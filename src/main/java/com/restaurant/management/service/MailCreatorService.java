@@ -20,7 +20,7 @@ public class MailCreatorService {
 
     public String buildVerificationEmail(String message, String token) {
 
-        String verificationURL = SecurityConstans.BASE_URL + "/email-verification?token=" + token;
+        String verificationURL = SecurityConstans.BASE_URL + "/auth/email-verification?token=" + token;
 
         Context context = new Context();
         context.setVariable("message", message);

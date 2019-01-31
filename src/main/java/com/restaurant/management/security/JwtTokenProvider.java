@@ -75,7 +75,7 @@ public class JwtTokenProvider {
     public String generateEmailVerificationToken(String userId) {
 
         Date now = new Date();
-        Date expireDate = new Date(now.getTime() + SecurityConstans.EXPIRATION_TIME);
+        Date expireDate = new Date(now.getTime() + SecurityConstans.EMAIL_VERIFICATION_EXPIRATION_TIME);
 
         return Jwts.builder()
                 .setSubject(userId)

@@ -90,7 +90,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         user.setRoles(Collections.singleton(userRole));
 
-        simpleEmailService.sendEmailVerification(new Mail(signUpRequest.getEmail(), signUpRequest.getName(), signUpRequest.getUsername()), token);
+        simpleEmailService.sendEmailVerification(
+                new Mail(signUpRequest.getEmail(), signUpRequest.getName(), signUpRequest.getUsername()), token);
 
         return userRepository.save(user);
     }

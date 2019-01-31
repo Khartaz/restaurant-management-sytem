@@ -1,6 +1,5 @@
 package com.restaurant.management.utils;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -10,9 +9,6 @@ import java.util.Random;
 public class Utils {
     private final Random RANDOM = new SecureRandom();
     private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
 
     private String generateRandomString(int length) {
         StringBuilder returnValue = new StringBuilder(length);

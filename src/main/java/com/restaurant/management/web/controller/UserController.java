@@ -1,11 +1,6 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.Mail;
-import com.restaurant.management.domain.User;
-import com.restaurant.management.repository.UserRepository;
-import com.restaurant.management.security.JwtTokenProvider;
 import com.restaurant.management.service.CustomUserDetailsService;
-import com.restaurant.management.service.SimpleEmailService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -23,24 +18,6 @@ import java.net.URI;
 public class UserController {
 
     private CustomUserDetailsService customUserDetailsService;
-    private UserRepository userRepository;
-    private JwtTokenProvider tokenProvider;
-    private SimpleEmailService simpleEmailService;
-
-    @Autowired
-    public void setTokenProvider(JwtTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
-
-    @Autowired
-    public void setSimpleEmailService(SimpleEmailService simpleEmailService) {
-        this.simpleEmailService = simpleEmailService;
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Autowired
     public void setCustomUserDetailsService(CustomUserDetailsService customUserDetailsService) {
@@ -54,7 +31,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        User user = customUserDetailsService.createUser(signUpRequest);
+        customUserDetailsService.createUser(signUpRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")

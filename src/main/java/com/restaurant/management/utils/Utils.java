@@ -19,7 +19,7 @@ public class Utils {
         return new String(returnValue);
     }
 
-    public String generatePublicId(int length) {
+    public String generateUserUniqueId(int length) {
         return generateRandomString(length);
     }
 }

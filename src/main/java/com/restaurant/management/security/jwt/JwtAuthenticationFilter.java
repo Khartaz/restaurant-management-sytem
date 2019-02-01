@@ -1,4 +1,4 @@
-package com.restaurant.management.security;
+package com.restaurant.management.security.jwt;
 
 import com.restaurant.management.service.CustomUserDetailsService;
 import org.slf4j.Logger;
@@ -49,9 +49,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader(SecurityConstans.HEADER_STRING);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(SecurityConstans.TOKEN_PREFIX)) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7, bearerToken.length());
         }
         return null;
     }

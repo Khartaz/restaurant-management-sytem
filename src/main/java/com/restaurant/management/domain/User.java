@@ -24,6 +24,10 @@ public class User extends DateAudit {
     private Long id;
 
     @NotBlank
+    @Column(name = "user_unique_id")
+    private String userUniqueId;
+
+    @NotBlank
     @Size(max = 40)
     @Column(name = "name")
     private String name;
@@ -45,17 +49,17 @@ public class User extends DateAudit {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "passwordToken")
+    @Column(name = "password_token")
     private String passwordToken;
 
-    @Column(name = "encryptedPassword")
+    @Column(name = "encrypted_password")
     private String encryptedPassword;
 
-    @Column(name = "emailVerificationToken")
+    @Column(name = "email_verification_token")
     private String emailVerificationToken;
 
-    @Column(name = "isEnabled")
-    private Boolean isEnabled;
+    @Column(name = "isActive")
+    private Boolean isActive;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
@@ -76,6 +80,14 @@ public class User extends DateAudit {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserUniqueId() {
+        return userUniqueId;
+    }
+
+    public void setUserUniqueId(String userUniqueId) {
+        this.userUniqueId = userUniqueId;
     }
 
     public String getUsername() {
@@ -142,11 +154,11 @@ public class User extends DateAudit {
         this.emailVerificationToken = emailVerificationToken;
     }
 
-    public Boolean getEnabled() {
-        return isEnabled;
+    public Boolean getActive() {
+        return isActive;
     }
 
-    public void setEnabled(Boolean enabled) {
-        isEnabled = enabled;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

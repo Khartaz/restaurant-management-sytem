@@ -1,4 +1,4 @@
-package com.restaurant.management.security;
+package com.restaurant.management.security.jwt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

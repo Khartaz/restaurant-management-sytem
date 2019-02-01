@@ -9,7 +9,7 @@ import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.UserRepository;
-import com.restaurant.management.security.JwtTokenProvider;
+import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
@@ -80,25 +80,26 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new UserExistsException("Email is already taken");
         }
+        String userUniqueId = utils.generateUserUniqueId(10);
+        String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
 
 
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(false);
+        user.setActive(false);
+        user.setUserUniqueId(userUniqueId);
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new UserAuthenticationException("User Role not set."));
 
         user.setRoles(Collections.singleton(userRole));
-
-        String token = tokenProvider.generateEmailVerificationToken(signUpRequest.getUsername());
+        user.setEmailVerificationToken(token);
 
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpRequest.getEmail(), signUpRequest.getName(), signUpRequest.getUsername()), token);
-
-        user.setEmailVerificationToken(token);
 
         userRepository.save(user);
 
@@ -110,7 +111,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username or email : " + usernameOrEmail));
 
-        if (!user.getEnabled()) {
+
+        if (!user.getActive()) {
             throw new UserAuthenticationException("Account is disabled. Please verify email first.");
         }
 
@@ -137,7 +139,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
             if (!hasTokenExpired) {
                 user.setEmailVerificationToken(null);
-                user.setEnabled(Boolean.TRUE);
+                user.setActive(Boolean.TRUE);
                 userRepository.save(user);
                 returnValue = true;
             }

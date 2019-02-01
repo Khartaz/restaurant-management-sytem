@@ -1,5 +1,7 @@
-package com.restaurant.management.security;
+package com.restaurant.management.security.jwt;
 
+import com.restaurant.management.security.SecurityConstans;
+import com.restaurant.management.security.UserPrincipal;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +15,6 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-
-    private static final String AUTHORITIES_KEY = "auth";
 
     //@Value("${app.jwtSecret}")
     private String jwtSecret = "h2ia83mao20s";
@@ -30,7 +30,7 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
+                .setSubject(userPrincipal.getUserUniqueId())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -50,18 +50,10 @@ public class JwtTokenProvider {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+        } catch (SignatureException e) {
+            logger.info("Invalid JWT signature: " + e.getMessage());
+            return false;
         }
-        return false;
     }
 
     public boolean hasTokenExpired(String token) {
@@ -75,14 +67,13 @@ public class JwtTokenProvider {
         return tokenExpirationDate.before(todayDate);
     }
 
-    public String generateEmailVerificationToken(String username) {
+    public String generateEmailVerificationToken(String userUniqueId) {
 
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + SecurityConstans.EMAIL_VERIFICATION_EXPIRATION_TIME);
 
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
+                .setSubject(userUniqueId)
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

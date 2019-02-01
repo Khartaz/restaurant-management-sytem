@@ -24,10 +24,6 @@ public class User extends DateAudit {
     private Long id;
 
     @NotBlank
-    @Column(name = "userId")
-    private String userId;
-
-    @NotBlank
     @Size(max = 40)
     @Column(name = "name")
     private String name;
@@ -80,14 +76,6 @@ public class User extends DateAudit {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getUsername() {

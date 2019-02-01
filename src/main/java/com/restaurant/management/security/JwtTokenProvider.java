@@ -6,12 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+
+    private static final String AUTHORITIES_KEY = "auth";
 
     //@Value("${app.jwtSecret}")
     private String jwtSecret = "h2ia83mao20s";
@@ -36,7 +39,7 @@ public class JwtTokenProvider {
 
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstans.getTokenSecret())
+                .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -45,7 +48,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(SecurityConstans.getTokenSecret()).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature");
@@ -72,24 +75,24 @@ public class JwtTokenProvider {
         return tokenExpirationDate.before(todayDate);
     }
 
-    public String generateEmailVerificationToken(String userId) {
+    public String generateEmailVerificationToken(String username) {
 
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + SecurityConstans.EMAIL_VERIFICATION_EXPIRATION_TIME);
 
         return Jwts.builder()
-                .setSubject(userId)
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public String generatePasswordResetToken(String userId) {
+    public String generatePasswordResetToken(String userUniqueId) {
         return Jwts.builder()
-                .setSubject(userId)
+                .setSubject(userUniqueId)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstans.PASSWORD_RESET_EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstans.getTokenSecret())
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 }

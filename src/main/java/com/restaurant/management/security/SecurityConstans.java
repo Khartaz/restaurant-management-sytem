@@ -8,7 +8,7 @@ public class SecurityConstans {
     public static final long PASSWORD_RESET_EXPIRATION_TIME = 3600000; //1hour
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-    public static final String USER_ID = "userId";
+    public static final String USER_ID = "userUniqueId";
 
     public static final String[] SWAGGER = {
             // -- swagger ui

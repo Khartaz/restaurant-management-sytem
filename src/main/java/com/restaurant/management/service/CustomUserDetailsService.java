@@ -4,7 +4,9 @@ import com.restaurant.management.domain.Mail;
 import com.restaurant.management.domain.Role;
 import com.restaurant.management.domain.RoleName;
 import com.restaurant.management.domain.User;
-import com.restaurant.management.exception.AppException;
+import com.restaurant.management.exception.user.UserAuthenticationException;
+import com.restaurant.management.exception.user.UserExistsException;
+import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.UserRepository;
 import com.restaurant.management.security.JwtTokenProvider;
@@ -20,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,12 +55,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail)
-            throws UsernameNotFoundException {
-        // Let people login with either username or email
+    public UserDetails loadUserByUsername(String usernameOrEmail) {
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail)
+                        new UserNotFoundException("User not found with username or email : " + usernameOrEmail)
                 );
 
         return UserPrincipal.create(user);
@@ -68,41 +67,51 @@ public class CustomUserDetailsService implements UserDetailsService {
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with id : " + id)
+                () -> new UserNotFoundException("User not found with id : " + id)
         );
         return UserPrincipal.create(user);
     }
 
     public User createUser(SignUpRequest signUpRequest) {
+        if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+            throw new UserExistsException("Username is already taken");
+        }
+
+        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new UserExistsException("Email is already taken");
+        }
+
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
 
-        String userId = utils.generatePublicId(15);
-        String token = tokenProvider.generateEmailVerificationToken(userId);
 
-        user.setUserId(userId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEmailVerificationToken(token);
         user.setEnabled(false);
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
+                .orElseThrow(() -> new UserAuthenticationException("User Role not set."));
 
         user.setRoles(Collections.singleton(userRole));
+
+        String token = tokenProvider.generateEmailVerificationToken(signUpRequest.getUsername());
 
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpRequest.getEmail(), signUpRequest.getName(), signUpRequest.getUsername()), token);
 
-        return userRepository.save(user);
+        user.setEmailVerificationToken(token);
+
+        userRepository.save(user);
+
+        return user;
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         String usernameOrEmail = loginRequest.getUsernameOrEmail();
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail));
+                .orElseThrow(() -> new UserNotFoundException("User not found with username or email : " + usernameOrEmail));
 
         if (!user.getEnabled()) {
-            throw new UsernameNotFoundException("Account is disabled. Please verify email first.");
+            throw new UserAuthenticationException("Account is disabled. Please verify email first.");
         }
 
         Authentication authentication = authenticationManager.authenticate(

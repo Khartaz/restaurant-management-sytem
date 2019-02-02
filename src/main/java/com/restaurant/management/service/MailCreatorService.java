@@ -29,4 +29,16 @@ public class MailCreatorService {
         context.setVariable("show_button", true);
         return templateEngine.process("mail/emailVerification", context);
     }
+
+    public String buildPasswordResetEmail(String message, String token) {
+
+        String verificationURL = SecurityConstans.BASE_URL + "/auth/reset-password?token=" + token;
+
+        Context context = new Context();
+        context.setVariable("message", message);
+        context.setVariable("tasks_url", verificationURL);
+        context.setVariable("button", "Reset password");
+        context.setVariable("show_button", true);
+        return templateEngine.process("mail/passwordReset", context);
+    }
 }

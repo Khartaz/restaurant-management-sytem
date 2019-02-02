@@ -2,8 +2,10 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.service.CustomUserDetailsService;
 import com.restaurant.management.web.request.LoginRequest;
+import com.restaurant.management.web.request.PasswordResetRequest;
 import com.restaurant.management.web.request.SignUpRequest;
 import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.web.request.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UserController {
+public class AccountController {
 
     private CustomUserDetailsService customUserDetailsService;
 
@@ -43,5 +45,22 @@ public class UserController {
     @GetMapping(value = "/email-verification", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> verifyEmailToken(@RequestParam(value = "token") String token) {
         return ResponseEntity.ok(customUserDetailsService.verifyEmailToken(token));
+    }
+
+    @PostMapping(value = "/password-reset-request",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest) {
+
+        return ResponseEntity.ok(customUserDetailsService.requestResetPassword(passwordResetRequest.getUsernameOrEmail()));
+    }
+
+    @PostMapping(value = "/reset-password",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> resetPassword(@RequestParam(value = "token") String token,
+                                           @RequestBody PasswordReset passwordReset) {
+
+        return ResponseEntity.ok(customUserDetailsService.resetPassword(token, passwordReset));
     }
 }

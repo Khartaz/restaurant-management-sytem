@@ -15,6 +15,7 @@ import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpRequest;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
+import com.restaurant.management.web.request.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -86,8 +88,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
 
-
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(false);
         user.setUserUniqueId(userUniqueId);
@@ -130,20 +130,68 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new JwtAuthenticationResponse(jwt);
     }
 
+    public boolean requestResetPassword(String usernameOrEmail) {
+        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username or email : " + usernameOrEmail));
+
+        if (!user.getActive()) {
+            throw new UserAuthenticationException("Account is disabled. Please verify email first.");
+        }
+
+        String token = tokenProvider.generatePasswordResetToken(user.getUserUniqueId());
+
+        user.setPasswordResetToken(token);
+        userRepository.save(user);
+
+        simpleEmailService.sendResetPasswordEmail(
+                new Mail(user.getEmail(), user.getName(), user.getUsername()), token);
+
+        return true;
+    }
+
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 
-        User user = userRepository.findUserByEmailVerificationToken(token);
+        User user = userRepository.findUserByEmailVerificationToken(token)
+                .orElseThrow(() -> new UserAuthenticationException("Unauthenticated"));
 
-        if (user != null) {
-            boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
-            if (!hasTokenExpired) {
-                user.setEmailVerificationToken(null);
-                user.setActive(Boolean.TRUE);
-                userRepository.save(user);
-                returnValue = true;
-            }
+        boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
+
+        if (!hasTokenExpired) {
+            user.setEmailVerificationToken(null);
+            user.setActive(Boolean.TRUE);
+            userRepository.save(user);
+            returnValue = true;
         }
         return returnValue;
     }
+
+    public boolean resetPassword(String token, PasswordReset passwordReset) {
+        boolean returnValue = false;
+
+        boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
+
+        User user = userRepository.findUserByPasswordResetToken(token)
+                .orElseThrow(() -> new UserAuthenticationException("Unauthenticated"));
+
+        if (!user.getActive()) {
+            throw new UserAuthenticationException("Account is disabled. Please verify email first.");
+        }
+
+        if (!passwordReset.getPassword().equals(passwordReset.getConfirmPassword())) {
+            throw new UserAuthenticationException("Password and confirmed password must be this same");
+        }
+
+        if (!hasTokenExpired) {
+                String encodedPassword = passwordEncoder.encode(passwordReset.getPassword());
+
+                user.setPassword(encodedPassword);
+                user.setPasswordResetToken(null);
+                userRepository.save(user);
+
+                returnValue = true;
+        }
+        return returnValue;
+    }
+
 }

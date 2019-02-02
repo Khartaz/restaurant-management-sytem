@@ -80,9 +80,13 @@ public class JwtTokenProvider {
     }
 
     public String generatePasswordResetToken(String userUniqueId) {
+
+        Date now = new Date();
+        Date expireDate = new Date(now.getTime() + SecurityConstans.PASSWORD_RESET_EXPIRATION_TIME);
+
         return Jwts.builder()
                 .setSubject(userUniqueId)
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstans.PASSWORD_RESET_EXPIRATION_TIME))
+                .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

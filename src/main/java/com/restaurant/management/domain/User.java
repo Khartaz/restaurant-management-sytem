@@ -49,8 +49,8 @@ public class User extends DateAudit {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "password_token")
-    private String passwordToken;
+    @Column(name = "password_reset_token")
+    private String passwordResetToken;
 
     @Column(name = "encrypted_password")
     private String encryptedPassword;
@@ -122,20 +122,12 @@ public class User extends DateAudit {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getPasswordResetToken() {
+        return passwordResetToken;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public String getPasswordToken() {
-        return passwordToken;
-    }
-
-    public void setPasswordToken(String passwordToken) {
-        this.passwordToken = passwordToken;
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
     }
 
     public String getEncryptedPassword() {
@@ -160,5 +152,13 @@ public class User extends DateAudit {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

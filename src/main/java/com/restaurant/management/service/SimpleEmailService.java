@@ -51,4 +51,26 @@ public class SimpleEmailService {
             messageHelper.setText(mailCreatorService.buildVerificationEmail(mail.getMessage(), token),true);
         };
     }
+
+    public void sendResetPasswordEmail(final Mail mail, String token) {
+
+        LOGGER.info("Starting email preparation...");
+        try {
+
+            javaMailSender.send(createResetPasswordEmail(mail, token));
+            LOGGER.info("Email has been sent.");
+        } catch (MailException e) {
+
+            LOGGER.error("Failed to process email sending: ", e.getMessage(), e);
+        }
+    }
+
+    private MimeMessagePreparator createResetPasswordEmail(final Mail mail, String token) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildPasswordResetEmail(mail.getMessage(), token),true);
+        };
+    }
 }

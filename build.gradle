@@ -29,10 +29,10 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-mail')
 
     //Local Tomcat
-    //runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'mysql:mysql-connector-java'
 
     //Heroku
-    compile('org.postgresql:postgresql')
+    //compile('org.postgresql:postgresql')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'

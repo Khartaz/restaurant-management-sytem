@@ -64,6 +64,9 @@ public class User extends DateAudit {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Customer> customers = new HashSet<>();
+
     public User() {
     }
 
@@ -161,4 +164,5 @@ public class User extends DateAudit {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 }

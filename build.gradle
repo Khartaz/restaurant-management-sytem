@@ -13,6 +13,8 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+
 
 group = 'com.restaurant.management'
 version = '0.0.1-SNAPSHOT'
@@ -27,12 +29,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compile('org.springframework.boot:spring-boot-starter-mail')
-    runtimeOnly 'mysql:mysql-connector-java'
+
+    //Local Tomcat 
+    //runtimeOnly 'mysql:mysql-connector-java'
+    
+    //Heroku
+    compile('org.postgresql:postgresql')
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     compile 'org.thymeleaf:thymeleaf-spring5:3.0.10.RELEASE'
 
-
+    //Swagger
+    compile('io.springfox:springfox-swagger2:2.7.0')
+    compile('io.springfox:springfox-swagger-ui:2.7.0')
+    
     compile 'io.jsonwebtoken:jjwt:0.9.0'
 
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.3'

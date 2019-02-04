@@ -21,6 +21,18 @@ public class SecurityConstans {
             "/webjars/**"
     };
 
+    public static final String[] REACT_FILES = {
+            "/",
+            "/favicon.ico",
+            "/**/*.png",
+            "/**/*.gif",
+            "/**/*.svg",
+            "/**/*.jpg",
+            "/**/*.html",
+            "/**/*.css",
+            "/**/*.js"
+    };
+
     public static String getTokenSecret() {
         AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("appProperties");
         return appProperties.getTokenSecret();

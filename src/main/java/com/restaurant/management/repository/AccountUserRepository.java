@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AdminUserRepository extends JpaRepository<AccountUser, Long> {
-    Optional<AdminUser> findByEmail(String email);
+public interface AccountUserRepository extends JpaRepository<AccountUser, Long> {
+    Optional<AccountUser> findByEmail(String email);
 
-    Optional<AdminUser> findByUsernameOrEmail(String username, String email);
+    Optional<AccountUser> findByUsernameOrEmail(String username, String email);
 
-    List<AdminUser> findByIdIn(List<Long> userIds);
+    List<AccountUser> findByIdIn(List<Long> userIds);
 
-    Optional<AdminUser> findByUsername(String username);
+    Optional<AccountUser> findByUsername(String username);
 
-    Optional<AdminUser> findAdminUserByUserUniqueId(String userUniqueId);
+    Optional<AccountUser> findAdminUserByUserUniqueId(String userUniqueId);
 
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
 
-    Optional<AdminUser> findAdminUserByEmailVerificationToken(String token);
+    Optional<AccountUser> findAdminUserByEmailVerificationToken(String token);
 
-    Optional<AdminUser> findAdminUserByPasswordResetToken(String token);
+    Optional<AccountUser> findAdminUserByPasswordResetToken(String token);
 }

@@ -1,13 +1,15 @@
 package com.restaurant.management.service;
 
+import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.Mail;
 import com.restaurant.management.domain.Role;
 import com.restaurant.management.domain.RoleName;
 import com.restaurant.management.exception.user.UserAuthenticationException;
+import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.RoleRepository;
-import com.restaurant.management.repository.AdminUserRepository;
+import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.utils.Utils;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +34,10 @@ import java.util.stream.Stream;
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
-public class AdminUserService extends AbstractUserDetailsService {
+public class AccountUserService implements UserDetailsService {
 
     private AuthenticationManager authenticationManager;
-    private AdminUserRepository adminUserRepository;
+    private AccountUserRepository accountUserRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
@@ -42,11 +45,11 @@ public class AdminUserService extends AbstractUserDetailsService {
     private SimpleEmailService simpleEmailService;
 
     @Autowired
-    public AdminUserService(AuthenticationManager authenticationManager, AdminUserRepository userRepository,
-                            RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                            JwtTokenProvider tokenProvider, Utils utils, SimpleEmailService simpleEmailService) {
+    public AccountUserService(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
+                              RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                              JwtTokenProvider tokenProvider, Utils utils, SimpleEmailService simpleEmailService) {
         this.authenticationManager = authenticationManager;
-        this.adminUserRepository = userRepository;
+        this.accountUserRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -56,7 +59,7 @@ public class AdminUserService extends AbstractUserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
-        AdminUser adminUser = adminUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        AccountUser adminUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
 
         return UserPrincipal.create(adminUser);
@@ -64,25 +67,25 @@ public class AdminUserService extends AbstractUserDetailsService {
 
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserByUserUniqueId(String userUniqueId) {
-        AdminUser adminUser = adminUserRepository.findAdminUserByUserUniqueId(userUniqueId)
+        AccountUser adminUser = accountUserRepository.findAdminUserByUserUniqueId(userUniqueId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage()+ userUniqueId));
 
         return UserPrincipal.create(adminUser);
     }
 
 
-    public AdminUser createAdmin(SignUpUserRequest signUpUserRequest) {
-       /* Email and Username validation
+    public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
+       // Email and Username validation
 
-        if(adminUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
+        if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
             throw new UserExistsException(UserMessages.USERNAME_TAKEN.getErrorMessage());
         }
 
-        if(adminUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
+        if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
-        */
-        AdminUser newAdmin = new AdminUser();
+
+        AccountUser newAdmin = new AccountUser();
 
         String userUniqueId = utils.generateUserUniqueId(10);
         String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
@@ -101,7 +104,7 @@ public class AdminUserService extends AbstractUserDetailsService {
         newAdmin.setRoles(Collections.singleton(userRole));
         newAdmin.setEmailVerificationToken(token);
 
-        adminUserRepository.save(newAdmin);
+        accountUserRepository.save(newAdmin);
 
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
@@ -110,16 +113,56 @@ public class AdminUserService extends AbstractUserDetailsService {
     }
 
 
+    public AccountUser registerUserAccount(SignUpUserRequest signUpUserRequest) {
+        // Email and Username validation
+
+        if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
+            throw new UserExistsException(UserMessages.USERNAME_TAKEN.getErrorMessage());
+        }
+
+        if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
+            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
+        }
+
+        AccountUser accountUser = new AccountUser();
+
+        String userUniqueId = utils.generateUserUniqueId(10);
+        String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
+
+        accountUser.setName(signUpUserRequest.getName());
+        accountUser.setLastname(signUpUserRequest.getLastname());
+        accountUser.setUsername(signUpUserRequest.getUsername());
+        accountUser.setEmail(signUpUserRequest.getEmail());
+        accountUser.setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()));
+        accountUser.setActive(false);
+        accountUser.setUserUniqueId(userUniqueId);
+
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
+
+        accountUser.setRoles(Collections.singleton(userRole));
+        accountUser.setEmailVerificationToken(token);
+
+        accountUserRepository.save(accountUser);
+
+        simpleEmailService.sendEmailVerification(
+                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
+
+        return accountUser;
+    }
+
+
+
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         String usernameOrEmail = loginRequest.getUsernameOrEmail();
-        AdminUser adminUser = adminUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
 
-        /* If User is Active validation
-        if (!adminUser.getActive()) {
+        // If User is Active validation
+        if (!accountUser.getActive()) {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
         }
-        */
+
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -134,15 +177,15 @@ public class AdminUserService extends AbstractUserDetailsService {
     }
 
     public boolean requestResetPassword(String usernameOrEmail) {
-        AdminUser adminUser = adminUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
 
-        Stream.of(adminUser).forEach(u -> {
+        Stream.of(accountUser).forEach(u -> {
             if (!u.getActive()) {
                 throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
             }
              u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getUserUniqueId()));
-             adminUserRepository.save(u);
+             accountUserRepository.save(u);
 
              simpleEmailService.sendResetPasswordEmail(
                     new Mail(u.getEmail(), u.getName(), u.getUsername()), u.getPasswordResetToken());
@@ -154,7 +197,7 @@ public class AdminUserService extends AbstractUserDetailsService {
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 
-        AdminUser adminUser = adminUserRepository.findAdminUserByEmailVerificationToken(token)
+        AccountUser adminUser = accountUserRepository.findAdminUserByEmailVerificationToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getErrorMessage()));
 
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
@@ -162,7 +205,7 @@ public class AdminUserService extends AbstractUserDetailsService {
         if (!hasTokenExpired) {
             adminUser.setEmailVerificationToken(null);
             adminUser.setActive(Boolean.TRUE);
-            adminUserRepository.save(adminUser);
+            accountUserRepository.save(adminUser);
             returnValue = true;
         }
         return returnValue;
@@ -172,10 +215,10 @@ public class AdminUserService extends AbstractUserDetailsService {
         boolean returnValue = false;
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
-        AdminUser adminUser = adminUserRepository.findAdminUserByPasswordResetToken(token)
+        AccountUser accountUser = accountUserRepository.findAdminUserByPasswordResetToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getErrorMessage()));
 
-        if (!adminUser.getActive()) {
+        if (!accountUser.getActive()) {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
         }
 
@@ -186,9 +229,9 @@ public class AdminUserService extends AbstractUserDetailsService {
         if (!hasTokenExpired) {
                 String encodedPassword = passwordEncoder.encode(passwordReset.getPassword());
 
-                adminUser.setPassword(encodedPassword);
-                adminUser.setPasswordResetToken(null);
-                adminUserRepository.save(adminUser);
+                accountUser.setPassword(encodedPassword);
+                accountUser.setPasswordResetToken(null);
+                accountUserRepository.save(accountUser);
 
                 returnValue = true;
         }

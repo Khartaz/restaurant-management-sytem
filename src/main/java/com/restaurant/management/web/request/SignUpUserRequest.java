@@ -2,10 +2,14 @@ package com.restaurant.management.web.request;
 
 import javax.validation.constraints.*;
 
-public class SignUpRequest {
+public class SignUpUserRequest {
     @NotBlank
     @Size(min = 4, max = 40)
     private String name;
+
+    @NotBlank
+    @Size(min = 4, max = 40)
+    private String lastname;
 
     @NotBlank
     @Size(min = 3, max = 15)
@@ -26,6 +30,14 @@ public class SignUpRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getUsername() {

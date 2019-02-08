@@ -1,9 +1,10 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.service.CustomUserDetailsService;
+import com.restaurant.management.exception.user.UserMessages;
+import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.PasswordResetRequest;
-import com.restaurant.management.web.request.SignUpRequest;
+import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.request.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,35 +17,40 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/auth")
-public class AccountController {
+@RequestMapping("/api/admin")
+public class AccountUserController {
 
-    private CustomUserDetailsService customUserDetailsService;
+    private AccountUserService accountUserService;
 
     @Autowired
-    public void setCustomUserDetailsService(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
+    public void setAccountUserService(AccountUserService accountUserService) {
+        this.accountUserService = accountUserService;
     }
 
-    @PostMapping("/signin")
+    @PostMapping(value = "/signin",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(customUserDetailsService.authenticateUser(loginRequest));
+        return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        customUserDetailsService.createUser(signUpRequest);
+    @PostMapping(value = "/signup",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> registerAdminUser(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
+        accountUserService.registerAdminAccount(signUpUserRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")
-                .buildAndExpand(signUpRequest.getUsername()).toUri();
+                .buildAndExpand(signUpUserRequest.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.created(location).body(
+                new ApiResponse(true, UserMessages.REGISTER_SUCCESS.getErrorMessage()));
     }
 
     @GetMapping(value = "/email-verification", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> verifyEmailToken(@RequestParam(value = "token") String token) {
-        return ResponseEntity.ok(customUserDetailsService.verifyEmailToken(token));
+        return ResponseEntity.ok(accountUserService.verifyEmailToken(token));
     }
 
     @PostMapping(value = "/password-reset-request",
@@ -52,7 +58,7 @@ public class AccountController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest) {
 
-        return ResponseEntity.ok(customUserDetailsService.requestResetPassword(passwordResetRequest.getUsernameOrEmail()));
+        return ResponseEntity.ok(accountUserService.requestResetPassword(passwordResetRequest.getUsernameOrEmail()));
     }
 
     @PostMapping(value = "/reset-password",
@@ -61,6 +67,6 @@ public class AccountController {
     public ResponseEntity<?> resetPassword(@RequestParam(value = "token") String token,
                                            @RequestBody PasswordReset passwordReset) {
 
-        return ResponseEntity.ok(customUserDetailsService.resetPassword(token, passwordReset));
+        return ResponseEntity.ok(accountUserService.resetPassword(token, passwordReset));
     }
 }

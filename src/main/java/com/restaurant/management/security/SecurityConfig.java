@@ -2,7 +2,7 @@ package com.restaurant.management.security;
 
 import com.restaurant.management.security.jwt.JwtAuthenticationEntryPoint;
 import com.restaurant.management.security.jwt.JwtAuthenticationFilter;
-import com.restaurant.management.service.CustomUserDetailsService;
+import com.restaurant.management.service.AccountUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +28,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private CustomUserDetailsService customUserDetailsService;
+    private AccountUserService accountUserService;
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    public void setCustomUserDetailsService(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
+    public void setAccountUserService(AccountUserService accountUserService) {
+        this.accountUserService = accountUserService;
     }
 
     @Autowired
@@ -46,10 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter();
     }
 
-    @Override
+     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(customUserDetailsService)
+                .userDetailsService(accountUserService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -82,17 +82,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(SecurityConstans.SWAGGER)
                 .permitAll()
-                .antMatchers("/api/auth/**")
-                .permitAll()
-                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
+                .antMatchers(
+                        SecurityConstans.AUTH_URL,
+                        SecurityConstans.CUSTOMER_URL,
+                        SecurityConstans.ACCOUNT_URL,
+                        SecurityConstans.ADMIN_URL)
                 .permitAll()
                 .anyRequest()
                 .authenticated();
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
     }
+
 }

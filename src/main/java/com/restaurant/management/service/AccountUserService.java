@@ -182,6 +182,7 @@ public class AccountUserService implements UserDetailsService {
                 throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
             }
              u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getUserUniqueId()));
+
              accountUserRepository.save(u);
 
              simpleEmailService.sendResetPasswordEmail(
@@ -202,7 +203,9 @@ public class AccountUserService implements UserDetailsService {
         if (!hasTokenExpired) {
             adminUser.setEmailVerificationToken(null);
             adminUser.setActive(Boolean.TRUE);
+
             accountUserRepository.save(adminUser);
+
             returnValue = true;
         }
         return returnValue;
@@ -228,6 +231,7 @@ public class AccountUserService implements UserDetailsService {
 
                 accountUser.setPassword(encodedPassword);
                 accountUser.setPasswordResetToken(null);
+
                 accountUserRepository.save(accountUser);
 
                 returnValue = true;

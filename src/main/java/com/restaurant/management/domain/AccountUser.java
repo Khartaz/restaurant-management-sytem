@@ -18,8 +18,8 @@ public class AccountUser extends AbstractAdmin {
                        String userUniqueId, String password, String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
         super(name, lastname, email,
-                username, userUniqueId, password,
-                emailVerificationToken, isActive, roles);
+              username, userUniqueId, password,
+              emailVerificationToken, isActive, roles);
     }
 
     @Override

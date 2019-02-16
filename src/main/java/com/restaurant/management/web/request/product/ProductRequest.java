@@ -1,6 +1,9 @@
 package com.restaurant.management.web.request.product;
 
+import com.restaurant.management.domain.Ingredient;
+
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class ProductRequest {
 
@@ -13,8 +16,7 @@ public class ProductRequest {
     @NotBlank
     private double price;
 
-    @NotBlank
-    private String ingredients;
+    private List<Ingredient> ingredients;
 
     public String getName() {
         return name;
@@ -40,11 +42,11 @@ public class ProductRequest {
         this.price = price;
     }
 
-    public String getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 }

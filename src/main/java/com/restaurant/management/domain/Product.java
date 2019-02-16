@@ -2,6 +2,8 @@ package com.restaurant.management.domain;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -20,9 +22,8 @@ public class Product {
     @Column(name = "price")
     private Double price;
 
-    //Change later for classList
-    @Column(name = "ingredients")
-    private String ingredients;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     @Column(name = "createdAt")
     private Instant createdAt;
@@ -30,7 +31,15 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String category, double price, String ingredients) {
+    public Product(String name, String category, double price, List<Ingredient> ingredients, Instant createdAt) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.ingredients = ingredients;
+        this.createdAt = createdAt;
+    }
+
+    public Product(String name, String category, double price, List<Ingredient> ingredients) {
         this.name = name;
         this.category = category;
         this.price = price;
@@ -69,11 +78,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -83,6 +92,43 @@ public class Product {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public static class ProductBuilder {
+        private String name;
+        private String category;
+        private Double price;
+        private List<Ingredient> ingredients;
+        private Instant createdAt;
+
+        public ProductBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ProductBuilder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public ProductBuilder setPrice(Double price) {
+            this.price = price;
+            return this;
+        }
+
+        public ProductBuilder setIngredients(List<Ingredient> ingredients) {
+            this.ingredients = ingredients;
+            return this;
+        }
+
+        public ProductBuilder setCreatedAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this.name, this.category, this.price, this.ingredients, this.createdAt);
+        }
     }
 
 }

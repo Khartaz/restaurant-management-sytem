@@ -13,7 +13,7 @@ public class Order  {
     private Long id;
 
     @Column(name = "order_number")
-    private Long orderNumber; //Change to unique String?
+    private String orderNumber;
 
     @Column(name = "ordered")
     private Instant ordered;
@@ -30,7 +30,7 @@ public class Order  {
     public Order() {
     }
 
-    public Order(Long orderNumber,
+    public Order(String orderNumber,
                  Instant ordered, String status,
                  Double totalPrice, Cart cart) {
         this.orderNumber = orderNumber;
@@ -48,11 +48,11 @@ public class Order  {
         this.id = id;
     }
 
-    public Long getOrderNumber() {
+    public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(Long orderNumber) {
+    public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
@@ -89,13 +89,13 @@ public class Order  {
     }
 
     public static class OrderBuilder {
-        private Long orderNumber;
+        private String orderNumber;
         private Instant ordered;
         private String status;
         private Double totalPrice;
         private Cart cart;
 
-        public OrderBuilder setOrderNumber(Long orderNumber) {
+        public OrderBuilder setOrderNumber(String orderNumber) {
             this.orderNumber = orderNumber;
             return this;
         }

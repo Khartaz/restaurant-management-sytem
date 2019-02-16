@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.stream.Stream;
 
 @Service
@@ -24,12 +25,13 @@ public class ProductService {
 
     public void registerProduct(ProductRequest request) {
 
-        Product newProduct = new Product();
-
-        newProduct.setName(request.getName());
-        newProduct.setCategory(request.getCategory());
-        newProduct.setPrice(request.getPrice());
-        newProduct.setIngredients(request.getIngredients());
+        Product newProduct = new Product.ProductBuilder()
+                .setName(request.getName())
+                .setCategory(request.getCategory())
+                .setPrice(request.getPrice())
+                .setIngredients(request.getIngredients())
+                .setCreatedAt(new Date().toInstant())
+                .build();
 
         productRepository.save(newProduct);
     }

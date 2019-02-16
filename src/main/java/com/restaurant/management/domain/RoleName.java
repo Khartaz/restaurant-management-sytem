@@ -1,6 +1,6 @@
 package com.restaurant.management.domain;
 
 public enum RoleName {
-    ROLE_USER,
+    MANAGER,
     ROLE_ADMIN
 }

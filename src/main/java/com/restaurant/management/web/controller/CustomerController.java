@@ -30,7 +30,7 @@ public class CustomerController {
         customerService.createCustomer(singUpCustomerRequest);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/users/{username}")
+                .fromCurrentContextPath().path("/api/customer/{name}")
                 .buildAndExpand(singUpCustomerRequest.getName()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "Customer registered successfully"));

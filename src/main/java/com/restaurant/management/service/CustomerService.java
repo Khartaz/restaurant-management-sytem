@@ -25,14 +25,14 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    //@RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
+    //@RolesAllowed({"MANAGER", "ROLE_ADMIN"})
     public Customer createCustomer(SingUpCustomerRequest request) {
         Customer customer = new Customer();
 
-        customer.setUserUniqueId(utils.generateUserUniqueId(10));
         customer.setName(request.getName());
         customer.setLastname(request.getLastname());
         customer.setEmail(request.getEmail());
+        customer.setPhoneNumber(request.getPhoneNumber());
 
         customerRepository.save(customer);
 

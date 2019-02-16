@@ -2,7 +2,9 @@ package com.restaurant.management.web.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 public class SingUpCustomerRequest {
 
@@ -18,6 +20,9 @@ public class SingUpCustomerRequest {
     @Size(max = 40)
     @Email
     private String email;
+
+    @NotNull
+    private Long phoneNumber;
 
     public String getName() {
         return name;
@@ -41,5 +46,13 @@ public class SingUpCustomerRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

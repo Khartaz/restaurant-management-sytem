@@ -16,12 +16,6 @@ public abstract class AbstractUser extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank
-    @Size(max = 40)
-    @Column(name = "user_unique_id")
-    private String userUniqueId;
-
     @NotBlank
     @Size(max = 40)
     @Column(name = "name")
@@ -42,20 +36,18 @@ public abstract class AbstractUser extends DateAudit {
     public AbstractUser() {
     }
 
+    public AbstractUser(String name, String lastname, String email) {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUserUniqueId() {
-        return userUniqueId;
-    }
-
-    public void setUserUniqueId(String userUniqueId) {
-        this.userUniqueId = userUniqueId;
     }
 
     public String getName() {

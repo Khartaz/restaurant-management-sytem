@@ -16,7 +16,6 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/account")
-@SuppressWarnings("Duplicates")
 public class AccountUserController {
 
     private AccountUserService accountUserService;
@@ -37,7 +36,7 @@ public class AccountUserController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-        accountUserService.registerUserAccount(signUpUserRequest);
+        accountUserService.registerManagerAccount(signUpUserRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")

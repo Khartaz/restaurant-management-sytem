@@ -16,7 +16,6 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/admin")
-@SuppressWarnings("Duplicates")
 public class AdminUserController {
 
     private AccountUserService accountUserService;

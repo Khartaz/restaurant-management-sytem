@@ -73,7 +73,6 @@ public class AccountUserService implements UserDetailsService {
         return UserPrincipal.create(adminUser);
     }
 
-
     public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
        // Email and Username validation
 
@@ -85,35 +84,35 @@ public class AccountUserService implements UserDetailsService {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
 
-        AccountUser newAdmin = new AccountUser();
-
         String userUniqueId = utils.generateUserUniqueId(10);
-        String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
-        newAdmin.setName(signUpUserRequest.getName());
-        newAdmin.setLastname(signUpUserRequest.getLastname());
-        newAdmin.setUsername(signUpUserRequest.getUsername());
-        newAdmin.setEmail(signUpUserRequest.getEmail());
-        newAdmin.setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()));
-        newAdmin.setActive(false);
-        newAdmin.setUserUniqueId(userUniqueId);
+        String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
 
-        newAdmin.setRoles(Collections.singleton(userRole));
-        newAdmin.setEmailVerificationToken(token);
+        AccountUser newAdminUser = new AccountUser.AccountUserBuilder()
+                .setName(signUpUserRequest.getName())
+                .setLastname(signUpUserRequest.getLastname())
+                .setUsername(signUpUserRequest.getUsername())
+                .setEmail(signUpUserRequest.getEmail())
+                .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
+                .setIsActive(Boolean.FALSE)
+                .setUserUniqueId(userUniqueId)
+                .setRoles(Collections.singleton(userRole))
+                .setEmailVerificationToken(token)
+                .build();
 
-        accountUserRepository.save(newAdmin);
+        accountUserRepository.save(newAdminUser);
 
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
 
-        return newAdmin;
+        return newAdminUser;
     }
 
 
-    public AccountUser registerUserAccount(SignUpUserRequest signUpUserRequest) {
+    public AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest) {
         // Email and Username validation
 
         if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
@@ -124,24 +123,24 @@ public class AccountUserService implements UserDetailsService {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
 
-        AccountUser accountUser = new AccountUser();
-
         String userUniqueId = utils.generateUserUniqueId(10);
+
         String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
-        accountUser.setName(signUpUserRequest.getName());
-        accountUser.setLastname(signUpUserRequest.getLastname());
-        accountUser.setUsername(signUpUserRequest.getUsername());
-        accountUser.setEmail(signUpUserRequest.getEmail());
-        accountUser.setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()));
-        accountUser.setActive(false);
-        accountUser.setUserUniqueId(userUniqueId);
-
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+        Role userRole = roleRepository.findByName(RoleName.MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
 
-        accountUser.setRoles(Collections.singleton(userRole));
-        accountUser.setEmailVerificationToken(token);
+        AccountUser accountUser = new AccountUser.AccountUserBuilder()
+                .setName(signUpUserRequest.getName())
+                .setLastname(signUpUserRequest.getLastname())
+                .setUsername(signUpUserRequest.getUsername())
+                .setEmail(signUpUserRequest.getEmail())
+                .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
+                .setIsActive(Boolean.FALSE)
+                .setUserUniqueId(userUniqueId)
+                .setRoles(Collections.singleton(userRole))
+                .setEmailVerificationToken(token)
+                .build();
 
         accountUserRepository.save(accountUser);
 
@@ -150,8 +149,6 @@ public class AccountUserService implements UserDetailsService {
 
         return accountUser;
     }
-
-
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         String usernameOrEmail = loginRequest.getUsernameOrEmail();

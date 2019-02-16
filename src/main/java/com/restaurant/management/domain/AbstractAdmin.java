@@ -12,10 +12,16 @@ import java.util.Set;
 @JsonIgnoreProperties(allowGetters = true)
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AbstractAdmin extends AbstractUser {
+
     @NotBlank
     @Size(max = 15)
     @Column(name = "username")
     private String username;
+
+    @NotBlank
+    @Size(max = 40)
+    @Column(name = "user_unique_id")
+    private String userUniqueId;
 
     @NotBlank
     @Size(max = 100)
@@ -40,12 +46,32 @@ public abstract class AbstractAdmin extends AbstractUser {
     public AbstractAdmin() {
     }
 
+    public AbstractAdmin(String name, String lastname, String email,
+                         String username, String userUniqueId, String password,
+                         String emailVerificationToken, Boolean isActive, Set<Role> roles) {
+        super(name, lastname, email);
+        this.username = username;
+        this.userUniqueId = userUniqueId;
+        this.password = password;
+        this.emailVerificationToken = emailVerificationToken;
+        this.isActive = isActive;
+        this.roles = roles;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getUserUniqueId() {
+        return userUniqueId;
+    }
+
+    public void setUserUniqueId(String userUniqueId) {
+        this.userUniqueId = userUniqueId;
     }
 
     public String getPassword() {

@@ -6,7 +6,6 @@ import com.restaurant.management.service.AccountUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -86,7 +85,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         SecurityConstans.AUTH_URL,
                         SecurityConstans.CUSTOMER_URL,
                         SecurityConstans.ACCOUNT_URL,
-                        SecurityConstans.ADMIN_URL)
+                        SecurityConstans.ADMIN_URL,
+                        SecurityConstans.PRODUCT_URL,
+                        SecurityConstans.ORDER_URL,
+                        SecurityConstans.CART_URL)
                 .permitAll()
                 .anyRequest()
                 .authenticated();

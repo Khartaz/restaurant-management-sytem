@@ -1,6 +1,6 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class OrderController {
 
     @PostMapping(value = "/{phoneNumber}")
     public @ResponseBody
-    ResponseEntity<Order> sendOrder(@PathVariable Long phoneNumber) {
+    ResponseEntity<OrderDto> sendOrder(@PathVariable Long phoneNumber) {
 
         return ResponseEntity.ok(orderService.processOrder(phoneNumber));
     }

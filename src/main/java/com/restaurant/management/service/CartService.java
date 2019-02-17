@@ -1,10 +1,12 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
+import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,17 +19,20 @@ public class CartService {
     private CartRepository cartRepository;
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
+    private CartMapper cartMapper;
 
     @Autowired
     public CartService(CartRepository cartRepository,
                        ProductRepository productRepository,
-                       CustomerRepository customerRepository) {
+                       CustomerRepository customerRepository,
+                       CartMapper cartMapper) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
+        this.cartMapper = cartMapper;
     }
 
-    public void addToCart(Long phoneNumber, String productName, Integer quantity) {
+    public CartDto addToCart(Long phoneNumber, String productName, Integer quantity) {
         Customer customer = customerRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getErrorMessage()));
 
@@ -53,6 +58,8 @@ public class CartService {
         newCart.getLineItems().add(lineItem);
 
         cartRepository.save(newCart);
+
+        return cartMapper.mapToCartDto(newCart);
     }
 
 }

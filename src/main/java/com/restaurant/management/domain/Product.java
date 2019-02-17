@@ -31,7 +31,9 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String category, double price, List<Ingredient> ingredients, Instant createdAt) {
+    public Product(Long id, String name, String category, Double price,
+                   List<Ingredient> ingredients, Instant createdAt) {
+        this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -39,11 +41,13 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public Product(String name, String category, double price, List<Ingredient> ingredients) {
+    public Product(String name, String category, double price,
+                   List<Ingredient> ingredients, Instant createdAt) {
         this.name = name;
         this.category = category;
         this.price = price;
         this.ingredients = ingredients;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {

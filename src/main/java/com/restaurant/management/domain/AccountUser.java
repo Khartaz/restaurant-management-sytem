@@ -14,6 +14,15 @@ public class AccountUser extends AbstractAdmin {
     public AccountUser() {
     }
 
+    public AccountUser(Long id, String name, String lastname, String email, String username,
+                       String userUniqueId, String password, String emailVerificationToken,
+                       Boolean isActive, Set<Role> roles) {
+        super(id, name, lastname, email,
+                username, userUniqueId, password,
+                emailVerificationToken, isActive, roles);
+    }
+
+
     public AccountUser(String name, String lastname, String email, String username,
                        String userUniqueId, String password, String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {

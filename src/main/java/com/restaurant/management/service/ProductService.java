@@ -1,8 +1,10 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Product;
+import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
+import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.web.request.product.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,15 @@ import java.util.stream.Stream;
 public class ProductService {
 
     private ProductRepository productRepository;
+    private ProductMapper productMapper;
 
     @Autowired
-    public void setProductRepository(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
-    public void registerProduct(ProductRequest request) {
+    public ProductDto registerProduct(ProductRequest request) {
 
         Product newProduct = new Product.ProductBuilder()
                 .setName(request.getName())
@@ -34,6 +38,8 @@ public class ProductService {
                 .build();
 
         productRepository.save(newProduct);
+
+        return productMapper.mapToProductDto(newProduct);
     }
 
     public void deleteProduct(Long id) {
@@ -44,7 +50,7 @@ public class ProductService {
     }
 
 
-    public void updateProduct(Long id, ProductRequest productRequest) {
+    public ProductDto updateProduct(Long id, ProductRequest productRequest) {
         Product product = productRepository.findProductById(id)
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + id));
 
@@ -61,8 +67,11 @@ public class ProductService {
             if (productRequest.getIngredients() != null) {
                 v.setIngredients(productRequest.getIngredients());
             }
-            productRepository.save(v);
         });
+
+        productRepository.save(product);
+
+        return productMapper.mapToProductDto(product);
     }
 
     public Iterable<Product> getAllProducts() {

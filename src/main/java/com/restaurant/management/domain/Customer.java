@@ -12,6 +12,11 @@ public class Customer extends AbstractUser  {
     public Customer() {
     }
 
+    public Customer(Long id, String name, String lastname, String email, Long phoneNumber) {
+        super(id, name, lastname, email);
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public String getName() {
         return super.getName();
@@ -30,6 +35,16 @@ public class Customer extends AbstractUser  {
     @Override
     public void setLastname(String lastname) {
         super.setLastname(lastname);
+    }
+
+    @Override
+    public String getEmail() {
+        return super.getEmail();
+    }
+
+    @Override
+    public void setEmail(String email) {
+        super.setEmail(email);
     }
 
     public Long getPhoneNumber() {

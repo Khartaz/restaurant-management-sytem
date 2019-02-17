@@ -1,8 +1,11 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.dto.CustomerDto;
+import com.restaurant.management.exception.customer.CustomerExistsException;
+import com.restaurant.management.exception.customer.CustomerMessages;
+import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.repository.CustomerRepository;
-import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.SingUpCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,20 +16,26 @@ import javax.transaction.Transactional;
 @Transactional
 public class CustomerService {
     private CustomerRepository customerRepository;
-    private Utils utils;
+    private CustomerMapper customerMapper;
 
     @Autowired
-    public void setUtils(Utils utils) {
-        this.utils = utils;
-    }
-
-    @Autowired
-    public void setCustomerRepository(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository,
+                           CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     //@RolesAllowed({"MANAGER", "ROLE_ADMIN"})
-    public Customer createCustomer(SingUpCustomerRequest request) {
+    public CustomerDto createCustomer(SingUpCustomerRequest request) {
+
+        if (customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getErrorMessage());
+        }
+
+        if (customerRepository.existsByEmail(request.getEmail())) {
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getErrorMessage());
+        }
+
         Customer customer = new Customer();
 
         customer.setName(request.getName());
@@ -36,6 +45,6 @@ public class CustomerService {
 
         customerRepository.save(customer);
 
-        return customer;
+        return customerMapper.mapToCustomerDto(customer);
     }
 }

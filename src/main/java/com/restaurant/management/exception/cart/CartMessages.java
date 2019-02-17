@@ -1,13 +1,11 @@
-package com.restaurant.management.exception.customer;
+package com.restaurant.management.exception.cart;
 
-public enum  CustomerMessages {
-    CUSTOMER_NOT_REGISTER("Please register customer first."),
-    CUSTOMER_PHONE_EXISTS("Customer with provided phone number already exists."),
-    CUSTOMER_EMAIL_EXISTS("Customer with provided email already exists.");
+public enum  CartMessages {
+    CART_NOT_FOUND("First add products to cart");
 
     private String errorMessage;
 
-    CustomerMessages(String errorMessage) {
+    CartMessages(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

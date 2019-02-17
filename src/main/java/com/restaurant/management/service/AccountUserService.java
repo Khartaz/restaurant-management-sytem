@@ -4,10 +4,12 @@ import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.Mail;
 import com.restaurant.management.domain.Role;
 import com.restaurant.management.domain.RoleName;
+import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
@@ -43,11 +45,13 @@ public class AccountUserService implements UserDetailsService {
     private JwtTokenProvider tokenProvider;
     private Utils utils;
     private SimpleEmailService simpleEmailService;
+    private AccountUserMapper accountUserMapper;
 
     @Autowired
     public AccountUserService(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
                               RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                              JwtTokenProvider tokenProvider, Utils utils, SimpleEmailService simpleEmailService) {
+                              JwtTokenProvider tokenProvider, Utils utils, SimpleEmailService simpleEmailService,
+                              AccountUserMapper accountUserMapper) {
         this.authenticationManager = authenticationManager;
         this.accountUserRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -55,6 +59,7 @@ public class AccountUserService implements UserDetailsService {
         this.tokenProvider = tokenProvider;
         this.utils = utils;
         this.simpleEmailService = simpleEmailService;
+        this.accountUserMapper = accountUserMapper;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class AccountUserService implements UserDetailsService {
         return UserPrincipal.create(adminUser);
     }
 
-    public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
+    public AccountUserDto registerAdminAccount(SignUpUserRequest signUpUserRequest) {
        // Email and Username validation
 
         if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
@@ -108,11 +113,11 @@ public class AccountUserService implements UserDetailsService {
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
 
-        return newAdminUser;
+        return accountUserMapper.mapToAccountUserDto(newAdminUser);
     }
 
 
-    public AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest) {
+    public AccountUserDto registerManagerAccount(SignUpUserRequest signUpUserRequest) {
         // Email and Username validation
 
         if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
@@ -147,7 +152,7 @@ public class AccountUserService implements UserDetailsService {
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
 
-        return accountUser;
+        return accountUserMapper.mapToAccountUserDto(accountUser);
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {

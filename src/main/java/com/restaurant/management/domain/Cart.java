@@ -24,6 +24,13 @@ public class Cart {
     public Cart() {
     }
 
+    public Cart(Long id, Boolean isOpen, Customer customer, List<LineItem> lineItems) {
+        this.id = id;
+        this.isOpen = isOpen;
+        this.customer = customer;
+        this.lineItems = lineItems;
+    }
+
     public Cart(Boolean isOpen, Customer customer, List<LineItem> lineItems) {
         this.isOpen = isOpen;
         this.customer = customer;

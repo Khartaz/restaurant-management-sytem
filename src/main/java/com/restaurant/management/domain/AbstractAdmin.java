@@ -46,6 +46,18 @@ public abstract class AbstractAdmin extends AbstractUser {
     public AbstractAdmin() {
     }
 
+    public AbstractAdmin(Long id, String name, String lastname, String email,
+                         String username, String userUniqueId, String password,
+                         String emailVerificationToken, Boolean isActive, Set<Role> roles) {
+        super(id, name, lastname, email);
+        this.username = username;
+        this.userUniqueId = userUniqueId;
+        this.password = password;
+        this.emailVerificationToken = emailVerificationToken;
+        this.isActive = isActive;
+        this.roles = roles;
+    }
+
     public AbstractAdmin(String name, String lastname, String email,
                          String username, String userUniqueId, String password,
                          String emailVerificationToken, Boolean isActive, Set<Role> roles) {

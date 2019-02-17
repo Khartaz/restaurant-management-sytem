@@ -30,6 +30,17 @@ public class Order  {
     public Order() {
     }
 
+    public Order(Long id, String orderNumber,
+                 Instant ordered, String status,
+                 Double totalPrice, Cart cart) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.ordered = ordered;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.cart = cart;
+    }
+
     public Order(String orderNumber,
                  Instant ordered, String status,
                  Double totalPrice, Cart cart) {

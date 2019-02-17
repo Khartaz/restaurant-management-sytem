@@ -22,32 +22,33 @@ public class Product {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "createdAt")
+    private Instant createdAt;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    @Column(name = "createdAt")
-    private Instant createdAt;
 
     public Product() {
     }
 
     public Product(Long id, String name, String category, Double price,
-                   List<Ingredient> ingredients, Instant createdAt) {
+                   Instant createdAt, List<Ingredient> ingredients) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.ingredients = ingredients;
         this.createdAt = createdAt;
+        this.ingredients = ingredients;
     }
 
     public Product(String name, String category, double price,
-                   List<Ingredient> ingredients, Instant createdAt) {
+                   Instant createdAt, List<Ingredient> ingredients) {
         this.name = name;
         this.category = category;
         this.price = price;
-        this.ingredients = ingredients;
         this.createdAt = createdAt;
+        this.ingredients = ingredients;
     }
 
     public Long getId() {
@@ -131,7 +132,7 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(this.name, this.category, this.price, this.ingredients, this.createdAt);
+            return new Product(this.name, this.category, this.price, this.createdAt, this.ingredients);
         }
     }
 

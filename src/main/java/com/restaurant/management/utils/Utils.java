@@ -11,7 +11,7 @@ public class Utils {
     private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private final String ALPHABET2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private String generateRandomString(int length) {
+    private String generateRandomStringWithSmallLetters(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 
         for (int i = 0; i < length; i++) {
@@ -20,7 +20,7 @@ public class Utils {
         return new String(returnValue);
     }
 
-    public String generateOrderNumber(int length) {
+    private String generateRandomStringWithBigLetters(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 
         for (int i = 0; i < length; i++) {
@@ -29,7 +29,15 @@ public class Utils {
         return new String(returnValue);
     }
 
+    public String generateCartNumber(int length) {
+        return generateRandomStringWithBigLetters(length);
+    }
+
+    public String generateOrderNumber(int length) {
+        return generateRandomStringWithBigLetters(length);
+    }
+
     public String generateUserUniqueId(int length) {
-        return generateRandomString(length);
+        return generateRandomStringWithSmallLetters(length);
     }
 }

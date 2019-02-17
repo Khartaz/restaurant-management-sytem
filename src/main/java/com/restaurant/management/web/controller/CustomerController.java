@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/api/customers")
 public class CustomerController {
 
     private CustomerService customerService;
@@ -30,7 +30,7 @@ public class CustomerController {
         customerService.createCustomer(singUpCustomerRequest);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/customer/{name}")
+                .fromCurrentContextPath().path("/api/customers/{name}")
                 .buildAndExpand(singUpCustomerRequest.getName()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "Customer registered successfully"));

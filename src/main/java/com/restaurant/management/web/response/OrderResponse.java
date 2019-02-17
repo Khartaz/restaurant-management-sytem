@@ -1,33 +1,23 @@
-package com.restaurant.management.domain.dto;
-
-import com.restaurant.management.domain.Cart;
+package com.restaurant.management.web.response;
 
 import java.time.Instant;
 
-public class OrderDto {
+public class OrderResponse {
 
-    private Long id;
     private String orderNumber;
     private Instant ordered;
     private String status;
     private Double totalPrice;
-    private CartDto cart;
+    private CartResponse cartResponse;
 
-    public OrderDto(Long id, String orderNumber, Instant ordered, String status, Double totalPrice, CartDto cart) {
-        this.id = id;
+
+    public OrderResponse(String orderNumber, Instant ordered,
+                         String status, Double totalPrice, CartResponse cartResponse) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
         this.status = status;
         this.totalPrice = totalPrice;
-        this.cart = cart;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.cartResponse = cartResponse;
     }
 
     public String getOrderNumber() {
@@ -62,11 +52,11 @@ public class OrderDto {
         this.totalPrice = totalPrice;
     }
 
-    public CartDto getCart() {
-        return cart;
+    public CartResponse getCartResponse() {
+        return cartResponse;
     }
 
-    public void setCart(CartDto cart) {
-        this.cart = cart;
+    public void setCartResponse(CartResponse cartResponse) {
+        this.cartResponse = cartResponse;
     }
 }

@@ -1,33 +1,20 @@
-package com.restaurant.management.domain.dto;
+package com.restaurant.management.web.response;
 
 import java.time.Instant;
 import java.util.List;
 
-public class ProductDto {
+public class ProductResponse {
 
-    private Long id;
     private String name;
     private String category;
     private Double price;
-    private List<IngredientDto> ingredients;
-    private Instant createdAt;
+    private List<IngredientResponse> ingredients;
 
-    public ProductDto(Long id, String name, String category, Double price,
-                      Instant createdAt, List<IngredientDto> ingredients) {
-        this.id = id;
+    public ProductResponse(String name, String category, Double price, List<IngredientResponse> ingredients) {
         this.name = name;
         this.category = category;
         this.price = price;
-        this.createdAt = createdAt;
         this.ingredients = ingredients;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -54,19 +41,12 @@ public class ProductDto {
         this.price = price;
     }
 
-    public List<IngredientDto> getIngredients() {
+    public List<IngredientResponse> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<IngredientDto> ingredients) {
+    public void setIngredients(List<IngredientResponse> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
 }

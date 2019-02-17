@@ -1,26 +1,38 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.OrderDto;
+import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.service.OrderService;
+import com.restaurant.management.web.response.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     private OrderService orderService;
+    private OrderMapper orderMapper;
 
     @Autowired
-    public void setOrderService(OrderService orderService) {
+    public OrderController(OrderService orderService, OrderMapper orderMapper) {
         this.orderService = orderService;
+        this.orderMapper = orderMapper;
     }
 
     @PostMapping(value = "/{phoneNumber}")
     public @ResponseBody
-    ResponseEntity<OrderDto> sendOrder(@PathVariable Long phoneNumber) {
+    Resource<OrderResponse> sendOrder(@PathVariable Long phoneNumber) {
 
-        return ResponseEntity.ok(orderService.processOrder(phoneNumber));
+        OrderDto orderDto = orderService.processOrder(phoneNumber);
+
+        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
+
+        Link link = linkTo(OrderController.class).slash(orderResponse.getOrderNumber()).withSelfRel();
+        return new Resource<>(orderResponse, link);
     }
 }

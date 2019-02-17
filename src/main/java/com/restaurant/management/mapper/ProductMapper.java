@@ -2,10 +2,17 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.dto.ProductDto;
+import com.restaurant.management.web.response.ProductResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class ProductMapper {
+
+    @Autowired
+    private IngredientMapper ingredientMapper;
 
     public Product mapToProduct(final ProductDto productDto) {
         return new Product(
@@ -13,8 +20,10 @@ public class ProductMapper {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                productDto.getIngredients(),
-                productDto.getCreatedAt()
+                productDto.getCreatedAt(),
+                productDto.getIngredients().stream()
+                        .map(v -> ingredientMapper.mapToIngredient(v))
+                        .collect(Collectors.toList())
         );
     }
 
@@ -24,8 +33,21 @@ public class ProductMapper {
                 product.getName(),
                 product.getCategory(),
                 product.getPrice(),
-                product.getIngredients(),
-                product.getCreatedAt()
+                product.getCreatedAt(),
+                product.getIngredients().stream()
+                        .map(v -> ingredientMapper.mapToIngredientDto(v))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public ProductResponse mapToProductResponse(final ProductDto productDto) {
+        return new ProductResponse(
+                productDto.getName(),
+                productDto.getCategory(),
+                productDto.getPrice(),
+                productDto.getIngredients().stream()
+                        .map(v -> ingredientMapper.mapToIngredientResponse(v))
+                        .collect(Collectors.toList())
         );
     }
 }

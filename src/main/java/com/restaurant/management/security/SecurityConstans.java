@@ -10,12 +10,12 @@ public class SecurityConstans {
     public static final String HEADER_STRING = "Authorization";
     public static final String USER_ID = "userUniqueId";
     public static final String AUTH_URL = "/api/auth/**";
-    public static final String CUSTOMER_URL = "/api/customer/**";
-    public static final String ACCOUNT_URL = "/api/account/**";
+    public static final String CUSTOMER_URL = "/api/customers/**";
+    public static final String ACCOUNT_URL = "/api/accounts/**";
     public static final String ADMIN_URL = "/api/admin/**";
-    public static final String PRODUCT_URL = "/api/product/**";
-    public static final String ORDER_URL = "/api/order/**";
-    public static final String CART_URL = "/api/cart/**";
+    public static final String PRODUCT_URL = "/api/products/**";
+    public static final String ORDER_URL = "/api/orders/**";
+    public static final String CART_URL = "/api/carts/**";
 
     public static final String[] SWAGGER = {
             // -- swagger ui

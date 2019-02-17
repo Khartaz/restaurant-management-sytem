@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private ProductService productService;
@@ -47,7 +47,7 @@ public class ProductController {
         productService.updateProduct(id, request);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/product/{name}")
+                .fromCurrentContextPath().path("/api/products/{name}")
                 .buildAndExpand(request.getName()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "Product Updated"));

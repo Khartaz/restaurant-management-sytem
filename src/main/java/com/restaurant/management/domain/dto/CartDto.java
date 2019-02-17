@@ -1,22 +1,22 @@
 package com.restaurant.management.domain.dto;
 
-import com.restaurant.management.domain.Customer;
-import com.restaurant.management.domain.LineItem;
-
 import java.util.List;
 
 public class CartDto {
 
     private Long id;
+    private String cartNumber;
     private Boolean isOpen;
-    private Customer customer;
-    private List<LineItem> lineItems;
+    private CustomerDto customer;
+    private List<LineItemDto> lineItems;
 
     public CartDto(Long id,
+                   String cartNumber,
                    Boolean isOpen,
-                   Customer customer,
-                   List<LineItem> lineItems) {
+                   CustomerDto customer,
+                   List<LineItemDto> lineItems) {
         this.id = id;
+        this.cartNumber = cartNumber;
         this.isOpen = isOpen;
         this.customer = customer;
         this.lineItems = lineItems;
@@ -30,6 +30,14 @@ public class CartDto {
         this.id = id;
     }
 
+    public String getCartNumber() {
+        return cartNumber;
+    }
+
+    public void setCartNumber(String cartNumber) {
+        this.cartNumber = cartNumber;
+    }
+
     public Boolean getOpen() {
         return isOpen;
     }
@@ -38,19 +46,19 @@ public class CartDto {
         isOpen = open;
     }
 
-    public Customer getCustomer() {
+    public CustomerDto getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerDto customer) {
         this.customer = customer;
     }
 
-    public List<LineItem> getLineItems() {
+    public List<LineItemDto> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<LineItem> lineItems) {
+    public void setLineItems(List<LineItemDto> lineItems) {
         this.lineItems = lineItems;
     }
 }

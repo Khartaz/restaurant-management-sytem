@@ -12,6 +12,9 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "cart_number")
+    private String cartNumber;
+
     @Column(name = "isOpen")
     private Boolean isOpen;
 
@@ -24,8 +27,10 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(Long id, Boolean isOpen, Customer customer, List<LineItem> lineItems) {
+    public Cart(Long id, String cartNumber, Boolean isOpen,
+                Customer customer, List<LineItem> lineItems) {
         this.id = id;
+        this.cartNumber = cartNumber;
         this.isOpen = isOpen;
         this.customer = customer;
         this.lineItems = lineItems;
@@ -43,6 +48,14 @@ public class Cart {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCartNumber() {
+        return cartNumber;
+    }
+
+    public void setCartNumber(String cartNumber) {
+        this.cartNumber = cartNumber;
     }
 
     public Boolean getOpen() {
@@ -77,9 +90,15 @@ public class Cart {
     }
 
     public static class CartBuilder {
+        private String cartNumber;
         private Boolean isOpen;
         private Customer customer;
         private List<LineItem> lineItems = new ArrayList<>();
+
+        public CartBuilder setCartNumber(String cartNumber) {
+            this.cartNumber = cartNumber;
+            return this;
+        }
 
         public CartBuilder setIsOpen(Boolean isOpen) {
             this.isOpen = isOpen;

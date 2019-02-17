@@ -22,6 +22,12 @@ public class LineItem {
     public LineItem() {
     }
 
+    public LineItem(Product product, Integer quantity, Double price) {
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }

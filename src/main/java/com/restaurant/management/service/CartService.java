@@ -8,6 +8,7 @@ import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.repository.*;
+import com.restaurant.management.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +21,19 @@ public class CartService {
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
     private CartMapper cartMapper;
+    private Utils utils;
 
     @Autowired
     public CartService(CartRepository cartRepository,
                        ProductRepository productRepository,
                        CustomerRepository customerRepository,
-                       CartMapper cartMapper) {
+                       CartMapper cartMapper,
+                       Utils utils) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
         this.cartMapper = cartMapper;
+        this.utils = utils;
     }
 
     public CartDto addToCart(Long phoneNumber, String productName, Integer quantity) {
@@ -52,6 +56,10 @@ public class CartService {
         lineItem.setProduct(product);
         lineItem.setQuantity(quantity);
         lineItem.setPrice(product.getPrice());
+
+        if (!cart.isPresent()) {
+            newCart.setCartNumber(utils.generateCartNumber(5));
+        }
 
         newCart.setOpen(true);
         newCart.setCustomer(customer);

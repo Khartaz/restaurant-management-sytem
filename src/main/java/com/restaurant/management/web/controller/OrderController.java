@@ -4,6 +4,7 @@ import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.OrderResponse;
+import com.restaurant.management.web.response.SendOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -24,11 +25,11 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @PostMapping(value = "/{phoneNumber}")
+    @PostMapping(value = "/send")
     public @ResponseBody
-    Resource<OrderResponse> sendOrder(@PathVariable Long phoneNumber) {
+    Resource<OrderResponse> sendOrder(@RequestBody SendOrder sendOrder) {
 
-        OrderDto orderDto = orderService.processOrder(phoneNumber);
+        OrderDto orderDto = orderService.processOrder(sendOrder.getPhoneNumber());
 
         OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
 

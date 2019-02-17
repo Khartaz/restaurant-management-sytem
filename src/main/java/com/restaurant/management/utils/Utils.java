@@ -8,8 +8,8 @@ import java.util.Random;
 @Component
 public class Utils {
     private final Random RANDOM = new SecureRandom();
-    private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private final String ALPHABET2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static final String ALPHABET2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private String generateRandomStringWithSmallLetters(int length) {
         StringBuilder returnValue = new StringBuilder(length);
@@ -27,6 +27,10 @@ public class Utils {
             returnValue.append(ALPHABET2.charAt(RANDOM.nextInt(ALPHABET2.length())));
         }
         return new String(returnValue);
+    }
+
+    public String generateProductUniqueId(int length) {
+        return generateRandomStringWithBigLetters(length);
     }
 
     public String generateCartNumber(int length) {

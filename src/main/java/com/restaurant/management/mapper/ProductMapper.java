@@ -17,6 +17,7 @@ public class ProductMapper {
     public Product mapToProduct(final ProductDto productDto) {
         return new Product(
                 productDto.getId(),
+                productDto.getUniqueId(),
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
@@ -30,6 +31,7 @@ public class ProductMapper {
     public ProductDto mapToProductDto(final Product product) {
         return new ProductDto(
                 product.getId(),
+                product.getUniqueId(),
                 product.getName(),
                 product.getCategory(),
                 product.getPrice(),
@@ -42,6 +44,7 @@ public class ProductMapper {
 
     public ProductResponse mapToProductResponse(final ProductDto productDto) {
         return new ProductResponse(
+                productDto.getUniqueId(),
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),

@@ -6,15 +6,17 @@ import java.util.List;
 public class ProductDto {
 
     private Long id;
+    private String uniqueId;
     private String name;
     private String category;
     private Double price;
     private List<IngredientDto> ingredients;
     private Instant createdAt;
 
-    public ProductDto(Long id, String name, String category, Double price,
+    public ProductDto(Long id, String uniqueId, String name, String category, Double price,
                       Instant createdAt, List<IngredientDto> ingredients) {
         this.id = id;
+        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -28,6 +30,14 @@ public class ProductDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public String getName() {

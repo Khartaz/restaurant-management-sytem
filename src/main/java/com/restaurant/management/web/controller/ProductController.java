@@ -1,9 +1,14 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.dto.ProductDto;
+import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,29 +16,33 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private ProductService productService;
+    private ProductMapper productMapper;
 
     @Autowired
-    public void setProductService(ProductService productService) {
+    public ProductController(ProductService productService, ProductMapper productMapper) {
         this.productService = productService;
+        this.productMapper = productMapper;
     }
 
     @PostMapping
-    public ResponseEntity<?> registerProduct(@RequestBody ProductRequest request) {
-        productService.registerProduct(request);
+    public @ResponseBody
+    Resource<ProductResponse> registerProduct(@RequestBody ProductRequest request) {
+        ProductDto productDto = productService.registerProduct(request);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/product/{name}")
-                .buildAndExpand(request.getName()).toUri();
+        ProductResponse response = productMapper.mapToProductResponse(productDto);
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "Product register"));
+        Link link = linkTo(ProductController.class).slash(response.getUniqueId()).withSelfRel();
+        return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 
         productService.deleteProduct(id);
@@ -41,15 +50,15 @@ public class ProductController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Product deleted"));
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable  Long id, @RequestBody ProductRequest request) {
+    @PutMapping
+    public @ResponseBody
+    Resource<ProductResponse> updateProduct(@RequestBody ProductRequest request) {
 
-        productService.updateProduct(id, request);
+        ProductDto productDto = productService.updateProduct(request);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/products/{name}")
-                .buildAndExpand(request.getName()).toUri();
+        ProductResponse response = productMapper.mapToProductResponse(productDto);
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "Product Updated"));
+        Link link = linkTo(ProductController.class).slash(request.getUniqueId()).withSelfRel();
+        return new Resource<>(response, link);
     }
 }

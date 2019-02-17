@@ -6,6 +6,7 @@ import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.repository.ProductRepository;
+import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.product.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +21,21 @@ public class ProductService {
 
     private ProductRepository productRepository;
     private ProductMapper productMapper;
+    private Utils utils;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository,
+                          ProductMapper productMapper,
+                          Utils utils) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.utils = utils;
     }
 
     public ProductDto registerProduct(ProductRequest request) {
 
         Product newProduct = new Product.ProductBuilder()
+                .setUniqueId(utils.generateProductUniqueId(5))
                 .setName(request.getName())
                 .setCategory(request.getCategory())
                 .setPrice(request.getPrice())
@@ -50,9 +56,11 @@ public class ProductService {
     }
 
 
-    public ProductDto updateProduct(Long id, ProductRequest productRequest) {
-        Product product = productRepository.findProductById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + id));
+    public ProductDto updateProduct(ProductRequest productRequest) {
+        Product product = productRepository.findProductByUniqueId(productRequest.getUniqueId())
+                .orElseThrow(() -> new ProductNotFoundException(
+                        ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + productRequest.getUniqueId()
+                ));
 
         Stream.of(product).forEach(v -> {
             if (productRequest.getName() != null) {

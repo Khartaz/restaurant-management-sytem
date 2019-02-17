@@ -1,38 +1,55 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.dto.CustomerDto;
+import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SingUpCustomerRequest;
-import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
+
+import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
 
     private CustomerService customerService;
+    private CustomerMapper customerMapper;
 
     @Autowired
-    public void setCustomerService(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CustomerMapper customerMapper) {
         this.customerService = customerService;
+        this.customerMapper = customerMapper;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerCustomer(@Valid @RequestBody SingUpCustomerRequest singUpCustomerRequest) {
-        customerService.createCustomer(singUpCustomerRequest);
+    public @ResponseBody
+    Resource<CustomerResponse> registerCustomer(@Valid @RequestBody SingUpCustomerRequest singUpCustomerRequest) {
+        CustomerDto customerDto = customerService.createCustomer(singUpCustomerRequest);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/customers/{name}")
-                .buildAndExpand(singUpCustomerRequest.getName()).toUri();
+        CustomerResponse response = customerMapper.mapToCustomerResponse(customerDto);
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "Customer registered successfully"));
+        Link link = linkTo(CustomerController.class).withSelfRel();
+        return new Resource<>(response, link);
     }
+
+    @GetMapping
+    public @ResponseBody
+    Resources<CustomerResponse> getAllCustomers() {
+        List<CustomerDto> customerDto = customerService.getAllCustomers();
+
+        List<CustomerResponse> response = customerMapper.mapToCustomerResponseList(customerDto);
+
+        Link link = linkTo(CustomerController.class).withSelfRel();
+        return new Resources<>(response, link);
+    }
+
 }

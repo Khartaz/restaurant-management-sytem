@@ -12,6 +12,11 @@ public class Customer extends AbstractUser  {
     public Customer() {
     }
 
+    public Customer(String name, String lastname, String email, Long phoneNumber) {
+        super(name, lastname, email);
+        this.phoneNumber = phoneNumber;
+    }
+
     public Customer(Long id, String name, String lastname, String email, Long phoneNumber) {
         super(id, name, lastname, email);
         this.phoneNumber = phoneNumber;

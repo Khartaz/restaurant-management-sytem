@@ -8,6 +8,9 @@ import java.util.List;
 public class ProductRequest {
 
     @NotBlank
+    private String uniqueId;
+
+    @NotBlank
     private String name;
 
     @NotBlank
@@ -17,6 +20,14 @@ public class ProductRequest {
     private double price;
 
     private List<Ingredient> ingredients;
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 
     public String getName() {
         return name;

@@ -13,6 +13,9 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "unique_id")
+    private String uniqueId;
+
     @Column(name = "name")
     private String name;
 
@@ -28,13 +31,13 @@ public class Product {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ingredient> ingredients = new ArrayList<>();
 
-
     public Product() {
     }
 
-    public Product(Long id, String name, String category, Double price,
+    public Product(Long id, String uniqueId, String name, String category, Double price,
                    Instant createdAt, List<Ingredient> ingredients) {
         this.id = id;
+        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -42,8 +45,9 @@ public class Product {
         this.ingredients = ingredients;
     }
 
-    public Product(String name, String category, double price,
+    public Product(String uniqueId, String name, String category, double price,
                    Instant createdAt, List<Ingredient> ingredients) {
+        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -57,6 +61,14 @@ public class Product {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public String getName() {
@@ -100,11 +112,17 @@ public class Product {
     }
 
     public static class ProductBuilder {
+        private String uniqueId;
         private String name;
         private String category;
         private Double price;
         private List<Ingredient> ingredients;
         private Instant createdAt;
+
+        public ProductBuilder setUniqueId(String uniqueId) {
+            this.uniqueId = uniqueId;
+            return this;
+        }
 
         public ProductBuilder setName(String name) {
             this.name = name;
@@ -132,7 +150,8 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(this.name, this.category, this.price, this.createdAt, this.ingredients);
+            return new Product(this.uniqueId, this.name, this.category,
+                    this.price, this.createdAt, this.ingredients);
         }
     }
 

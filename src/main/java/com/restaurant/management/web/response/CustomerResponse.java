@@ -4,14 +4,14 @@ public class CustomerResponse {
 
     private String name;
     private String lastname;
-    private Long phoneNumber;
     private String email;
+    private Long phoneNumber;
 
-    public CustomerResponse(String name, String lastname, Long phoneNumber, String email) {
+    public CustomerResponse(String name, String lastname, String email, Long phoneNumber) {
         this.name = name;
         this.lastname = lastname;
-        this.phoneNumber = phoneNumber;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -30,6 +30,14 @@ public class CustomerResponse {
         this.lastname = lastname;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Long getPhoneNumber() {
         return phoneNumber;
     }
@@ -38,11 +46,5 @@ public class CustomerResponse {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

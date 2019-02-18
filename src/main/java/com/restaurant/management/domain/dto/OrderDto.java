@@ -1,7 +1,5 @@
 package com.restaurant.management.domain.dto;
 
-import com.restaurant.management.domain.Cart;
-
 import java.time.Instant;
 
 public class OrderDto {

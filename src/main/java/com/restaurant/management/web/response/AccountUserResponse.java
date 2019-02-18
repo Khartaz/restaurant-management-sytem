@@ -1,22 +1,21 @@
-package com.restaurant.management.domain.dto;
+package com.restaurant.management.web.response;
+
+import com.restaurant.management.domain.dto.RoleDto;
 
 import java.util.Set;
 
-public class AccountUserDto {
-    private Long id;
+public class AccountUserResponse {
     private String name;
     private String lastname;
     private String email;
     private String username;
     private String userUniqueId;
-    private String password;
-    private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleDto> roles;
 
-    public AccountUserDto(Long id, String name, String lastname, String email,
-                          String username, String userUniqueId, Boolean isActive, Set<RoleDto> roles) {
-        this.id = id;
+    public AccountUserResponse(String name, String lastname, String email,
+                               String username, String userUniqueId,
+                               Boolean isActive, Set<RoleDto> roles) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -24,14 +23,6 @@ public class AccountUserDto {
         this.userUniqueId = userUniqueId;
         this.isActive = isActive;
         this.roles = roles;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -72,22 +63,6 @@ public class AccountUserDto {
 
     public void setUserUniqueId(String userUniqueId) {
         this.userUniqueId = userUniqueId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmailVerificationToken() {
-        return emailVerificationToken;
-    }
-
-    public void setEmailVerificationToken(String emailVerificationToken) {
-        this.emailVerificationToken = emailVerificationToken;
     }
 
     public Boolean getActive() {

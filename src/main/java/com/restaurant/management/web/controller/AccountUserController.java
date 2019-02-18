@@ -1,49 +1,47 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.exception.user.UserMessages;
+import com.restaurant.management.domain.dto.AccountUserDto;
+import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.web.response.AccountUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountUserController {
 
     private AccountUserService accountUserService;
+    private AccountUserMapper accountUserMapper;
 
     @Autowired
-    public void setAccountUserService(AccountUserService accountUserService) {
+    public AccountUserController(AccountUserService accountUserService, AccountUserMapper accountUserMapper) {
         this.accountUserService = accountUserService;
+        this.accountUserMapper = accountUserMapper;
     }
 
-    @PostMapping(value = "/signin",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
     }
 
-    @PostMapping(value = "/signup",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-        accountUserService.registerManagerAccount(signUpUserRequest);
+    @PostMapping(value = "/signup")
+    public @ResponseBody
+    Resource<AccountUserResponse> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
+        AccountUserDto accountUserDto = accountUserService.registerManagerAccount(signUpUserRequest);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/users/{username}")
-                .buildAndExpand(signUpUserRequest.getUsername()).toUri();
+        AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
-        return ResponseEntity.created(location).body(
-                new ApiResponse(true, UserMessages.REGISTER_SUCCESS.getErrorMessage()));
+        Link link = linkTo(AdminUserController.class).slash(userResponse.getUserUniqueId()).withSelfRel();
+        return new Resource<>(userResponse, link);
     }
-
 }

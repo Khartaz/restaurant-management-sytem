@@ -1,0 +1,20 @@
+package com.restaurant.management.domain.dto;
+
+import com.restaurant.management.domain.RoleName;
+
+public class RoleDto {
+
+    private RoleName name;
+
+    public RoleDto(RoleName name) {
+        this.name = name;
+    }
+
+    public RoleName getName() {
+        return name;
+    }
+
+    public void setName(RoleName name) {
+        this.name = name;
+    }
+}

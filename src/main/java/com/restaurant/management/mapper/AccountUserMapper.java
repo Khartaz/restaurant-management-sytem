@@ -2,23 +2,33 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.dto.AccountUserDto;
+import com.restaurant.management.web.response.AccountUserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class AccountUserMapper {
 
+    private RoleMapper roleMapper;
+
+    @Autowired
+    public void setRoleMapper(RoleMapper roleMapper) {
+        this.roleMapper = roleMapper;
+    }
+
     public AccountUser mapToAccountUser(final AccountUserDto accountUserDto) {
         return new AccountUser(
-                accountUserDto.getId(),
                 accountUserDto.getName(),
                 accountUserDto.getLastname(),
                 accountUserDto.getEmail(),
                 accountUserDto.getUsername(),
                 accountUserDto.getUserUniqueId(),
-                accountUserDto.getPassword(),
-                accountUserDto.getEmailVerificationToken(),
                 accountUserDto.getActive(),
-                accountUserDto.getRoles()
+                accountUserDto.getRoles().stream()
+                        .map(v -> roleMapper.mapToRole(v))
+                        .collect(Collectors.toSet())
         );
     }
 
@@ -30,10 +40,22 @@ public class AccountUserMapper {
                 accountUser.getEmail(),
                 accountUser.getUsername(),
                 accountUser.getUserUniqueId(),
-                accountUser.getPassword(),
-                accountUser.getEmailVerificationToken(),
                 accountUser.getActive(),
-                accountUser.getRoles()
+                accountUser.getRoles().stream()
+                        .map(v -> roleMapper.mapToRoleDto(v))
+                        .collect(Collectors.toSet())
+        );
+    }
+
+    public AccountUserResponse mapToAccountUserResponse(final AccountUserDto accountUserDto) {
+        return new AccountUserResponse(
+                accountUserDto.getName(),
+                accountUserDto.getLastname(),
+                accountUserDto.getEmail(),
+                accountUserDto.getUsername(),
+                accountUserDto.getUserUniqueId(),
+                accountUserDto.getActive(),
+                accountUserDto.getRoles()
         );
     }
 }

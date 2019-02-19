@@ -1,29 +1,67 @@
 package com.restaurant.management.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "account_users")
-public class AccountUser extends AbstractAdmin {
+public class AccountUser extends AbstractUser {
+
+    @NotBlank
+    @Size(max = 15)
+    @Column(name = "username")
+    private String username;
+
+    @NotBlank
+    @Size(max = 40)
+    @Column(name = "user_unique_id")
+    private String userUniqueId;
+
+    @NotBlank
+    @Size(max = 100)
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "password_reset_token")
+    private String passwordResetToken;
+
+    @Column(name = "encrypted_password")
+    private String encryptedPassword;
+
+    @Column(name = "email_verification_token")
+    private String emailVerificationToken;
+
+    @Column(name = "isActive")
+    private Boolean isActive;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Role> roles = new HashSet<>();
 
     public AccountUser() {
     }
 
-    public AccountUser(String name, String lastname, String email, String username,
-                       String userUniqueId, String password, String emailVerificationToken,
-                       Boolean isActive, Set<Role> roles) {
-        super(name, lastname, email,
-              username, userUniqueId, password,
-              emailVerificationToken, isActive, roles);
+    public AccountUser(String name, String lastname, String email,
+                       String username, String userUniqueId, String password,
+                       String emailVerificationToken, Boolean isActive, Set<Role> roles) {
+        super(name, lastname, email);
+        this.username = username;
+        this.userUniqueId = userUniqueId;
+        this.password = password;
+        this.emailVerificationToken = emailVerificationToken;
+        this.isActive = isActive;
+        this.roles = roles;
     }
 
-    public AccountUser(String name, String lastname, String email, String username,
-                       String userUniqueId, Boolean isActive, Set<Role> roles) {
-        super(name, lastname, email,
-                username, userUniqueId, isActive, roles);
+    public AccountUser(String name, String lastname, String email,
+                         String username, String userUniqueId, Boolean isActive, Set<Role> roles) {
+        super(name, lastname, email);
+        this.username = username;
+        this.userUniqueId = userUniqueId;
+        this.isActive = isActive;
+        this.roles = roles;
     }
 
     @Override
@@ -34,16 +72,6 @@ public class AccountUser extends AbstractAdmin {
     @Override
     public void setId(Long id) {
         super.setId(id);
-    }
-
-    @Override
-    public String getUserUniqueId() {
-        return super.getUserUniqueId();
-    }
-
-    @Override
-    public void setUserUniqueId(String userUniqueId) {
-        super.setUserUniqueId(userUniqueId);
     }
 
     @Override
@@ -74,6 +102,70 @@ public class AccountUser extends AbstractAdmin {
     @Override
     public void setEmail(String email) {
         super.setEmail(email);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserUniqueId() {
+        return userUniqueId;
+    }
+
+    public void setUserUniqueId(String userUniqueId) {
+        this.userUniqueId = userUniqueId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public static class AccountUserBuilder {

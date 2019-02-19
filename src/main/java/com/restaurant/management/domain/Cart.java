@@ -18,7 +18,7 @@ public class Cart {
     @Column(name = "isOpen")
     private Boolean isOpen;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

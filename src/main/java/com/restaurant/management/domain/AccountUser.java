@@ -64,46 +64,6 @@ public class AccountUser extends AbstractUser {
         this.roles = roles;
     }
 
-    @Override
-    public Long getId() {
-        return super.getId();
-    }
-
-    @Override
-    public void setId(Long id) {
-        super.setId(id);
-    }
-
-    @Override
-    public String getName() {
-        return super.getName();
-    }
-
-    @Override
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    @Override
-    public String getLastname() {
-        return super.getLastname();
-    }
-
-    @Override
-    public void setLastname(String lastname) {
-        super.setLastname(lastname);
-    }
-
-    @Override
-    public String getEmail() {
-        return super.getEmail();
-    }
-
-    @Override
-    public void setEmail(String email) {
-        super.setEmail(email);
-    }
-
     public String getUsername() {
         return username;
     }

@@ -14,7 +14,4 @@ public class RoleDto {
         return name;
     }
 
-    public void setName(RoleName name) {
-        this.name = name;
-    }
 }

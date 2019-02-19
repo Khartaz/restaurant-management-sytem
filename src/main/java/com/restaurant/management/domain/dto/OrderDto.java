@@ -24,47 +24,23 @@ public class OrderDto {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getOrderNumber() {
         return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
     }
 
     public Instant getOrdered() {
         return ordered;
     }
 
-    public void setOrdered(Instant ordered) {
-        this.ordered = ordered;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public CartDto getCart() {
         return cart;
-    }
-
-    public void setCart(CartDto cart) {
-        this.cart = cart;
     }
 }

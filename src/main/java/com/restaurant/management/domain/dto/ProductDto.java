@@ -24,59 +24,32 @@ public class ProductDto {
         this.ingredients = ingredients;
     }
 
+
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUniqueId() {
         return uniqueId;
     }
 
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public Double getPrice() {
         return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public List<IngredientDto> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<IngredientDto> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public Instant getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
     }
 }

@@ -1,11 +1,13 @@
 package com.restaurant.management.security;
 
+import com.amazonaws.services.xray.model.Http;
 import com.restaurant.management.security.jwt.JwtAuthenticationEntryPoint;
 import com.restaurant.management.security.jwt.JwtAuthenticationFilter;
 import com.restaurant.management.service.AccountUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -89,6 +94,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         SecurityConstans.PRODUCT_URL,
                         SecurityConstans.ORDER_URL,
                         SecurityConstans.CART_URL)
+                .permitAll()
+                .antMatchers(HttpMethod.POST)
+                .permitAll()
+                .antMatchers(HttpMethod.PUT)
+                .permitAll()
+                .antMatchers(HttpMethod.GET)
+                .permitAll()
+                .antMatchers(HttpMethod.DELETE)
                 .permitAll()
                 .anyRequest()
                 .authenticated();

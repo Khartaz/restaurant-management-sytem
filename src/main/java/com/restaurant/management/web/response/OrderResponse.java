@@ -24,39 +24,19 @@ public class OrderResponse {
         return orderNumber;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
     public Instant getOrdered() {
         return ordered;
-    }
-
-    public void setOrdered(Instant ordered) {
-        this.ordered = ordered;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public CartResponse getCartResponse() {
         return cartResponse;
-    }
-
-    public void setCartResponse(CartResponse cartResponse) {
-        this.cartResponse = cartResponse;
     }
 }

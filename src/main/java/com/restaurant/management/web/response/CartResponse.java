@@ -22,16 +22,8 @@ public class CartResponse {
         return cartNumber;
     }
 
-    public void setCartNumber(String cartNumber) {
-        this.cartNumber = cartNumber;
-    }
-
     public Boolean getOpen() {
         return isOpen;
-    }
-
-    public void setOpen(Boolean open) {
-        isOpen = open;
     }
 
     public CustomerResponse getCustomer() {
@@ -44,9 +36,5 @@ public class CartResponse {
 
     public List<LineItemResponse> getLineItems() {
         return lineItems;
-    }
-
-    public void setLineItems(List<LineItemResponse> lineItems) {
-        this.lineItems = lineItems;
     }
 }

@@ -22,40 +22,19 @@ public class ProductResponse {
         return uniqueId;
     }
 
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public Double getPrice() {
         return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public List<IngredientResponse> getIngredients() {
         return ingredients;
     }
-
-    public void setIngredients(List<IngredientResponse> ingredients) {
-        this.ingredients = ingredients;
-    }
-
 }

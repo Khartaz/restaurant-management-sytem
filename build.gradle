@@ -30,7 +30,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-hateoas")
 
     //Local Tomcat
-    runtimeOnly('mysql:mysql-connector-java')
+//    runtimeOnly('mysql:mysql-connector-java')
+    compile('org.postgresql:postgresql')
 
     //Heroku
     //compile('org.postgresql:postgresql')

@@ -32,6 +32,7 @@ public class CustomerMapper {
 
     public CustomerResponse mapToCustomerResponse(final CustomerDto customerDto) {
         return new CustomerResponse(
+                customerDto.getId(),
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),
@@ -54,6 +55,7 @@ public class CustomerMapper {
     public List<CustomerResponse> mapToCustomerResponseList(final List<CustomerDto> customers) {
         return customers.stream()
                 .map(v -> new CustomerResponse(
+                        v.getId(),
                         v.getName(),
                         v.getLastname(),
                         v.getEmail(),

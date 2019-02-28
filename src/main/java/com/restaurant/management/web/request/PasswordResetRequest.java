@@ -7,7 +7,4 @@ public class PasswordResetRequest {
         return usernameOrEmail;
     }
 
-    public void setUsernameOrEmail(String usernameOrEmail) {
-        this.usernameOrEmail = usernameOrEmail;
-    }
 }

@@ -1,5 +1,6 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.service.OrderService;
@@ -35,5 +36,15 @@ public class OrderController {
 
         Link link = linkTo(OrderController.class).slash(orderResponse.getOrderNumber()).withSelfRel();
         return new Resource<>(orderResponse, link);
+    }
+
+    @PutMapping(value = "/list/close")
+    public @ResponseBody
+    Resource<DailyOrderList> closeDailyOrderList() {
+
+        DailyOrderList dailyOrderList = orderService.closeDailyList();
+
+        Link link = linkTo(OrderController.class).withSelfRel();
+        return new Resource<>(dailyOrderList, link);
     }
 }

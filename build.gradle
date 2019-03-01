@@ -28,14 +28,12 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-mail')
     compile("org.springframework.boot:spring-boot-starter-hateoas")
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
 
     //Local Tomcat
 //    runtimeOnly('mysql:mysql-connector-java')
     compile('org.postgresql:postgresql')
-
-    //Heroku
-    //compile('org.postgresql:postgresql')
-
+    
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
     compile('org.thymeleaf:thymeleaf-spring5:3.0.10.RELEASE')

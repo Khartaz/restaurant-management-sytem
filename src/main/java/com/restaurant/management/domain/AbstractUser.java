@@ -15,7 +15,9 @@ import javax.validation.constraints.Size;
 public abstract class AbstractUser extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
     @NotBlank
     @Size(max = 40)
     @Column(name = "name")

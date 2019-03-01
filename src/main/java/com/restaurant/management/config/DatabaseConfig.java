@@ -1,23 +1,28 @@
 package com.restaurant.management.config;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
-/*
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @Configuration
 public class DatabaseConfig {
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
 
     @Bean
-    public DataSource dataSource() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
-        return new HikariDataSource(config);
+    public BasicDataSource dataSource() throws URISyntaxException {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
     }
 }
-*/

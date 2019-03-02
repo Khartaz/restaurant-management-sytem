@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'war'
+apply plugin: 'war'
 
 group = 'com.restaurant.management'
 version = '0.0.1-SNAPSHOT'
@@ -37,7 +37,8 @@ dependencies {
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
     //Local Tomcat
-    runtimeOnly('mysql:mysql-connector-java')
+    compile('mysql:mysql-connector-java:8.0.13')
+
 //    compile('org.postgresql:postgresql')
 //    compile ('org.apache.commons:commons-dbcp2:2.5.0')
 

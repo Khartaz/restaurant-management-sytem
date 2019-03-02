@@ -11,8 +11,11 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
 
 group = 'com.restaurant.management'
 version = '0.0.1-SNAPSHOT'
@@ -24,16 +27,19 @@ repositories {
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile('org.springframework.boot:spring-boot-devtools')
     implementation('org.springframework.boot:spring-boot-starter-security')
     implementation('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-mail')
     compile("org.springframework.boot:spring-boot-starter-hateoas")
     compile('org.springframework.boot:spring-boot-starter-jdbc')
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
     //Local Tomcat
-//    runtimeOnly('mysql:mysql-connector-java')
-    compile('org.postgresql:postgresql')
-    compile ('org.apache.commons:commons-dbcp2:2.5.0')
+    runtimeOnly('mysql:mysql-connector-java')
+//    compile('org.postgresql:postgresql')
+//    compile ('org.apache.commons:commons-dbcp2:2.5.0')
 
 
     testImplementation('org.springframework.boot:spring-boot-starter-test')
@@ -50,4 +56,5 @@ dependencies {
     //Amazon
     compile('com.amazonaws:aws-java-sdk-ses:1.11.466')
     compile('com.amazonaws:aws-java-sdk:1.11.330')
+
 }

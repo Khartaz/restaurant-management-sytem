@@ -47,4 +47,5 @@ public class AccountUserController {
         Link link = linkTo(AdminUserController.class).slash(userResponse.getUserUniqueId()).withSelfRel();
         return new Resource<>(userResponse, link);
     }
+
 }

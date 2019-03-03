@@ -197,6 +197,18 @@ public class AccountUserService implements UserDetailsService {
         return true;
     }
 
+    public boolean resendEmailVerificationToken(String usernameOrEmail) {
+        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
+
+        String token = accountUser.getEmailVerificationToken();
+
+        simpleEmailService.sendEmailVerification(
+                new Mail(accountUser.getEmail(), accountUser.getName(), accountUser.getUsername()), token);
+
+        return true;
+    }
+
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 

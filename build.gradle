@@ -26,25 +26,25 @@ repositories {
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-    implementation('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
 
     // JAVA SIMPLE EMAIL
     compile('org.springframework.boot:spring-boot-starter-mail')
     // SECURITY
-    implementation('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-security')
     
     //Local Tomcat
 //    compile('mysql:mysql-connector-java:8.0.13')
+//    compile('org.springframework.boot:spring-boot-starter-jdbc')
 
     compile('org.postgresql:postgresql')
 
     // HATEOAS
     compile("org.springframework.boot:spring-boot-starter-hateoas")
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation('org.springframework.security:spring-security-test')
+    compile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.security:spring-security-test')
     compile('org.thymeleaf:thymeleaf-spring5:3.0.10.RELEASE')
 
     //Swagger

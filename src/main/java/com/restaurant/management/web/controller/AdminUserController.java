@@ -18,7 +18,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class AdminUserController {
 
     private AccountUserService accountUserService;
@@ -30,12 +30,12 @@ public class AdminUserController {
         this.accountUserMapper = accountUserMapper;
     }
 
-    @PostMapping(value = "/signin")
+    @PostMapping(value = "/admin/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
     }
 
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/admin/signup")
     public @ResponseBody
     Resource<AccountUserResponse> registerAdminUser(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
         AccountUserDto accountUserDto = accountUserService.registerAdminAccount(signUpUserRequest);

@@ -23,7 +23,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api")
 public class AccountUserController {
 
     private AccountUserService accountUserService;
@@ -35,13 +35,13 @@ public class AccountUserController {
         this.accountUserMapper = accountUserMapper;
     }
 
-    @PostMapping(value = "/signin")
+    @PostMapping(value = "/accounts/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
     }
 
 
-    @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/accounts/signup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
         AccountUserDto accountUserDto = accountUserService.registerManagerAccount(signUpUserRequest);
@@ -52,7 +52,7 @@ public class AccountUserController {
         return new Resource<>(userResponse, link);
     }
 
-    @GetMapping(value = " ", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/accounts", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Resources<AccountUser> showAllUsers() {
         List<AccountUser> accountUsers = accountUserService.getAllAccountUsers();
         Link link = linkTo(AccountUserController.class).withSelfRel();

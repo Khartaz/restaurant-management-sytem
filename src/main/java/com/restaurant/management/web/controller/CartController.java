@@ -14,7 +14,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api")
 public class CartController {
 
     private CartService cartService;
@@ -26,7 +26,7 @@ public class CartController {
         this.cartMapper = cartMapper;
     }
 
-    @PutMapping(value = "addToCart")
+    @PutMapping(value = "/carts/addToCart")
     public @ResponseBody
     Resource<CartResponse> addToCart(@RequestBody OrderRequest orderRequest) {
         CartDto cartDto = cartService.addToCart(orderRequest.getPhoneNumber(), orderRequest.getProductName(), orderRequest.getQuantity());

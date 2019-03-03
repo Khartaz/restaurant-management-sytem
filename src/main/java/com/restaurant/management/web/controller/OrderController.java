@@ -15,7 +15,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api")
 public class OrderController {
 
     private OrderService orderService;
@@ -27,7 +27,7 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @PostMapping(value = "/send")
+    @PostMapping(value = "/orders/send")
     public @ResponseBody
     Resource<OrderResponse> sendOrder(@RequestBody SendOrder sendOrder) {
 
@@ -39,7 +39,7 @@ public class OrderController {
         return new Resource<>(orderResponse, link);
     }
 
-    @PutMapping(value = "/list/close")
+    @PutMapping(value = "/orders/list/close")
     public @ResponseBody
     Resource<DailyOrderList> closeDailyOrderList() {
 

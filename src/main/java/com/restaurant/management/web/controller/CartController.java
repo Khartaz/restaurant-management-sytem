@@ -15,7 +15,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/carts")
 public class CartController {
 
     private CartService cartService;
@@ -27,7 +27,7 @@ public class CartController {
         this.cartMapper = cartMapper;
     }
 
-    @PutMapping(value = "/carts/addToCart",
+    @PutMapping(value = "/addToCart",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> addToCart(@RequestBody OrderRequest orderRequest) {

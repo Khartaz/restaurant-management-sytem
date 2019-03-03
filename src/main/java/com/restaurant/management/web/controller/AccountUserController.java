@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -41,7 +41,7 @@ public class AccountUserController {
     }
 
 
-    @PostMapping(value = "/accounts/signup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/accounts/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
         AccountUserDto accountUserDto = accountUserService.registerManagerAccount(signUpUserRequest);
@@ -52,8 +52,9 @@ public class AccountUserController {
         return new Resource<>(userResponse, link);
     }
 
-    @GetMapping(value = "/accounts", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Resources<AccountUser> showAllUsers() {
+    @GetMapping(value = "/accounts", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resources<AccountUser> showAllUsers() {
         List<AccountUser> accountUsers = accountUserService.getAllAccountUsers();
         Link link = linkTo(AccountUserController.class).withSelfRel();
 

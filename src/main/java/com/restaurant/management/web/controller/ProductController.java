@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -33,7 +33,9 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
-    @PostMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/products",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> registerProduct(@RequestBody ProductRequest request) {
         ProductDto productDto = productService.registerProduct(request);
@@ -44,7 +46,9 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/products/{id}")
+    @DeleteMapping(value = "/products/{id}",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 
         productService.deleteProduct(id);
@@ -52,7 +56,9 @@ public class ProductController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Product deleted"));
     }
 
-    @PutMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/products",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> updateProduct(@RequestBody ProductRequest request) {
 
@@ -64,7 +70,9 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @GetMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/products",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<Product> showProducts() {
 

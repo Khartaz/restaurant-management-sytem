@@ -12,6 +12,7 @@ import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -27,7 +28,9 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @PostMapping(value = "/orders/send")
+    @PostMapping(value = "/orders/send",
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<OrderResponse> sendOrder(@RequestBody SendOrder sendOrder) {
 
@@ -39,7 +42,9 @@ public class OrderController {
         return new Resource<>(orderResponse, link);
     }
 
-    @PutMapping(value = "/orders/list/close")
+    @PutMapping(value = "/orders/list/close",
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderList> closeDailyOrderList() {
 

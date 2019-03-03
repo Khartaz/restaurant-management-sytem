@@ -11,6 +11,7 @@ import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -26,7 +27,9 @@ public class CartController {
         this.cartMapper = cartMapper;
     }
 
-    @PutMapping(value = "/carts/addToCart")
+    @PutMapping(value = "/carts/addToCart",
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> addToCart(@RequestBody OrderRequest orderRequest) {
         CartDto cartDto = cartService.addToCart(orderRequest.getPhoneNumber(), orderRequest.getProductName(), orderRequest.getQuantity());

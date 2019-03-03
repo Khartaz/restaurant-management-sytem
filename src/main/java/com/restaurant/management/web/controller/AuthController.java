@@ -11,7 +11,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthController {
 
     private AccountUserService accountUserService;
@@ -21,13 +21,12 @@ public class AuthController {
         this.accountUserService = accountUserService;
     }
 
-    @GetMapping(value = "/email-verification",
-            produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/auth/email-verification", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> verifyEmailToken(@RequestParam(value = "token") String token) {
         return ResponseEntity.ok(accountUserService.verifyEmailToken(token));
     }
 
-    @PostMapping(value = "/password-reset-request",
+    @PostMapping(value = "/auth/password-reset-request",
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest) {
@@ -35,7 +34,7 @@ public class AuthController {
         return ResponseEntity.ok(accountUserService.requestResetPassword(passwordResetRequest.getUsernameOrEmail()));
     }
 
-    @PostMapping(value = "/reset-password",
+    @PostMapping(value = "/auth/reset-password",
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPassword(@RequestParam(value = "token") String token,
@@ -44,7 +43,7 @@ public class AuthController {
         return ResponseEntity.ok(accountUserService.resetPassword(token, passwordReset));
     }
 
-    @PostMapping(value = "/email-token",
+    @PostMapping(value = "/auth/email-token",
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> sendEmailToken(@RequestParam String usernameOrEmail) {

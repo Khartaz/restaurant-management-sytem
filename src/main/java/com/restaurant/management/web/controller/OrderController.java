@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api")
 public class OrderController {
 
     private OrderService orderService;
@@ -28,7 +28,7 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @PostMapping(value = "/send",
+    @PostMapping(value = "/orders/send",
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -42,9 +42,7 @@ public class OrderController {
         return new Resource<>(orderResponse, link);
     }
 
-    @PutMapping(value = "/list/close",
-            consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/orders/list/close", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderList> closeDailyOrderList() {
 

@@ -45,7 +45,7 @@ public class CustomerController {
         return new Resource<>(response, link);
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = " ", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<CustomerResponse> getAllCustomers() {
         List<CustomerDto> customerDto = customerService.getAllCustomers();

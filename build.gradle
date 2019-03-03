@@ -27,20 +27,21 @@ repositories {
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile('org.springframework.boot:spring-boot-devtools')
-    implementation('org.springframework.boot:spring-boot-starter-security')
     implementation('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-mail')
-    compile("org.springframework.boot:spring-boot-starter-hateoas")
-    compile('org.springframework.boot:spring-boot-starter-jdbc')
-//    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+//    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
+    // SECURITY
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    
     //Local Tomcat
 //    compile('mysql:mysql-connector-java:8.0.13')
 
     compile('org.postgresql:postgresql')
-//    compile ('org.apache.commons:commons-dbcp2:2.5.0')
 
+    // HATEOAS
+    compile("org.springframework.boot:spring-boot-starter-hateoas")
 
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')

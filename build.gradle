@@ -28,10 +28,10 @@ repositories {
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-mail')
-//    compile('org.springframework.boot:spring-boot-starter-jdbc')
-//    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
 
+    // JAVA SIMPLE EMAIL
+    compile('org.springframework.boot:spring-boot-starter-mail')
     // SECURITY
     implementation('org.springframework.boot:spring-boot-starter-security')
     

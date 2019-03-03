@@ -10,12 +10,10 @@ import com.restaurant.management.exception.orderlist.OrderListNotFoundException;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.repository.*;
 import com.restaurant.management.utils.Utils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 

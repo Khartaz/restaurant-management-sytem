@@ -11,10 +11,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@Configuration
-public class DatabaseConfig {
+//@Configuration
+//public class DatabaseConfig {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(DatabaseConfig.class);
+//    private static Logger LOGGER = LoggerFactory.getLogger(DatabaseConfig.class);
 //
 //    @Bean
 //    public DataSource dataSource() {
@@ -65,4 +65,4 @@ public class DatabaseConfig {
 //        return null;
 //    }
 //    jdbc:mysql://aa1uxsttl7z33a.cblujp7mksrf.eu-west-1.rds.amazonaws.com:3306/aa1uxsttl7z33a?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
-}
+//}

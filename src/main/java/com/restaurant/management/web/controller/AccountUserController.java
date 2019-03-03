@@ -53,7 +53,7 @@ public class AccountUserController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  Resources<AccountUser> showAllUsers() {
+    public @ResponseBody Resources<AccountUser> showAllUsers() {
         List<AccountUser> accountUsers = accountUserService.getAllAccountUsers();
         Link link = linkTo(AccountUserController.class).withSelfRel();
 

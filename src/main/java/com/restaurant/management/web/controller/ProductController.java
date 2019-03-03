@@ -65,7 +65,8 @@ public class ProductController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Resources<Product> showProducts() {
+    public @ResponseBody
+    Resources<Product> showProducts() {
 
         List<Product> productList = productService.getAllProducts();
 

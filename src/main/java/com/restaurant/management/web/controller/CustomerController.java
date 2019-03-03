@@ -20,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/customers")
 public class CustomerController {
 
     private CustomerService customerService;
@@ -32,7 +32,7 @@ public class CustomerController {
         this.customerMapper = customerMapper;
     }
 
-    @PostMapping("/customers/signup")
+    @PostMapping("/signup")
     public @ResponseBody
     Resource<CustomerResponse> registerCustomer(@Valid @RequestBody SingUpCustomerRequest singUpCustomerRequest) {
         CustomerDto customerDto = customerService.createCustomer(singUpCustomerRequest);
@@ -43,7 +43,7 @@ public class CustomerController {
         return new Resource<>(response, link);
     }
 
-    @GetMapping(value = "/customers", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<CustomerResponse> getAllCustomers() {
         List<CustomerDto> customerDto = customerService.getAllCustomers();

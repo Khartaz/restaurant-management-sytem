@@ -20,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class AdminUserController {
 
     private AccountUserService accountUserService;
@@ -32,12 +32,16 @@ public class AdminUserController {
         this.accountUserMapper = accountUserMapper;
     }
 
-    @PostMapping(value = "/admin/signin", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signin",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
     }
 
-    @PostMapping(value = "/admin/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signup",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> registerAdminUser(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
         AccountUserDto accountUserDto = accountUserService.registerAdminAccount(signUpUserRequest);

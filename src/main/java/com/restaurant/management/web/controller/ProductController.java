@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private ProductService productService;
@@ -33,9 +33,7 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
-    @PostMapping(value = "/products",
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> registerProduct(@RequestBody ProductRequest request) {
         ProductDto productDto = productService.registerProduct(request);
@@ -46,7 +44,7 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/products/{id}",
+    @DeleteMapping(value = "/{id}",
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
@@ -56,9 +54,7 @@ public class ProductController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Product deleted"));
     }
 
-    @PutMapping(value = "/products",
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> updateProduct(@RequestBody ProductRequest request) {
 
@@ -70,9 +66,7 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @GetMapping(value = "/products",
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<Product> showProducts() {
 

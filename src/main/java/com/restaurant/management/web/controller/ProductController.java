@@ -1,5 +1,6 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.service.ProductService;
@@ -9,8 +10,12 @@ import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -57,5 +62,15 @@ public class ProductController {
 
         Link link = linkTo(ProductController.class).slash(request.getUniqueId()).withSelfRel();
         return new Resource<>(response, link);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Resources<Product> showProducts() {
+
+        List<Product> productList = productService.getAllProducts();
+
+        Link link = linkTo(ProductController.class).withSelfRel();
+
+        return new Resources<>(productList, link);
     }
 }

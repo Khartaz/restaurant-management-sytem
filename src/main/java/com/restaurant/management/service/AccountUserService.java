@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -254,6 +255,13 @@ public class AccountUserService implements UserDetailsService {
                 returnValue = true;
         }
         return returnValue;
+    }
+
+    public List<AccountUser> getAllAccountUsers() {
+        List<AccountUser> accountUsers = accountUserRepository.findAll();
+
+
+        return accountUsers;
     }
 
 }

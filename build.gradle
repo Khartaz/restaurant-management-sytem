@@ -30,7 +30,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-mail')
 //    compile('org.springframework.boot:spring-boot-starter-jdbc')
-    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+//    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 
     // SECURITY
     implementation('org.springframework.boot:spring-boot-starter-security')

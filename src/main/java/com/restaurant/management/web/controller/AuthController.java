@@ -42,8 +42,8 @@ public class AuthController {
         return ResponseEntity.ok(accountUserService.resetPassword(token, passwordReset));
     }
 
-    @GetMapping(value = "/email-token/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendEmailToken(@PathVariable String usernameOrEmail) {
+    @GetMapping(value = "/email-token", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendEmailToken(@RequestParam String usernameOrEmail) {
         return ResponseEntity.ok(accountUserService.resendEmailVerificationToken(usernameOrEmail));
     }
 

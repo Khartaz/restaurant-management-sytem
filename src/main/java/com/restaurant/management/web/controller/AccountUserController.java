@@ -51,6 +51,12 @@ public class AccountUserController {
         return new Resource<>(userResponse, link);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public @ResponseBody
+    ResponseEntity<?> deleteAccount(@PathVariable Long id) {
+        return ResponseEntity.ok(accountUserService.deleteUserById(id));
+    }
+
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<AccountUserResponse> showAllUsers() {

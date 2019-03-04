@@ -9,7 +9,8 @@ public enum UserMessages {
     ROLE_NOT_SET("Role not set."),
     PASSWORDS_EQUALS("Password and confirmed password must be this same"),
     USER_NOT_FOUND("User not found with username or email : "),
-    UNIQUE_ID_NOT_FOUND("User not found with id : "),
+    ID_NOT_FOUND("User not found with id: "),
+    UNIQUE_ID_NOT_FOUND("User not found with unique id : "),
     ACCOUNT_DISABLED("Account is disabled. Please verify email first.");
 
 

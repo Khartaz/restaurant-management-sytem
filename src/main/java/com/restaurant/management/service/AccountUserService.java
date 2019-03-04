@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -155,6 +156,17 @@ public class AccountUserService implements UserDetailsService {
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
+    }
+
+    public boolean deleteUserById(Long id) {
+        Optional<AccountUser> accountUser = accountUserRepository.findById(id);
+
+        if (accountUser.isPresent()) {
+            accountUserRepository.deleteById(accountUser.get().getId());
+            return true;
+        } else {
+            throw new UserNotFoundException(UserMessages.ID_NOT_FOUND.getErrorMessage() + id);
+        }
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {

@@ -36,7 +36,6 @@ dependencies {
     
     // LOCAL TOMCAT
     compile('mysql:mysql-connector-java:8.0.13')
-    
     // REMOTE POSTGRESQL
     compile('org.postgresql:postgresql')
 

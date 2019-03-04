@@ -53,7 +53,7 @@ public class AccountUserController {
 
     @DeleteMapping(value = "/{id}")
     public @ResponseBody
-    ResponseEntity<?> deleteAccount(@PathVariable Long id) {
+    ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
         return ResponseEntity.ok(accountUserService.deleteUserById(id));
     }
 
@@ -66,6 +66,17 @@ public class AccountUserController {
         Link link = linkTo(AccountUserController.class).withSelfRel();
 
         return new Resources<>(accountUsersResponse, link);
+    }
+
+    @GetMapping(value = "/{userUniqueId}", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<AccountUserResponse> showUser(@PathVariable String userUniqueId) {
+        AccountUserDto accountUserDto = accountUserService.getUserByUserUniqueId(userUniqueId);
+
+        AccountUserResponse accountUserResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
+
+        Link link = linkTo(AccountUserController.class).slash(accountUserResponse.getUserUniqueId()).withSelfRel();
+        return new Resource<>(accountUserResponse, link);
     }
 
 }

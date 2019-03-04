@@ -169,6 +169,17 @@ public class AccountUserService implements UserDetailsService {
         }
     }
 
+
+    public AccountUserDto getUserByUserUniqueId(String userUniqueId) {
+        Optional<AccountUser> accountUser = accountUserRepository.findByUserUniqueId(userUniqueId);
+
+        if (!accountUser.isPresent()) {
+            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage());
+        }
+
+        return accountUserMapper.mapToAccountUserDto(accountUser.get());
+    }
+
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         String usernameOrEmail = loginRequest.getUsernameOrEmail();
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)

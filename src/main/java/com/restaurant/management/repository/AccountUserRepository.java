@@ -12,6 +12,12 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
 
     Optional<AccountUser> findByUsernameOrEmail(String username, String email);
 
+    Optional<AccountUser> findByUserUniqueId(String userUniqueId);
+
+    void deleteByUserUniqueId(String userUniqueId);
+
+    void deleteById(Long id);
+
     List<AccountUser> findByIdIn(List<Long> userIds);
 
     Optional<AccountUser> findByUsername(String username);

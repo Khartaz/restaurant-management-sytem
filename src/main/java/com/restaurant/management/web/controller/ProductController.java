@@ -70,7 +70,7 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @GetMapping(value = "/products", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<Product> showProducts() {
 

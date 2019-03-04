@@ -17,6 +17,7 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
+import com.restaurant.management.web.response.AccountUserResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.request.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -257,11 +258,10 @@ public class AccountUserService implements UserDetailsService {
         return returnValue;
     }
 
-    public List<AccountUser> getAllAccountUsers() {
+    public List<AccountUserDto> getAllAccountUsers() {
         List<AccountUser> accountUsers = accountUserRepository.findAll();
 
-
-        return accountUsers;
+        return accountUserMapper.mapToAccountUserListDto(accountUsers);
     }
 
 }

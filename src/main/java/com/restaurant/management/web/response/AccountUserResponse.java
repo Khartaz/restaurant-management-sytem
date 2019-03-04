@@ -12,11 +12,11 @@ public class AccountUserResponse {
     private String username;
     private String userUniqueId;
     private Boolean isActive;
-    private Set<RoleDto> roles;
+    private Set<RoleResponse> roles;
 
     public AccountUserResponse(Long id, String name, String lastname, String email,
                                String username, String userUniqueId,
-                               Boolean isActive, Set<RoleDto> roles) {
+                               Boolean isActive, Set<RoleResponse> roles) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -55,7 +55,7 @@ public class AccountUserResponse {
         return isActive;
     }
 
-    public Set<RoleDto> getRoles() {
+    public Set<RoleResponse> getRoles() {
         return roles;
     }
 }

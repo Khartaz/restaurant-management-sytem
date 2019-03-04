@@ -6,6 +6,7 @@ import com.restaurant.management.web.response.AccountUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -57,7 +58,60 @@ public class AccountUserMapper {
                 accountUserDto.getUsername(),
                 accountUserDto.getUserUniqueId(),
                 accountUserDto.getActive(),
-                accountUserDto.getRoles()
+                accountUserDto.getRoles().stream()
+                        .map(r -> roleMapper.mapToRoleResponse(r))
+                        .collect(Collectors.toSet())
         );
+    }
+
+    public List<AccountUser> mapToAccountUserList(final List<AccountUserDto> accountUsersDto) {
+
+        return accountUsersDto.stream()
+                .map(u -> new AccountUser(
+                        u.getId(),
+                        u.getName(),
+                        u.getLastname(),
+                        u.getEmail(),
+                        u.getUsername(),
+                        u.getUserUniqueId(),
+                        u.getActive(),
+                        u.getRoles().stream()
+                                .map(r -> roleMapper.mapToRole(r))
+                                .collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<AccountUserDto> mapToAccountUserListDto(final List<AccountUser> accountUsers) {
+        return accountUsers.stream()
+                .map(u -> new AccountUserDto(
+                        u.getId(),
+                        u.getName(),
+                        u.getLastname(),
+                        u.getEmail(),
+                        u.getUsername(),
+                        u.getUserUniqueId(),
+                        u.getActive(),
+                        u.getRoles().stream()
+                                .map(r -> roleMapper.mapToRoleDto(r))
+                                .collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<AccountUserResponse> mapToAccountUserListResponse(final List<AccountUserDto> accountUsersDto) {
+        return accountUsersDto.stream()
+                .map(u -> new AccountUserResponse(
+                        u.getId(),
+                        u.getName(),
+                        u.getLastname(),
+                        u.getEmail(),
+                        u.getUsername(),
+                        u.getUserUniqueId(),
+                        u.getActive(),
+                        u.getRoles().stream()
+                        .map(r -> roleMapper.mapToRoleResponse(r))
+                                .collect(Collectors.toSet())
+                )).collect(Collectors.toList());
     }
 }

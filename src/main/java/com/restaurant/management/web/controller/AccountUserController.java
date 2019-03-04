@@ -1,6 +1,5 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.AccountUserService;
@@ -54,11 +53,13 @@ public class AccountUserController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resources<AccountUser> showAllUsers() {
-        List<AccountUser> accountUsers = accountUserService.getAllAccountUsers();
+    Resources<AccountUserResponse> showAllUsers() {
+        List<AccountUserDto> accountUsersDto = accountUserService.getAllAccountUsers();
+
+        List<AccountUserResponse> accountUsersResponse = accountUserMapper.mapToAccountUserListResponse(accountUsersDto);
         Link link = linkTo(AccountUserController.class).withSelfRel();
 
-        return new Resources<>(accountUsers, link);
+        return new Resources<>(accountUsersResponse, link);
     }
 
 }

@@ -56,10 +56,12 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(Long id, String name, String lastname, String email,
-                         String username, String userUniqueId, Boolean isActive, Set<Role> roles) {
+                         String username, String userUniqueId, String emailVerificationToken,
+                       Boolean isActive, Set<Role> roles) {
         super(id, name, lastname, email);
         this.username = username;
         this.userUniqueId = userUniqueId;
+        this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
     }

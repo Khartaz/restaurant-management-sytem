@@ -1,7 +1,5 @@
 package com.restaurant.management.web.response;
 
-import com.restaurant.management.domain.dto.RoleDto;
-
 import java.util.Set;
 
 public class AccountUserResponse {
@@ -11,11 +9,12 @@ public class AccountUserResponse {
     private String email;
     private String username;
     private String userUniqueId;
+    private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleResponse> roles;
 
     public AccountUserResponse(Long id, String name, String lastname, String email,
-                               String username, String userUniqueId,
+                               String username, String userUniqueId, String emailVerificationToken,
                                Boolean isActive, Set<RoleResponse> roles) {
         this.id = id;
         this.name = name;
@@ -23,6 +22,7 @@ public class AccountUserResponse {
         this.email = email;
         this.username = username;
         this.userUniqueId = userUniqueId;
+        this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
     }
@@ -49,6 +49,10 @@ public class AccountUserResponse {
 
     public String getUserUniqueId() {
         return userUniqueId;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
     }
 
     public Boolean getActive() {

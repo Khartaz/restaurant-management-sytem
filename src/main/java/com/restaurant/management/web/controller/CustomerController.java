@@ -32,7 +32,7 @@ public class CustomerController {
         this.customerMapper = customerMapper;
     }
 
-    @PostMapping("/signup")
+    @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CustomerResponse> registerCustomer(@Valid @RequestBody SingUpCustomerRequest singUpCustomerRequest) {
         CustomerDto customerDto = customerService.createCustomer(singUpCustomerRequest);

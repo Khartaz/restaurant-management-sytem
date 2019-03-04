@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 @JsonIgnoreProperties(allowGetters = true)
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AbstractUser extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

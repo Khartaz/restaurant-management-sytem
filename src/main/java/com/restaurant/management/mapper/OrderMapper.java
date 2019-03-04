@@ -36,6 +36,7 @@ public class OrderMapper {
 
     public OrderResponse mapToOrderResponse(final OrderDto orderDto) {
         return new OrderResponse(
+                orderDto.getId(),
                 orderDto.getOrderNumber(),
                 orderDto.getOrdered(),
                 orderDto.getStatus(),

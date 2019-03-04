@@ -23,7 +23,8 @@ public class LineItem {
     public LineItem() {
     }
 
-    public LineItem(Product product, Integer quantity, Double price) {
+    public LineItem(Long id, Product product, Integer quantity, Double price) {
+        this.id = id;
         this.product = product;
         this.quantity = quantity;
         this.price = price;

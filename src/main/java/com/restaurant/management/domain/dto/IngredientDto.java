@@ -2,14 +2,21 @@ package com.restaurant.management.domain.dto;
 
 public class IngredientDto {
 
+    private Long id;
+
     private String name;
 
-    public IngredientDto(String name) {
+
+    public IngredientDto(Long id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
-
 }

@@ -44,6 +44,7 @@ public class ProductMapper {
 
     public ProductResponse mapToProductResponse(final ProductDto productDto) {
         return new ProductResponse(
+                productDto.getId(),
                 productDto.getUniqueId(),
                 productDto.getName(),
                 productDto.getCategory(),

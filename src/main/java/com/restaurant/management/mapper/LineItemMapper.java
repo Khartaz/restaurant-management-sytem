@@ -18,6 +18,7 @@ public class LineItemMapper {
 
     public LineItem mapToLineItem(final LineItemDto lineItemDto) {
         return new LineItem(
+                lineItemDto.getId(),
                 productMapper.mapToProduct(lineItemDto.getProductDto()),
                 lineItemDto.getQuantity(),
                 lineItemDto.getPrice()
@@ -26,6 +27,7 @@ public class LineItemMapper {
 
     public LineItemDto mapToLineItemDto(final LineItem lineItem) {
         return new LineItemDto(
+                lineItem.getId(),
                 productMapper.mapToProductDto(lineItem.getProduct()),
                 lineItem.getQuantity(),
                 lineItem.getPrice()
@@ -34,6 +36,7 @@ public class LineItemMapper {
 
     public LineItemResponse mapToLineItemResponse(final LineItemDto lineItemDto) {
         return new LineItemResponse(
+                lineItemDto.getId(),
                 productMapper.mapToProductResponse(lineItemDto.getProductDto()),
                 lineItemDto.getQuantity(),
                 lineItemDto.getPrice()

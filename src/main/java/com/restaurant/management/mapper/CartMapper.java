@@ -46,6 +46,7 @@ public class CartMapper {
 
     public CartResponse mapToCartResponse(final CartDto cartDto) {
         return new CartResponse(
+                cartDto.getId(),
                 cartDto.getCartNumber(),
                 cartDto.getOpen(),
                 customerMapper.mapToCustomerResponse(cartDto.getCustomer()),

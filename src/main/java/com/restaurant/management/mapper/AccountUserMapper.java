@@ -20,6 +20,7 @@ public class AccountUserMapper {
 
     public AccountUser mapToAccountUser(final AccountUserDto accountUserDto) {
         return new AccountUser(
+                accountUserDto.getId(),
                 accountUserDto.getName(),
                 accountUserDto.getLastname(),
                 accountUserDto.getEmail(),
@@ -49,6 +50,7 @@ public class AccountUserMapper {
 
     public AccountUserResponse mapToAccountUserResponse(final AccountUserDto accountUserDto) {
         return new AccountUserResponse(
+                accountUserDto.getId(),
                 accountUserDto.getName(),
                 accountUserDto.getLastname(),
                 accountUserDto.getEmail(),

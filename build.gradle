@@ -34,12 +34,11 @@ dependencies {
     // SECURITY
     compile('org.springframework.boot:spring-boot-starter-security')
     
-    //Local Tomcat
-//    compile('mysql:mysql-connector-java:8.0.13')
-//    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    // LOCAL TOMCAT
+    compile('mysql:mysql-connector-java:8.0.13')
     
-
-    compile('org.postgresql:postgresql')
+    // REMOTE POSTGRESQL
+//    compile('org.postgresql:postgresql')
 
     // HATEOAS
     compile("org.springframework.boot:spring-boot-starter-hateoas")

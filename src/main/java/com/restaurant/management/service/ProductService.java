@@ -77,8 +77,12 @@ public class ProductService {
     public ProductDto updateProduct(ProductRequest productRequest) {
         Product product = productRepository.findProductByUniqueId(productRequest.getUniqueId())
                 .orElseThrow(() -> new ProductNotFoundException(
-                        ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + productRequest.getUniqueId()
+                        ProductMessages.PRODUCT_UNIQUE_ID_NOT_FOUND.getErrorMessage() + productRequest.getUniqueId()
                 ));
+
+        if (productRepository.existsByName(productRequest.getName())) {
+            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getErrorMessage());
+        }
 
         Stream.of(product).forEach(p -> {
             p.setName(productRequest.getName());

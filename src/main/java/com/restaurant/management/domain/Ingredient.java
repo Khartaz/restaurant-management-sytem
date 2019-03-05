@@ -1,7 +1,6 @@
 package com.restaurant.management.domain;
 
 import javax.persistence.*;
-
 @Entity
 @Table(name = "ingredients")
 public class Ingredient {
@@ -22,7 +21,6 @@ public class Ingredient {
         this.name = name;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -38,4 +36,5 @@ public class Ingredient {
     public void setName(String name) {
         this.name = name;
     }
+
 }

@@ -17,7 +17,7 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.response.AccountUserResponse;
+import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.request.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +119,6 @@ public class AccountUserService implements UserDetailsService {
         return accountUserMapper.mapToAccountUserDto(newAdminUser);
     }
 
-
     public AccountUserDto registerManagerAccount(SignUpUserRequest signUpUserRequest) {
         // Email and Username validation
 
@@ -169,6 +168,20 @@ public class AccountUserService implements UserDetailsService {
         }
     }
 
+    public AccountUserDto updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
+        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + request.getUsernameOrEmail()));
+
+        Stream.of(accountUser).forEach(acc -> {
+            acc.setName(request.getName());
+            acc.setLastname(request.getLastname());
+        });
+
+        accountUserRepository.save(accountUser);
+
+        return accountUserMapper.mapToAccountUserDto(accountUser);
+
+    }
 
     public AccountUserDto getUserByUserUniqueId(String userUniqueId) {
         Optional<AccountUser> accountUser = accountUserRepository.findByUserUniqueId(userUniqueId);

@@ -2,6 +2,7 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.dto.ProductDto;
+import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.mapper.ProductMapper;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -34,9 +37,20 @@ public class ProductService {
     }
 
     public ProductDto registerProduct(ProductRequest request) {
+        if (productRepository.existsByName(request.getName())) {
+            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getErrorMessage());
+        }
+
+        String  uniqueProductId = utils.generateProductUniqueId(7);
+
+        Optional<Product> productExists = productRepository.findProductByUniqueId(uniqueProductId);
+
+        if (productExists.isPresent()) {
+            uniqueProductId = utils.generateProductUniqueId(8);
+        }
 
         Product newProduct = new Product.ProductBuilder()
-                .setUniqueId(utils.generateProductUniqueId(5))
+                .setUniqueId(uniqueProductId)
                 .setName(request.getName())
                 .setCategory(request.getCategory())
                 .setPrice(request.getPrice())
@@ -49,13 +63,16 @@ public class ProductService {
         return productMapper.mapToProductDto(newProduct);
     }
 
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findProductById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + id));
+    public boolean deleteProduct(String uniqueId) {
+        Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
 
-        productRepository.delete(product);
+        if (product.isPresent()) {
+            productRepository.deleteById(product.get().getId());
+            return true;
+        } else {
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + uniqueId);
+        }
     }
-
 
     public ProductDto updateProduct(ProductRequest productRequest) {
         Product product = productRepository.findProductByUniqueId(productRequest.getUniqueId())
@@ -63,19 +80,11 @@ public class ProductService {
                         ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + productRequest.getUniqueId()
                 ));
 
-        Stream.of(product).forEach(v -> {
-            if (productRequest.getName() != null) {
-                v.setName(productRequest.getName());
-            }
-            if (productRequest.getPrice() != 0) {
-                v.setPrice(productRequest.getPrice());
-            }
-            if (productRequest.getCategory() != null) {
-                v.setCategory(productRequest.getCategory());
-            }
-            if (productRequest.getIngredients() != null) {
-                v.setIngredients(productRequest.getIngredients());
-            }
+        Stream.of(product).forEach(p -> {
+            p.setName(productRequest.getName());
+            p.setPrice(productRequest.getPrice());
+            p.setCategory(productRequest.getCategory());
+            p.setIngredients(productRequest.getIngredients());
         });
 
         productRepository.save(product);
@@ -83,9 +92,22 @@ public class ProductService {
         return productMapper.mapToProductDto(product);
     }
 
-    public List<Product> getAllProducts() {
+    public ProductDto getProductByUniqueId(String uniqueId) {
+        Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
 
-        return productRepository.findAll();
+        if (!product.isPresent()) {
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage());
+        }
+
+        return productMapper.mapToProductDto(product.get());
+    }
+
+    public List<ProductDto> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+
+        return products.stream()
+                .map(v -> productMapper.mapToProductDto(v))
+                .collect(Collectors.toList());
     }
 
 }

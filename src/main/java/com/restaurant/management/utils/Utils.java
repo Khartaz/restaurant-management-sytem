@@ -11,6 +11,7 @@ public class Utils {
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final String ALPHABET2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
     private String generateRandomStringWithSmallLetters(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 

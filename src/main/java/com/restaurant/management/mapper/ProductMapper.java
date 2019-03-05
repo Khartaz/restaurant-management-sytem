@@ -1,11 +1,14 @@
 package com.restaurant.management.mapper;
 
+import com.restaurant.management.domain.Ingredient;
 import com.restaurant.management.domain.Product;
+import com.restaurant.management.domain.dto.IngredientDto;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -54,4 +57,5 @@ public class ProductMapper {
                         .collect(Collectors.toList())
         );
     }
+
 }

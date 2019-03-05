@@ -5,6 +5,7 @@ import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
+import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.AccountUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -49,6 +50,19 @@ public class AccountUserController {
 
         Link link = linkTo(AccountUserController.class).slash(userResponse.getUserUniqueId()).withSelfRel();
         return new Resource<>(userResponse, link);
+    }
+
+    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<AccountUserResponse> updateAccountNameOrLastname(@Valid @RequestBody UpdateAccountNameOrLastname request) {
+
+        AccountUserDto accountUserDto = accountUserService.updateAccountNameOrLastname(request);
+
+        AccountUserResponse response = accountUserMapper.mapToAccountUserResponse(accountUserDto);
+
+        Link link = linkTo(AccountUserController.class).slash(response.getUserUniqueId()).withSelfRel();
+
+        return new Resource<>(response, link);
     }
 
     @DeleteMapping(value = "/{id}")

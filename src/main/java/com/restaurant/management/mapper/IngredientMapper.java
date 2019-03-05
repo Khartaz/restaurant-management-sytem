@@ -5,6 +5,10 @@ import com.restaurant.management.domain.dto.IngredientDto;
 import com.restaurant.management.web.response.IngredientResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class IngredientMapper {
 
@@ -28,4 +32,5 @@ public class IngredientMapper {
                 ingredientDto.getName()
         );
     }
+
 }

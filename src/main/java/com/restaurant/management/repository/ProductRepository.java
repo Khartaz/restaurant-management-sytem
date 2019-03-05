@@ -12,9 +12,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findProductById(Long id);
 
+    Optional<Product> findProductsByUniqueId(String uniqueId);
+
     Optional<Product> findProductByUniqueId(String id);
 
     boolean existsByName(String name);
+
+    boolean existsByUniqueId(String uniqueId);
 
     Optional<Product> findProductByName(String name);
 

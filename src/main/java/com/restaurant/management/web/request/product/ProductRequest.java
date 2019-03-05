@@ -3,11 +3,12 @@ package com.restaurant.management.web.request.product;
 import com.restaurant.management.domain.Ingredient;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ProductRequest {
 
-    @NotBlank
+//    @NotBlank
     private String uniqueId;
 
     @NotBlank
@@ -16,9 +17,10 @@ public class ProductRequest {
     @NotBlank
     private String category;
 
-    @NotBlank
+    @NotNull
     private double price;
 
+    @NotNull
     private List<Ingredient> ingredients;
 
     public String getUniqueId() {

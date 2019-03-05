@@ -10,8 +10,8 @@ public class ProductDto {
     private String name;
     private String category;
     private Double price;
-    private List<IngredientDto> ingredients;
     private Instant createdAt;
+    private List<IngredientDto> ingredients;
 
     public ProductDto(Long id, String uniqueId, String name, String category, Double price,
                       Instant createdAt, List<IngredientDto> ingredients) {
@@ -23,7 +23,6 @@ public class ProductDto {
         this.createdAt = createdAt;
         this.ingredients = ingredients;
     }
-
 
     public Long getId() {
         return id;

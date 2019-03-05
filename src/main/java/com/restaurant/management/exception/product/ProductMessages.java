@@ -2,7 +2,9 @@ package com.restaurant.management.exception.product;
 
 public enum  ProductMessages {
 
-    PRODUCT_NOT_FOUND("Product not found with provided id. Register it first.");
+    PRODUCT_NOT_FOUND("Product not found with provided id. Register it first."),
+    PRODUCT_DELETED("Product deleted"),
+    PRODUCT_NAME_EXISTS("Product with provied name already exists.");
 
 
     private String errorMessage;

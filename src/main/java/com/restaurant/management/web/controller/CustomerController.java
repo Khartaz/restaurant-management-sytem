@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,6 +44,12 @@ public class CustomerController {
         return new Resource<>(response, link);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public @ResponseBody
+    ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+        return ResponseEntity.ok(customerService.deleteCustomerById(id));
+    }
+
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<CustomerResponse> getAllCustomers() {
@@ -52,6 +59,18 @@ public class CustomerController {
 
         Link link = linkTo(CustomerController.class).withSelfRel();
         return new Resources<>(response, link);
+    }
+
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CustomerResponse> showCustomer(@PathVariable Long id) {
+        CustomerDto customerDto = customerService.getCustomerById(id);
+
+        CustomerResponse response = customerMapper.mapToCustomerResponse(customerDto);
+
+        Link link = linkTo(CustomerController.class).slash(response.getId()).withSelfRel();
+
+        return new Resource<>(response, link);
     }
 
 }

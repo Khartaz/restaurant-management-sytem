@@ -1,8 +1,6 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.Ingredient;
 import com.restaurant.management.domain.Product;
-import com.restaurant.management.domain.dto.IngredientDto;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,4 +56,21 @@ public class ProductMapper {
         );
     }
 
+    public List<ProductDto> mapToProductDtoList(final List<Product> products) {
+        return products.stream()
+                .map(this::mapToProductDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductResponse> mapToProductResponseList(final List<ProductDto> products) {
+        return products.stream()
+                .map(this::mapToProductResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> mapToProductList(final List<ProductDto> products) {
+        return products.stream()
+                .map(this::mapToProduct)
+                .collect(Collectors.toList());
+    }
 }

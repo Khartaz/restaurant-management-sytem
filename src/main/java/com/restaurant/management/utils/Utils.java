@@ -34,7 +34,7 @@ public class Utils {
         return generateRandomStringWithBigLetters(length);
     }
 
-    public String generateCartNumber(int length) {
+    public String generateCartUniqueId(int length) {
         return generateRandomStringWithBigLetters(length);
     }
 

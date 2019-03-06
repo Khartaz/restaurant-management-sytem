@@ -19,7 +19,6 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -55,7 +54,7 @@ public class ProductService {
             uniqueProductId = utils.generateProductUniqueId(8);
         }
 
-        List<Ingredient> ingredients = ingredientMapper.mapToIngredientList(request.getIngredients());
+        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(request.getIngredients());
 
         Product newProduct = new Product.ProductBuilder()
                 .setUniqueId(uniqueProductId)
@@ -96,7 +95,7 @@ public class ProductService {
             p.setName(productRequest.getName());
             p.setPrice(productRequest.getPrice());
             p.setCategory(productRequest.getCategory());
-            p.setIngredients(ingredientMapper.mapToIngredientList(productRequest.getIngredients()));
+            p.setIngredients(ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients()));
         });
 
         productRepository.save(product);
@@ -110,16 +109,13 @@ public class ProductService {
         if (!product.isPresent()) {
             throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage());
         }
-
         return productMapper.mapToProductDto(product.get());
     }
 
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
-        return products.stream()
-                .map(v -> productMapper.mapToProductDto(v))
-                .collect(Collectors.toList());
+        return productMapper.mapToProductDtoList(products);
     }
 
 }

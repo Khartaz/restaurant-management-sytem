@@ -1,12 +1,14 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.AccountUserDto;
+import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.AccountUserResponse;
+import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -66,9 +68,9 @@ public class AccountUserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public @ResponseBody
-    ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
-        return ResponseEntity.ok(accountUserService.deleteUserById(id));
+    public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
+        accountUserService.deleteUserById(id);
+        return ResponseEntity.ok().body(new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getErrorMessage()));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

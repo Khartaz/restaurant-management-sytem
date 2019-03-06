@@ -1,11 +1,13 @@
 package com.restaurant.management.service;
 
+import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.Customer;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
 import com.restaurant.management.mapper.CustomerMapper;
+import com.restaurant.management.repository.CartRepository;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.web.request.SingUpCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,15 @@ import java.util.Optional;
 public class CustomerService {
     private CustomerRepository customerRepository;
     private CustomerMapper customerMapper;
+    private CartRepository cartRepository;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
-                           CustomerMapper customerMapper) {
+                           CustomerMapper customerMapper,
+                           CartRepository cartRepository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.cartRepository = cartRepository;
     }
 
     //@RolesAllowed({"MANAGER", "ROLE_ADMIN"})
@@ -61,6 +66,8 @@ public class CustomerService {
         Optional<Customer> customer = customerRepository.findById(id);
 
         if (customer.isPresent()) {
+            cartRepository.deleteAllByCustomer(customer.get());
+
             customerRepository.deleteById(customer.get().getId());
             return true;
         } else {

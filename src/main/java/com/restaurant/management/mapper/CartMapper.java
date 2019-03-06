@@ -6,6 +6,7 @@ import com.restaurant.management.web.response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,7 +24,7 @@ public class CartMapper {
     public Cart mapToCart(final CartDto cartDto) {
         return new Cart(
                 cartDto.getId(),
-                cartDto.getCartNumber(),
+                cartDto.getUniqueId(),
                 cartDto.getOpen(),
                 customerMapper.mapToCustomer(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
@@ -35,7 +36,7 @@ public class CartMapper {
     public CartDto mapToCartDto(final Cart cart) {
         return new CartDto(
                 cart.getId(),
-                cart.getCartNumber(),
+                cart.getUniqueId(),
                 cart.getOpen(),
                 customerMapper.mapToCustomerDto(cart.getCustomer()),
                 cart.getLineItems().stream()
@@ -47,12 +48,30 @@ public class CartMapper {
     public CartResponse mapToCartResponse(final CartDto cartDto) {
         return new CartResponse(
                 cartDto.getId(),
-                cartDto.getCartNumber(),
+                cartDto.getUniqueId(),
                 cartDto.getOpen(),
                 customerMapper.mapToCustomerResponse(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemResponse(v))
                         .collect(Collectors.toList())
         );
+    }
+
+    public List<CartDto> mapToCartDtoList(final List<Cart> carts) {
+        return carts.stream()
+                .map(this::mapToCartDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CartResponse> mapToCartResponseList(final List<CartDto> carts) {
+        return carts.stream()
+                .map(this::mapToCartResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<Cart> mapToCartList(final List<CartDto> carts) {
+        return carts.stream()
+                .map(this::mapToCart)
+                .collect(Collectors.toList());
     }
 }

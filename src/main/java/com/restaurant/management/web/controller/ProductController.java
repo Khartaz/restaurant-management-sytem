@@ -47,9 +47,7 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/{uniqueId}",
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{uniqueId}")
     public ResponseEntity<?> deleteProduct(@PathVariable String uniqueId) {
         productService.deleteProduct(uniqueId);
         return ResponseEntity.ok().body(new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getErrorMessage()));
@@ -73,16 +71,14 @@ public class ProductController {
 
         List<ProductDto> productsDto = productService.getAllProducts();
 
-        List<ProductResponse> productsResponse = productsDto.stream()
-                .map(p -> productMapper.mapToProductResponse(p))
-                .collect(Collectors.toList());
+        List<ProductResponse> productsResponse = productMapper.mapToProductResponseList(productsDto);
 
         Link link = linkTo(ProductController.class).withSelfRel();
 
         return new Resources<>(productsResponse, link);
     }
 
-    @GetMapping(value = "{uniqueId}",produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{uniqueId}",produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> showProduct(@PathVariable String uniqueId) {
 

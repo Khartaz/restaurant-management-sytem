@@ -5,18 +5,18 @@ import java.util.List;
 public class CartDto {
 
     private Long id;
-    private String cartNumber;
+    private String uniqueId;
     private Boolean isOpen;
     private CustomerDto customer;
     private List<LineItemDto> lineItems;
 
     public CartDto(Long id,
-                   String cartNumber,
+                   String uniqueId,
                    Boolean isOpen,
                    CustomerDto customer,
                    List<LineItemDto> lineItems) {
         this.id = id;
-        this.cartNumber = cartNumber;
+        this.uniqueId = uniqueId;
         this.isOpen = isOpen;
         this.customer = customer;
         this.lineItems = lineItems;
@@ -26,8 +26,8 @@ public class CartDto {
         return id;
     }
 
-    public String getCartNumber() {
-        return cartNumber;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
     public Boolean getOpen() {

@@ -2,6 +2,8 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.*;
 import com.restaurant.management.domain.dto.CartDto;
+import com.restaurant.management.exception.cart.CartMessages;
+import com.restaurant.management.exception.cart.CartNotFoundException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
 import com.restaurant.management.exception.product.ProductMessages;
@@ -12,6 +14,7 @@ import com.restaurant.management.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,7 +61,7 @@ public class CartService {
         lineItem.setPrice(product.getPrice());
 
         if (!cart.isPresent()) {
-            newCart.setCartNumber(utils.generateCartNumber(5));
+            newCart.setUniqueId(utils.generateCartUniqueId(5));
         }
 
         newCart.setOpen(true);
@@ -70,4 +73,29 @@ public class CartService {
         return cartMapper.mapToCartDto(newCart);
     }
 
+    public List<CartDto> getAllCarts() {
+        List<Cart> carts = cartRepository.findAll();
+
+        return cartMapper.mapToCartDtoList(carts);
+    }
+
+    public CartDto getCartByUniqueId(String uniqueId) {
+        Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
+
+        if (!cart.isPresent()) {
+            throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getErrorMessage() + uniqueId);
+        }
+        return cartMapper.mapToCartDto(cart.get());
+    }
+
+    public boolean deleteCart(String uniqueId) {
+        Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
+
+        if (cart.isPresent()) {
+            cartRepository.deleteById(cart.get().getId());
+            return true;
+        } else {
+            throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getErrorMessage() + uniqueId);
+        }
+    }
 }

@@ -1,9 +1,11 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.CustomerDto;
+import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SingUpCustomerRequest;
+import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -45,9 +47,9 @@ public class CustomerController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public @ResponseBody
-    ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
-        return ResponseEntity.ok(customerService.deleteCustomerById(id));
+    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+        customerService.deleteCustomerById(id);
+        return ResponseEntity.ok().body(new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getErrorMessage()));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

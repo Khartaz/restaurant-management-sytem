@@ -34,11 +34,29 @@ public class IngredientMapper {
         );
     }
 
-    public List<Ingredient> mapToIngredientList(final List<IngredientRequest> ingredientsRequest) {
+    public List<Ingredient> mapToIngredientListFromRequest(final List<IngredientRequest> ingredientsRequest) {
         return ingredientsRequest.stream()
                 .map(i -> new Ingredient(
                         i.getName()
                 )).collect(Collectors.toList());
+    }
+
+    public List<IngredientDto> mapToIngredientDtoList(final List<Ingredient> ingredients) {
+        return ingredients.stream()
+                .map(this::mapToIngredientDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<IngredientResponse> mapToIngredientResponseList(final List<IngredientDto> ingredients) {
+        return ingredients.stream()
+                .map(this::mapToIngredientResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<Ingredient> mapToIngredientList(final List<IngredientDto> ingredients) {
+        return ingredients.stream()
+                .map(this::mapToIngredient)
+                .collect(Collectors.toList());
     }
 
 }

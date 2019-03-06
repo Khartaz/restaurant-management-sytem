@@ -4,18 +4,18 @@ import java.util.List;
 
 public class CartResponse {
     private Long id;
-    private String cartNumber;
+    private String uniqueId;
     private Boolean isOpen;
     private CustomerResponse customer;
     private List<LineItemResponse> lineItems;
 
     public CartResponse(Long id,
-                        String cartNumber,
+                        String uniqueId,
                         Boolean isOpen,
                         CustomerResponse customer,
                         List<LineItemResponse> lineItems) {
         this.id = id;
-        this.cartNumber = cartNumber;
+        this.uniqueId = uniqueId;
         this.isOpen = isOpen;
         this.customer = customer;
         this.lineItems = lineItems;
@@ -25,8 +25,8 @@ public class CartResponse {
         return id;
     }
 
-    public String getCartNumber() {
-        return cartNumber;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
     public Boolean getOpen() {

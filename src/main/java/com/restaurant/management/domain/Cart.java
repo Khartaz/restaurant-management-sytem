@@ -13,8 +13,8 @@ public class Cart {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "cart_number")
-    private String cartNumber;
+    @Column(name = "unique_id")
+    private String uniqueId;
 
     @Column(name = "isOpen")
     private Boolean isOpen;
@@ -28,10 +28,10 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(Long id, String cartNumber, Boolean isOpen,
+    public Cart(Long id, String uniqueId, Boolean isOpen,
                 Customer customer, List<LineItem> lineItems) {
         this.id = id;
-        this.cartNumber = cartNumber;
+        this.uniqueId = uniqueId;
         this.isOpen = isOpen;
         this.customer = customer;
         this.lineItems = lineItems;
@@ -51,12 +51,12 @@ public class Cart {
         this.id = id;
     }
 
-    public String getCartNumber() {
-        return cartNumber;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
-    public void setCartNumber(String cartNumber) {
-        this.cartNumber = cartNumber;
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public Boolean getOpen() {

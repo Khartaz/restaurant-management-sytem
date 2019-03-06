@@ -63,4 +63,10 @@ public class CustomerMapper {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public List<Customer> mapToCustomerList(final List<CustomerDto> customers) {
+        return customers.stream()
+                .map(this::mapToCustomer)
+                .collect(Collectors.toList());
+    }
 }

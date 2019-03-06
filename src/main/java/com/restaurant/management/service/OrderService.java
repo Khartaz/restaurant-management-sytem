@@ -4,7 +4,7 @@ import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
 import com.restaurant.management.domain.dto.OrderDto;
-import com.restaurant.management.exception.cart.CartException;
+import com.restaurant.management.exception.cart.CartNotFoundException;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.orderlist.OrderListNotFoundException;
 import com.restaurant.management.mapper.OrderMapper;
@@ -42,7 +42,7 @@ public class OrderService {
     public OrderDto processOrder(Long phoneNumber) {
 
         Cart cart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
-                .orElseThrow(() -> new CartException(CartMessages.CART_NOT_FOUND.getErrorMessage()));
+                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_FOUND.getErrorMessage()));
 
         Order order = new Order.OrderBuilder()
                 .setOrdered(new Date().toInstant())

@@ -7,6 +7,7 @@ public enum UserMessages {
     USERNAME_TAKEN("Username is already taken"),
     UNAUTHENTICATED("Unauthenticated"),
     ROLE_NOT_SET("Role not set."),
+    ACCOUNT_DELETED("Account deleted"),
     PASSWORDS_EQUALS("Password and confirmed password must be this same"),
     USER_NOT_FOUND("User not found with username or email : "),
     ID_NOT_FOUND("User not found with id: "),

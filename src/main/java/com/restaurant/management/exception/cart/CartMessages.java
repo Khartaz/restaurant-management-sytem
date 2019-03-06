@@ -1,7 +1,9 @@
 package com.restaurant.management.exception.cart;
 
 public enum  CartMessages {
-    CART_NOT_FOUND("First add products to cart");
+    CART_NOT_FOUND("First add products to cart"),
+    CART_DELETED("Cart deleted"),
+    CART_UNIQUE_ID_NOT_FOUND("Cart with provided unique id not found. ");
 
     private String errorMessage;
 

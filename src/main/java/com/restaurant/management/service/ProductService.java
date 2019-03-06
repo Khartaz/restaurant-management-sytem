@@ -1,10 +1,12 @@
 package com.restaurant.management.service;
 
+import com.restaurant.management.domain.Ingredient;
 import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
+import com.restaurant.management.mapper.IngredientMapper;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.utils.Utils;
@@ -27,14 +29,17 @@ public class ProductService {
     private ProductRepository productRepository;
     private ProductMapper productMapper;
     private Utils utils;
+    private IngredientMapper ingredientMapper;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
                           ProductMapper productMapper,
-                          Utils utils) {
+                          Utils utils,
+                          IngredientMapper ingredientMapper) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.utils = utils;
+        this.ingredientMapper = ingredientMapper;
     }
 
     public ProductDto registerProduct(RegisterProductRequest request) {
@@ -50,12 +55,14 @@ public class ProductService {
             uniqueProductId = utils.generateProductUniqueId(8);
         }
 
+        List<Ingredient> ingredients = ingredientMapper.mapToIngredientList(request.getIngredients());
+
         Product newProduct = new Product.ProductBuilder()
                 .setUniqueId(uniqueProductId)
                 .setName(request.getName())
                 .setCategory(request.getCategory())
                 .setPrice(request.getPrice())
-                .setIngredients(request.getIngredients())
+                .setIngredients(ingredients)
                 .setCreatedAt(new Date().toInstant())
                 .build();
 
@@ -89,7 +96,7 @@ public class ProductService {
             p.setName(productRequest.getName());
             p.setPrice(productRequest.getPrice());
             p.setCategory(productRequest.getCategory());
-            p.setIngredients(productRequest.getIngredients());
+            p.setIngredients(ingredientMapper.mapToIngredientList(productRequest.getIngredients()));
         });
 
         productRepository.save(product);

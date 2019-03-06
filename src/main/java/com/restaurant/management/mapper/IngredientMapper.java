@@ -2,6 +2,7 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.Ingredient;
 import com.restaurant.management.domain.dto.IngredientDto;
+import com.restaurant.management.web.request.product.IngredientRequest;
 import com.restaurant.management.web.response.IngredientResponse;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,13 @@ public class IngredientMapper {
                 ingredientDto.getId(),
                 ingredientDto.getName()
         );
+    }
+
+    public List<Ingredient> mapToIngredientList(final List<IngredientRequest> ingredientsRequest) {
+        return ingredientsRequest.stream()
+                .map(i -> new Ingredient(
+                        i.getName()
+                )).collect(Collectors.toList());
     }
 
 }

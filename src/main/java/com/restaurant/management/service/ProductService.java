@@ -9,6 +9,7 @@ import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.product.ProductRequest;
+import com.restaurant.management.web.request.product.RegisterProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class ProductService {
         this.utils = utils;
     }
 
-    public ProductDto registerProduct(ProductRequest request) {
+    public ProductDto registerProduct(RegisterProductRequest request) {
         if (productRepository.existsByName(request.getName())) {
             throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getErrorMessage());
         }

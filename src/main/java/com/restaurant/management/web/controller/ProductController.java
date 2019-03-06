@@ -5,6 +5,7 @@ import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.web.request.product.ProductRequest;
+import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class ProductController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductResponse> registerProduct(@Valid @RequestBody ProductRequest request) {
+    Resource<ProductResponse> registerProduct(@Valid @RequestBody RegisterProductRequest request) {
         ProductDto productDto = productService.registerProduct(request);
 
         ProductResponse response = productMapper.mapToProductResponse(productDto);

@@ -18,7 +18,7 @@ public class RegisterProductRequest {
     private double price;
 
     @NotNull
-    private List<Ingredient> ingredients;
+    private List<IngredientRequest> ingredients;
 
     public String getName() {
         return name;
@@ -32,7 +32,7 @@ public class RegisterProductRequest {
         return price;
     }
 
-    public List<Ingredient> getIngredients() {
+    public List<IngredientRequest> getIngredients() {
         return ingredients;
     }
 }

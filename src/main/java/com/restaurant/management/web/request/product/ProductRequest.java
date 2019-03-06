@@ -1,7 +1,5 @@
 package com.restaurant.management.web.request.product;
 
-import com.restaurant.management.domain.Ingredient;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -21,7 +19,7 @@ public class ProductRequest {
     private double price;
 
     @NotNull
-    private List<Ingredient> ingredients;
+    private List<IngredientRequest> ingredients;
 
     public String getUniqueId() {
         return uniqueId;
@@ -39,7 +37,7 @@ public class ProductRequest {
         return price;
     }
 
-    public List<Ingredient> getIngredients() {
+    public List<IngredientRequest> getIngredients() {
         return ingredients;
     }
 }

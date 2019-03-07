@@ -4,7 +4,7 @@ public enum  ProductMessages {
 
     PRODUCT_NOT_FOUND("Product not found with provided id. Register it first."),
     PRODUCT_UNIQUE_ID_NOT_FOUND("Product not found with provided unique id. Register it first."),
-    PRODUCT_DELETED("Product deleted"),
+    ARCHIVED("Product has been moved to the archive"),
     PRODUCT_NAME_EXISTS("Product with provided name already exists.");
 
 
@@ -17,7 +17,7 @@ public enum  ProductMessages {
     /**
      * @return the errorMessage
      */
-    public String getErrorMessage() {
+    public String getMessage() {
         return errorMessage;
     }
 

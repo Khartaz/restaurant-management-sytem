@@ -23,6 +23,7 @@ public class ProductMapper {
                 productDto.getCategory(),
                 productDto.getPrice(),
                 productDto.getCreatedAt(),
+                productDto.getArchived(),
                 productDto.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredient(v))
                         .collect(Collectors.toList())
@@ -37,6 +38,7 @@ public class ProductMapper {
                 product.getCategory(),
                 product.getPrice(),
                 product.getCreatedAt(),
+                product.getArchived(),
                 product.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientDto(v))
                         .collect(Collectors.toList())
@@ -50,6 +52,7 @@ public class ProductMapper {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
+                productDto.getCreatedAt(),
                 productDto.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientResponse(v))
                         .collect(Collectors.toList())

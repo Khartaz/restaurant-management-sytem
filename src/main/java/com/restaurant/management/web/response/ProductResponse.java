@@ -1,5 +1,6 @@
 package com.restaurant.management.web.response;
 
+import java.time.Instant;
 import java.util.List;
 
 public class ProductResponse {
@@ -8,15 +9,18 @@ public class ProductResponse {
     private String name;
     private String category;
     private Double price;
+    private Instant createdAt;
     private List<IngredientResponse> ingredients;
 
     public ProductResponse(Long id, String uniqueId, String name,
-                           String category, Double price, List<IngredientResponse> ingredients) {
+                           String category, Double price, Instant createdAt,
+                           List<IngredientResponse> ingredients) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
+        this.createdAt = createdAt;
         this.ingredients = ingredients;
     }
 
@@ -38,6 +42,10 @@ public class ProductResponse {
 
     public Double getPrice() {
         return price;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
     public List<IngredientResponse> getIngredients() {

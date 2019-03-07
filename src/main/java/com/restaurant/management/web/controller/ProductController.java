@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -47,10 +46,10 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/{uniqueId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String uniqueId) {
-        productService.deleteProduct(uniqueId);
-        return ResponseEntity.ok().body(new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getErrorMessage()));
+    @PatchMapping(value = "/{uniqueId}")
+    public ResponseEntity<?> transferToArchive(@PathVariable String uniqueId) {
+        productService.transferToArchive(uniqueId);
+        return ResponseEntity.ok().body(new ApiResponse(true, ProductMessages.ARCHIVED.getMessage()));
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -89,5 +88,17 @@ public class ProductController {
         Link link = linkTo(ProductController.class).slash(productResponse.getUniqueId()).withSelfRel();
 
         return new Resource<>(productResponse, link);
+    }
+
+    @GetMapping(value = "/archived", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resources<ProductResponse> showArchivedProducts() {
+        List<ProductDto> productsDto = productService.getAllArchivedProducts();
+
+        List<ProductResponse> response = productMapper.mapToProductResponseList(productsDto);
+
+        Link link = linkTo(ProductController.class).withSelfRel();
+
+        return new Resources<>(response, link);
     }
 }

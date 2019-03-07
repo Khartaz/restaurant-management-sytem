@@ -43,7 +43,7 @@ public class ProductService {
 
     public ProductDto registerProduct(RegisterProductRequest request) {
         if (productRepository.existsByName(request.getName())) {
-            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getErrorMessage());
+            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getMessage());
         }
 
         String  uniqueProductId = utils.generateProductUniqueId(7);
@@ -61,8 +61,9 @@ public class ProductService {
                 .setName(request.getName())
                 .setCategory(request.getCategory())
                 .setPrice(request.getPrice())
-                .setIngredients(ingredients)
                 .setCreatedAt(new Date().toInstant())
+                .setIsArchived(Boolean.FALSE)
+                .setIngredients(ingredients)
                 .build();
 
         productRepository.save(newProduct);
@@ -70,25 +71,26 @@ public class ProductService {
         return productMapper.mapToProductDto(newProduct);
     }
 
-    public boolean deleteProduct(String uniqueId) {
+    public boolean transferToArchive(String uniqueId) {
         Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
 
         if (product.isPresent()) {
-            productRepository.deleteById(product.get().getId());
+            product.get().setArchived(Boolean.TRUE);
+            productRepository.save(product.get());
             return true;
         } else {
-            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage() + uniqueId);
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getMessage() + uniqueId);
         }
     }
 
     public ProductDto updateProduct(ProductRequest productRequest) {
         Product product = productRepository.findProductByUniqueId(productRequest.getUniqueId())
                 .orElseThrow(() -> new ProductNotFoundException(
-                        ProductMessages.PRODUCT_UNIQUE_ID_NOT_FOUND.getErrorMessage() + productRequest.getUniqueId()
+                        ProductMessages.PRODUCT_UNIQUE_ID_NOT_FOUND.getMessage() + productRequest.getUniqueId()
                 ));
 
         if (productRepository.existsByName(productRequest.getName())) {
-            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getErrorMessage());
+            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getMessage());
         }
 
         Stream.of(product).forEach(p -> {
@@ -107,13 +109,19 @@ public class ProductService {
         Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
 
         if (!product.isPresent()) {
-            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getErrorMessage());
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getMessage());
         }
         return productMapper.mapToProductDto(product.get());
     }
 
     public List<ProductDto> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.findAllByIsArchivedIsFalse();
+
+        return productMapper.mapToProductDtoList(products);
+    }
+
+    public List<ProductDto> getAllArchivedProducts() {
+        List<Product> products = productRepository.findAllByIsArchivedIsTrue();
 
         return productMapper.mapToProductDtoList(products);
     }

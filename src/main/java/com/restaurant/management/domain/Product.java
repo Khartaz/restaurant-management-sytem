@@ -29,6 +29,9 @@ public class Product {
     @Column(name = "createdAt")
     private Instant createdAt;
 
+    @Column(name = "isArchived")
+    private Boolean isArchived;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ingredient> ingredients = new ArrayList<>();
 
@@ -36,23 +39,25 @@ public class Product {
     }
 
     public Product(Long id, String uniqueId, String name, String category, Double price,
-                   Instant createdAt, List<Ingredient> ingredients) {
+                   Instant createdAt, Boolean isArchived, List<Ingredient> ingredients) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.createdAt = createdAt;
+        this.isArchived = isArchived;
         this.ingredients = ingredients;
     }
 
-    public Product(String uniqueId, String name, String category, double price,
-                   Instant createdAt, List<Ingredient> ingredients) {
+    public Product(String uniqueId, String name, String category, Double price,
+                   Instant createdAt, Boolean isArchived, List<Ingredient> ingredients) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.createdAt = createdAt;
+        this.isArchived = isArchived;
         this.ingredients = ingredients;
     }
 
@@ -96,14 +101,6 @@ public class Product {
         this.price = price;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -112,13 +109,31 @@ public class Product {
         this.createdAt = createdAt;
     }
 
+    public Boolean getArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(Boolean archived) {
+        isArchived = archived;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+
     public static class ProductBuilder {
         private String uniqueId;
         private String name;
         private String category;
         private Double price;
-        private List<Ingredient> ingredients;
         private Instant createdAt;
+        private Boolean isArchived;
+        private List<Ingredient> ingredients;
 
         public ProductBuilder setUniqueId(String uniqueId) {
             this.uniqueId = uniqueId;
@@ -140,19 +155,26 @@ public class Product {
             return this;
         }
 
-        public ProductBuilder setIngredients(List<Ingredient> ingredients) {
-            this.ingredients = ingredients;
-            return this;
-        }
-
         public ProductBuilder setCreatedAt(Instant createdAt) {
             this.createdAt = createdAt;
             return this;
         }
 
+        public ProductBuilder setIsArchived(Boolean isArchived) {
+            this.isArchived = isArchived;
+            return this;
+        }
+
+        public ProductBuilder setIngredients(List<Ingredient> ingredients) {
+            this.ingredients = ingredients;
+            return this;
+        }
+
+
+
         public Product build() {
             return new Product(this.uniqueId, this.name, this.category,
-                    this.price, this.createdAt, this.ingredients);
+                    this.price, this.createdAt, this.isArchived, this.ingredients);
         }
     }
 

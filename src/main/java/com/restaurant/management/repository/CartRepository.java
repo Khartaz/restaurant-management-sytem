@@ -13,12 +13,16 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     Optional<Cart> findCartByCustomerPhoneNumberAndIsOpenTrue(Long phoneNumber);
 
+    Optional<List<Cart>> findAllByIsOpenIsTrue();
+
+    Optional<List<Cart>> findAllByIsOpenIsFalse();
+
     List<Cart> findByCustomer(Customer customer);
 
     void deleteAllByCustomer(Customer customer);
 
     Optional<Cart> findByUniqueId(String uniqueId);
 
-
+    boolean existsByCustomerAndIsOpenTrue(Customer customer);
 }
 

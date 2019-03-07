@@ -1,6 +1,5 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.Customer;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.exception.customer.CustomerExistsException;
@@ -37,11 +36,11 @@ public class CustomerService {
     public CustomerDto createCustomer(SingUpCustomerRequest request) {
 
         if (customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getErrorMessage());
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
         }
 
         if (customerRepository.existsByEmail(request.getEmail())) {
-            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getErrorMessage());
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
         }
 
         Customer customer = new Customer();
@@ -71,7 +70,7 @@ public class CustomerService {
             customerRepository.deleteById(customer.get().getId());
             return true;
         } else {
-            throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getErrorMessage() + id);
+            throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id);
         }
     }
 
@@ -79,7 +78,7 @@ public class CustomerService {
         Optional<Customer> customer = customerRepository.findById(id);
 
         if (!customer.isPresent()) {
-            throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getErrorMessage() + id);
+            throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id);
         }
 
         return customerMapper.mapToCustomerDto(customer.get());

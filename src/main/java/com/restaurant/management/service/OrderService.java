@@ -42,7 +42,7 @@ public class OrderService {
     public OrderDto processOrder(Long phoneNumber) {
 
         Cart cart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
-                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_FOUND.getErrorMessage()));
+                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_FOUND.getMessage()));
 
         Order order = new Order.OrderBuilder()
                 .setOrdered(new Date().toInstant())

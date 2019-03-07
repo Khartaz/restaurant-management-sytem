@@ -16,7 +16,7 @@ public enum  CustomerMessages {
     /**
      * @return the errorMessage
      */
-    public String getErrorMessage() {
+    public String getMessage() {
         return errorMessage;
     }
 

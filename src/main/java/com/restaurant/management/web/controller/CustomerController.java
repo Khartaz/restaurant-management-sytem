@@ -49,7 +49,7 @@ public class CustomerController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
-        return ResponseEntity.ok().body(new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getErrorMessage()));
+        return ResponseEntity.ok().body(new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage()));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

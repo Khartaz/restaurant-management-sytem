@@ -35,24 +35,6 @@ public class CartController {
         this.cartMapper = cartMapper;
     }
 
-//    @PutMapping(value = "/addToCart",
-//            consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-//    public @ResponseBody
-//    Resource<CartResponse> addToCart(@RequestBody OrderRequest orderRequest) {
-//        CartDto cartDto = cartService.addToCart(orderRequest.getPhoneNumber(), orderRequest.getProductName(), orderRequest.getQuantity());
-//
-//        CartResponse response = cartMapper.mapToCartResponse(cartDto);
-//
-//        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
-//        return new Resource<>(response, link);
-//    }
-
-    @DeleteMapping(value = "/{uniqueId}")
-    public ResponseEntity<?> deleteCart(@PathVariable String uniqueId) {
-        cartService.deleteCart(uniqueId);
-        return ResponseEntity.ok().body(new ApiResponse(true, CartMessages.CART_DELETED.getMessage()));
-    }
-
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<CartResponse> showCarts() {
@@ -63,6 +45,24 @@ public class CartController {
         Link link = linkTo(CartController.class).withSelfRel();
 
         return new Resources<>(response, link);
+    }
+
+    @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> showCart(@PathVariable String uniqueId) {
+        CartDto cartDto = cartService.getCartByUniqueId(uniqueId);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+
+        return new Resource<>(response, link);
+    }
+
+    @DeleteMapping(value = "/{uniqueId}")
+    public ResponseEntity<?> deleteCart(@PathVariable String uniqueId) {
+        cartService.deleteCart(uniqueId);
+        return ResponseEntity.ok().body(new ApiResponse(true, CartMessages.CART_DELETED.getMessage()));
     }
 
     @GetMapping(value = "/opened", produces = APPLICATION_JSON_VALUE)
@@ -89,11 +89,10 @@ public class CartController {
         return new Resources<>(response, link);
     }
 
-
-    @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> showCart(@PathVariable String uniqueId) {
-        CartDto cartDto = cartService.getCartByUniqueId(uniqueId);
+    Resource<CartResponse> registerCustomerCart(@Valid @RequestBody RegisterCartRequest request) {
+        CartDto cartDto = cartService.openCustomerCart(request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -102,10 +101,48 @@ public class CartController {
         return new Resource<>(response, link);
     }
 
-    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/addToCart",
+            consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> registerCustomerCart(@Valid @RequestBody RegisterCartRequest request) {
-        CartDto cartDto = cartService.registerCustomerCart(request);
+    Resource<CartResponse> addToCart(@RequestBody OrderRequest orderRequest) {
+        CartDto cartDto = cartService.addToCart(orderRequest);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+        return new Resource<>(response, link);
+    }
+
+    @GetMapping(value = "/checkoutCart", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> checkoutCart(@RequestParam Long phoneNumber) {
+        CartDto cartDto = cartService.checkoutCart(phoneNumber);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+
+        return new Resource<>(response, link);
+    }
+
+    @PutMapping(value = "/product",
+            consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> updateProductQuantity(@RequestBody OrderRequest request) {
+        CartDto cartDto = cartService.updateProductQuantity(request);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+
+        return new Resource<>(response, link);
+    }
+
+    @DeleteMapping(value = "/product",
+            produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> removeProductCart(@RequestBody OrderRequest request) {
+        CartDto cartDto = cartService.deleteProductFromCart(request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 

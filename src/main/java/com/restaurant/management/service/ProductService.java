@@ -79,7 +79,7 @@ public class ProductService {
             productRepository.save(product.get());
             return true;
         } else {
-            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getMessage() + uniqueId);
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + uniqueId);
         }
     }
 
@@ -109,7 +109,7 @@ public class ProductService {
         Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
 
         if (!product.isPresent()) {
-            throw new ProductNotFoundException(ProductMessages.PRODUCT_NOT_FOUND.getMessage());
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage());
         }
         return productMapper.mapToProductDto(product.get());
     }

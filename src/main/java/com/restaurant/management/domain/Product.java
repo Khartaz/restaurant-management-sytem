@@ -170,8 +170,6 @@ public class Product {
             return this;
         }
 
-
-
         public Product build() {
             return new Product(this.uniqueId, this.name, this.category,
                     this.price, this.createdAt, this.isArchived, this.ingredients);

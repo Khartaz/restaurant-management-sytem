@@ -2,6 +2,7 @@ package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.LineItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,6 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     Optional<Cart> findByUniqueId(String uniqueId);
 
     boolean existsByCustomerAndIsOpenTrue(Customer customer);
+
 }
 

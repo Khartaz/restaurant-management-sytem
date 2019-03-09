@@ -65,8 +65,6 @@ public class CustomerService {
         Optional<Customer> customer = customerRepository.findById(id);
 
         if (customer.isPresent()) {
-            cartRepository.deleteAllByCustomer(customer.get());
-
             customerRepository.deleteById(customer.get().getId());
             return true;
         } else {

@@ -2,10 +2,11 @@ package com.restaurant.management.exception.product;
 
 public enum  ProductMessages {
 
-    PRODUCT_NOT_FOUND("Product not found with provided id. Register it first."),
-    PRODUCT_UNIQUE_ID_NOT_FOUND("Product not found with provided unique id. Register it first."),
-    ARCHIVED("Product has been moved to the archive"),
-    PRODUCT_NAME_EXISTS("Product with provided name already exists.");
+    PRODUCT_ID_NOT_FOUND("Product not found with provided id. Register it first. "),
+    PRODUCT_NAME_NOT_FOUND("Product not found with provided name. "),
+    PRODUCT_UNIQUE_ID_NOT_FOUND("Product not found with provided unique id. Register it first. "),
+    ARCHIVED("Product has been moved to the archive. "),
+    PRODUCT_NAME_EXISTS("Product with provided name already exists. ");
 
 
     private String errorMessage;

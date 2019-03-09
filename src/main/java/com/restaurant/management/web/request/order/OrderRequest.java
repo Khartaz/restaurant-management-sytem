@@ -1,17 +1,16 @@
 package com.restaurant.management.web.request.order;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class OrderRequest {
 
-    @NotNull
+//    @NotNull
     private Long phoneNumber;
 
-    @NotBlank
+//    @NotBlank
     private String productName;
 
-    @NotNull
+//    @NotNull
     private Integer quantity;
 
     public Long getPhoneNumber() {

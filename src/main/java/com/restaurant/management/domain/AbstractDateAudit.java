@@ -15,7 +15,7 @@ import java.time.Instant;
 @JsonIgnoreProperties(
         allowGetters = true
 )
-public abstract class DateAudit implements Serializable {
+public abstract class AbstractDateAudit implements Serializable {
 
     @CreatedDate
     @Column(name = "createdAt", nullable = false, updatable = false)

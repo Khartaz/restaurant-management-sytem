@@ -1,11 +1,13 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.service.CartService;
 import com.restaurant.management.web.request.cart.RegisterCartRequest;
-import com.restaurant.management.web.request.order.OrderRequest;
+import com.restaurant.management.web.request.cart.RemoveProductRequest;
+import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,40 +61,41 @@ public class CartController {
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/{uniqueId}")
-    public ResponseEntity<?> deleteCart(@PathVariable String uniqueId) {
-        cartService.deleteCart(uniqueId);
+    @GetMapping(value = "/session", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resources<CartResponse> showSessionCarts() {
+        List<CartDto> cartsDto = cartService.getSessionCarts();
+
+        List<CartResponse> response = cartMapper.mapToCartResponseList(cartsDto);
+
+        Link link = linkTo(CartController.class).withSelfRel();
+
+        return new Resources<>(response, link);
+    }
+
+
+    @GetMapping(value = "/session/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> showSessionCart(@PathVariable String uniqueId) {
+        CartDto cartDto = cartService.getSessionCartByUniqueId(uniqueId);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+
+        return new Resource<>(response, link);
+    }
+
+    @DeleteMapping(value = "/session/{uniqueId}")
+    public ResponseEntity<?> deleteSessionCart(@PathVariable String uniqueId) {
+        cartService.deleteSessionCart(uniqueId);
         return ResponseEntity.ok().body(new ApiResponse(true, CartMessages.CART_DELETED.getMessage()));
-    }
-
-    @GetMapping(value = "/opened", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resources<CartResponse> showOpenedCarts() {
-        List<CartDto> cartDtos = cartService.getOpenedCarts();
-
-        List<CartResponse> response = cartMapper.mapToCartResponseList(cartDtos);
-
-        Link link = linkTo(CartController.class).withSelfRel();
-
-        return new Resources<>(response, link);
-    }
-
-    @GetMapping(value = "/closed", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resources<CartResponse> showClosedCarts() {
-        List<CartDto> cartDtos = cartService.getClosedCarts();
-
-        List<CartResponse> response = cartMapper.mapToCartResponseList(cartDtos);
-
-        Link link = linkTo(CartController.class).withSelfRel();
-
-        return new Resources<>(response, link);
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> registerCustomerCart(@Valid @RequestBody RegisterCartRequest request) {
-        CartDto cartDto = cartService.openCustomerCart(request);
+        CartDto cartDto = cartService.openSessionCart(request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -104,31 +107,19 @@ public class CartController {
     @PutMapping(value = "/addToCart",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> addToCart(@RequestBody OrderRequest orderRequest) {
-        CartDto cartDto = cartService.addToCart(orderRequest);
+    Resource<CartResponse> addToCart(@RequestBody UpdateCartRequest updateCartRequest) {
+        CartDto cartDto = cartService.addToCart(updateCartRequest);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
         Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
-        return new Resource<>(response, link);
-    }
-
-    @GetMapping(value = "/checkoutCart", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<CartResponse> checkoutCart(@RequestParam Long phoneNumber) {
-        CartDto cartDto = cartService.checkoutCart(phoneNumber);
-
-        CartResponse response = cartMapper.mapToCartResponse(cartDto);
-
-        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
-
         return new Resource<>(response, link);
     }
 
     @PutMapping(value = "/product",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> updateProductQuantity(@RequestBody OrderRequest request) {
+    Resource<CartResponse> updateProductQuantity(@RequestBody UpdateCartRequest request) {
         CartDto cartDto = cartService.updateProductQuantity(request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
@@ -141,7 +132,7 @@ public class CartController {
     @DeleteMapping(value = "/product",
             produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> removeProductCart(@RequestBody OrderRequest request) {
+    Resource<CartResponse> removeProductCart(@RequestBody RemoveProductRequest request) {
         CartDto cartDto = cartService.deleteProductFromCart(request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
@@ -149,6 +140,16 @@ public class CartController {
         Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
 
         return new Resource<>(response, link);
+    }
+
+    @PutMapping(value = "/session/confirm", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<Cart> confirmCart(@RequestParam Long phoneNumber) {
+        Cart cart = cartService.confirmCart(phoneNumber);
+
+        Link link = linkTo(CartController.class).slash(cart.getUniqueId()).withSelfRel();
+
+        return new Resource<>(cart, link);
     }
 
 }

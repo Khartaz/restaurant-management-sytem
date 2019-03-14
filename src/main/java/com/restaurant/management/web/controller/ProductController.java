@@ -46,12 +46,6 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @PatchMapping(value = "/{uniqueId}")
-    public ResponseEntity<?> transferToArchive(@PathVariable String uniqueId) {
-        productService.transferToArchive(uniqueId);
-        return ResponseEntity.ok().body(new ApiResponse(true, ProductMessages.ARCHIVED.getMessage()));
-    }
-
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest request) {
@@ -90,15 +84,10 @@ public class ProductController {
         return new Resource<>(productResponse, link);
     }
 
-    @GetMapping(value = "/archived", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resources<ProductResponse> showArchivedProducts() {
-        List<ProductDto> productsDto = productService.getAllArchivedProducts();
-
-        List<ProductResponse> response = productMapper.mapToProductResponseList(productsDto);
-
-        Link link = linkTo(ProductController.class).withSelfRel();
-
-        return new Resources<>(response, link);
+    @DeleteMapping(value = "/{uniqueId}")
+    public ResponseEntity<?> deleteByUniqueId(@PathVariable String uniqueId) {
+        productService.deleteByUniqueId(uniqueId);
+        return ResponseEntity.ok().body(new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage()));
     }
+
 }

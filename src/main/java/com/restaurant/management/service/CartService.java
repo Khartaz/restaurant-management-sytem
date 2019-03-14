@@ -2,6 +2,7 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.*;
 import com.restaurant.management.domain.dto.CartDto;
+import com.restaurant.management.exception.cart.CartException;
 import com.restaurant.management.exception.cart.CartExistsException;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.cart.CartNotFoundException;
@@ -14,7 +15,8 @@ import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.repository.*;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.cart.RegisterCartRequest;
-import com.restaurant.management.web.request.order.OrderRequest;
+import com.restaurant.management.web.request.cart.RemoveProductRequest;
+import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +27,9 @@ import java.util.Optional;
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
-public class CartService {
+public class SessionCartService {
 
-    private CartRepository cartRepository;
+    private SessionCartRepository sessionCartRepository;
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
     private CartMapper cartMapper;
@@ -35,13 +37,13 @@ public class CartService {
     private LineItemRepository lineItemRepository;
 
     @Autowired
-    public CartService(CartRepository cartRepository,
-                       ProductRepository productRepository,
-                       CustomerRepository customerRepository,
-                       CartMapper cartMapper,
-                       Utils utils,
-                       LineItemRepository lineItemRepository) {
-        this.cartRepository = cartRepository;
+    public SessionCartService(SessionCartRepository sessionCartRepository,
+                              ProductRepository productRepository,
+                              CustomerRepository customerRepository,
+                              CartMapper cartMapper,
+                              Utils utils,
+                              LineItemRepository lineItemRepository) {
+        this.sessionCartRepository = sessionCartRepository;
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
         this.cartMapper = cartMapper;
@@ -49,26 +51,26 @@ public class CartService {
         this.lineItemRepository = lineItemRepository;
     }
 
-    public CartDto openCustomerCart(RegisterCartRequest request) {
+    public CartDto openSessionCart(RegisterCartRequest request) {
         Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
 
-        if (cartRepository.existsByCustomerAndIsOpenTrue(customer)) {
+        if (sessionCartRepository.existsByCustomerAndIsOpenTrue(customer)) {
             throw new CartExistsException(CartMessages.CART_EXISTS.getMessage());
         }
 
-        Cart newCart = new Cart();
+        SessionCart newSessionCart = new SessionCart();
 
-        newCart.setUniqueId(utils.generateCartUniqueId(5));
-        newCart.setOpen(true);
-        newCart.setCustomer(customer);
+        newSessionCart.setUniqueId(utils.generateCartUniqueId(5));
+        newSessionCart.setOpen(true);
+        newSessionCart.setCustomer(customer);
 
-        cartRepository.save(newCart);
+        sessionCartRepository.save(newSessionCart);
 
-        return cartMapper.mapToCartDto(newCart);
+        return cartMapper.mapToCartDto(newSessionCart);
     }
 
-    public CartDto addToCart(OrderRequest request) {
+    public CartDto addToCart(UpdateCartRequest request) {
         if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
@@ -76,36 +78,36 @@ public class CartService {
         Product product = productRepository.findProductByName(request.getProductName())
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
 
-        Cart newCart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
+        SessionCart newSessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
-        Optional<LineItem> lineItem = newCart.getLineItems().stream()
+        Optional<SessionLineItem> lineItem = newSessionCart.getSessionLineItems().stream()
                 .filter(p -> p.getProduct().getName().equals(request.getProductName()))
                 .findFirst();
 
         if (!lineItem.isPresent()) {
-            lineItem = Optional.of(new LineItem());
-            newCart.getLineItems().add(lineItem.get());
+            lineItem = Optional.of(new SessionLineItem());
+            newSessionCart.getSessionLineItems().add(lineItem.get());
         }
 
         lineItem.get().setProduct(product);
         lineItem.get().setQuantity(request.getQuantity());
         lineItem.get().setPrice(product.getPrice() * request.getQuantity());
 
-        cartRepository.save(newCart);
+        sessionCartRepository.save(newSessionCart);
 
-        return cartMapper.mapToCartDto(newCart);
+        return cartMapper.mapToCartDto(newSessionCart);
     }
 
-    public CartDto updateProductQuantity(OrderRequest request) {
+    public CartDto updateProductQuantity(UpdateCartRequest request) {
         if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
 
-        Cart cart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
-        LineItem lineItem = cart.getLineItems().stream()
+        SessionLineItem sessionLineItem = sessionCart.getSessionLineItems().stream()
                 .filter(v -> v.getProduct().getName().equals(request.getProductName()))
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_NAME_NOT_FOUND.getMessage() + request.getProductName()));
@@ -114,62 +116,62 @@ public class CartService {
             throw new ArithmeticException(CartMessages.NOT_ENOUGH_AT_CART.getMessage());
         }
 
-        lineItem.setQuantity(request.getQuantity());
-        lineItem.setPrice(lineItem.getProduct().getPrice() * request.getQuantity());
+        sessionLineItem.setQuantity(request.getQuantity());
+        sessionLineItem.setPrice(sessionLineItem.getProduct().getPrice() * request.getQuantity());
 
-        cartRepository.save(cart);
+        sessionCartRepository.save(sessionCart);
 
-        return cartMapper.mapToCartDto(cart);
+        return cartMapper.mapToCartDto(sessionCart);
     }
 
-    public CartDto deleteProductFromCart(OrderRequest request) {
+    public CartDto deleteProductFromCart(RemoveProductRequest request) {
         if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
 
-        Cart cart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
-        LineItem lineItem = cart.getLineItems().stream()
+        SessionLineItem sessionLineItem = sessionCart.getSessionLineItems().stream()
                 .filter(v -> v.getProduct().getName().equals(request.getProductName()))
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_NAME_NOT_FOUND.getMessage() + request.getProductName()));
 
-        cart.getLineItems().remove(lineItem);
-        deleteLineItem(lineItem.getId());
+        sessionCart.getSessionLineItems().remove(sessionLineItem);
+        deleteLineItem(sessionLineItem.getId());
 
-        return cartMapper.mapToCartDto(cart);
+        return cartMapper.mapToCartDto(sessionCart);
     }
 
     public CartDto checkoutCart(Long phoneNumber) {
-        Cart cart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
-         return cartMapper.mapToCartDto(cart);
+         return cartMapper.mapToCartDto(sessionCart);
     }
 
     public List<CartDto> getAllCarts() {
-        List<Cart> carts = cartRepository.findAll();
+        List<SessionCart> sessionCarts = sessionCartRepository.findAll();
 
-        return cartMapper.mapToCartDtoList(carts);
+        return cartMapper.mapToCartDtoList(sessionCarts);
     }
 
     public List<CartDto> getOpenedCarts() {
-        List<Cart> carts = cartRepository.findAllByIsOpenIsTrue()
+        List<SessionCart> sessionCarts = sessionCartRepository.findAllByIsOpenIsTrue()
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_OPENED_EMPTY.getMessage()));
 
-        return cartMapper.mapToCartDtoList(carts);
+        return cartMapper.mapToCartDtoList(sessionCarts);
     }
 
-    public List<CartDto> getClosedCarts() {
-        List<Cart> carts = cartRepository.findAllByIsOpenIsFalse()
-                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_CLOSED_EMPTY.getMessage()));
-
-        return cartMapper.mapToCartDtoList(carts);
-    }
+//    public List<CartDto> getClosedCarts() {
+//        List<SessionCart> sessionCarts = sessionCartRepository.findAllByIsOpenIsFalse()
+//                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_CLOSED_EMPTY.getMessage()));
+//
+//        return cartMapper.mapToCartDtoList(sessionCarts);
+//    }
 
     public CartDto getCartByUniqueId(String uniqueId) {
-        Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
+        Optional<SessionCart> cart = sessionCartRepository.findByUniqueId(uniqueId);
 
         if (!cart.isPresent()) {
             throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
@@ -178,17 +180,21 @@ public class CartService {
     }
 
     public void deleteCart(String uniqueId) {
-        Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
+        Optional<SessionCart> cart = sessionCartRepository.findByUniqueId(uniqueId);
 
         if (cart.isPresent()) {
-            cartRepository.deleteById(cart.get().getId());
+            sessionCartRepository.deleteById(cart.get().getId());
         } else {
             throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
+        }
+
+        if (!cart.get().getOpen()) {
+            throw new CartException(CartMessages.CART_IS_CLOSED.getMessage());
         }
     }
 
     private void deleteLineItem(Long id) {
-        Optional<LineItem> lineItem = lineItemRepository.findById(id);
+        Optional<SessionLineItem> lineItem = lineItemRepository.findById(id);
 
         if (lineItem.isPresent()) {
             lineItemRepository.deleteById(lineItem.get().getId());

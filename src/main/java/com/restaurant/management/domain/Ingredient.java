@@ -1,6 +1,7 @@
 package com.restaurant.management.domain;
 
 import javax.persistence.*;
+
 @Entity
 @Table(name = "ingredients")
 public class Ingredient {

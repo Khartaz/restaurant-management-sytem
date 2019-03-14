@@ -1,12 +1,15 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.SessionCart;
+import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
 import com.restaurant.management.mapper.CustomerMapper;
-import com.restaurant.management.repository.CartRepository;
+import com.restaurant.management.repository.archive.CustomerArchiveRepository;
+import com.restaurant.management.repository.SessionCartRepository;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.web.request.SingUpCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +24,18 @@ import java.util.Optional;
 public class CustomerService {
     private CustomerRepository customerRepository;
     private CustomerMapper customerMapper;
-    private CartRepository cartRepository;
+    private SessionCartRepository sessionCartRepository;
+    private CustomerArchiveRepository customerArchiveRepository;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
                            CustomerMapper customerMapper,
-                           CartRepository cartRepository) {
+                           SessionCartRepository sessionCartRepository,
+                           CustomerArchiveRepository customerArchiveRepository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
-        this.cartRepository = cartRepository;
+        this.sessionCartRepository = sessionCartRepository;
+        this.customerArchiveRepository = customerArchiveRepository;
     }
 
     //@RolesAllowed({"MANAGER", "ROLE_ADMIN"})
@@ -52,6 +58,9 @@ public class CustomerService {
 
         customerRepository.save(customer);
 
+        CustomerArchive customerArchive = customerMapper.mapToCustomerArchive(customer);
+        customerArchiveRepository.save(customerArchive);
+
         return customerMapper.mapToCustomerDto(customer);
     }
 
@@ -61,12 +70,15 @@ public class CustomerService {
         return customerMapper.mapToCustomerDtoList(customers);
     }
 
-    public boolean deleteCustomerById(Long id) {
+    public void deleteCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
 
         if (customer.isPresent()) {
+            SessionCart sessionCart = sessionCartRepository.findByCustomer(customer.get());
+
+            sessionCartRepository.delete(sessionCart);
+
             customerRepository.deleteById(customer.get().getId());
-            return true;
         } else {
             throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id);
         }

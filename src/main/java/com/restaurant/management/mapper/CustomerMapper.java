@@ -1,6 +1,7 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,25 @@ public class CustomerMapper {
         );
     }
 
+    public CustomerArchive mapToCustomerArchive(final Customer customer) {
+        return new CustomerArchive(
+                customer.getName(),
+                customer.getLastname(),
+                customer.getEmail(),
+                customer.getPhoneNumber()
+        );
+    }
+
     public CustomerDto mapToCustomerDto(final Customer customer) {
+        return new CustomerDto(
+                customer.getId(),
+                customer.getName(),
+                customer.getLastname(),
+                customer.getEmail(),
+                customer.getPhoneNumber());
+    }
+
+    public CustomerDto mapToCustomerDto(final CustomerArchive customer) {
         return new CustomerDto(
                 customer.getId(),
                 customer.getName(),

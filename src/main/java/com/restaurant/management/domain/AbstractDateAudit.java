@@ -1,4 +1,4 @@
-package com.restaurant.management.domain.audit;
+package com.restaurant.management.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;

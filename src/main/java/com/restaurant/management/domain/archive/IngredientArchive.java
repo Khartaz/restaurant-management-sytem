@@ -1,4 +1,4 @@
-package com.restaurant.management.domain;
+package com.restaurant.management.domain.archive;
 
 import javax.persistence.*;
 

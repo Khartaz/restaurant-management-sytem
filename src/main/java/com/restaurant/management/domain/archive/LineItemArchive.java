@@ -1,4 +1,6 @@
-package com.restaurant.management.domain;
+package com.restaurant.management.domain.archive;
+
+import com.restaurant.management.domain.AbstractLineItem;
 
 import javax.persistence.*;
 

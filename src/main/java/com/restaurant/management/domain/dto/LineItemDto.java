@@ -6,11 +6,11 @@ public class LineItemDto {
     private Integer quantity;
     private Double price;
 
-    public LineItemDto(Long id, ProductDto productDto, Integer quantity, Double price) {
+    public LineItemDto(Long id, Integer quantity, Double price, ProductDto productDto) {
         this.id = id;
-        this.productDto = productDto;
         this.quantity = quantity;
         this.price = price;
+        this.productDto = productDto;
     }
 
     public Long getId() {

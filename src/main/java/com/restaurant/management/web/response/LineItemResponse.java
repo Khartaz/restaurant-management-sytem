@@ -6,13 +6,12 @@ public class LineItemResponse {
     private Integer quantity;
     private Double price;
 
-    public LineItemResponse(Long id,
-                            ProductResponse product,
-                            Integer quantity, Double price) {
+    public LineItemResponse(Long id, Integer quantity,
+                            Double price, ProductResponse product) {
         this.id = id;
-        this.product = product;
         this.quantity = quantity;
         this.price = price;
+        this.product = product;
     }
 
     public Long getId() {

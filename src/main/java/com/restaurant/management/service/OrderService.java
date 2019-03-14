@@ -1,6 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Cart;
+import com.restaurant.management.domain.SessionCart;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
 import com.restaurant.management.domain.dto.OrderDto;
@@ -21,38 +21,45 @@ import java.util.Optional;
 @Transactional
 public class OrderService {
     private OrderRepository orderRepository;
-    private CartRepository cartRepository;
+    private SessionCartRepository sessionCartRepository;
     private Utils utils;
     private OrderMapper orderMapper;
     private DailyOrderListRepository dailyOrderListRepository;
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
-                        CartRepository cartRepository,
+                        SessionCartRepository sessionCartRepository,
                         Utils utils,
                         OrderMapper orderMapper,
                         DailyOrderListRepository dailyOrderListRepository) {
         this.orderRepository = orderRepository;
-        this.cartRepository = cartRepository;
+        this.sessionCartRepository = sessionCartRepository;
         this.utils = utils;
         this.orderMapper = orderMapper;
         this.dailyOrderListRepository = dailyOrderListRepository;
     }
 
+    /**
+     *
+     * Create method to convert CheckoutCart to ProductHistory
+     *
+     * And adjust processOrder method :)
+     */
+
     public OrderDto processOrder(Long phoneNumber) {
 
-        Cart cart = cartRepository.findCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_FOUND.getMessage()));
 
         Order order = new Order.OrderBuilder()
                 .setOrdered(new Date().toInstant())
                 .setStatus("ORDERED") //Delivered? enum
                 .setOrderNumber(utils.generateOrderNumber(5))
-                .setTotalPrice(cart.calculateTotal())
-                .setCart(cart)
+                .setTotalPrice(sessionCart.calculateTotal())
+                .setSessionCart(sessionCart)
                 .build();
 
-        order.getCart().setOpen(Boolean.FALSE);
+        order.getSessionCart().setOpen(Boolean.FALSE);
 
         addToDailyOrderList(order);
 

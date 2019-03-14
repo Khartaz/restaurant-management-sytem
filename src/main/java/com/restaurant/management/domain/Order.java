@@ -26,30 +26,30 @@ public class Order  {
     private Double totalPrice;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Cart cart;
+    private SessionCart sessionCart;
 
     public Order() {
     }
 
     public Order(Long id, String orderNumber,
                  Instant ordered, String status,
-                 Double totalPrice, Cart cart) {
+                 Double totalPrice, SessionCart sessionCart) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.ordered = ordered;
         this.status = status;
         this.totalPrice = totalPrice;
-        this.cart = cart;
+        this.sessionCart = sessionCart;
     }
 
     public Order(String orderNumber,
                  Instant ordered, String status,
-                 Double totalPrice, Cart cart) {
+                 Double totalPrice, SessionCart sessionCart) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
         this.status = status;
         this.totalPrice = totalPrice;
-        this.cart = cart;
+        this.sessionCart = sessionCart;
     }
 
     public Long getId() {
@@ -92,12 +92,12 @@ public class Order  {
         this.totalPrice = totalPrice;
     }
 
-    public Cart getCart() {
-        return cart;
+    public SessionCart getSessionCart() {
+        return sessionCart;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setSessionCart(SessionCart sessionCart) {
+        this.sessionCart = sessionCart;
     }
 
     public static class OrderBuilder {
@@ -105,7 +105,7 @@ public class Order  {
         private Instant ordered;
         private String status;
         private Double totalPrice;
-        private Cart cart;
+        private SessionCart sessionCart;
 
         public OrderBuilder setOrderNumber(String orderNumber) {
             this.orderNumber = orderNumber;
@@ -127,13 +127,13 @@ public class Order  {
             return this;
         }
 
-        public OrderBuilder setCart(Cart cart) {
-            this.cart = cart;
+        public OrderBuilder setSessionCart(SessionCart sessionCart) {
+            this.sessionCart = sessionCart;
             return this;
         }
 
         public Order build() {
-            return new Order(this.orderNumber, this.ordered, this.status, this.totalPrice, this.cart);
+            return new Order(this.orderNumber, this.ordered, this.status, this.totalPrice, this.sessionCart);
         }
     }
 

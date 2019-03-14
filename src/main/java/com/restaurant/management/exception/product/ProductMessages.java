@@ -6,6 +6,7 @@ public enum  ProductMessages {
     PRODUCT_NAME_NOT_FOUND("Product not found with provided name. "),
     PRODUCT_UNIQUE_ID_NOT_FOUND("Product not found with provided unique id. Register it first. "),
     ARCHIVED("Product has been moved to the archive. "),
+    PRODUCT_DELETED("Product deleted"),
     PRODUCT_NAME_EXISTS("Product with provided name already exists. ");
 
 

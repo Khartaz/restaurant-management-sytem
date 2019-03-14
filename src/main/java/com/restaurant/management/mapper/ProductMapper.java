@@ -1,6 +1,7 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.Product;
+import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,12 @@ import java.util.stream.Collectors;
 @Component
 public class ProductMapper {
 
-    @Autowired
     private IngredientMapper ingredientMapper;
+
+    @Autowired
+    public void setIngredientMapper(IngredientMapper ingredientMapper) {
+        this.ingredientMapper = ingredientMapper;
+    }
 
     public Product mapToProduct(final ProductDto productDto) {
         return new Product(
@@ -23,9 +28,21 @@ public class ProductMapper {
                 productDto.getCategory(),
                 productDto.getPrice(),
                 productDto.getCreatedAt(),
-                productDto.getArchived(),
                 productDto.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredient(v))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public ProductArchive mapToProductArchive(final Product product) {
+        return new ProductArchive(
+                product.getUniqueId(),
+                product.getName(),
+                product.getCategory(),
+                product.getPrice(),
+                product.getCreatedAt(),
+                product.getIngredients().stream()
+                        .map(v -> ingredientMapper.mapToIngredientArchive(v))
                         .collect(Collectors.toList())
         );
     }
@@ -38,8 +55,21 @@ public class ProductMapper {
                 product.getCategory(),
                 product.getPrice(),
                 product.getCreatedAt(),
-                product.getArchived(),
                 product.getIngredients().stream()
+                        .map(v -> ingredientMapper.mapToIngredientDto(v))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public ProductDto mapToProductDto(final ProductArchive productArchive) {
+        return new ProductDto(
+                productArchive.getId(),
+                productArchive.getUniqueId(),
+                productArchive.getName(),
+                productArchive.getCategory(),
+                productArchive.getPrice(),
+                productArchive.getCreatedAt(),
+                productArchive.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientDto(v))
                         .collect(Collectors.toList())
         );

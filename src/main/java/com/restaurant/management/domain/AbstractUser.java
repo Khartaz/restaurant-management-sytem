@@ -1,7 +1,6 @@
 package com.restaurant.management.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.restaurant.management.domain.audit.DateAudit;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -11,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 @JsonIgnoreProperties(allowGetters = true)
-public abstract class AbstractUser extends DateAudit {
+public abstract class AbstractUser extends AbstractDateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

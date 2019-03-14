@@ -1,6 +1,6 @@
 package com.restaurant.management.web.request.cart;
 
-public class RemoveCartProductRequest {
+public class RemoveProductRequest {
 
     private Long phoneNumber;
 

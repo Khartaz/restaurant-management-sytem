@@ -20,14 +20,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     boolean existsByUniqueId(String uniqueId);
 
+    void deleteByUniqueId(String uniqueId);
+
     Optional<Product> findProductByName(String name);
 
     List<Product> findProductsByName(String name);
 
     List<Product> findProductsByName(List<String> name);
-
-    List<Product> findAllByIsArchivedIsFalse();
-
-    List<Product> findAllByIsArchivedIsTrue();
 
 }

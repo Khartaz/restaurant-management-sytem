@@ -9,8 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
 
-    @Autowired
     private CartMapper cartMapper;
+
+    @Autowired
+    public void setCartMapper(CartMapper cartMapper) {
+        this.cartMapper = cartMapper;
+    }
 
     public Order mapToOrder(final OrderDto orderDto) {
         return new Order(
@@ -19,7 +23,7 @@ public class OrderMapper {
                 orderDto.getOrdered(),
                 orderDto.getStatus(),
                 orderDto.getTotalPrice(),
-                cartMapper.mapToCart(orderDto.getCart())
+                cartMapper.mapToSessionCart(orderDto.getCart())
         );
     }
 
@@ -30,7 +34,7 @@ public class OrderMapper {
                 order.getOrdered(),
                 order.getStatus(),
                 order.getTotalPrice(),
-                cartMapper.mapToCartDto(order.getCart())
+                cartMapper.mapToCartDto(order.getSessionCart())
         );
     }
 

@@ -2,12 +2,18 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Ingredient;
 import com.restaurant.management.domain.Product;
+import com.restaurant.management.domain.SessionCart;
+import com.restaurant.management.domain.SessionLineItem;
+import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.mapper.IngredientMapper;
 import com.restaurant.management.mapper.ProductMapper;
+import com.restaurant.management.repository.SessionCartRepository;
+import com.restaurant.management.repository.SessionLineItemRepository;
+import com.restaurant.management.repository.archive.ProductArchiveRepository;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.product.ProductRequest;
@@ -19,6 +25,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -29,16 +36,22 @@ public class ProductService {
     private ProductMapper productMapper;
     private Utils utils;
     private IngredientMapper ingredientMapper;
+    private ProductArchiveRepository productArchiveRepository;
+    private SessionLineItemRepository sessionLineItemRepository;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
                           ProductMapper productMapper,
                           Utils utils,
-                          IngredientMapper ingredientMapper) {
+                          IngredientMapper ingredientMapper,
+                          ProductArchiveRepository productArchiveRepository,
+                          SessionLineItemRepository sessionLineItemRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.utils = utils;
         this.ingredientMapper = ingredientMapper;
+        this.productArchiveRepository = productArchiveRepository;
+        this.sessionLineItemRepository = sessionLineItemRepository;
     }
 
     public ProductDto registerProduct(RegisterProductRequest request) {
@@ -46,7 +59,7 @@ public class ProductService {
             throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getMessage());
         }
 
-        String  uniqueProductId = utils.generateProductUniqueId(7);
+        String uniqueProductId = utils.generateProductUniqueId(7);
 
         Optional<Product> productExists = productRepository.findProductByUniqueId(uniqueProductId);
 
@@ -62,25 +75,15 @@ public class ProductService {
                 .setCategory(request.getCategory())
                 .setPrice(request.getPrice())
                 .setCreatedAt(new Date().toInstant())
-                .setIsArchived(Boolean.FALSE)
                 .setIngredients(ingredients)
                 .build();
 
         productRepository.save(newProduct);
 
+        ProductArchive productArchive = productMapper.mapToProductArchive(newProduct);
+        productArchiveRepository.save(productArchive);
+
         return productMapper.mapToProductDto(newProduct);
-    }
-
-    public boolean transferToArchive(String uniqueId) {
-        Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
-
-        if (product.isPresent()) {
-            product.get().setArchived(Boolean.TRUE);
-            productRepository.save(product.get());
-            return true;
-        } else {
-            throw new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + uniqueId);
-        }
     }
 
     public ProductDto updateProduct(ProductRequest productRequest) {
@@ -115,15 +118,23 @@ public class ProductService {
     }
 
     public List<ProductDto> getAllProducts() {
-        List<Product> products = productRepository.findAllByIsArchivedIsFalse();
+        List<Product> products = productRepository.findAll();
 
         return productMapper.mapToProductDtoList(products);
     }
 
-    public List<ProductDto> getAllArchivedProducts() {
-        List<Product> products = productRepository.findAllByIsArchivedIsTrue();
+    public void deleteByUniqueId(String uniqueId) {
+        Optional<Product> product = productRepository.findProductByUniqueId(uniqueId);
 
-        return productMapper.mapToProductDtoList(products);
+        if (product.isPresent()) {
+            List<SessionLineItem> sessionLineItems = sessionLineItemRepository.findAllByProductUniqueId(uniqueId);
+
+            sessionLineItemRepository.deleteAll(sessionLineItems);
+
+            productRepository.deleteByUniqueId(uniqueId);
+        } else {
+            throw new ProductNotFoundException(ProductMessages.PRODUCT_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
+        }
     }
 
 }

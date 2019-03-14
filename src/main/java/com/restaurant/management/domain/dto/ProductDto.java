@@ -11,18 +11,16 @@ public class ProductDto {
     private String category;
     private Double price;
     private Instant createdAt;
-    private Boolean isArchived;
     private List<IngredientDto> ingredients;
 
     public ProductDto(Long id, String uniqueId, String name, String category, Double price,
-                      Instant createdAt, Boolean isArchived, List<IngredientDto> ingredients) {
+                      Instant createdAt, List<IngredientDto> ingredients) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.createdAt = createdAt;
-        this.isArchived = isArchived;
         this.ingredients = ingredients;
     }
 
@@ -44,10 +42,6 @@ public class ProductDto {
 
     public Double getPrice() {
         return price;
-    }
-
-    public Boolean getArchived() {
-        return isArchived;
     }
 
     public Instant getCreatedAt() {

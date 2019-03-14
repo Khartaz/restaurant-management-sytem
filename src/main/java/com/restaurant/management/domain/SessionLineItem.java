@@ -3,39 +3,18 @@ package com.restaurant.management.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "line_items")
-public class LineItem {
+@Table(name = "session_line_items")
+public class SessionLineItem extends AbstractLineItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Product product;
 
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    @Column(name = "price")
-    private Double price;
-
-    public LineItem() {
+    public SessionLineItem() {
     }
 
-    public LineItem(Long id, Product product, Integer quantity, Double price) {
-        this.id = id;
+    public SessionLineItem(Long id, Integer quantity, Double price, Product product) {
+        super(id, quantity, price);
         this.product = product;
-        this.quantity = quantity;
-        this.price = price;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Product getProduct() {
@@ -44,22 +23,6 @@ public class LineItem {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
 }

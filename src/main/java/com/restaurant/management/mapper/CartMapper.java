@@ -78,7 +78,17 @@ public class CartMapper {
                 sessionCart.getSessionLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemArchive(v))
                         .collect(Collectors.toList())
+        );
+    }
 
+    public Cart mapToCart(final CartDto cartDto) {
+        return new Cart(
+                cartDto.getUniqueId(),
+                cartDto.getOpen(),
+                customerMapper.mapToCustomerArchive(cartDto.getCustomer()),
+                cartDto.getLineItems().stream()
+                        .map(v -> lineItemMapper.mapToLineItemArchive(v))
+                        .collect(Collectors.toList())
         );
     }
 

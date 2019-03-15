@@ -102,17 +102,24 @@ public class CartService {
 
         lineItem.ifPresent(item -> {
             Integer quantity = item.getQuantity() + request.getQuantity();
+
+            Double price = item.getProduct().getPrice() * quantity;
+            price = Math.floor(price * 100) / 100;
+
             item.setQuantity(quantity);
-            item.setPrice(item.getProduct().getPrice() * quantity);
+            item.setPrice(price);
         });
 
         if (!lineItem.isPresent()) {
+            Double price = product.getPrice() * request.getQuantity();
+            price = Math.floor(price * 100) / 100;
+
             lineItem = Optional.of(new SessionLineItem());
             newSessionCart.getSessionLineItems().add(lineItem.get());
 
             lineItem.get().setProduct(product);
             lineItem.get().setQuantity(request.getQuantity());
-            lineItem.get().setPrice(product.getPrice() * request.getQuantity());
+            lineItem.get().setPrice(price);
         }
 
         sessionCartRepository.save(newSessionCart);

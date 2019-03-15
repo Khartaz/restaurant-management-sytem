@@ -23,7 +23,7 @@ public class OrderMapper {
                 orderDto.getOrdered(),
                 orderDto.getStatus(),
                 orderDto.getTotalPrice(),
-                cartMapper.mapToSessionCart(orderDto.getCart())
+                cartMapper.mapToCart(orderDto.getCart())
         );
     }
 
@@ -34,7 +34,7 @@ public class OrderMapper {
                 order.getOrdered(),
                 order.getStatus(),
                 order.getTotalPrice(),
-                cartMapper.mapToCartDto(order.getSessionCart())
+                cartMapper.mapToCartDto(order.getCart())
         );
     }
 

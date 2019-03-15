@@ -25,6 +25,14 @@ public class LineItemMapper {
         );
     }
 
+    public LineItemArchive mapToLineItemArchive(final LineItemDto lineItemDto) {
+        return new LineItemArchive(
+                lineItemDto.getQuantity(),
+                lineItemDto.getPrice(),
+                productMapper.mapToProductArchive(lineItemDto.getProductDto())
+        );
+    }
+
     public SessionLineItem mapToSessionLineItem(final LineItemDto lineItemDto) {
         return new SessionLineItem(
                 lineItemDto.getId(),

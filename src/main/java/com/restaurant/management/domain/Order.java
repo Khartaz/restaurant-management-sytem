@@ -2,7 +2,9 @@ package com.restaurant.management.domain;
 
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.time.Instant;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "orders")
@@ -26,30 +28,30 @@ public class Order  {
     private Double totalPrice;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private SessionCart sessionCart;
+    private Cart cart;
 
     public Order() {
     }
 
     public Order(Long id, String orderNumber,
                  Instant ordered, String status,
-                 Double totalPrice, SessionCart sessionCart) {
+                 Double totalPrice, Cart cart) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.ordered = ordered;
         this.status = status;
         this.totalPrice = totalPrice;
-        this.sessionCart = sessionCart;
+        this.cart = cart;
     }
 
     public Order(String orderNumber,
                  Instant ordered, String status,
-                 Double totalPrice, SessionCart sessionCart) {
+                 Double totalPrice, Cart cart) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
         this.status = status;
         this.totalPrice = totalPrice;
-        this.sessionCart = sessionCart;
+        this.cart = cart;
     }
 
     public Long getId() {
@@ -92,12 +94,22 @@ public class Order  {
         this.totalPrice = totalPrice;
     }
 
-    public SessionCart getSessionCart() {
-        return sessionCart;
+    public Double calculateTotalPrice(Cart cart) {
+         double price = Stream.of(cart.getLineItems())
+                .flatMapToDouble(v -> v.stream()
+                        .mapToDouble(AbstractLineItem::getPrice))
+                .sum();
+
+        return Math.floor(price * 100) / 100;
+
     }
 
-    public void setSessionCart(SessionCart sessionCart) {
-        this.sessionCart = sessionCart;
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public static class OrderBuilder {
@@ -105,7 +117,7 @@ public class Order  {
         private Instant ordered;
         private String status;
         private Double totalPrice;
-        private SessionCart sessionCart;
+        private Cart cart;
 
         public OrderBuilder setOrderNumber(String orderNumber) {
             this.orderNumber = orderNumber;
@@ -127,13 +139,13 @@ public class Order  {
             return this;
         }
 
-        public OrderBuilder setSessionCart(SessionCart sessionCart) {
-            this.sessionCart = sessionCart;
+        public OrderBuilder setCart(Cart cart) {
+            this.cart = cart;
             return this;
         }
 
         public Order build() {
-            return new Order(this.orderNumber, this.ordered, this.status, this.totalPrice, this.sessionCart);
+            return new Order(this.orderNumber, this.ordered, this.status, this.totalPrice, this.cart);
         }
     }
 

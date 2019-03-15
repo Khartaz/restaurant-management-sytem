@@ -1,11 +1,7 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.SessionCart;
-import com.restaurant.management.domain.DailyOrderList;
-import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.*;
 import com.restaurant.management.domain.dto.OrderDto;
-import com.restaurant.management.exception.cart.CartNotFoundException;
-import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.orderlist.OrderListNotFoundException;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.repository.*;
@@ -21,45 +17,34 @@ import java.util.Optional;
 @Transactional
 public class OrderService {
     private OrderRepository orderRepository;
-    private SessionCartRepository sessionCartRepository;
     private Utils utils;
     private OrderMapper orderMapper;
     private DailyOrderListRepository dailyOrderListRepository;
+    private CartService cartService;
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
-                        SessionCartRepository sessionCartRepository,
                         Utils utils,
                         OrderMapper orderMapper,
-                        DailyOrderListRepository dailyOrderListRepository) {
+                        DailyOrderListRepository dailyOrderListRepository,
+                        CartService cartService) {
         this.orderRepository = orderRepository;
-        this.sessionCartRepository = sessionCartRepository;
         this.utils = utils;
         this.orderMapper = orderMapper;
         this.dailyOrderListRepository = dailyOrderListRepository;
+        this.cartService = cartService;
     }
 
-    /**
-     *
-     * Create method to convert CheckoutCart to ProductHistory
-     *
-     * And adjust processOrder method :)
-     */
-
     public OrderDto processOrder(Long phoneNumber) {
-
-        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
-                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_FOUND.getMessage()));
+        Cart cart = cartService.confirmCart(phoneNumber);
 
         Order order = new Order.OrderBuilder()
                 .setOrdered(new Date().toInstant())
-                .setStatus("ORDERED") //Delivered? enum
+                .setStatus("ORDERED")
                 .setOrderNumber(utils.generateOrderNumber(5))
-                .setTotalPrice(sessionCart.calculateTotal())
-                .setSessionCart(sessionCart)
+                .setTotalPrice(new Order().calculateTotalPrice(cart))
+                .setCart(cart)
                 .build();
-
-        order.getSessionCart().setOpen(Boolean.FALSE);
 
         addToDailyOrderList(order);
 

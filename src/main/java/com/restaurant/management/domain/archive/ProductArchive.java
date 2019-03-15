@@ -36,7 +36,8 @@ public class ProductArchive  {
     }
 
     public ProductArchive(String uniqueId, String name, String category,
-                          Double price, Instant createdAt, List<IngredientArchive> ingredients) {
+                          Double price, Instant createdAt,
+                          List<IngredientArchive> ingredients) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;

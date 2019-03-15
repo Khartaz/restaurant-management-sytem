@@ -47,6 +47,19 @@ public class ProductMapper {
         );
     }
 
+    public ProductArchive mapToProductArchive(final ProductDto productDto) {
+        return new ProductArchive(
+                productDto.getUniqueId(),
+                productDto.getName(),
+                productDto.getCategory(),
+                productDto.getPrice(),
+                productDto.getCreatedAt(),
+                productDto.getIngredients().stream()
+                        .map(v -> ingredientMapper.mapToIngredientArchive(v))
+                        .collect(Collectors.toList())
+        );
+    }
+
     public ProductDto mapToProductDto(final Product product) {
         return new ProductDto(
                 product.getId(),

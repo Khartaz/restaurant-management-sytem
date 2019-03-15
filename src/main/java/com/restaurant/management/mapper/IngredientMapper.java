@@ -47,11 +47,17 @@ public class IngredientMapper {
         );
     }
 
+    public IngredientArchive mapToIngredientArchive(final IngredientDto ingredientDto) {
+        return new IngredientArchive(
+                ingredientDto.getName()
+        );
+    }
+
     public List<Ingredient> mapToIngredientListFromRequest(final List<IngredientRequest> ingredientsRequest) {
         return ingredientsRequest.stream()
                 .map(i -> new Ingredient(
-                        i.getName()
-                )).collect(Collectors.toList());
+                        i.getName()))
+                .collect(Collectors.toList());
     }
 
     public List<IngredientDto> mapToIngredientDtoList(final List<Ingredient> ingredients) {

@@ -18,4 +18,5 @@ public interface DailyOrderListRepository extends JpaRepository<DailyOrderList, 
 
     @Override
     List<DailyOrderList> findAll();
+
 }

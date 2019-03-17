@@ -39,7 +39,6 @@ public class AuthController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPassword(@RequestParam(value = "token") String token,
                                            @RequestBody PasswordReset passwordReset) {
-
         return ResponseEntity.ok(accountUserService.resetPassword(token, passwordReset));
     }
 

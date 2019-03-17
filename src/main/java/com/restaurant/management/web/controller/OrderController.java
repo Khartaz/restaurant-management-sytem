@@ -45,7 +45,8 @@ public class OrderController {
         return new Resources<>(response, link);
     }
 
-    @GetMapping(value = "/{orderNumber}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{orderNumber}",
+            produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<OrderResponse> showOrder(@PathVariable String orderNumber) {
         OrderDto orderDto = orderService.getByOrderNumber(orderNumber);

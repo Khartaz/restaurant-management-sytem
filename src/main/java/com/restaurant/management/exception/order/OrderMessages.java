@@ -2,6 +2,7 @@ package com.restaurant.management.exception.order;
 
 public enum  OrderMessages {
     ORDER_LIST_EXISTS("Daily order list is already open"),
+    ORDER_DELETED("Order deleted"),
     ORDER_LIST_NOT_FOUND("Order list not found. Please open it first"),
     ORDER_NUMBER_NOT_FOUND("Order with provided order number not found. ");
 

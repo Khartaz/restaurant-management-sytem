@@ -241,6 +241,16 @@ public class CartService {
         }
     }
 
+    public void deleteCart(String uniqueId) {
+        Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
+
+        if (cart.isPresent()) {
+            cartRepository.deleteById(cart.get().getId());
+        } else {
+            throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
+        }
+    }
+
     private void deleteLineItem(Long id) {
         Optional<SessionLineItem> lineItem = sessionLineItemRepository.findById(id);
 

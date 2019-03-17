@@ -15,7 +15,7 @@ public class DailyOrderList extends AbstractDateAudit {
     @Column(name = "unique_id")
     private String uniqueId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Order> orders = new LinkedHashSet<>();
 
     @Column(name = "daily_income")

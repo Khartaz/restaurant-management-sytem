@@ -62,4 +62,9 @@ public class OrderService {
         return orderMapper.mapToOrderDto(order);
     }
 
+    public void deleteOrder(String orderNumber) {
+        Order order = orderMapper.mapToOrder(getByOrderNumber(orderNumber));
+
+        orderRepository.deleteById(order.getId());
+    }
 }

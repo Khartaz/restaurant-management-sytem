@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "line_items_archive")
 public class LineItemArchive extends AbstractLineItem {
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ProductArchive product;
 
     public LineItemArchive() {

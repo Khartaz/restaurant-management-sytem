@@ -1,14 +1,17 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.OrderDto;
+import com.restaurant.management.exception.order.OrderMessages;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.service.OrderService;
+import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.OrderResponse;
 import com.restaurant.management.web.response.SendOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,18 +31,6 @@ public class OrderController {
     public OrderController(OrderService orderService, OrderMapper orderMapper) {
         this.orderService = orderService;
         this.orderMapper = orderMapper;
-    }
-
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<OrderResponse> registerOrder(@RequestBody SendOrder sendOrder) {
-
-        OrderDto orderDto = orderService.processOrder(sendOrder.getPhoneNumber());
-
-        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
-
-        Link link = linkTo(OrderController.class).slash(orderResponse.getOrderNumber()).withSelfRel();
-        return new Resource<>(orderResponse, link);
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -66,16 +57,22 @@ public class OrderController {
         return new Resource<>(response, link);
     }
 
+    @DeleteMapping(value = "/{orderNumber}")
+    public ResponseEntity<?> deleteOrder(@PathVariable String orderNumber) {
+        orderService.deleteOrder(orderNumber);
+        return ResponseEntity.ok().body(new ApiResponse(true, OrderMessages.ORDER_DELETED.getMessage()));
+    }
 
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<OrderResponse> registerOrder(@RequestBody SendOrder sendOrder) {
+
+        OrderDto orderDto = orderService.processOrder(sendOrder.getPhoneNumber());
+
+        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
+
+        Link link = linkTo(OrderController.class).slash(orderResponse.getOrderNumber()).withSelfRel();
+        return new Resource<>(orderResponse, link);
+    }
 
 }
-
-//    @PutMapping(value = "/list/close", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-//    public @ResponseBody
-//    Resource<DailyOrderList> closeDailyOrderList() {
-//
-//        DailyOrderList dailyOrderList = orderService.closeDailyList();
-//
-//        Link link = linkTo(OrderController.class).withSelfRel();
-//        return new Resource<>(dailyOrderList, link);
-//    }

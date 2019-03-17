@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "carts")
 public class Cart extends AbstractCart {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CustomerArchive customer;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

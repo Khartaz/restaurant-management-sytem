@@ -2,7 +2,7 @@ package com.restaurant.management.exception.cart;
 
 public enum  CartMessages {
     CART_NOT_FOUND("First add products to cart. "),
-    CART_DELETED("SessionCart deleted. "),
+    CART_DELETED("Cart deleted. "),
     CART_NOT_REGISTER("Please first open cart for customer"),
     CART_EXISTS("SessionCart already register for customer. You can add products. "),
     CART_OPENED_EMPTY("There is no opened customer carts. "),

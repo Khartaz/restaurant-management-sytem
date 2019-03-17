@@ -1,6 +1,5 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.mapper.CartMapper;
@@ -91,6 +90,19 @@ public class CartController {
         return ResponseEntity.ok().body(new ApiResponse(true, CartMessages.CART_DELETED.getMessage()));
     }
 
+    @DeleteMapping(value = "/product",
+            produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> removeProductCart(@Valid @RequestBody RemoveProductRequest request) {
+        CartDto cartDto = cartService.deleteProductFromCart(request);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+
+        return new Resource<>(response, link);
+    }
+
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> registerCustomerCart(@Valid @RequestBody RegisterCartRequest request) {
@@ -127,28 +139,5 @@ public class CartController {
 
         return new Resource<>(response, link);
     }
-
-    @DeleteMapping(value = "/product",
-            produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<CartResponse> removeProductCart(@Valid @RequestBody RemoveProductRequest request) {
-        CartDto cartDto = cartService.deleteProductFromCart(request);
-
-        CartResponse response = cartMapper.mapToCartResponse(cartDto);
-
-        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
-
-        return new Resource<>(response, link);
-    }
-
-//    @PutMapping(value = "/session/confirm", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-//    public @ResponseBody
-//    Resource<Cart> confirmCart(@RequestParam Long phoneNumber) {
-//        Cart cart = cartService.confirmCart(phoneNumber);
-//
-//        Link link = linkTo(CartController.class).slash(cart.getUniqueId()).withSelfRel();
-//
-//        return new Resource<>(cart, link);
-//    }
 
 }

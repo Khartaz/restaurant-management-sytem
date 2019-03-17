@@ -45,4 +45,8 @@ public class Utils {
     public String generateUserUniqueId(int length) {
         return generateRandomStringWithSmallLetters(length);
     }
+
+    public String generateDailyOrderListUniqueId(int length) {
+        return generateRandomStringWithBigLetters(length);
+    }
 }

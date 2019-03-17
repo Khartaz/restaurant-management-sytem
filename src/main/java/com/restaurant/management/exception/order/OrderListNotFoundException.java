@@ -1,4 +1,4 @@
-package com.restaurant.management.exception.orderlist;
+package com.restaurant.management.exception.order;
 
 import com.restaurant.management.exception.NotFoundException;
 import org.springframework.http.HttpStatus;

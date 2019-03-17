@@ -73,7 +73,6 @@ public class CartController {
         return new Resources<>(response, link);
     }
 
-
     @GetMapping(value = "/session/{uniqueId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> showSessionCart(@PathVariable String uniqueId) {
@@ -132,7 +131,7 @@ public class CartController {
     @DeleteMapping(value = "/product",
             produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> removeProductCart(@RequestBody RemoveProductRequest request) {
+    Resource<CartResponse> removeProductCart(@Valid @RequestBody RemoveProductRequest request) {
         CartDto cartDto = cartService.deleteProductFromCart(request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
@@ -142,14 +141,14 @@ public class CartController {
         return new Resource<>(response, link);
     }
 
-    @PutMapping(value = "/session/confirm", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<Cart> confirmCart(@RequestParam Long phoneNumber) {
-        Cart cart = cartService.confirmCart(phoneNumber);
-
-        Link link = linkTo(CartController.class).slash(cart.getUniqueId()).withSelfRel();
-
-        return new Resource<>(cart, link);
-    }
+//    @PutMapping(value = "/session/confirm", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+//    public @ResponseBody
+//    Resource<Cart> confirmCart(@RequestParam Long phoneNumber) {
+//        Cart cart = cartService.confirmCart(phoneNumber);
+//
+//        Link link = linkTo(CartController.class).slash(cart.getUniqueId()).withSelfRel();
+//
+//        return new Resource<>(cart, link);
+//    }
 
 }

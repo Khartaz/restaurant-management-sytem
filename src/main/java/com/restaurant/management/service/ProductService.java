@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -69,11 +70,14 @@ public class ProductService {
 
         List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(request.getIngredients());
 
+        double price = request.getPrice();
+        price = Math.floor(price * 100) / 100;
+
         Product newProduct = new Product.ProductBuilder()
                 .setUniqueId(uniqueProductId)
                 .setName(request.getName())
                 .setCategory(request.getCategory())
-                .setPrice(request.getPrice())
+                .setPrice(price)
                 .setCreatedAt(new Date().toInstant())
                 .setIngredients(ingredients)
                 .build();

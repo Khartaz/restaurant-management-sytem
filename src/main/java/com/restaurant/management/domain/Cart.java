@@ -43,10 +43,4 @@ public class Cart extends AbstractCart {
         this.lineItems = lineItems;
     }
 
-    public Double calculateTotal(){
-        return lineItems.stream()
-                .mapToDouble(v ->v.getPrice() * v.getQuantity())
-                .reduce(Double::sum)
-                .getAsDouble();
-    }
 }

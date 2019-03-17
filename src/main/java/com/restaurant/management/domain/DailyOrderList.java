@@ -1,20 +1,22 @@
 package com.restaurant.management.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "daily_orders_list")
-public class DailyOrderList {
+public class DailyOrderList extends AbstractDateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
+    @Column(name = "unique_id")
+    private String uniqueId;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private Set<Order> orders = new LinkedHashSet<>();
 
     @Column(name = "daily_income")
     private Double dailyIncome;
@@ -33,11 +35,19 @@ public class DailyOrderList {
         this.id = id;
     }
 
-    public List<Order> getOrders() {
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    public Set<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
 
@@ -57,11 +67,4 @@ public class DailyOrderList {
         isOpened = opened;
     }
 
-    //To fix/check
-    public Double calculateDailyIncome() {
-        return orders.stream()
-                .mapToDouble(v -> v.getTotalPrice() * orders.size())
-                .reduce(Double::sum)
-                .getAsDouble();
-    }
 }

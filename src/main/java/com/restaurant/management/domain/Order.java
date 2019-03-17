@@ -101,7 +101,6 @@ public class Order  {
                 .sum();
 
         return Math.floor(price * 100) / 100;
-
     }
 
     public Cart getCart() {

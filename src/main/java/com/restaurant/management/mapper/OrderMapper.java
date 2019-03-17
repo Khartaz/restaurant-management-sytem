@@ -6,6 +6,9 @@ import com.restaurant.management.web.response.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class OrderMapper {
 
@@ -47,5 +50,17 @@ public class OrderMapper {
                 orderDto.getTotalPrice(),
                 cartMapper.mapToCartResponse(orderDto.getCart())
         );
+    }
+
+    public List<OrderDto> mapToOrderDtoList(final List<Order> order) {
+        return order.stream()
+                .map(this::mapToOrderDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<OrderResponse> mapToOrderResponseList(final List<OrderDto> orders) {
+        return orders.stream()
+                .map(this::mapToOrderResponse)
+                .collect(Collectors.toList());
     }
 }

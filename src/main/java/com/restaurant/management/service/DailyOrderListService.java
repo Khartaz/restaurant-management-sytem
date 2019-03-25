@@ -2,15 +2,14 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
-import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.exception.order.OrderListExistsException;
 import com.restaurant.management.exception.order.OrderListNotFoundException;
 import com.restaurant.management.exception.order.OrderMessages;
 import com.restaurant.management.exception.order.OrderNotFoundException;
-import com.restaurant.management.mapper.DailyOrderListMapper;
 import com.restaurant.management.repository.DailyOrderListRepository;
 import com.restaurant.management.repository.OrderRepository;
 import com.restaurant.management.utils.Utils;
+import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,115 +18,113 @@ import java.util.*;
 
 @Service
 @Transactional
+@SuppressWarnings("Duplicates")
 public class DailyOrderListService {
     private DailyOrderListRepository dailyOrderListRepository;
     private OrderRepository orderRepository;
-    private Utils utils;
-    private DailyOrderListMapper orderListMapper;
 
     @Autowired
     public DailyOrderListService(DailyOrderListRepository dailyOrderListRepository,
-                                 OrderRepository orderRepository,
-                                 Utils utils,
-                                 DailyOrderListMapper orderListMapper) {
+                                 OrderRepository orderRepository) {
         this.dailyOrderListRepository = dailyOrderListRepository;
         this.orderRepository = orderRepository;
-        this.utils = utils;
-        this.orderListMapper = orderListMapper;
     }
 
-    public DailyOrderListDto getOrderListByUniqueId(String uniqueId) {
-        DailyOrderList dailyOrderList = dailyOrderListRepository.findByUniqueId(uniqueId)
+    public DailyOrderList getOrderListByUniqueId(String uniqueId) {
+        return dailyOrderListRepository.findByUniqueId(uniqueId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
-
-        return orderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public List<DailyOrderListDto> getAll() {
-        List<DailyOrderList> dailyOrderList = dailyOrderListRepository.findAll();
-
-        return orderListMapper.mapToDailyOrderListDto(dailyOrderList);
+    public List<DailyOrderList> getAll() {
+        return dailyOrderListRepository.findAll();
     }
 
-    public DailyOrderListDto openOrderList() {
-        if (dailyOrderListRepository.existsByIsOpenedTrue()) {
+    public DailyOrderList openOrderList() {
+        if (dailyOrderListRepository.existsByIsOpenTrue()) {
             throw new OrderListExistsException(OrderMessages.ORDER_LIST_EXISTS.getMessage());
         }
 
         DailyOrderList orderList = new DailyOrderList();
 
-        orderList.setUniqueId(utils.generateDailyOrderListUniqueId(10));
+        orderList.setUniqueId(Utils.generateDailyOrderListUniqueId(10));
         orderList.setDailyIncome(0.00);
         orderList.setOpened(Boolean.TRUE);
         orderList.setOrders(new LinkedHashSet<>());
 
         dailyOrderListRepository.save(orderList);
 
-        return orderListMapper.mapToDailyOrderListDto(orderList);
+        return orderList;
     }
 
-    public DailyOrderListDto getOpenedOrderList() {
-        DailyOrderList dailyOrderList =  dailyOrderListRepository.findDailyOrderListByIsOpenedTrue()
+    public DailyOrderList getOpenedOrderList() {
+        return dailyOrderListRepository.findDailyOrderListByIsOpenTrue()
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
-
-        return orderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public DailyOrderListDto addOrderToList(String orderNumber) {
+    public DailyOrderList addOrderToList(String orderNumber) {
         Order order = orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_NUMBER_NOT_FOUND.getMessage()));
 
-        DailyOrderList dailyOrderList = orderListMapper.mapToDailyOrderList(getOpenedOrderList());
+        DailyOrderList dailyOrderList = getOpenedOrderList();
 
         int oldSize = dailyOrderList.getOrders().size();
 
-        dailyOrderList.getOrders().add(order);
+        Set<Order> orders  = new LinkedHashSet<>(dailyOrderList.getOrders());
+        orders.add(order);
 
-        if (dailyOrderList.getOrders().size() > oldSize) {
+        if (orders.size() >= oldSize) {
             double income = order.getTotalPrice() + dailyOrderList.getDailyIncome();
             income = Math.floor(income * 100) / 100;
             dailyOrderList.setDailyIncome(income);
+            dailyOrderList.setOrders(orders);
         }
+
         dailyOrderListRepository.save(dailyOrderList);
 
-        return orderListMapper.mapToDailyOrderListDto(dailyOrderList);
+        return dailyOrderList;
     }
 
-    public DailyOrderListDto removeOrderFromList(String orderNumber) {
+    public DailyOrderList removeOrderFromList(String orderNumber) {
         Order order = orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_NUMBER_NOT_FOUND.getMessage()));
 
-        DailyOrderList dailyOrderList = orderListMapper.mapToDailyOrderList(getOpenedOrderList());
+        DailyOrderList dailyOrderList = getOpenedOrderList();
 
         int oldSize = dailyOrderList.getOrders().size();
 
-        dailyOrderList.getOrders().remove(order);
+        Set<Order> orders = new LinkedHashSet<>(dailyOrderList.getOrders());
+        orders.remove(order);
 
-        if (dailyOrderList.getOrders().size() < oldSize) {
+        if (orders.size() <= oldSize) {
             double income = dailyOrderList.getDailyIncome() - order.getTotalPrice();
             income = Math.floor(income * 100) / 100;
             dailyOrderList.setDailyIncome(income);
+            dailyOrderList.setOrders(orders);
         }
+
         dailyOrderListRepository.save(dailyOrderList);
 
-        return orderListMapper.mapToDailyOrderListDto(dailyOrderList);
+        return dailyOrderList;
     }
 
-    public DailyOrderListDto closeDailyList() {
-        DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenedTrue()
+    public DailyOrderList closeDailyList() {
+        DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenTrue()
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_OPEN.getMessage()));
 
         dailyOrderList.setOpened(Boolean.FALSE);
         dailyOrderListRepository.save(dailyOrderList);
 
-        return orderListMapper.mapToDailyOrderListDto(dailyOrderList);
+        return dailyOrderList;
     }
 
-    public void deleteByUniqueId(String uniqueId) {
+    public ApiResponse deleteByUniqueId(String uniqueId) {
         Optional<DailyOrderList> orderList = dailyOrderListRepository.findByUniqueId(uniqueId);
 
         if (orderList.isPresent()) {
             dailyOrderListRepository.delete(orderList.get());
+
+            return new ApiResponse(true, OrderMessages.ORDER_LIST_DELETED.getMessage());
+
         } else {
             throw new OrderListExistsException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage());
         }

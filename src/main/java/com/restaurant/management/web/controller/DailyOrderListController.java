@@ -1,10 +1,8 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.DailyOrderListDto;
-import com.restaurant.management.exception.order.OrderMessages;
 import com.restaurant.management.mapper.DailyOrderListMapper;
-import com.restaurant.management.service.DailyOrderListService;
-import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.service.facade.DailyOrderListFacade;
 import com.restaurant.management.web.response.DailyOrderListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -23,20 +21,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/orders/daily")
 public class DailyOrderListController {
 
-    private DailyOrderListService orderListService;
+    private DailyOrderListFacade dailyOrderListFacade;
     private DailyOrderListMapper orderListMapper;
 
     @Autowired
-    public DailyOrderListController(DailyOrderListService orderListService,
+    public DailyOrderListController(DailyOrderListFacade dailyOrderListFacade,
                                     DailyOrderListMapper orderListMapper) {
-        this.orderListService = orderListService;
+        this.dailyOrderListFacade = dailyOrderListFacade;
         this.orderListMapper = orderListMapper;
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderListResponse> registerDailyOrderList() {
-        DailyOrderListDto orderList = orderListService.openOrderList();
+        DailyOrderListDto orderList = dailyOrderListFacade.openOrderList();
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -48,7 +46,7 @@ public class DailyOrderListController {
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<DailyOrderListResponse> showOrderLists() {
-        List<DailyOrderListDto> dailyOrderList = orderListService.getAll();
+        List<DailyOrderListDto> dailyOrderList = dailyOrderListFacade.getAll();
 
         List<DailyOrderListResponse> response = orderListMapper.mapToDailyOrderListResponse(dailyOrderList);
 
@@ -60,7 +58,7 @@ public class DailyOrderListController {
     @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderListResponse> showOrderList(@PathVariable String uniqueId) {
-        DailyOrderListDto dailyOrderList = orderListService.getOrderListByUniqueId(uniqueId);
+        DailyOrderListDto dailyOrderList = dailyOrderListFacade.getOrderListByUniqueId(uniqueId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(dailyOrderList);
 
@@ -71,15 +69,14 @@ public class DailyOrderListController {
 
     @DeleteMapping(value = "/{uniqueId}")
     public ResponseEntity<?> deleteListByUniqueId(@PathVariable String uniqueId) {
-        orderListService.deleteByUniqueId(uniqueId);
-        return ResponseEntity.ok().body(new ApiResponse(true, OrderMessages.ORDER_LIST_DELETED.getMessage()));
+        return ResponseEntity.ok().body(dailyOrderListFacade.deleteByUniqueId(uniqueId));
     }
 
     @PatchMapping(value = "/add",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderListResponse> addOrder(@RequestBody String orderNumber) {
-        DailyOrderListDto orderList = orderListService.addOrderToList(orderNumber);
+        DailyOrderListDto orderList = dailyOrderListFacade.addOrderToList(orderNumber);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -92,7 +89,7 @@ public class DailyOrderListController {
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderListResponse> removeOrder(@RequestBody String orderNumber) {
-        DailyOrderListDto orderList = orderListService.removeOrderFromList(orderNumber);
+        DailyOrderListDto orderList = dailyOrderListFacade.removeOrderFromList(orderNumber);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -105,7 +102,7 @@ public class DailyOrderListController {
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<DailyOrderListResponse> closeDailyList() {
-        DailyOrderListDto orderList = orderListService.closeDailyList();
+        DailyOrderListDto orderList = dailyOrderListFacade.closeDailyList();
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 

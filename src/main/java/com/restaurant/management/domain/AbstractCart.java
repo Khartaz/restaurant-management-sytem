@@ -49,7 +49,7 @@ public abstract class AbstractCart {
         this.uniqueId = uniqueId;
     }
 
-    public Boolean getOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 

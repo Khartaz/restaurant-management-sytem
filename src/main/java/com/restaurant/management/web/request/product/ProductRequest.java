@@ -21,6 +21,18 @@ public class ProductRequest {
     @NotNull
     private List<IngredientRequest> ingredients;
 
+    public ProductRequest() {
+    }
+
+    public ProductRequest(String uniqueId, String name, String category,
+                          double price, List<IngredientRequest> ingredients) {
+        this.uniqueId = uniqueId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.ingredients = ingredients;
+    }
+
     public String getUniqueId() {
         return uniqueId;
     }

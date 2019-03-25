@@ -45,8 +45,8 @@ public class CustomerMapper {
                 customer.getId(),
                 customer.getName(),
                 customer.getLastname(),
-                customer.getEmail(),
-                customer.getPhoneNumber());
+                customer.getPhoneNumber(),
+                customer.getEmail());
     }
 
     public CustomerDto mapToCustomerDto(final CustomerArchive customer) {
@@ -54,8 +54,8 @@ public class CustomerMapper {
                 customer.getId(),
                 customer.getName(),
                 customer.getLastname(),
-                customer.getEmail(),
-                customer.getPhoneNumber());
+                customer.getPhoneNumber(),
+                customer.getEmail());
     }
 
     public CustomerResponse mapToCustomerResponse(final CustomerDto customerDto) {
@@ -74,8 +74,8 @@ public class CustomerMapper {
                         v.getId(),
                         v.getName(),
                         v.getLastname(),
-                        v.getEmail(),
-                        v.getPhoneNumber()
+                        v.getPhoneNumber(),
+                        v.getEmail()
                         ))
                 .collect(Collectors.toList());
     }

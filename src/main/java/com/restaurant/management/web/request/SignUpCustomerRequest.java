@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-public class SingUpCustomerRequest {
+public class SignUpCustomerRequest {
 
     @NotBlank
     @Size(min = 4, max = 40)
@@ -23,6 +23,16 @@ public class SingUpCustomerRequest {
 
     @NotNull
     private Long phoneNumber;
+
+    public SignUpCustomerRequest() {
+    }
+
+    public SignUpCustomerRequest(String name, String lastname, String email, Long phoneNumber) {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getName() {
         return name;

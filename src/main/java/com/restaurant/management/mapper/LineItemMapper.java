@@ -42,7 +42,7 @@ public class LineItemMapper {
         );
     }
 
-    public LineItemDto mapToLineItemDto(final SessionLineItem sessionLineItem) {
+    public LineItemDto mapToLineItemDto(SessionLineItem sessionLineItem) {
         return new LineItemDto(
                 sessionLineItem.getId(),
                 sessionLineItem.getQuantity(),

@@ -18,6 +18,17 @@ public class RegisterProductRequest {
     @NotNull
     private List<IngredientRequest> ingredients;
 
+    public RegisterProductRequest() {
+    }
+
+    public RegisterProductRequest(String name, String category,
+                                  double price,List<IngredientRequest> ingredients) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.ingredients = ingredients;
+    }
+
     public String getName() {
         return name;
     }

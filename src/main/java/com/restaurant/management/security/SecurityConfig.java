@@ -1,6 +1,5 @@
 package com.restaurant.management.security;
 
-import com.amazonaws.services.xray.model.Http;
 import com.restaurant.management.security.jwt.JwtAuthenticationEntryPoint;
 import com.restaurant.management.security.jwt.JwtAuthenticationFilter;
 import com.restaurant.management.service.AccountUserService;
@@ -19,10 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -50,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter();
     }
 
-     @Override
+    @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .userDetailsService(accountUserService)

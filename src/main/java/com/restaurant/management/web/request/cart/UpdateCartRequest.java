@@ -9,6 +9,17 @@ public class UpdateCartRequest {
 
     private Integer quantity;
 
+    public UpdateCartRequest() {
+    }
+
+    public UpdateCartRequest(Long phoneNumber,
+                             String productName,
+                             Integer quantity) {
+        this.phoneNumber = phoneNumber;
+        this.productName = productName;
+        this.quantity = quantity;
+    }
+
     public Long getPhoneNumber() {
         return phoneNumber;
     }

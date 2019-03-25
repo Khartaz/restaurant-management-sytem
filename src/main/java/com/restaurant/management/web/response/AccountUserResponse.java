@@ -13,6 +13,9 @@ public class AccountUserResponse {
     private Boolean isActive;
     private Set<RoleResponse> roles;
 
+    public AccountUserResponse() {
+    }
+
     public AccountUserResponse(Long id, String name, String lastname, String email,
                                String username, String userUniqueId, String emailVerificationToken,
                                Boolean isActive, Set<RoleResponse> roles) {
@@ -55,7 +58,7 @@ public class AccountUserResponse {
         return emailVerificationToken;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return isActive;
     }
 

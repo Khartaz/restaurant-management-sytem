@@ -1,11 +1,9 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.CustomerDto;
-import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.mapper.CustomerMapper;
-import com.restaurant.management.service.CustomerService;
-import com.restaurant.management.web.request.SingUpCustomerRequest;
-import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.service.facade.CustomerFacade;
+import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -26,36 +24,35 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    private CustomerService customerService;
+    private CustomerFacade customerFacade;
     private CustomerMapper customerMapper;
 
     @Autowired
-    public CustomerController(CustomerService customerService, CustomerMapper customerMapper) {
-        this.customerService = customerService;
+    public CustomerController(CustomerFacade customerFacade, CustomerMapper customerMapper) {
+        this.customerFacade = customerFacade;
         this.customerMapper = customerMapper;
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CustomerResponse> registerCustomer(@Valid @RequestBody SingUpCustomerRequest singUpCustomerRequest) {
-        CustomerDto customerDto = customerService.createCustomer(singUpCustomerRequest);
+    Resource<CustomerResponse> registerCustomer(@Valid @RequestBody SignUpCustomerRequest signUpCustomerRequest) {
+        CustomerDto customerDto = customerFacade.createCustomer(signUpCustomerRequest);
 
         CustomerResponse response = customerMapper.mapToCustomerResponse(customerDto);
 
-        Link link = linkTo(CustomerController.class).withSelfRel();
+        Link link = linkTo(CustomerController.class).slash(response.getId()).withSelfRel();
         return new Resource<>(response, link);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
-        customerService.deleteCustomerById(id);
-        return ResponseEntity.ok().body(new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage()));
+        return ResponseEntity.ok().body(customerFacade.deleteCustomerById(id));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<CustomerResponse> getAllCustomers() {
-        List<CustomerDto> customerDto = customerService.getAllCustomers();
+        List<CustomerDto> customerDto = customerFacade.getAllCustomers();
 
         List<CustomerResponse> response = customerMapper.mapToCustomerResponseList(customerDto);
 
@@ -66,7 +63,7 @@ public class CustomerController {
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CustomerResponse> showCustomer(@PathVariable Long id) {
-        CustomerDto customerDto = customerService.getCustomerById(id);
+        CustomerDto customerDto = customerFacade.getCustomerById(id);
 
         CustomerResponse response = customerMapper.mapToCustomerResponse(customerDto);
 

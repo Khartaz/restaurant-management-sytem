@@ -16,7 +16,6 @@ public class UpdateAccountNameOrLastname {
     @Size(min = 4, max = 40)
     private String lastname;
 
-
     public String getUsernameOrEmail() {
         return usernameOrEmail;
     }

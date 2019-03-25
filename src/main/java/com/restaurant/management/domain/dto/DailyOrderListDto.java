@@ -7,20 +7,20 @@ public class DailyOrderListDto {
     private Long id;
     private String uniqueId;
     private Double dailyIncome;
-    private Boolean isOpened;
+    private Boolean isOpen;
     private Set<OrderDto> ordersDto = new LinkedHashSet<>();
 
+    public DailyOrderListDto() {
+    }
+
     public DailyOrderListDto(Long id, String uniqueId,
-                             Double dailyIncome, Boolean isOpened,
+                             Double dailyIncome, Boolean isOpen,
                              Set<OrderDto> ordersDto) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
-        this.isOpened = isOpened;
+        this.isOpen = isOpen;
         this.ordersDto = ordersDto;
-    }
-
-    public DailyOrderListDto() {
     }
 
     public Long getId() {
@@ -35,8 +35,8 @@ public class DailyOrderListDto {
         return dailyIncome;
     }
 
-    public Boolean getOpened() {
-        return isOpened;
+    public Boolean isOpen() {
+        return isOpen;
     }
 
     public Set<OrderDto> getOrdersDto() {

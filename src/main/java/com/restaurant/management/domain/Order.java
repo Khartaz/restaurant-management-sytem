@@ -2,7 +2,6 @@ package com.restaurant.management.domain;
 
 
 import javax.persistence.*;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.stream.Stream;
 
@@ -18,7 +17,7 @@ public class Order  {
     @Column(name = "order_number")
     private String orderNumber;
 
-    @Column(name = "ordered")
+    @Column(name = "is_ordered")
     private Instant ordered;
 
     @Column(name = "status")

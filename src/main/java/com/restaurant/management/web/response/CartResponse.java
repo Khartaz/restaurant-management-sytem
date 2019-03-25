@@ -9,6 +9,9 @@ public class CartResponse {
     private CustomerResponse customer;
     private List<LineItemResponse> lineItems;
 
+    public CartResponse() {
+    }
+
     public CartResponse(Long id,
                         String uniqueId,
                         Boolean isOpen,
@@ -29,7 +32,7 @@ public class CartResponse {
         return uniqueId;
     }
 
-    public Boolean getOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 

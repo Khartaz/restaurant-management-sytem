@@ -11,8 +11,21 @@ public class OrderDto {
     private Double totalPrice;
     private CartDto cart;
 
-    public OrderDto(Long id, String orderNumber, Instant ordered, String status, Double totalPrice, CartDto cart) {
+    public OrderDto() {
+    }
+
+    public OrderDto(Long id, String orderNumber, Instant ordered,
+                    String status, Double totalPrice, CartDto cart) {
         this.id = id;
+        this.orderNumber = orderNumber;
+        this.ordered = ordered;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.cart = cart;
+    }
+
+    public OrderDto(String orderNumber, Instant ordered,
+                    String status, Double totalPrice, CartDto cart) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
         this.status = status;

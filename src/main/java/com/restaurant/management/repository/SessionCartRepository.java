@@ -13,7 +13,7 @@ public interface SessionCartRepository extends JpaRepository<SessionCart, Long> 
 
     Optional<SessionCart> findSessionCartByCustomerPhoneNumberAndIsOpenTrue(Long phoneNumber);
 
-    SessionCart findByCustomer(Customer customer);
+    Optional<SessionCart> findByCustomer(Customer customer);
 
     Optional<SessionCart> findSessionCartByUniqueIdAndIsOpenTrue(String uniqueId);
 
@@ -21,5 +21,6 @@ public interface SessionCartRepository extends JpaRepository<SessionCart, Long> 
 
     boolean existsByCustomerAndIsOpenTrue(Customer customer);
 
+    void deleteByUniqueId(String uniqueId);
 }
 

@@ -1,7 +1,6 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.DailyOrderList;
-import com.restaurant.management.domain.Order;
 import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.web.response.DailyOrderListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class DailyOrderListMapper {
                 orderListDto.getId(),
                 orderListDto.getUniqueId(),
                 orderListDto.getDailyIncome(),
-                orderListDto.getOpened(),
+                orderListDto.isOpen(),
                 orderListDto.getOrdersDto().stream()
                     .map(v -> orderMapper.mapToOrder(v))
                 .collect(Collectors.toSet())
@@ -36,7 +35,7 @@ public class DailyOrderListMapper {
                 orderList.getId(),
                 orderList.getUniqueId(),
                 orderList.getDailyIncome(),
-                orderList.getOpened(),
+                orderList.isOpen(),
                 orderList.getOrders().stream()
                         .map(v -> orderMapper.mapToOrderDto(v))
                         .collect(Collectors.toSet())
@@ -48,7 +47,7 @@ public class DailyOrderListMapper {
                 orderListDto.getId(),
                 orderListDto.getUniqueId(),
                 orderListDto.getDailyIncome(),
-                orderListDto.getOpened(),
+                orderListDto.isOpen(),
                 orderListDto.getOrdersDto().stream()
                         .map(v -> orderMapper.mapToOrderResponse(v))
                         .collect(Collectors.toSet())

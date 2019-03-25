@@ -61,7 +61,7 @@ public class AccountUserDto {
         return emailVerificationToken;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return isActive;
     }
 

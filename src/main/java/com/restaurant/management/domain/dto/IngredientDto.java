@@ -6,9 +6,15 @@ public class IngredientDto {
 
     private String name;
 
+    public IngredientDto() {
+    }
 
     public IngredientDto(Long id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public IngredientDto(String name) {
         this.name = name;
     }
 

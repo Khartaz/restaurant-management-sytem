@@ -8,8 +8,18 @@ public class CustomerResponse {
     private String email;
     private Long phoneNumber;
 
+    public CustomerResponse() {
+    }
+
     public CustomerResponse(Long id, String name, String lastname, String email, Long phoneNumber) {
         this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public CustomerResponse(String name, String lastname, String email, Long phoneNumber) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;

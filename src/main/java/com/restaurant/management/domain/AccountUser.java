@@ -115,7 +115,7 @@ public class AccountUser extends AbstractUser {
         this.emailVerificationToken = emailVerificationToken;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return isActive;
     }
 

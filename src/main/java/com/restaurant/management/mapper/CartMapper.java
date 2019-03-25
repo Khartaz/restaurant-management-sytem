@@ -26,7 +26,7 @@ public class CartMapper {
         return new SessionCart(
                 cartDto.getId(),
                 cartDto.getUniqueId(),
-                cartDto.getOpen(),
+                cartDto.isOpen(),
                 customerMapper.mapToCustomer(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToSessionLineItem(v))
@@ -34,11 +34,11 @@ public class CartMapper {
         );
     }
 
-    public CartDto mapToCartDto(final SessionCart sessionCart) {
+    public CartDto mapToCartDto(SessionCart sessionCart) {
         return new CartDto(
                 sessionCart.getId(),
                 sessionCart.getUniqueId(),
-                sessionCart.getOpen(),
+                sessionCart.isOpen(),
                 customerMapper.mapToCustomerDto(sessionCart.getCustomer()),
                 sessionCart.getSessionLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
@@ -50,7 +50,7 @@ public class CartMapper {
         return new CartDto(
                 cart.getId(),
                 cart.getUniqueId(),
-                cart.getOpen(),
+                cart.isOpen(),
                 customerMapper.mapToCustomerDto(cart.getCustomer()),
                 cart.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
@@ -62,7 +62,7 @@ public class CartMapper {
         return new CartResponse(
                 cartDto.getId(),
                 cartDto.getUniqueId(),
-                cartDto.getOpen(),
+                cartDto.isOpen(),
                 customerMapper.mapToCustomerResponse(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemResponse(v))
@@ -70,10 +70,10 @@ public class CartMapper {
         );
     }
 
-    public Cart mapToCart(final SessionCart sessionCart) {
+    public Cart mapToCart(SessionCart sessionCart) {
         return new Cart(
                 sessionCart.getUniqueId(),
-                sessionCart.getOpen(),
+                sessionCart.isOpen(),
                 customerMapper.mapToCustomerArchive(sessionCart.getCustomer()),
                 sessionCart.getSessionLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemArchive(v))
@@ -81,10 +81,10 @@ public class CartMapper {
         );
     }
 
-    public Cart mapToCart(final CartDto cartDto) {
+    public Cart mapToCart(CartDto cartDto) {
         return new Cart(
                 cartDto.getUniqueId(),
-                cartDto.getOpen(),
+                cartDto.isOpen(),
                 customerMapper.mapToCustomerArchive(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemArchive(v))
@@ -98,7 +98,7 @@ public class CartMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<CartDto> mapToSessionCartDtoList(final List<SessionCart> sessionCarts) {
+    public List<CartDto> mapSessionCartToCartDtoList(final List<SessionCart> sessionCarts) {
         return sessionCarts.stream()
                 .map(this::mapToCartDto)
                 .collect(Collectors.toList());

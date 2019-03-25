@@ -1,10 +1,8 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.OrderDto;
-import com.restaurant.management.exception.order.OrderMessages;
 import com.restaurant.management.mapper.OrderMapper;
-import com.restaurant.management.service.OrderService;
-import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.service.facade.OrderFacade;
 import com.restaurant.management.web.response.OrderResponse;
 import com.restaurant.management.web.response.SendOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +22,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/orders")
 public class OrderController {
 
-    private OrderService orderService;
+    private OrderFacade orderFacade;
     private OrderMapper orderMapper;
 
     @Autowired
-    public OrderController(OrderService orderService, OrderMapper orderMapper) {
-        this.orderService = orderService;
+    public OrderController(OrderFacade orderFacade, OrderMapper orderMapper) {
+        this.orderFacade = orderFacade;
         this.orderMapper = orderMapper;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resources<OrderResponse> showOrders() {
-        List<OrderDto> ordersDto = orderService.showOrders();
+        List<OrderDto> ordersDto = orderFacade.getAllOrders();
 
         List<OrderResponse> response = orderMapper.mapToOrderResponseList(ordersDto);
 
@@ -49,7 +47,7 @@ public class OrderController {
             produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<OrderResponse> showOrder(@PathVariable String orderNumber) {
-        OrderDto orderDto = orderService.getByOrderNumber(orderNumber);
+        OrderDto orderDto = orderFacade.getByOrderNumber(orderNumber);
 
         OrderResponse response = orderMapper.mapToOrderResponse(orderDto);
 
@@ -60,15 +58,15 @@ public class OrderController {
 
     @DeleteMapping(value = "/{orderNumber}")
     public ResponseEntity<?> deleteOrder(@PathVariable String orderNumber) {
-        orderService.deleteOrder(orderNumber);
-        return ResponseEntity.ok().body(new ApiResponse(true, OrderMessages.ORDER_DELETED.getMessage()));
+
+        return ResponseEntity.ok().body(orderFacade.deleteOrder(orderNumber));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<OrderResponse> registerOrder(@RequestBody SendOrder sendOrder) {
 
-        OrderDto orderDto = orderService.processOrder(sendOrder.getPhoneNumber());
+        OrderDto orderDto = orderFacade.processOrder(sendOrder);
 
         OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
 

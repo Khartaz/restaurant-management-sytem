@@ -29,7 +29,7 @@ public class AccountUserMapper {
                 accountUserDto.getUsername(),
                 accountUserDto.getUserUniqueId(),
                 accountUserDto.getEmailVerificationToken(),
-                accountUserDto.getActive(),
+                accountUserDto.isActive(),
                 accountUserDto.getRoles().stream()
                         .map(v -> roleMapper.mapToRole(v))
                         .collect(Collectors.toSet())
@@ -45,7 +45,7 @@ public class AccountUserMapper {
                 accountUser.getUsername(),
                 accountUser.getUserUniqueId(),
                 accountUser.getEmailVerificationToken(),
-                accountUser.getActive(),
+                accountUser.isActive(),
                 accountUser.getRoles().stream()
                         .map(v -> roleMapper.mapToRoleDto(v))
                         .collect(Collectors.toSet())
@@ -61,7 +61,7 @@ public class AccountUserMapper {
                 accountUserDto.getUsername(),
                 accountUserDto.getUserUniqueId(),
                 accountUserDto.getEmailVerificationToken(),
-                accountUserDto.getActive(),
+                accountUserDto.isActive(),
                 accountUserDto.getRoles().stream()
                         .map(r -> roleMapper.mapToRoleResponse(r))
                         .collect(Collectors.toSet())
@@ -79,7 +79,7 @@ public class AccountUserMapper {
                         u.getUsername(),
                         u.getUserUniqueId(),
                         u.getEmailVerificationToken(),
-                        u.getActive(),
+                        u.isActive(),
                         u.getRoles().stream()
                                 .map(r -> roleMapper.mapToRole(r))
                                 .collect(Collectors.toSet())
@@ -97,7 +97,7 @@ public class AccountUserMapper {
                         u.getUsername(),
                         u.getUserUniqueId(),
                         u.getEmailVerificationToken(),
-                        u.getActive(),
+                        u.isActive(),
                         u.getRoles().stream()
                                 .map(r -> roleMapper.mapToRoleDto(r))
                                 .collect(Collectors.toSet())
@@ -115,7 +115,7 @@ public class AccountUserMapper {
                         u.getUsername(),
                         u.getUserUniqueId(),
                         u.getEmailVerificationToken(),
-                        u.getActive(),
+                        u.isActive(),
                         u.getRoles().stream()
                         .map(r -> roleMapper.mapToRoleResponse(r))
                                 .collect(Collectors.toSet())

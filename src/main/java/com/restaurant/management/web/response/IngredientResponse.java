@@ -5,6 +5,9 @@ public class IngredientResponse {
 
     private String name;
 
+    public IngredientResponse() {
+    }
+
     public IngredientResponse(Long id, String name) {
         this.id = id;
         this.name = name;

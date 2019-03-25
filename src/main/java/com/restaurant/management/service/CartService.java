@@ -4,8 +4,6 @@ import com.restaurant.management.domain.*;
 import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.archive.LineItemArchive;
 import com.restaurant.management.domain.archive.ProductArchive;
-import com.restaurant.management.domain.dto.CartDto;
-import com.restaurant.management.exception.cart.CartException;
 import com.restaurant.management.exception.cart.CartExistsException;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.cart.CartNotFoundException;
@@ -22,6 +20,7 @@ import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.cart.RegisterCartRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
+import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,6 @@ public class CartService {
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
     private CartMapper cartMapper;
-    private Utils utils;
     private SessionLineItemRepository sessionLineItemRepository;
     private ProductArchiveRepository productArchiveRepository;
     private CustomerArchiveRepository customerArchiveRepository;
@@ -51,7 +49,6 @@ public class CartService {
                        ProductRepository productRepository,
                        CustomerRepository customerRepository,
                        CartMapper cartMapper,
-                       Utils utils,
                        SessionLineItemRepository sessionLineItemRepository,
                        ProductArchiveRepository productArchiveRepository,
                        CustomerArchiveRepository customerArchiveRepository) {
@@ -60,13 +57,12 @@ public class CartService {
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
         this.cartMapper = cartMapper;
-        this.utils = utils;
         this.sessionLineItemRepository = sessionLineItemRepository;
         this.productArchiveRepository = productArchiveRepository;
         this.customerArchiveRepository = customerArchiveRepository;
     }
 
-    public CartDto openSessionCart(RegisterCartRequest request) {
+    public SessionCart openSessionCart(RegisterCartRequest request) {
         Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
 
@@ -76,16 +72,16 @@ public class CartService {
 
         SessionCart newSessionCart = new SessionCart();
 
-        newSessionCart.setUniqueId(utils.generateCartUniqueId(5));
-        newSessionCart.setOpen(true);
+        newSessionCart.setUniqueId(Utils.generateCartUniqueId(5));
+        newSessionCart.setOpen(Boolean.TRUE);
         newSessionCart.setCustomer(customer);
 
         sessionCartRepository.save(newSessionCart);
 
-        return cartMapper.mapToCartDto(newSessionCart);
+        return newSessionCart;
     }
 
-    public CartDto addToCart(UpdateCartRequest request) {
+    public SessionCart addToCart(UpdateCartRequest request) {
         if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
@@ -103,7 +99,7 @@ public class CartService {
         lineItem.ifPresent(item -> {
             Integer quantity = item.getQuantity() + request.getQuantity();
 
-            Double price = item.getProduct().getPrice() * quantity;
+            double price = item.getProduct().getPrice() * quantity;
             price = Math.floor(price * 100) / 100;
 
             item.setQuantity(quantity);
@@ -111,7 +107,7 @@ public class CartService {
         });
 
         if (!lineItem.isPresent()) {
-            Double price = product.getPrice() * request.getQuantity();
+            double price = product.getPrice() * request.getQuantity();
             price = Math.floor(price * 100) / 100;
 
             lineItem = Optional.of(new SessionLineItem());
@@ -124,10 +120,10 @@ public class CartService {
 
         sessionCartRepository.save(newSessionCart);
 
-        return cartMapper.mapToCartDto(newSessionCart);
+        return newSessionCart;
     }
 
-    public CartDto updateProductQuantity(UpdateCartRequest request) {
+    public SessionCart updateProductQuantity(UpdateCartRequest request) {
         if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
@@ -149,10 +145,10 @@ public class CartService {
 
         sessionCartRepository.save(sessionCart);
 
-        return cartMapper.mapToCartDto(sessionCart);
+        return sessionCart;
     }
 
-    public CartDto deleteProductFromCart(RemoveProductRequest request) {
+    public SessionCart removeProductFromCart(RemoveProductRequest request) {
         if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
@@ -168,7 +164,7 @@ public class CartService {
         sessionCart.getSessionLineItems().remove(sessionLineItem);
         deleteLineItem(sessionLineItem.getId());
 
-        return cartMapper.mapToCartDto(sessionCart);
+        return sessionCart;
     }
 
     public Cart confirmCart(Long phoneNumber) {
@@ -191,57 +187,50 @@ public class CartService {
 
         cartRepository.save(cart);
 
-        sessionCartRepository.delete(sessionCart);
+        deleteSessionCart(sessionCart.getUniqueId());
 
         return cart;
     }
 
-    public List<CartDto> getAllCarts() {
-        List<Cart> carts = cartRepository.findAll();
-
-        return cartMapper.mapToCartDtoList(carts);
+    public List<Cart> getAllCarts() {
+        return cartRepository.findAll();
     }
 
-    public List<CartDto> getSessionCarts() {
-        List<SessionCart> sessionCarts = sessionCartRepository.findAll();
-
-        return cartMapper.mapToSessionCartDtoList(sessionCarts);
+    public List<SessionCart> getSessionCarts() {
+       return sessionCartRepository.findAll();
     }
 
-    public CartDto getCartByUniqueId(String uniqueId) {
+    public Cart getCartByUniqueId(String uniqueId) {
         Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
 
         if (!cart.isPresent()) {
             throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage());
         }
-
-        return cartMapper.mapToCartDto(cart.get());
+        return cart.get();
     }
 
-    public CartDto getSessionCartByUniqueId(String uniqueId) {
+    public SessionCart getSessionCartByUniqueId(String uniqueId) {
         Optional<SessionCart> sessionCart = sessionCartRepository.findByUniqueId(uniqueId);
 
         if (!sessionCart.isPresent()) {
             throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
         }
-        return cartMapper.mapToCartDto(sessionCart.get());
+        return sessionCart.get();
     }
 
-    public void deleteSessionCart(String uniqueId) {
-        Optional<SessionCart> cart = sessionCartRepository.findByUniqueId(uniqueId);
+    public ApiResponse deleteSessionCart(String uniqueId) {
+        Optional<SessionCart> sessionCart = sessionCartRepository.findByUniqueId(uniqueId);
 
-        if (cart.isPresent()) {
-            sessionCartRepository.deleteById(cart.get().getId());
-        } else {
-            throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
+        if (sessionCart.isPresent()) {
+            sessionCartRepository.deleteByUniqueId(sessionCart.get().getUniqueId());
+
+            return new ApiResponse(true, CartMessages.CART_DELETED.getMessage());
         }
 
-        if (!cart.get().getOpen()) {
-            throw new CartException(CartMessages.CART_IS_CLOSED.getMessage());
-        }
+        throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
     }
 
-    public void deleteCart(String uniqueId) {
+    private void deleteCart(String uniqueId) {
         Optional<Cart> cart = cartRepository.findByUniqueId(uniqueId);
 
         if (cart.isPresent()) {
@@ -251,13 +240,12 @@ public class CartService {
         }
     }
 
-    private void deleteLineItem(Long id) {
-        Optional<SessionLineItem> lineItem = sessionLineItemRepository.findById(id);
+    public ApiResponse deleteLineItem(Long id) {
+        SessionLineItem lineItem = sessionLineItemRepository.findById(id)
+                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + id));
 
-        if (lineItem.isPresent()) {
-            sessionLineItemRepository.deleteById(lineItem.get().getId());
-        } else {
-            throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + id);
-        }
+        sessionLineItemRepository.deleteById(lineItem.getId());
+
+        return new ApiResponse(true, CartMessages.LINE_ITEM_DELETED.getMessage());
     }
 }

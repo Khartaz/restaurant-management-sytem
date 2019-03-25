@@ -6,6 +6,9 @@ public class LineItemResponse {
     private Integer quantity;
     private Double price;
 
+    public LineItemResponse() {
+    }
+
     public LineItemResponse(Long id, Integer quantity,
                             Double price, ProductResponse product) {
         this.id = id;

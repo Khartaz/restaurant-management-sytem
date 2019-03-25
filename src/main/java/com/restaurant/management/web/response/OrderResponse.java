@@ -10,6 +10,8 @@ public class OrderResponse {
     private Double totalPrice;
     private CartResponse cartResponse;
 
+    public OrderResponse() {
+    }
 
     public OrderResponse(Long id, String orderNumber, Instant ordered,
                          String status, Double totalPrice, CartResponse cartResponse) {

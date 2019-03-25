@@ -4,11 +4,7 @@ public class Mail {
     private String mailTo;
     private String subject;
     private String message;
-    private String token;
 
-    public Mail(String token) {
-
-    }
 
     public Mail(String mailTo, String subject, String message) {
         this.mailTo = mailTo;
@@ -28,7 +24,4 @@ public class Mail {
         return message;
     }
 
-    public String getToken() {
-        return token;
-    }
 }

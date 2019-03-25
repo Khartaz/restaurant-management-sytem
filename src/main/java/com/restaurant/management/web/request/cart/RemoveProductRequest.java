@@ -6,6 +6,14 @@ public class RemoveProductRequest {
 
     private String productName;
 
+    public RemoveProductRequest() {
+    }
+
+    public RemoveProductRequest(Long phoneNumber, String productName) {
+        this.phoneNumber = phoneNumber;
+        this.productName = productName;
+    }
+
     public Long getPhoneNumber() {
         return phoneNumber;
     }

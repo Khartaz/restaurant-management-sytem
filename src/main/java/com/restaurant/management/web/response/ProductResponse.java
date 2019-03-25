@@ -12,6 +12,9 @@ public class ProductResponse {
     private Instant createdAt;
     private List<IngredientResponse> ingredients;
 
+    public ProductResponse() {
+    }
+
     public ProductResponse(Long id, String uniqueId, String name,
                            String category, Double price, Instant createdAt,
                            List<IngredientResponse> ingredients) {

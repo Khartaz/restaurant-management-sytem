@@ -1,12 +1,10 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.ProductDto;
-import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.mapper.ProductMapper;
-import com.restaurant.management.service.ProductService;
+import com.restaurant.management.service.facade.ProductFacade;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
-import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -26,19 +24,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private ProductService productService;
+    private ProductFacade productFacade;
     private ProductMapper productMapper;
 
     @Autowired
-    public ProductController(ProductService productService, ProductMapper productMapper) {
-        this.productService = productService;
+    public ProductController(ProductFacade productFacade, ProductMapper productMapper) {
+        this.productFacade = productFacade;
         this.productMapper = productMapper;
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> registerProduct(@Valid @RequestBody RegisterProductRequest request) {
-        ProductDto productDto = productService.registerProduct(request);
+        ProductDto productDto = productFacade.registerProduct(request);
 
         ProductResponse response = productMapper.mapToProductResponse(productDto);
 
@@ -50,7 +48,7 @@ public class ProductController {
     public @ResponseBody
     Resource<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest request) {
 
-        ProductDto productDto = productService.updateProduct(request);
+        ProductDto productDto = productFacade.updateProduct(request);
 
         ProductResponse response = productMapper.mapToProductResponse(productDto);
 
@@ -62,7 +60,7 @@ public class ProductController {
     public @ResponseBody
     Resources<ProductResponse> showProducts() {
 
-        List<ProductDto> productsDto = productService.getAllProducts();
+        List<ProductDto> productsDto = productFacade.getAllProducts();
 
         List<ProductResponse> productsResponse = productMapper.mapToProductResponseList(productsDto);
 
@@ -75,7 +73,7 @@ public class ProductController {
     public @ResponseBody
     Resource<ProductResponse> showProduct(@PathVariable String uniqueId) {
 
-        ProductDto productDto = productService.getProductByUniqueId(uniqueId);
+        ProductDto productDto = productFacade.getProductByUniqueId(uniqueId);
 
         ProductResponse productResponse = productMapper.mapToProductResponse(productDto);
 
@@ -86,8 +84,7 @@ public class ProductController {
 
     @DeleteMapping(value = "/{uniqueId}")
     public ResponseEntity<?> deleteByUniqueId(@PathVariable String uniqueId) {
-        productService.deleteByUniqueId(uniqueId);
-        return ResponseEntity.ok().body(new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage()));
+        return ResponseEntity.ok().body(productFacade.deleteByUniqueId(uniqueId));
     }
 
 }

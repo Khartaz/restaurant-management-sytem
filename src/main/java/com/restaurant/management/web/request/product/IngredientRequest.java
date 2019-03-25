@@ -7,6 +7,13 @@ public class IngredientRequest {
     @NotBlank
     private String name;
 
+    public IngredientRequest() {
+    }
+
+    public IngredientRequest(@NotBlank String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

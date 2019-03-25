@@ -20,7 +20,7 @@ public class IngredientMapper {
         );
     }
 
-    public IngredientDto mapToIngredientDto(final Ingredient ingredient) {
+    public IngredientDto mapToIngredientDto(Ingredient ingredient) {
         return new IngredientDto(
                 ingredient.getId(),
                 ingredient.getName()

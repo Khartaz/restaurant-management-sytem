@@ -6,15 +6,18 @@ public class DailyOrderListResponse {
     private Long id;
     private String uniqueId;
     private Double dailyIncome;
-    private Boolean isOpened;
+    private Boolean isOpen;
     private Set<OrderResponse> orderResponse;
 
+    public DailyOrderListResponse() {
+    }
+
     public DailyOrderListResponse(Long id, String uniqueId, Double dailyIncome,
-                                  Boolean isOpened, Set<OrderResponse> orderResponse) {
+                                  Boolean isOpen, Set<OrderResponse> orderResponse) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
-        this.isOpened = isOpened;
+        this.isOpen = isOpen;
         this.orderResponse = orderResponse;
     }
 
@@ -30,8 +33,8 @@ public class DailyOrderListResponse {
         return dailyIncome;
     }
 
-    public Boolean getOpened() {
-        return isOpened;
+    public Boolean isOpen() {
+        return isOpen;
     }
 
     public Set<OrderResponse> getOrderResponse() {

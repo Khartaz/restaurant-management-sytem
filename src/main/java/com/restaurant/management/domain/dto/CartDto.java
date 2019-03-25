@@ -10,12 +10,33 @@ public class CartDto {
     private CustomerDto customer;
     private List<LineItemDto> lineItems;
 
+    public CartDto() {
+    }
+
     public CartDto(Long id,
                    String uniqueId,
                    Boolean isOpen,
                    CustomerDto customer,
                    List<LineItemDto> lineItems) {
         this.id = id;
+        this.uniqueId = uniqueId;
+        this.isOpen = isOpen;
+        this.customer = customer;
+        this.lineItems = lineItems;
+    }
+
+    public CartDto(String uniqueId,
+                   Boolean isOpen,
+                   CustomerDto customer) {
+        this.uniqueId = uniqueId;
+        this.isOpen = isOpen;
+        this.customer = customer;
+    }
+
+    public CartDto(String uniqueId,
+                   Boolean isOpen,
+                   CustomerDto customer,
+                   List<LineItemDto> lineItems) {
         this.uniqueId = uniqueId;
         this.isOpen = isOpen;
         this.customer = customer;
@@ -30,7 +51,7 @@ public class CartDto {
         return uniqueId;
     }
 
-    public Boolean getOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 

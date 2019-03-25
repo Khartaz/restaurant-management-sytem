@@ -60,7 +60,7 @@ public class ProductMapper {
         );
     }
 
-    public ProductDto mapToProductDto(final Product product) {
+    public ProductDto mapToProductDto(Product product) {
         return new ProductDto(
                 product.getId(),
                 product.getUniqueId(),

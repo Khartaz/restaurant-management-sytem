@@ -18,18 +18,18 @@ public class DailyOrderList extends AbstractDateAudit {
     @Column(name = "daily_income")
     private Double dailyIncome;
 
-    @Column(name = "is_opened")
-    private Boolean isOpened;
+    @Column(name = "is_open")
+    private Boolean isOpen;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Order> orders = new LinkedHashSet<>();
 
     public DailyOrderList(Long id, String uniqueId, Double dailyIncome,
-                          Boolean isOpened, Set<Order> orders) {
+                          Boolean isOpen, Set<Order> orders) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
-        this.isOpened = isOpened;
+        this.isOpen = isOpen;
         this.orders = orders;
     }
 
@@ -60,12 +60,12 @@ public class DailyOrderList extends AbstractDateAudit {
         this.dailyIncome = dailyIncome;
     }
 
-    public Boolean getOpened() {
-        return isOpened;
+    public Boolean isOpen() {
+        return isOpen;
     }
 
     public void setOpened(Boolean opened) {
-        isOpened = opened;
+        isOpen = opened;
     }
 
     public Set<Order> getOrders() {

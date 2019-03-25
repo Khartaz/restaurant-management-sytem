@@ -13,6 +13,9 @@ public class ProductDto {
     private Instant createdAt;
     private List<IngredientDto> ingredients;
 
+    public ProductDto() {
+    }
+
     public ProductDto(Long id, String uniqueId, String name, String category, Double price,
                       Instant createdAt, List<IngredientDto> ingredients) {
         this.id = id;
@@ -22,6 +25,31 @@ public class ProductDto {
         this.price = price;
         this.createdAt = createdAt;
         this.ingredients = ingredients;
+    }
+
+    public ProductDto(String uniqueId, String name, String category, Double price,
+                      Instant createdAt, List<IngredientDto> ingredients) {
+        this.uniqueId = uniqueId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.createdAt = createdAt;
+        this.ingredients = ingredients;
+    }
+
+    public ProductDto(String uniqueId, String name, String category, Double price,
+                      List<IngredientDto> ingredients) {
+        this.uniqueId = uniqueId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.ingredients = ingredients;
+    }
+
+    public ProductDto(String name, String category, Double price) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
     }
 
     public Long getId() {

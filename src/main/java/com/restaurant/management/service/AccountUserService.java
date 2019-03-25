@@ -46,21 +46,19 @@ public class AccountUserService implements UserDetailsService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
-    private Utils utils;
     private SimpleEmailService simpleEmailService;
     private AccountUserMapper accountUserMapper;
 
     @Autowired
     public AccountUserService(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
                               RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                              JwtTokenProvider tokenProvider, Utils utils, SimpleEmailService simpleEmailService,
+                              JwtTokenProvider tokenProvider, SimpleEmailService simpleEmailService,
                               AccountUserMapper accountUserMapper) {
         this.authenticationManager = authenticationManager;
         this.accountUserRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
-        this.utils = utils;
         this.simpleEmailService = simpleEmailService;
         this.accountUserMapper = accountUserMapper;
     }
@@ -82,8 +80,6 @@ public class AccountUserService implements UserDetailsService {
     }
 
     public AccountUserDto registerAdminAccount(SignUpUserRequest signUpUserRequest) {
-       // Email and Username validation
-
         if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
             throw new UserExistsException(UserMessages.USERNAME_TAKEN.getErrorMessage());
         }
@@ -92,7 +88,7 @@ public class AccountUserService implements UserDetailsService {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
 
-        String userUniqueId = utils.generateUserUniqueId(10);
+        String userUniqueId = Utils.generateUserUniqueId(10);
 
         String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
@@ -120,8 +116,6 @@ public class AccountUserService implements UserDetailsService {
     }
 
     public AccountUserDto registerManagerAccount(SignUpUserRequest signUpUserRequest) {
-        // Email and Username validation
-
         if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
             throw new UserExistsException(UserMessages.USERNAME_TAKEN.getErrorMessage());
         }
@@ -130,7 +124,7 @@ public class AccountUserService implements UserDetailsService {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
 
-        String userUniqueId = utils.generateUserUniqueId(10);
+        String userUniqueId = Utils.generateUserUniqueId(10);
 
         String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
@@ -198,8 +192,7 @@ public class AccountUserService implements UserDetailsService {
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
 
-        // If User is Active validation
-        if (!accountUser.getActive()) {
+        if (!accountUser.isActive()) {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
         }
 
@@ -221,7 +214,7 @@ public class AccountUserService implements UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
 
         Stream.of(accountUser).forEach(u -> {
-            if (!u.getActive()) {
+            if (!u.isActive()) {
                 throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
             }
              u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getUserUniqueId()));
@@ -273,7 +266,7 @@ public class AccountUserService implements UserDetailsService {
         AccountUser accountUser = accountUserRepository.findAdminUserByPasswordResetToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getErrorMessage()));
 
-        if (!accountUser.getActive()) {
+        if (!accountUser.isActive()) {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
         }
 

@@ -7,12 +7,22 @@ public class CustomerDto {
     private Long phoneNumber;
     private String email;
 
-    public CustomerDto(Long id, String name, String lastname, String email, Long phoneNumber) {
+    public CustomerDto() {
+    }
+
+    public CustomerDto(String name, String lastname, Long phoneNumber, String email) {
+        this.name = name;
+        this.lastname = lastname;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public CustomerDto(Long id, String name, String lastname, Long phoneNumber, String email) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
-        this.email = email;
         this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     public Long getId() {

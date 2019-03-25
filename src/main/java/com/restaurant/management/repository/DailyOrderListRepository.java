@@ -10,9 +10,9 @@ import java.util.Optional;
 @Repository
 public interface DailyOrderListRepository extends JpaRepository<DailyOrderList, Long> {
 
-    Optional<DailyOrderList> findDailyOrderListByIsOpenedTrue();
+    Optional<DailyOrderList> findDailyOrderListByIsOpenTrue();
 
-    boolean existsByIsOpenedTrue();
+    boolean existsByIsOpenTrue();
 
     Optional<DailyOrderList> findByUniqueId(String uniqueId);
 

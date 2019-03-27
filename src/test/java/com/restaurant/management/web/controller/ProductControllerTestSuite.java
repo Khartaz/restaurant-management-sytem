@@ -198,7 +198,7 @@ public class ProductControllerTestSuite {
         when(productFacade.getProductByUniqueId(productDto.getUniqueId())).thenReturn(productDto);
         when(productMapper.mapToProductResponse(productDto)).thenReturn(response);
         //WHEN & THEN
-        mockMvc.perform(get(PATH + "/JD3ND2E").contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH + "/" + UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.uniqueId", is(UNIQUE_ID)))
                 .andExpect(jsonPath("$.name", is(PRODUCT_NAME)))
@@ -209,8 +209,8 @@ public class ProductControllerTestSuite {
 
     @Test
     public void shouldFetchDeleteProductByUniqueId() throws Exception {
-        //WHEN & THEN
-        mockMvc.perform(delete(PATH + "/uniqueId")
+        //GIVEN & WHEN & THEN
+        mockMvc.perform(delete(PATH + "/" + UNIQUE_ID)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())

@@ -42,6 +42,7 @@ public class CartControllerTestSuite {
 
     private static final String PATH = "/api/carts";
     private static final String CART_UNIQUE_ID = "uniqueId";
+    private static final long ID = 1L;
 
     @Test
     public void shouldFetchShowAllCarts() throws Exception {
@@ -54,7 +55,7 @@ public class CartControllerTestSuite {
         );
 
         CartResponse cartResponse = new CartResponse(
-                1L,
+                ID,
                 cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 new CustomerResponse(),
@@ -87,7 +88,7 @@ public class CartControllerTestSuite {
         );
 
         CartResponse cartResponse = new CartResponse(
-                1L,
+                ID,
                 cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 new CustomerResponse(),
@@ -97,7 +98,7 @@ public class CartControllerTestSuite {
         when(cartFacade.getCartByUniqueId(cartDto.getUniqueId())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
-        mockMvc.perform(get(PATH + "/uniqueId").contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH + "/" + CART_UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.uniqueId", is(CART_UNIQUE_ID)))
                 .andExpect(jsonPath("$.open", is(Boolean.FALSE)))
@@ -115,7 +116,7 @@ public class CartControllerTestSuite {
         );
 
         CartResponse cartResponse = new CartResponse(
-                1L,
+                ID,
                 cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 new CustomerResponse(),
@@ -147,7 +148,7 @@ public class CartControllerTestSuite {
         );
 
         CartResponse cartResponse = new CartResponse(
-                1L,
+                ID,
                 cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 new CustomerResponse(),
@@ -157,7 +158,7 @@ public class CartControllerTestSuite {
         when(cartFacade.getSessionCartByUniqueId(cartDto.getUniqueId())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
-        mockMvc.perform(get(PATH + "/session/uniqueId").contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH + "/session/" + CART_UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.uniqueId", is(CART_UNIQUE_ID)))
                 .andExpect(jsonPath("$.open", is(Boolean.FALSE)))
@@ -166,16 +167,8 @@ public class CartControllerTestSuite {
 
     @Test
     public void shouldFetchDeleteSessionCartByUniqueId() throws Exception {
-        //GIVEN
-        CartDto cartDto = new CartDto(
-                CART_UNIQUE_ID,
-                Boolean.FALSE,
-                new CustomerDto(),
-                new ArrayList<>()
-        );
-
-        //WHEN & THEN
-        mockMvc.perform(delete(PATH + "/session/uniqueId")
+        //GIVEN & WHEN & THEN
+        mockMvc.perform(delete(PATH + "/session/" + CART_UNIQUE_ID)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -185,38 +178,6 @@ public class CartControllerTestSuite {
     @Test
     public void shouldFetchRemoveProductFromCart() throws Exception {
         //GIVEN
-        ProductDto productDto = new ProductDto(
-                "uniqueId",
-                "product name",
-                "product category",
-                2.20,
-                new ArrayList<>()
-        );
-
-        LineItemDto lineItemDto = new LineItemDto(
-                1L,
-                1,
-                2.20,
-                productDto
-        );
-
-        ProductResponse productResponse = new ProductResponse(
-                1L,
-                "uniqueProductId",
-                "productName",
-                "category",
-                2.20,
-                new Date().toInstant(),
-                new ArrayList<>()
-        );
-
-        LineItemResponse lineItemResponse = new LineItemResponse(
-                1L,
-                1,
-                2.20,
-                productResponse
-        );
-
         CartDto cartDto = new CartDto(
                 CART_UNIQUE_ID,
                 Boolean.FALSE,
@@ -225,7 +186,7 @@ public class CartControllerTestSuite {
         );
 
         CartResponse cartResponse = new CartResponse(
-                1L,
+                ID,
                 cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 new CustomerResponse(),

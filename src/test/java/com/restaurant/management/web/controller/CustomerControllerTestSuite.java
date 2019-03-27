@@ -42,6 +42,7 @@ public class CustomerControllerTestSuite {
     private static final String CUSTOMER_LASTNAME = "Customer lastname";
     private static final String CUSTOMER_EMAIL = "customer@email";
     private static final long PHONE_NUMBER = 9289310L;
+    private static final long ID = 1L;
 
     @Test
     public void shouldFetchEmptyCustomerResponseList() throws Exception {
@@ -63,7 +64,7 @@ public class CustomerControllerTestSuite {
     public void shouldFetchGetAllCustomerResponseList() throws Exception {
         //GIVEN
         CustomerDto customerDto = new CustomerDto(
-                1L,
+                ID,
                 CUSTOMER_NAME,
                 CUSTOMER_LASTNAME,
                 PHONE_NUMBER,
@@ -96,7 +97,7 @@ public class CustomerControllerTestSuite {
     public void shouldFetchShowCustomerById() throws Exception {
         //GIVEN
         CustomerDto customerDto = new CustomerDto(
-                1L,
+                ID,
                 CUSTOMER_NAME,
                 CUSTOMER_LASTNAME,
                 PHONE_NUMBER,
@@ -112,7 +113,7 @@ public class CustomerControllerTestSuite {
         when(customerFacade.getCustomerById(customerDto.getId())).thenReturn(customerDto);
         when(customerMapper.mapToCustomerResponse(customerDto)).thenReturn(customerResponse);
         //WHEN & THEN
-        mockMvc.perform(get(PATH + "/1").contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH + "/" + ID).contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is(CUSTOMER_NAME)))
@@ -124,17 +125,8 @@ public class CustomerControllerTestSuite {
 
     @Test
     public void shouldFetchDeleteCustomer() throws Exception {
-        //GIVEN
-        CustomerDto customerDto = new CustomerDto(
-                1L,
-                CUSTOMER_NAME,
-                CUSTOMER_LASTNAME,
-                PHONE_NUMBER,
-                CUSTOMER_EMAIL
-        );
-
-        //WHEN & THEN
-        mockMvc.perform(delete(PATH + "/1")
+        //GIVEN & WHEN & THEN
+        mockMvc.perform(delete(PATH + "/" + ID)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -151,7 +143,7 @@ public class CustomerControllerTestSuite {
                 CUSTOMER_EMAIL);
 
         CustomerResponse customerResponse = new CustomerResponse(
-                1L,
+                ID,
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),

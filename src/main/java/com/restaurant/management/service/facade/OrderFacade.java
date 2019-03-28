@@ -7,6 +7,8 @@ import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.SendOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,10 +25,10 @@ public class OrderFacade {
         this.orderMapper = orderMapper;
     }
 
-    public List<OrderDto> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
+    public Page<OrderDto> getAllOrders(Pageable pageable) {
+        Page<Order> orders = orderService.getAllOrders(pageable);
 
-        return orderMapper.mapToOrderDtoList(orders);
+        return orderMapper.mapToProductDtoPage(orders);
     }
 
     public OrderDto getByOrderNumber(String orderNumber) {

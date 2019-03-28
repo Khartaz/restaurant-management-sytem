@@ -1,9 +1,11 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.web.response.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -58,9 +60,18 @@ public class OrderMapper {
                 .collect(Collectors.toList());
     }
 
+    public Page<OrderDto> mapToProductDtoPage(final Page<Order> orders) {
+        return orders.map(this::mapToOrderDto);
+    }
+
     public List<OrderResponse> mapToOrderResponseList(final List<OrderDto> orders) {
         return orders.stream()
                 .map(this::mapToOrderResponse)
                 .collect(Collectors.toList());
     }
+
+    public Page<OrderResponse> mapToOrderResponsePage(final Page<OrderDto> orders) {
+        return orders.map(this::mapToOrderResponse);
+    }
+
 }

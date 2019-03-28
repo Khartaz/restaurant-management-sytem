@@ -1,6 +1,8 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +13,7 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Override
-    List<Order> findAll();
+    Page<Order> findAll(Pageable pageable);
 
     Optional<Order> findByOrderNumber(String orderNumber);
 }

@@ -7,6 +7,8 @@ import com.restaurant.management.repository.*;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,8 +44,8 @@ public class OrderService {
         return order;
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public Order getByOrderNumber(String orderNumber) {

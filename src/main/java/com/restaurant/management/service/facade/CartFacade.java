@@ -10,6 +10,8 @@ import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,10 +28,10 @@ public class CartFacade {
         this.cartMapper = cartMapper;
     }
 
-    public List<CartDto> getAllCarts() {
-        List<Cart> carts = cartService.getAllCarts();
+    public Page<CartDto> getAllCarts(Pageable pageable) {
+        Page<Cart> carts = cartService.getAllCarts(pageable);
 
-        return cartMapper.mapToCartDtoList(carts);
+        return cartMapper.mapToCartDtoPage(carts);
     }
 
     public CartDto getCartByUniqueId(String uniqueId) {
@@ -38,10 +40,10 @@ public class CartFacade {
         return cartMapper.mapToCartDto(cart);
     }
 
-    public List<CartDto> getSessionCarts() {
-        List<SessionCart> carts = cartService.getSessionCarts();
+    public Page<CartDto> getSessionCarts(Pageable pageable) {
+        Page<SessionCart> carts = cartService.getSessionCarts(pageable);
 
-        return cartMapper.mapSessionCartToCartDtoList(carts);
+        return cartMapper.mapToCartDto(carts);
     }
 
     public CartDto getSessionCartByUniqueId(String uniqueId) {

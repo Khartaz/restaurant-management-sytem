@@ -22,6 +22,8 @@ import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -192,12 +194,12 @@ public class CartService {
         return cart;
     }
 
-    public List<Cart> getAllCarts() {
-        return cartRepository.findAll();
+    public Page<Cart> getAllCarts(Pageable pageable) {
+        return cartRepository.findAll(pageable);
     }
 
-    public List<SessionCart> getSessionCarts() {
-       return sessionCartRepository.findAll();
+    public Page<SessionCart> getSessionCarts(Pageable pageable) {
+       return sessionCartRepository.findAll(pageable);
     }
 
     public Cart getCartByUniqueId(String uniqueId) {

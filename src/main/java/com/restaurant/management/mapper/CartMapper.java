@@ -5,6 +5,8 @@ import com.restaurant.management.domain.SessionCart;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.web.response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -104,16 +106,32 @@ public class CartMapper {
                 .collect(Collectors.toList());
     }
 
+    public Page<CartDto> mapToCartDtoPage(final Page<Cart> carts) {
+        return carts.map(this::mapToCartDto);
+    }
+
     public List<CartResponse> mapToCartResponseList(final List<CartDto> carts) {
         return carts.stream()
                 .map(this::mapToCartResponse)
                 .collect(Collectors.toList());
     }
 
+    public Page<CartResponse> mapToCartResponsePage(final Page<CartDto> carts) {
+        return carts.map(this::mapToCartResponse);
+    }
+
     public List<SessionCart> mapToSessionCartList(final List<CartDto> carts) {
         return carts.stream()
                 .map(this::mapToSessionCart)
                 .collect(Collectors.toList());
+    }
+
+    public Page<SessionCart> mapToSessionCartPage(final Page<CartDto> carts) {
+        return carts.map(this::mapToSessionCart);
+    }
+
+    public Page<CartDto> mapToCartDto(final Page<SessionCart> sessionCarts) {
+        return sessionCarts.map(this::mapToCartDto);
     }
 
 }

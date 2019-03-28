@@ -9,14 +9,17 @@ import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -37,14 +40,12 @@ public class CartController {
 
         @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resources<CartResponse> showCarts() {
-        List<CartDto> cartDtos = cartFacade.getAllCarts();
+    ResponseEntity<PagedResources<CartResponse>> showCarts(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<CartDto> cartDtos = cartFacade.getAllCarts(pageable);
 
-        List<CartResponse> response = cartMapper.mapToCartResponseList(cartDtos);
+        Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartDtos);
 
-        Link link = linkTo(CartController.class).withSelfRel();
-
-        return new Resources<>(response, link);
+        return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)
@@ -61,14 +62,12 @@ public class CartController {
 
     @GetMapping(value = "/session", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resources<CartResponse> showSessionCarts() {
-        List<CartDto> cartsDto = cartFacade.getSessionCarts();
+    ResponseEntity<PagedResources<CartResponse>> showSessionCarts(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<CartDto> cartsDto = cartFacade.getSessionCarts(pageable);
 
-        List<CartResponse> response = cartMapper.mapToCartResponseList(cartsDto);
+        Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
 
-        Link link = linkTo(CartController.class).withSelfRel();
-
-        return new Resources<>(response, link);
+        return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
     @GetMapping(value = "/session/{uniqueId}", produces = APPLICATION_JSON_VALUE)

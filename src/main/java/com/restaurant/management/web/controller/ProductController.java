@@ -7,14 +7,17 @@ import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -28,7 +31,8 @@ public class ProductController {
     private ProductMapper productMapper;
 
     @Autowired
-    public ProductController(ProductFacade productFacade, ProductMapper productMapper) {
+    public ProductController(ProductFacade productFacade,
+                             ProductMapper productMapper) {
         this.productFacade = productFacade;
         this.productMapper = productMapper;
     }
@@ -56,19 +60,6 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resources<ProductResponse> showProducts() {
-
-        List<ProductDto> productsDto = productFacade.getAllProducts();
-
-        List<ProductResponse> productsResponse = productMapper.mapToProductResponseList(productsDto);
-
-        Link link = linkTo(ProductController.class).withSelfRel();
-
-        return new Resources<>(productsResponse, link);
-    }
-
     @GetMapping(value = "/{uniqueId}",produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> showProduct(@PathVariable String uniqueId) {
@@ -87,4 +78,13 @@ public class ProductController {
         return ResponseEntity.ok().body(productFacade.deleteByUniqueId(uniqueId));
     }
 
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<PagedResources<ProductResponse>> showProductsPageable(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<ProductDto> dtoPage = productFacade.getAllProducts(pageable);
+
+        Page<ProductResponse> responsePage = productMapper.mapToProductResponsePage(dtoPage);
+
+        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
+    }
 }

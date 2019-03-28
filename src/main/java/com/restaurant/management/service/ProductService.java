@@ -14,6 +14,8 @@ import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -98,8 +100,8 @@ public class ProductService {
         return product.get();
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     public ApiResponse deleteByUniqueId(String uniqueId) {

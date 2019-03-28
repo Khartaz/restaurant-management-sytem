@@ -5,9 +5,11 @@ import com.restaurant.management.domain.archive.IngredientArchive;
 import com.restaurant.management.domain.dto.IngredientDto;
 import com.restaurant.management.web.request.product.IngredientRequest;
 import com.restaurant.management.web.response.IngredientResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,6 +28,7 @@ public class IngredientMapper {
                 ingredient.getName()
         );
     }
+
 
     public IngredientDto mapToIngredientDto(final IngredientArchive ingredientArchive) {
         return new IngredientDto(

@@ -5,6 +5,7 @@ import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -74,6 +75,20 @@ public class ProductMapper {
         );
     }
 
+//    public Page<ProductDto> mapToProductDtoPage(Page<Product> product) {
+//        return new ProductDto(
+//                product.map(AbstractProduct::getId).get(),
+//                product.map(AbstractProduct::getUniqueId).get(),
+//                product.map(AbstractProduct::getName).get(),
+//                product.map(AbstractProduct::getCategory).get(),
+//                product.map(AbstractProduct::getPrice).get(),
+//                product.map(AbstractProduct::getCreatedAt).get(),
+//                product.map(Product::getIngredients).stream()
+//                        .map(v -> ingredientMapper.mapToIngredientDto(v))
+//                        .collect(Collectors.toList())
+//        );
+//    }
+
     public ProductDto mapToProductDto(final ProductArchive productArchive) {
         return new ProductDto(
                 productArchive.getId(),
@@ -102,16 +117,25 @@ public class ProductMapper {
         );
     }
 
-    public List<ProductDto> mapToProductDtoList(final List<Product> products) {
-        return products.stream()
-                .map(this::mapToProductDto)
-                .collect(Collectors.toList());
+//    public ProductDto mapToProductDtoList(final Product products) {
+//        return products.stream()
+//                .map(this::mapToProductDto)
+//                .collect(Collectors.toList());
+//    }
+
+
+    public Page<ProductDto> mapToProductDtoPage(final Page<Product> products) {
+        return products.map(this::mapToProductDto);
     }
 
     public List<ProductResponse> mapToProductResponseList(final List<ProductDto> products) {
         return products.stream()
                 .map(this::mapToProductResponse)
                 .collect(Collectors.toList());
+    }
+
+    public Page<ProductResponse> mapToProductResponsePage(final Page<ProductDto> productDtos) {
+        return productDtos.map(this::mapToProductResponse);
     }
 
     public List<Product> mapToProductList(final List<ProductDto> products) {

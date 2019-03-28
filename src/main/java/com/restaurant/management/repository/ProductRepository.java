@@ -1,6 +1,8 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +29,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findProductsByName(String name);
 
     List<Product> findProductsByName(List<String> name);
+
+    @Override
+    Page<Product> findAll(Pageable pageable);
 
 }

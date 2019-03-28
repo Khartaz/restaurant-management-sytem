@@ -8,6 +8,8 @@ import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,10 +37,10 @@ public class ProductFacade {
         return productMapper.mapToProductDto(product);
     }
 
-    public List<ProductDto> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+    public Page<ProductDto> getAllProducts(Pageable pageable) {
+        Page<Product> products = productService.getAllProducts(pageable);
 
-        return productMapper.mapToProductDtoList(products);
+        return productMapper.mapToProductDtoPage(products);
     }
 
     public ProductDto getProductByUniqueId(String uniqueId) {
@@ -48,6 +50,7 @@ public class ProductFacade {
     }
 
     public ApiResponse deleteByUniqueId(String uniqueId) {
+
         return productService.deleteByUniqueId(uniqueId);
     }
 }

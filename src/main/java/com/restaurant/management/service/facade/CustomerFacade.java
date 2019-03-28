@@ -7,6 +7,8 @@ import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,10 +31,10 @@ public class CustomerFacade {
         return customerMapper.mapToCustomerDto(customer);
     }
 
-    public List<CustomerDto> getAllCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
+    public Page<CustomerDto> getAllCustomers(Pageable pageable) {
+        Page<Customer> customers = customerService.getAllCustomers(pageable);
 
-        return customerMapper.mapToCustomerDtoList(customers);
+        return customerMapper.mapToCustomerDtoPage(customers);
     }
 
     public ApiResponse deleteCustomerById(Long id) {

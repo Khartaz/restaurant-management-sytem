@@ -6,9 +6,14 @@ import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,13 +56,12 @@ public class CustomerController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resources<CustomerResponse> getAllCustomers() {
-        List<CustomerDto> customerDto = customerFacade.getAllCustomers();
+    ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersPageable(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<CustomerDto> customersDto = customerFacade.getAllCustomers(pageable);
 
-        List<CustomerResponse> response = customerMapper.mapToCustomerResponseList(customerDto);
+        Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
 
-        Link link = linkTo(CustomerController.class).withSelfRel();
-        return new Resources<>(response, link);
+        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

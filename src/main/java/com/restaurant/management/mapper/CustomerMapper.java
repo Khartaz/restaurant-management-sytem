@@ -4,6 +4,7 @@ import com.restaurant.management.domain.Customer;
 import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.web.response.CustomerResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -80,6 +81,10 @@ public class CustomerMapper {
                 .collect(Collectors.toList());
     }
 
+    public Page<CustomerDto> mapToCustomerDtoPage(final Page<Customer> customers) {
+        return customers.map(this::mapToCustomerDto);
+    }
+
     public List<CustomerResponse> mapToCustomerResponseList(final List<CustomerDto> customers) {
         return customers.stream()
                 .map(v -> new CustomerResponse(
@@ -90,6 +95,10 @@ public class CustomerMapper {
                         v.getPhoneNumber()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public Page<CustomerResponse> mapToCustomerResponsePage(final Page<CustomerDto> customers) {
+        return customers.map(this::mapToCustomerResponse);
     }
 
     public List<Customer> mapToCustomerList(final List<CustomerDto> customers) {

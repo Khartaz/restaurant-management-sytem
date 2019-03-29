@@ -12,6 +12,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -68,13 +72,21 @@ public class OrderControllerTestSuite {
         List<OrderDto> ordersDto = new ArrayList<>();
         ordersDto.add(orderDto);
 
-        List<OrderResponse> responseList = new ArrayList<>();
-        responseList.add(response);
+        List<OrderResponse> ordersResponse = new ArrayList<>();
+        ordersResponse.add(response);
 
-        when(orderFacade.getAllOrders()).thenReturn(ordersDto);
-        when(orderMapper.mapToOrderResponseList(ordersDto)).thenReturn(responseList);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        Page<OrderDto> ordersDtoPage = new PageImpl<>(ordersDto);
+        Page<OrderResponse> ordersResponsePage = new PageImpl<>(ordersResponse);
+
+        when(orderFacade.getAllOrders(pageable)).thenReturn(ordersDtoPage);
+        when(orderMapper.mapToOrderResponsePage(ordersDtoPage)).thenReturn(ordersResponsePage);
         //WHEN & THEN
-        mockMvc.perform(get(PATH).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH)
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._embedded.orderResponseList", hasSize(1)))
                 .andReturn();

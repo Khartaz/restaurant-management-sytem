@@ -41,9 +41,9 @@ public class CartController {
         @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<CartResponse>> showCarts(Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<CartDto> cartDtos = cartFacade.getAllCarts(pageable);
+        Page<CartDto> cartsDto = cartFacade.getAllCarts(pageable);
 
-        Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartDtos);
+        Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
 
         return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }

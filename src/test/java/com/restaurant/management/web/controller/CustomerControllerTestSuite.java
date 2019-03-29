@@ -10,6 +10,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -48,13 +52,21 @@ public class CustomerControllerTestSuite {
     public void shouldFetchEmptyCustomerResponseList() throws Exception {
         //GIVEN
         List<CustomerDto> customersDto = new ArrayList<>();
-        List<CustomerResponse> customerResponse = new ArrayList<>();
+        List<CustomerResponse> customersResponse = new ArrayList<>();
 
-        when(customerFacade.getAllCustomers()).thenReturn(customersDto);
-        when(customerMapper.mapToCustomerResponseList(customersDto)).thenReturn(customerResponse);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        Page<CustomerDto> customersDtoPage = new PageImpl<>(customersDto);
+        Page<CustomerResponse> customersResponsePage = new PageImpl<>(customersResponse);
+
+        when(customerFacade.getAllCustomers(pageable)).thenReturn(customersDtoPage);
+        when(customerMapper.mapToCustomerResponsePage(customersDtoPage)).thenReturn(customersResponsePage);
 
         //WHEN & THEN
-        mockMvc.perform(get(PATH).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH)
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/customers")))
                 .andReturn();
@@ -80,14 +92,22 @@ public class CustomerControllerTestSuite {
         List<CustomerDto> customersDto = new ArrayList<>();
         customersDto.add(customerDto);
 
-        List<CustomerResponse> responseList = new ArrayList<>();
-        responseList.add(customerResponse);
+        List<CustomerResponse> customersResponse = new ArrayList<>();
+        customersResponse.add(customerResponse);
 
-        when(customerFacade.getAllCustomers()).thenReturn(customersDto);
-        when(customerMapper.mapToCustomerResponseList(customersDto)).thenReturn(responseList);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        Page<CustomerDto> customersDtoPage = new PageImpl<>(customersDto);
+        Page<CustomerResponse> customersResponsePage = new PageImpl<>(customersResponse);
+
+        when(customerFacade.getAllCustomers(pageable)).thenReturn(customersDtoPage);
+        when(customerMapper.mapToCustomerResponsePage(customersDtoPage)).thenReturn(customersResponsePage);
 
         //WHEN & THEN
-        mockMvc.perform(get(PATH).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH)
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_embedded.customerResponseList", hasSize(1)))
                 .andReturn();

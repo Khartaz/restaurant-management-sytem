@@ -13,8 +13,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -243,9 +248,12 @@ public class CartServiceTestSuite {
         carts.add(cart1);
         carts.add(cart2);
 
-        when(cartRepository.findAll()).thenReturn(carts);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        when(cartRepository.findAll(pageable)).thenReturn(new PageImpl<>(carts));
         //WHEN
-        List<Cart> result = cartService.getAllCarts();
+        Page<Cart> cartsPage = cartService.getAllCarts(pageable);
+        List<Cart> result = cartsPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
                 () -> assertEquals(result.size(), 2)
@@ -281,10 +289,12 @@ public class CartServiceTestSuite {
         sessionCarts.add(cart1);
         sessionCarts.add(cart2);
 
+        Pageable pageable = PageRequest.of(0, 1);
 
-        when(sessionCartRepository.findAll()).thenReturn(sessionCarts);
+        when(sessionCartRepository.findAll(pageable)).thenReturn(new PageImpl<>(sessionCarts));
         //WHEN
-        List<SessionCart> result = cartService.getSessionCarts();
+        Page<SessionCart> sessionCartsPage = cartService.getSessionCarts(pageable);
+        List<SessionCart> result = sessionCartsPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
                 () -> assertEquals(result.size(), 2)

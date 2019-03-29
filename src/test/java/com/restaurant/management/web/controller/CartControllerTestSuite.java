@@ -3,20 +3,20 @@ package com.restaurant.management.web.controller;
 import com.google.gson.Gson;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.domain.dto.CustomerDto;
-import com.restaurant.management.domain.dto.LineItemDto;
-import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.service.facade.CartFacade;
 import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
-import com.restaurant.management.web.response.LineItemResponse;
-import com.restaurant.management.web.response.ProductResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -64,14 +64,22 @@ public class CartControllerTestSuite {
 
         List<CartDto> cartsDto = new ArrayList<>();
         cartsDto.add(cartDto);
+
         List<CartResponse> cartsResponse = new ArrayList<>();
         cartsResponse.add(cartResponse);
 
-        when(cartFacade.getAllCarts()).thenReturn(cartsDto);
-        when(cartMapper.mapToCartResponseList(cartsDto)).thenReturn(cartsResponse);
+        Pageable pageable = PageRequest.of(0, 1);
 
+        Page<CartDto> cartsDtoPage = new PageImpl<>(cartsDto);
+        Page<CartResponse> cartsResponsePage = new PageImpl<>(cartsResponse);
+
+        when(cartFacade.getAllCarts(pageable)).thenReturn(cartsDtoPage);
+        when(cartMapper.mapToCartResponsePage(cartsDtoPage)).thenReturn(cartsResponsePage);
         //WHEN & THEN
-        mockMvc.perform(get(PATH).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH)
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._embedded.cartResponseList", hasSize(1)))
                 .andReturn();
@@ -125,13 +133,22 @@ public class CartControllerTestSuite {
 
         List<CartDto> cartsDto = new ArrayList<>();
         cartsDto.add(cartDto);
+
         List<CartResponse> cartsResponse = new ArrayList<>();
         cartsResponse.add(cartResponse);
 
-        when(cartFacade.getSessionCarts()).thenReturn(cartsDto);
-        when(cartMapper.mapToCartResponseList(cartsDto)).thenReturn(cartsResponse);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        Page<CartDto> cartsDtoPage = new PageImpl<>(cartsDto);
+        Page<CartResponse> cartsResponsePage = new PageImpl<>(cartsResponse);
+
+        when(cartFacade.getSessionCarts(pageable)).thenReturn(cartsDtoPage);
+        when(cartMapper.mapToCartResponsePage(cartsDtoPage)).thenReturn(cartsResponsePage);
         //WHEN & THEN
-        mockMvc.perform(get(PATH + "/session").contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH + "/session")
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._embedded.cartResponseList", hasSize(1)))
                 .andReturn();

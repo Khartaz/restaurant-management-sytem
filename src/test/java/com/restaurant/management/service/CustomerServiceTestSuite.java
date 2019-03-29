@@ -11,12 +11,18 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -63,9 +69,12 @@ public class CustomerServiceTestSuite {
         customers.add(customer2);
         customers.add(customer3);
 
-        when(customerRepository.findAll()).thenReturn(customers);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        when(customerRepository.findAll(pageable)).thenReturn(new PageImpl<>(customers));
         //WHEN
-        List<Customer> result = customerService.getAllCustomers();
+        Page<Customer> customerPage = customerService.getAllCustomers(pageable);
+        List<Customer> result = customerPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
                 () -> assertEquals(result.size(), customers.size()),

@@ -12,8 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -152,9 +157,12 @@ public class ProductServiceTestSuite {
         products.add(product1);
         products.add(product2);
 
-        when(productRepository.findAll()).thenReturn(products);
+        Pageable pageable = PageRequest.of(0,1);
+
+        when(productRepository.findAll(pageable)).thenReturn(new PageImpl<>(products));
         //WHEN
-        List<Product> result = productService.getAllProducts();
+        Page<Product> productsPage = productService.getAllProducts(pageable);
+        List<Product> result = productsPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
                 () -> assertEquals(result.size(), 2),

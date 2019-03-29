@@ -10,6 +10,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -89,13 +93,20 @@ public class ProductControllerTestSuite {
     public void shouldFetchEmptyProductResponseList() throws Exception {
         //GIVEN
         List<ProductDto> productsDto = new ArrayList<>();
-        List<ProductResponse> responseList = new ArrayList<>();
+        List<ProductResponse> productsResponse = new ArrayList<>();
 
-        when(productFacade.getAllProducts()).thenReturn(productsDto);
-        when(productMapper.mapToProductResponseList(productsDto)).thenReturn(responseList);
+        Pageable pageable = PageRequest.of(0, 1);
 
+        Page<ProductDto> productsDtoPage = new PageImpl<>(productsDto);
+        Page<ProductResponse> productsResponsePage = new PageImpl<>(productsResponse);
+
+        when(productFacade.getAllProducts(pageable)).thenReturn(productsDtoPage);
+        when(productMapper.mapToProductResponsePage(productsDtoPage)).thenReturn(productsResponsePage);
         //WHEN & THEN
-        mockMvc.perform(get(PATH).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH)
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/products")))
                 .andReturn();
@@ -125,13 +136,21 @@ public class ProductControllerTestSuite {
         List<ProductDto> productsDto = new ArrayList<>();
         productsDto.add(productDto);
 
-        List<ProductResponse> responseList = new ArrayList<>();
-        responseList.add(response);
+        List<ProductResponse> productsResponse = new ArrayList<>();
+        productsResponse.add(response);
 
-        when(productFacade.getAllProducts()).thenReturn(productsDto);
-        when(productMapper.mapToProductResponseList(productsDto)).thenReturn(responseList);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        Page<ProductDto> productsDtoPage = new PageImpl<>(productsDto);
+        Page<ProductResponse> productsResponsePage = new PageImpl<>(productsResponse);
+
+        when(productFacade.getAllProducts(pageable)).thenReturn(productsDtoPage);
+        when(productMapper.mapToProductResponsePage(productsDtoPage)).thenReturn(productsResponsePage);
         //WHEN & THEN
-        mockMvc.perform(get(PATH).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(PATH)
+                .param("page", "0")
+                .param("size", "1")
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._embedded.productResponseList", hasSize(1)))
                 .andReturn();

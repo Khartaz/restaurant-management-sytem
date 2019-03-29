@@ -16,10 +16,15 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -167,9 +172,12 @@ public class OrderServiceTestSuite {
         orders.add(order1);
         orders.add(order2);
 
-        when(orderRepository.findAll()).thenReturn(orders);
+        Pageable pageable = PageRequest.of(0,1);
+
+        when(orderRepository.findAll(pageable)).thenReturn(new PageImpl<>(orders));
         //WHEN
-        List<Order> result = orderService.getAllOrders();
+        Page<Order> ordersPage = orderService.getAllOrders(pageable);
+        List<Order> result = ordersPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
                 () -> assertEquals(result.size(), orders.size()),
@@ -177,5 +185,4 @@ public class OrderServiceTestSuite {
                 () -> assertEquals(result.get(1).getCart().getCustomer().getPhoneNumber(), customerArchive.getPhoneNumber())
         );
     }
-
 }

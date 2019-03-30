@@ -1,6 +1,8 @@
 package com.restaurant.management.repository;
 
+import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.archive.CustomerArchive;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findAll(Pageable pageable);
 
     Optional<Order> findByOrderNumber(String orderNumber);
+
+    Page<Order> findByCart(Cart cart, Pageable pageable);
+
 }

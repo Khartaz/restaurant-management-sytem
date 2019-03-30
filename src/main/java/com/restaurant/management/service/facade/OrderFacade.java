@@ -5,13 +5,10 @@ import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
-import com.restaurant.management.web.response.SendOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class OrderFacade {
@@ -41,8 +38,20 @@ public class OrderFacade {
         return orderService.deleteOrder(orderNumber);
     }
 
-    public OrderDto processOrder(SendOrder process) {
-        Order order = orderService.processOrder(process.getPhoneNumber());
+    public OrderDto processOrder(Long id) {
+        Order order = orderService.processOrder(id);
+
+        return orderMapper.mapToOrderDto(order);
+    }
+
+    public Page<OrderDto> getOrdersByCustomerId(Long id, Pageable pageable) {
+        Page<Order> orders = orderService.getOrdersByCustomerId(id, pageable);
+
+        return orderMapper.mapToProductDtoPage(orders);
+    }
+
+    public OrderDto getOrderByCustomerIdAndOrderNumber(Long id, String orderNumber) {
+        Order order = orderService.getOrderByCustomerIdAndOrderNumber(id, orderNumber);
 
         return orderMapper.mapToOrderDto(order);
     }

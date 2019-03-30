@@ -4,7 +4,6 @@ import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.service.facade.OrderFacade;
 import com.restaurant.management.web.response.OrderResponse;
-import com.restaurant.management.web.response.SendOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,17 +60,4 @@ public class OrderController {
 
         return ResponseEntity.ok().body(orderFacade.deleteOrder(orderNumber));
     }
-
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<OrderResponse> registerOrder(@RequestBody SendOrder sendOrder) {
-
-        OrderDto orderDto = orderFacade.processOrder(sendOrder);
-
-        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
-
-        Link link = linkTo(OrderController.class).slash(orderResponse.getOrderNumber()).withSelfRel();
-        return new Resource<>(orderResponse, link);
-    }
-
 }

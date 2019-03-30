@@ -168,8 +168,8 @@ public class CartService {
         return sessionCart;
     }
 
-    public Cart confirmCart(Long phoneNumber) {
-        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(phoneNumber)
+    public Cart confirmCart(Long id) {
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerId(id)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
         sessionCart.setOpen(Boolean.FALSE);

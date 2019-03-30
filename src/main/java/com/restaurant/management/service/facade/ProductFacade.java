@@ -53,4 +53,10 @@ public class ProductFacade {
 
         return productService.deleteByUniqueId(uniqueId);
     }
+
+    public List<ProductDto> getAllByName(String name, Pageable pageable) {
+        List<Product> products = productService.getAllByName(name, pageable);
+
+        return productMapper.mapToProductDtoList(products);
+    }
 }

@@ -11,6 +11,8 @@ public enum  CartMessages {
     CART_IS_CLOSED("SessionCart is closed cannot be deleted. "),
     PRODUCT_ALREADY_IN_CART("Product is already in cart. "),
     NOT_ENOUGH_AT_CART("Incorrect quantity request. "),
+    CUSTOMER_CART_NOT_FOUND("Customer cart with provided id and cart unique id not found"),
+    CUSTOMER_SESSION_CART_NOT_FOUND("Customer session cart with provided id not found. "),
     CART_UNIQUE_ID_NOT_FOUND("SessionCart with provided unique id not found. ");
 
     private String errorMessage;

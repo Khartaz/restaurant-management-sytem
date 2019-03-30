@@ -17,7 +17,6 @@ import com.restaurant.management.repository.*;
 import com.restaurant.management.repository.archive.CustomerArchiveRepository;
 import com.restaurant.management.repository.archive.ProductArchiveRepository;
 import com.restaurant.management.utils.Utils;
-import com.restaurant.management.web.request.cart.RegisterCartRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -64,8 +63,8 @@ public class CartService {
         this.customerArchiveRepository = customerArchiveRepository;
     }
 
-    public SessionCart openSessionCart(RegisterCartRequest request) {
-        Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber())
+    public SessionCart openSessionCart(Long id) {
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
 
         if (sessionCartRepository.existsByCustomerAndIsOpenTrue(customer)) {
@@ -83,15 +82,15 @@ public class CartService {
         return newSessionCart;
     }
 
-    public SessionCart addToCart(UpdateCartRequest request) {
-        if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+    public SessionCart addToCart(Long id, UpdateCartRequest request) {
+        if (!customerRepository.existsById(id)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
 
         Product product = productRepository.findProductByName(request.getProductName())
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_NAME_NOT_FOUND.getMessage()));
 
-        SessionCart newSessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
+        SessionCart newSessionCart = sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(id)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
         Optional<SessionLineItem> lineItem = newSessionCart.getSessionLineItems().stream()
@@ -125,12 +124,12 @@ public class CartService {
         return newSessionCart;
     }
 
-    public SessionCart updateProductQuantity(UpdateCartRequest request) {
-        if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+    public SessionCart updateProductQuantity(Long id, UpdateCartRequest request) {
+        if (!customerRepository.existsById(id)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
 
-        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(id)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
         SessionLineItem sessionLineItem = sessionCart.getSessionLineItems().stream()
@@ -150,12 +149,12 @@ public class CartService {
         return sessionCart;
     }
 
-    public SessionCart removeProductFromCart(RemoveProductRequest request) {
-        if (!customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+    public SessionCart removeProductFromCart(Long id, RemoveProductRequest request) {
+        if (!customerRepository.existsById(id)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
 
-        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(request.getPhoneNumber())
+        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(id)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
 
         SessionLineItem sessionLineItem = sessionCart.getSessionLineItems().stream()
@@ -198,6 +197,19 @@ public class CartService {
         return cartRepository.findAll(pageable);
     }
 
+    public Page<Cart> getCustomerCarts(Long id, Pageable pageable) {
+        return cartRepository.findByCustomerId(id, pageable);
+    }
+
+    public Cart getCustomerCartByUniqueId(Long id, String uniqueId) {
+        Optional<Cart> cart = cartRepository.findByCustomerIdAndUniqueId(id, uniqueId);
+
+        if (!cart.isPresent()) {
+            throw new CartNotFoundException(CartMessages.CUSTOMER_CART_NOT_FOUND.getMessage());
+        }
+        return cart.get();
+    }
+
     public Page<SessionCart> getSessionCarts(Pageable pageable) {
        return sessionCartRepository.findAll(pageable);
     }
@@ -216,6 +228,15 @@ public class CartService {
 
         if (!sessionCart.isPresent()) {
             throw new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + uniqueId);
+        }
+        return sessionCart.get();
+    }
+
+    public SessionCart getSessionCartByCustomerId(Long id) {
+        Optional<SessionCart> sessionCart = sessionCartRepository.findSessionCartByCustomerId(id);
+
+        if (!sessionCart.isPresent()) {
+            throw new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage());
         }
         return sessionCart.get();
     }

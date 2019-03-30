@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.hamcrest.Matchers.*;
@@ -192,35 +191,5 @@ public class CartControllerTestSuite {
                 .andReturn();
     }
 
-    @Test
-    public void shouldFetchRemoveProductFromCart() throws Exception {
-        //GIVEN
-        CartDto cartDto = new CartDto(
-                CART_UNIQUE_ID,
-                Boolean.FALSE,
-                new CustomerDto(),
-                Collections.EMPTY_LIST
-        );
 
-        CartResponse cartResponse = new CartResponse(
-                ID,
-                cartDto.getUniqueId(),
-                cartDto.isOpen(),
-                new CustomerResponse(),
-                Collections.EMPTY_LIST
-        );
-
-        Gson gson = new Gson();
-        String json = gson.toJson(cartResponse);
-
-        when(cartFacade.removeProductFromCart(ArgumentMatchers.any())).thenReturn(cartDto);
-        when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
-        //WHEN & THEN
-        mockMvc.perform(delete(PATH + "/product").contentType(APPLICATION_JSON_VALUE)
-                .characterEncoding(StandardCharsets.UTF_8.toString())
-                .content(json)
-                .accept(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.lineItems", hasSize(0)));
-    }
 }

@@ -50,37 +50,37 @@ public class DailyOrderListServiceTestSuite {
         );
     }
 
-    @Test
-    public void shouldGetAllDailyOrderLists() {
-        //GIVEN
-        DailyOrderList list1 = new DailyOrderList();
-        list1.setUniqueId(ORDER_LIST_UNIQUE_ID);
-        list1.setDailyIncome(532.00);
-        list1.setOpened(Boolean.TRUE);
-        list1.setOrders(new LinkedHashSet<>());
-
-        DailyOrderList list2 = new DailyOrderList();
-        list2.setUniqueId(ORDER_LIST_UNIQUE_ID + 1);
-        list2.setDailyIncome(68.00);
-        list2.setOpened(Boolean.TRUE);
-        list2.setOrders(new LinkedHashSet<>());
-
-        List<DailyOrderList> dailyOrdersLists = new ArrayList<>();
-        dailyOrdersLists.add(list1);
-        dailyOrdersLists.add(list2);
-
-        when(dailyOrderListRepository.findAll()).thenReturn(dailyOrdersLists);
-        //WHEN
-        List<DailyOrderList> result = dailyOrderListService.getAll();
-        //THEN
-        assertAll(
-                () -> assertEquals(result.get(0).getUniqueId(), ORDER_LIST_UNIQUE_ID),
-                () -> assertEquals(result.get(1).getUniqueId(), ORDER_LIST_UNIQUE_ID +1),
-                () -> assertEquals(result.size(), 2),
-                () -> assertEquals(result.get(0).getDailyIncome().doubleValue(), 532.00),
-                () -> assertEquals(result.get(1).getDailyIncome().doubleValue(), 68.00)
-        );
-    }
+//    @Test
+//    public void shouldGetAllDailyOrderLists() {
+//        //GIVEN
+//        DailyOrderList list1 = new DailyOrderList();
+//        list1.setUniqueId(ORDER_LIST_UNIQUE_ID);
+//        list1.setDailyIncome(532.00);
+//        list1.setOpened(Boolean.TRUE);
+//        list1.setOrders(new LinkedHashSet<>());
+//
+//        DailyOrderList list2 = new DailyOrderList();
+//        list2.setUniqueId(ORDER_LIST_UNIQUE_ID + 1);
+//        list2.setDailyIncome(68.00);
+//        list2.setOpened(Boolean.TRUE);
+//        list2.setOrders(new LinkedHashSet<>());
+//
+//        List<DailyOrderList> dailyOrdersLists = new ArrayList<>();
+//        dailyOrdersLists.add(list1);
+//        dailyOrdersLists.add(list2);
+//
+//        when(dailyOrderListRepository.findAll()).thenReturn(dailyOrdersLists);
+//        //WHEN
+//        List<DailyOrderList> result = dailyOrderListService.getAll();
+//        //THEN
+//        assertAll(
+//                () -> assertEquals(result.get(0).getUniqueId(), ORDER_LIST_UNIQUE_ID),
+//                () -> assertEquals(result.get(1).getUniqueId(), ORDER_LIST_UNIQUE_ID +1),
+//                () -> assertEquals(result.size(), 2),
+//                () -> assertEquals(result.get(0).getDailyIncome().doubleValue(), 532.00),
+//                () -> assertEquals(result.get(1).getDailyIncome().doubleValue(), 68.00)
+//        );
+//    }
 
     @Test
     public void shouldOpenDailyOrderList() {

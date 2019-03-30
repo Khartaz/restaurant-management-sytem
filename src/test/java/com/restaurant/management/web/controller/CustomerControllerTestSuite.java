@@ -1,12 +1,17 @@
 package com.restaurant.management.web.controller;
 
 import com.google.gson.Gson;
+import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.domain.dto.CustomerDto;
+import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.mapper.CustomerMapper;
+import com.restaurant.management.service.facade.CartFacade;
 import com.restaurant.management.service.facade.CustomerFacade;
+import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -40,6 +46,12 @@ public class CustomerControllerTestSuite {
     private CustomerFacade customerFacade;
     @MockBean
     private CustomerMapper customerMapper;
+    @MockBean
+    private CartFacade cartFacade;
+    @MockBean
+    private CartMapper cartMapper;
+
+    private static final String CART_UNIQUE_ID = "uniqueId";
 
     private static final String PATH = "/api/customers";
     private static final String CUSTOMER_NAME = "Customer name";
@@ -184,5 +196,37 @@ public class CustomerControllerTestSuite {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.lastname", is(CUSTOMER_LASTNAME)))
                 .andReturn();
+    }
+
+    @Test
+    public void shouldFetchRemoveProductFromCart() throws Exception {
+        //GIVEN
+        CartDto cartDto = new CartDto(
+                CART_UNIQUE_ID,
+                Boolean.FALSE,
+                new CustomerDto(),
+                Collections.EMPTY_LIST
+        );
+
+        CartResponse cartResponse = new CartResponse(
+                ID,
+                cartDto.getUniqueId(),
+                cartDto.isOpen(),
+                new CustomerResponse(),
+                Collections.EMPTY_LIST
+        );
+
+        Gson gson = new Gson();
+        String json = gson.toJson(cartResponse);
+
+        when(cartFacade.removeProductFromCart(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(cartDto);
+        when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
+        //WHEN & THEN
+        mockMvc.perform(delete(PATH + "/1/carts/session/product").contentType(APPLICATION_JSON_VALUE)
+                .characterEncoding(StandardCharsets.UTF_8.toString())
+                .content(json)
+                .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lineItems", hasSize(0)));
     }
 }

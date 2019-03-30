@@ -1,6 +1,8 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.DailyOrderList;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,6 @@ public interface DailyOrderListRepository extends JpaRepository<DailyOrderList, 
     Optional<DailyOrderList> findByUniqueId(String uniqueId);
 
     @Override
-    List<DailyOrderList> findAll();
+    Page<DailyOrderList> findAll(Pageable pageable);
 
 }

@@ -5,7 +5,6 @@ import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.archive.LineItemArchive;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.repository.*;
-import com.restaurant.management.web.request.cart.RegisterCartRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import org.junit.Test;
@@ -42,6 +41,7 @@ public class CartServiceTestSuite {
 
     private static final String UNIQUE_CART_ID = "J4L2H";
 
+    private static final long CUSTOMER_ID = 1L;
     private static final long PHONE_NUMBER = 684293190L;
     private static final String CUSTOMER_NAME = "Customer name";
     private static final String CUSTOMER_LASTNAME = "Customer lastname";
@@ -53,18 +53,17 @@ public class CartServiceTestSuite {
     @Test
     public void shouldOpenSessionCart() {
         //GIVEN
-        RegisterCartRequest request = new RegisterCartRequest(PHONE_NUMBER);
-
         Optional<Customer> customer = Optional.of(new Customer(
+                CUSTOMER_ID,
                 CUSTOMER_NAME,
                 CUSTOMER_LASTNAME,
                 CUSTOMER_EMAIL,
                 PHONE_NUMBER));
 
-        when(customerRepository.findByPhoneNumber(PHONE_NUMBER)).thenReturn(customer);
+        when(customerRepository.findById(CUSTOMER_ID)).thenReturn(customer);
         when(sessionCartRepository.existsByCustomerAndIsOpenTrue(customer.get())).thenReturn(Boolean.FALSE);
         //WHEN
-        SessionCart result = cartService.openSessionCart(request);
+        SessionCart result = cartService.openSessionCart(CUSTOMER_ID);
         //THEN
         assertAll(
                 () -> assertTrue(result.isOpen()),
@@ -77,7 +76,6 @@ public class CartServiceTestSuite {
     public void shouldAddToCart() {
         //GIVEN
         UpdateCartRequest request = new UpdateCartRequest(
-                PHONE_NUMBER,
                 PRODUCT_NAME,
                 5);
 
@@ -87,10 +85,11 @@ public class CartServiceTestSuite {
         product.setPrice(2.0);
 
         Optional<Customer> customer = Optional.of(new Customer(
+                CUSTOMER_ID,
                 CUSTOMER_NAME,
                 CUSTOMER_LASTNAME,
                 CUSTOMER_EMAIL,
-                request.getPhoneNumber()));
+                PHONE_NUMBER));
 
         SessionCart sessionCart = new SessionCart();
 
@@ -98,11 +97,11 @@ public class CartServiceTestSuite {
         sessionCart.setOpen(Boolean.TRUE);
         sessionCart.setCustomer(customer.get());
 
-        when(customerRepository.existsByPhoneNumber(PHONE_NUMBER)).thenReturn(Boolean.TRUE);
+        when(customerRepository.existsById(CUSTOMER_ID)).thenReturn(Boolean.TRUE);
         when(productRepository.findProductByName(anyString())).thenReturn(Optional.of(product));
-        when(sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(PHONE_NUMBER)).thenReturn(Optional.of(sessionCart));
+        when(sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(CUSTOMER_ID)).thenReturn(Optional.of(sessionCart));
         //WHEN
-        SessionCart result = cartService.addToCart(request);
+        SessionCart result = cartService.addToCart(CUSTOMER_ID, request);
         //THEN
 
         int resultQuantity = result.getSessionLineItems().get(0).getQuantity();
@@ -121,7 +120,6 @@ public class CartServiceTestSuite {
     public void shouldUpdateProductQuantityInSessionCart() {
         //GIVEN
         UpdateCartRequest request = new UpdateCartRequest(
-                PHONE_NUMBER,
                 PRODUCT_NAME,
                 5);
 
@@ -134,7 +132,7 @@ public class CartServiceTestSuite {
                 CUSTOMER_NAME,
                 CUSTOMER_LASTNAME,
                 CUSTOMER_EMAIL,
-                request.getPhoneNumber()));
+                PHONE_NUMBER));
 
         SessionCart sessionCart = new SessionCart();
 
@@ -148,10 +146,10 @@ public class CartServiceTestSuite {
 
         sessionCart.getSessionLineItems().add(lineItem);
 
-        when(customerRepository.existsByPhoneNumber(PHONE_NUMBER)).thenReturn(Boolean.TRUE);
-        when(sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(PHONE_NUMBER)).thenReturn(Optional.of(sessionCart));
+        when(customerRepository.existsById(CUSTOMER_ID)).thenReturn(Boolean.TRUE);
+        when(sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(CUSTOMER_ID)).thenReturn(Optional.of(sessionCart));
         //WHEN
-        SessionCart result = cartService.updateProductQuantity(request);
+        SessionCart result = cartService.updateProductQuantity(CUSTOMER_ID, request);
         //THEN
         int resultQuantity = result.getSessionLineItems().get(0).getQuantity();
         long resultPhoneNumber = result.getCustomer().getPhoneNumber();
@@ -166,7 +164,6 @@ public class CartServiceTestSuite {
     public void shouldRemoveProductFromSessionCart() {
         //GIVEN
         RemoveProductRequest request = new RemoveProductRequest(
-                PHONE_NUMBER,
                 PRODUCT_NAME
         );
 
@@ -176,10 +173,11 @@ public class CartServiceTestSuite {
         product.setPrice(2.0);
 
         Optional<Customer> customer = Optional.of(new Customer(
+                CUSTOMER_ID,
                 CUSTOMER_NAME,
                 CUSTOMER_LASTNAME,
                 CUSTOMER_EMAIL,
-                request.getPhoneNumber()));
+                PHONE_NUMBER));
 
         SessionCart sessionCart = new SessionCart();
 
@@ -195,11 +193,11 @@ public class CartServiceTestSuite {
 
         sessionCart.getSessionLineItems().add(lineItem);
 
-        when(customerRepository.existsByPhoneNumber(PHONE_NUMBER)).thenReturn(Boolean.TRUE);
-        when(sessionCartRepository.findSessionCartByCustomerPhoneNumberAndIsOpenTrue(PHONE_NUMBER)).thenReturn(Optional.of(sessionCart));
+        when(customerRepository.existsById(CUSTOMER_ID)).thenReturn(Boolean.TRUE);
+        when(sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(CUSTOMER_ID)).thenReturn(Optional.of(sessionCart));
         when(sessionLineItemRepository.findById(anyLong())).thenReturn(Optional.of(lineItem));
         //WHEN
-        SessionCart result = cartService.removeProductFromCart(request);
+        SessionCart result = cartService.removeProductFromCart(CUSTOMER_ID, request);
         //THEN
 
         int lineItemsSize = result.getSessionLineItems().size();

@@ -4,6 +4,7 @@ import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.web.response.DailyOrderListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -60,15 +61,27 @@ public class DailyOrderListMapper {
                 .collect(Collectors.toList());
     }
 
+    public Page<DailyOrderList> mapToDailyOrderListPage(final Page<DailyOrderListDto> ordersListDto) {
+        return ordersListDto.map(this::mapToDailyOrderList);
+    }
+
     public List<DailyOrderListDto> mapToDailyOrderListDto(final List<DailyOrderList> orderLists) {
         return orderLists.stream()
                 .map(this::mapToDailyOrderListDto)
                 .collect(Collectors.toList());
     }
 
+    public Page<DailyOrderListDto> mapToDailyOrderListDtoPage(final Page<DailyOrderList> ordersList) {
+        return ordersList.map(this::mapToDailyOrderListDto);
+    }
+
     public List<DailyOrderListResponse> mapToDailyOrderListResponse(final List<DailyOrderListDto> orderListDto) {
         return orderListDto.stream()
                 .map(this::mapToDailyOrderListResponse)
                 .collect(Collectors.toList());
+    }
+
+    public Page<DailyOrderListResponse> mapToDailyOrderListResponsePage(final Page<DailyOrderListDto> ordersList) {
+        return ordersList.map(this::mapToDailyOrderListResponse);
     }
 }

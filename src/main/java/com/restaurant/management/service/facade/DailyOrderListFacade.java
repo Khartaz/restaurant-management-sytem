@@ -6,9 +6,9 @@ import com.restaurant.management.mapper.DailyOrderListMapper;
 import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class DailyOrderListFacade {
@@ -28,10 +28,10 @@ public class DailyOrderListFacade {
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public List<DailyOrderListDto> getAll() {
-        List<DailyOrderList> dailyOrderLists = dailyOrderListService.getAll();
+    public Page<DailyOrderListDto> getAll(Pageable pageable) {
+        Page<DailyOrderList> dailyOrderLists = dailyOrderListService.getAll(pageable);
 
-        return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderLists);
+        return dailyOrderListMapper.mapToDailyOrderListDtoPage(dailyOrderLists);
     }
 
     public DailyOrderListDto getOrderListByUniqueId(String uniqueId) {

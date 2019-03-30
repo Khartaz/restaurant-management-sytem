@@ -120,4 +120,7 @@ public class ProductService {
         }
     }
 
+    public List<Product> getAllByName(String name, Pageable pageable) {
+        return productRepository.findAllByName(name, pageable);
+    }
 }

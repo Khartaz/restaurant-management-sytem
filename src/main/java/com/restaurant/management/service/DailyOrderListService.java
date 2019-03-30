@@ -11,6 +11,8 @@ import com.restaurant.management.repository.OrderRepository;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,8 +37,8 @@ public class DailyOrderListService {
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
-    public List<DailyOrderList> getAll() {
-        return dailyOrderListRepository.findAll();
+    public Page<DailyOrderList> getAll(Pageable pageable) {
+        return dailyOrderListRepository.findAll(pageable);
     }
 
     public DailyOrderList openOrderList() {

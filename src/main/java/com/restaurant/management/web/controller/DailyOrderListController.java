@@ -5,9 +5,14 @@ import com.restaurant.management.mapper.DailyOrderListMapper;
 import com.restaurant.management.service.facade.DailyOrderListFacade;
 import com.restaurant.management.web.response.DailyOrderListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,14 +50,12 @@ public class DailyOrderListController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resources<DailyOrderListResponse> showOrderLists() {
-        List<DailyOrderListDto> dailyOrderList = dailyOrderListFacade.getAll();
+    ResponseEntity<PagedResources<DailyOrderListResponse>> showOrdersList(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<DailyOrderListDto> dailyOrderList = dailyOrderListFacade.getAll(pageable);
 
-        List<DailyOrderListResponse> response = orderListMapper.mapToDailyOrderListResponse(dailyOrderList);
+        Page<DailyOrderListResponse> response = orderListMapper.mapToDailyOrderListResponsePage(dailyOrderList);
 
-        Link link = linkTo(DailyOrderListController.class).withSelfRel();
-
-        return new Resources<>(response, link);
+        return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)

@@ -34,6 +34,18 @@ public class CartFacade {
         return cartMapper.mapToCartDtoPage(carts);
     }
 
+    public Page<CartDto> getCustomerCarts(Long id, Pageable pageable) {
+        Page<Cart> carts = cartService.getCustomerCarts(id, pageable);
+
+        return cartMapper.mapToCartDtoPage(carts);
+    }
+
+    public CartDto getCustomerCartByUniqueId(Long id, String uniqueId) {
+        Cart cart = cartService.getCustomerCartByUniqueId(id, uniqueId);
+
+        return cartMapper.mapToCartDto(cart);
+    }
+
     public CartDto getCartByUniqueId(String uniqueId) {
         Cart cart = cartService.getCartByUniqueId(uniqueId);
 
@@ -52,30 +64,36 @@ public class CartFacade {
         return cartMapper.mapToCartDto(cart);
     }
 
+    public CartDto getSessionCartByCustomerId(Long id) {
+        SessionCart sessionCart = cartService.getSessionCartByCustomerId(id);
+
+        return cartMapper.mapToCartDto(sessionCart);
+    }
+
     public ApiResponse deleteSessionCart(String uniqueId) {
         return cartService.deleteSessionCart(uniqueId);
     }
 
-    public CartDto removeProductFromCart(RemoveProductRequest request) {
-        SessionCart sessionCart = cartService.removeProductFromCart(request);
+    public CartDto removeProductFromCart(Long id, RemoveProductRequest request) {
+        SessionCart sessionCart = cartService.removeProductFromCart(id, request);
 
         return cartMapper.mapToCartDto(sessionCart);
     }
 
-    public CartDto openSessionCart(RegisterCartRequest request) {
-        SessionCart sessionCart = cartService.openSessionCart(request);
+    public CartDto openSessionCart(Long id) {
+        SessionCart sessionCart = cartService.openSessionCart(id);
 
         return cartMapper.mapToCartDto(sessionCart);
     }
 
-    public CartDto addToCart(UpdateCartRequest request) {
-        SessionCart sessionCart = cartService.addToCart(request);
+    public CartDto addToCart(Long id, UpdateCartRequest request) {
+        SessionCart sessionCart = cartService.addToCart(id, request);
 
         return cartMapper.mapToCartDto(sessionCart);
     }
 
-    public CartDto updateProductQuantity(UpdateCartRequest request) {
-        SessionCart sessionCart = cartService.updateProductQuantity(request);
+    public CartDto updateProductQuantity(Long id, UpdateCartRequest request) {
+        SessionCart sessionCart = cartService.updateProductQuantity(id, request);
 
         return cartMapper.mapToCartDto(sessionCart);
     }

@@ -15,4 +15,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     @Override
     Page<Cart> findAll(Pageable pageable);
+
+    Page<Cart> findByCustomerId(Long id, Pageable pageable);
+
+    Optional<Cart> findByCustomerIdAndUniqueId(Long id, String uniqueId);
 }

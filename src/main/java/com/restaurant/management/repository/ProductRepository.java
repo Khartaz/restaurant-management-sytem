@@ -12,25 +12,24 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Optional<Product> findProductById(Long id);
-
-    Optional<Product> findProductsByUniqueId(String uniqueId);
-
     Optional<Product> findProductByUniqueId(String id);
 
     boolean existsByName(String name);
-
-    boolean existsByUniqueId(String uniqueId);
 
     void deleteByUniqueId(String uniqueId);
 
     Optional<Product> findProductByName(String name);
 
-    List<Product> findProductsByName(String name);
-
-    List<Product> findProductsByName(List<String> name);
-
     @Override
     Page<Product> findAll(Pageable pageable);
 
+    Optional<Product> findByNameStartingWith(String name);
+
+    Optional<Product> findByCategoryStartingWith(String category);
+
+    List<Product> findAllByName(String name, Pageable pageable);
+
+    List<Product> findAllByCategory(String category, Pageable pageable);
+
+    List<Product> findAllByPrice(Double price, Pageable pageable);
 }

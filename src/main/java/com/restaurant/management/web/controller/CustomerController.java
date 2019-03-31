@@ -112,7 +112,7 @@ public class CustomerController {
     @PutMapping(value = "/{id}/carts/session",
             produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> addToCart(@PathVariable Long id, @RequestBody UpdateCartRequest request) {
+    Resource<CartResponse> addToSessionCart(@PathVariable Long id, @RequestBody UpdateCartRequest request) {
         CartDto cartDto = cartFacade.addToCart(id, request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);

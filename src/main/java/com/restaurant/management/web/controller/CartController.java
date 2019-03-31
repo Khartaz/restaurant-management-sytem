@@ -3,11 +3,11 @@ package com.restaurant.management.web.controller;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.service.facade.CartFacade;
-import com.restaurant.management.web.request.cart.RegisterCartRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.CartResponse;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -89,4 +89,51 @@ public class CartController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping(value = "/customer/{customerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> registerCustomerCart(@PathVariable Long customerId) {
+        CartDto cartDto = cartFacade.openSessionCart(customerId);
+
+        CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash("customer").slash(cartResponse.getCustomer().getId()).withSelfRel();
+
+        return new Resource<>(cartResponse, link);
+    }
+
+    @PutMapping(value = "/session/{customerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> addToSessionCart(@PathVariable Long customerId, @RequestBody UpdateCartRequest request) {
+        CartDto cartDto = cartFacade.addToCart(customerId, request);
+
+        CartResponse response = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash("session").slash(response.getId()).withSelfRel();
+
+        return new Resource<>(response, link);
+    }
+
+    @DeleteMapping(value = "/session/{customerId}/product", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> removeProductFromCart(@PathVariable Long customerId, @Valid @RequestBody RemoveProductRequest request) {
+        CartDto cartDto = cartFacade.removeProductFromCart(customerId, request);
+
+        CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash("session").slash(cartResponse.getId()).slash("product").withSelfRel();
+
+        return new Resource<>(cartResponse, link);
+    }
+
+    @PutMapping(value = "/session/{customerId}/product", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CartResponse> updateProductQuantity(@PathVariable Long customerId, @RequestBody UpdateCartRequest request) {
+        CartDto cartDto = cartFacade.updateProductQuantity(customerId, request);
+
+        CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
+
+        Link link = linkTo(CartController.class).slash("session").slash(cartResponse.getCustomer().getId()).slash("product").withSelfRel();
+
+        return new Resource<>(cartResponse, link);
+    }
 }

@@ -18,6 +18,9 @@ public class DailyOrderList extends AbstractDateAudit {
     @Column(name = "daily_income")
     private Double dailyIncome;
 
+    @Column(name = "number_of_orders")
+    private Integer numberOfOrders;
+
     @Column(name = "is_open")
     private Boolean isOpen;
 
@@ -25,10 +28,12 @@ public class DailyOrderList extends AbstractDateAudit {
     private Set<Order> orders = new LinkedHashSet<>();
 
     public DailyOrderList(Long id, String uniqueId, Double dailyIncome,
+                          Integer numberOfOrders,
                           Boolean isOpen, Set<Order> orders) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
+        this.numberOfOrders = numberOfOrders;
         this.isOpen = isOpen;
         this.orders = orders;
     }
@@ -58,6 +63,14 @@ public class DailyOrderList extends AbstractDateAudit {
 
     public void setDailyIncome(Double dailyIncome) {
         this.dailyIncome = dailyIncome;
+    }
+
+    public Integer getNumberOfOrders() {
+        return numberOfOrders;
+    }
+
+    public void setNumberOfOrders(Integer numberOfOrders) {
+        this.numberOfOrders = numberOfOrders;
     }
 
     public Boolean isOpen() {

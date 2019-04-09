@@ -50,6 +50,7 @@ public class DailyOrderListService {
 
         orderList.setUniqueId(Utils.generateDailyOrderListUniqueId(10));
         orderList.setDailyIncome(0.00);
+        orderList.setNumberOfOrders(0);
         orderList.setOpened(Boolean.TRUE);
         orderList.setOrders(new LinkedHashSet<>());
 
@@ -78,6 +79,7 @@ public class DailyOrderListService {
             double income = order.getTotalPrice() + dailyOrderList.getDailyIncome();
             income = Math.floor(income * 100) / 100;
             dailyOrderList.setDailyIncome(income);
+            dailyOrderList.setNumberOfOrders(orders.size());
             dailyOrderList.setOrders(orders);
         }
 
@@ -101,6 +103,7 @@ public class DailyOrderListService {
             double income = dailyOrderList.getDailyIncome() - order.getTotalPrice();
             income = Math.floor(income * 100) / 100;
             dailyOrderList.setDailyIncome(income);
+            dailyOrderList.setNumberOfOrders(orders.size());
             dailyOrderList.setOrders(orders);
         }
 

@@ -24,6 +24,7 @@ public class DailyOrderListMapper {
                 orderListDto.getId(),
                 orderListDto.getUniqueId(),
                 orderListDto.getDailyIncome(),
+                orderListDto.getNumberOfOrders(),
                 orderListDto.isOpen(),
                 orderListDto.getOrdersDto().stream()
                     .map(v -> orderMapper.mapToOrder(v))
@@ -36,6 +37,7 @@ public class DailyOrderListMapper {
                 orderList.getId(),
                 orderList.getUniqueId(),
                 orderList.getDailyIncome(),
+                orderList.getNumberOfOrders(),
                 orderList.isOpen(),
                 orderList.getOrders().stream()
                         .map(v -> orderMapper.mapToOrderDto(v))
@@ -48,6 +50,7 @@ public class DailyOrderListMapper {
                 orderListDto.getId(),
                 orderListDto.getUniqueId(),
                 orderListDto.getDailyIncome(),
+                orderListDto.getNumberOfOrders(),
                 orderListDto.isOpen(),
                 orderListDto.getOrdersDto().stream()
                         .map(v -> orderMapper.mapToOrderResponse(v))

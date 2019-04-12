@@ -1,13 +1,13 @@
 package com.restaurant.management.domain;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
 @Table(name = "products")
-public class Product extends AbstractProduct{
+public class Product extends AbstractProduct {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ingredient> ingredients = new ArrayList<>();
@@ -16,13 +16,13 @@ public class Product extends AbstractProduct{
     }
 
     public Product(Long id, String uniqueId, String name, String category, Double price,
-                   Instant createdAt, List<Ingredient> ingredients) {
+                   Calendar createdAt, List<Ingredient> ingredients) {
         super(id, uniqueId, name, category, price, createdAt);
         this.ingredients = ingredients;
     }
 
     public Product(String uniqueId, String name, String category, Double price,
-                   Instant createdAt, List<Ingredient> ingredients) {
+                   Calendar createdAt, List<Ingredient> ingredients) {
         super(uniqueId, name, category, price, createdAt);
         this.ingredients = ingredients;
     }
@@ -40,7 +40,7 @@ public class Product extends AbstractProduct{
         private String name;
         private String category;
         private Double price;
-        private Instant createdAt;
+        private Calendar createdAt;
         private List<Ingredient> ingredients;
 
         public ProductBuilder setUniqueId(String uniqueId) {
@@ -63,7 +63,7 @@ public class Product extends AbstractProduct{
             return this;
         }
 
-        public ProductBuilder setCreatedAt(Instant createdAt) {
+        public ProductBuilder setCreatedAt(Calendar createdAt) {
             this.createdAt = createdAt;
             return this;
         }

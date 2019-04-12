@@ -1,11 +1,11 @@
 package com.restaurant.management.web.response;
 
-import java.time.Instant;
+import java.util.Calendar;
 
 public class OrderResponse {
     private Long id;
     private String orderNumber;
-    private Instant ordered;
+    private Calendar ordered;
     private String status;
     private Double totalPrice;
     private CartResponse cartResponse;
@@ -13,7 +13,7 @@ public class OrderResponse {
     public OrderResponse() {
     }
 
-    public OrderResponse(Long id, String orderNumber, Instant ordered,
+    public OrderResponse(Long id, String orderNumber, Calendar ordered,
                          String status, Double totalPrice, CartResponse cartResponse) {
         this.id = id;
         this.orderNumber = orderNumber;
@@ -31,7 +31,7 @@ public class OrderResponse {
         return orderNumber;
     }
 
-    public Instant getOrdered() {
+    public Calendar getOrdered() {
         return ordered;
     }
 

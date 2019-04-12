@@ -7,6 +7,7 @@ import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.mapper.IngredientMapper;
+import com.restaurant.management.repository.IngredientRepository;
 import com.restaurant.management.repository.SessionLineItemRepository;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.utils.Utils;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,14 +33,17 @@ public class ProductService {
     private ProductRepository productRepository;
     private IngredientMapper ingredientMapper;
     private SessionLineItemRepository sessionLineItemRepository;
+    private IngredientRepository ingredientRepository;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
                           IngredientMapper ingredientMapper,
-                          SessionLineItemRepository sessionLineItemRepository) {
+                          SessionLineItemRepository sessionLineItemRepository,
+                          IngredientRepository ingredientRepository) {
         this.productRepository = productRepository;
         this.ingredientMapper = ingredientMapper;
         this.sessionLineItemRepository = sessionLineItemRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     public Product registerProduct(RegisterProductRequest request) {
@@ -58,7 +63,7 @@ public class ProductService {
                 .setName(request.getName())
                 .setCategory(request.getCategory())
                 .setPrice(price)
-                .setCreatedAt(new Date().toInstant())
+                .setCreatedAt(Calendar.getInstance())
                 .setIngredients(ingredients)
                 .build();
 

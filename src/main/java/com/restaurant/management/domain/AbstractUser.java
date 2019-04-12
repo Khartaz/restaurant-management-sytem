@@ -30,7 +30,7 @@ public abstract class AbstractUser extends AbstractDateAudit {
     @NotBlank
     @Size(max = 40)
     @Email
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     public AbstractUser() {
@@ -51,10 +51,6 @@ public abstract class AbstractUser extends AbstractDateAudit {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

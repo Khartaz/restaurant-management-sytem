@@ -46,7 +46,7 @@ public class AccountUserController {
     @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-        AccountUserDto accountUserDto = accountUserService.registerManagerAccount(signUpUserRequest);
+            AccountUserDto accountUserDto = accountUserService.registerManagerAccount(signUpUserRequest);
 
         AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 

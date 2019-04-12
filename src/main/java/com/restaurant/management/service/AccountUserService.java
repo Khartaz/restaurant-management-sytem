@@ -80,10 +80,6 @@ public class AccountUserService implements UserDetailsService {
     }
 
     public AccountUserDto registerAdminAccount(SignUpUserRequest signUpUserRequest) {
-        if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
-            throw new UserExistsException(UserMessages.USERNAME_TAKEN.getErrorMessage());
-        }
-
         if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
@@ -98,7 +94,6 @@ public class AccountUserService implements UserDetailsService {
         AccountUser newAdminUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
                 .setLastname(signUpUserRequest.getLastname())
-                .setUsername(signUpUserRequest.getUsername())
                 .setEmail(signUpUserRequest.getEmail())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.FALSE)
@@ -110,16 +105,12 @@ public class AccountUserService implements UserDetailsService {
         accountUserRepository.save(newAdminUser);
 
         simpleEmailService.sendEmailVerification(
-                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
+                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
 
         return accountUserMapper.mapToAccountUserDto(newAdminUser);
     }
 
     public AccountUserDto registerManagerAccount(SignUpUserRequest signUpUserRequest) {
-        if(accountUserRepository.existsByUsername(signUpUserRequest.getUsername())) {
-            throw new UserExistsException(UserMessages.USERNAME_TAKEN.getErrorMessage());
-        }
-
         if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
@@ -134,7 +125,6 @@ public class AccountUserService implements UserDetailsService {
         AccountUser accountUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
                 .setLastname(signUpUserRequest.getLastname())
-                .setUsername(signUpUserRequest.getUsername())
                 .setEmail(signUpUserRequest.getEmail())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.FALSE)
@@ -146,7 +136,7 @@ public class AccountUserService implements UserDetailsService {
         accountUserRepository.save(accountUser);
 
         simpleEmailService.sendEmailVerification(
-                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName(), signUpUserRequest.getUsername()), token);
+                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }
@@ -174,7 +164,6 @@ public class AccountUserService implements UserDetailsService {
         accountUserRepository.save(accountUser);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
-
     }
 
     public AccountUserDto getUserByUserUniqueId(String userUniqueId) {
@@ -222,7 +211,7 @@ public class AccountUserService implements UserDetailsService {
              accountUserRepository.save(u);
 
              simpleEmailService.sendResetPasswordEmail(
-                    new Mail(u.getEmail(), u.getName(), u.getUsername()), u.getPasswordResetToken());
+                    new Mail(u.getEmail(), u.getName()), u.getPasswordResetToken());
         });
 
         return true;
@@ -235,7 +224,7 @@ public class AccountUserService implements UserDetailsService {
         String token = accountUser.getEmailVerificationToken();
 
         simpleEmailService.sendEmailVerification(
-                new Mail(accountUser.getEmail(), accountUser.getName(), accountUser.getUsername()), token);
+                new Mail(accountUser.getEmail(), accountUser.getName()), token);
 
         return true;
     }
@@ -243,16 +232,19 @@ public class AccountUserService implements UserDetailsService {
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 
-        AccountUser adminUser = accountUserRepository.findAdminUserByEmailVerificationToken(token)
+        AccountUser accountUser = accountUserRepository.findAdminUserByEmailVerificationToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getErrorMessage()));
 
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
-        if (!hasTokenExpired) {
-            adminUser.setEmailVerificationToken(null);
-            adminUser.setActive(Boolean.TRUE);
+        String username = Utils.generateUsername(accountUser.getName(), accountUser.getLastname(), accountUser.getId());
 
-            accountUserRepository.save(adminUser);
+        if (!hasTokenExpired) {
+            accountUser.setEmailVerificationToken(null);
+            accountUser.setActive(Boolean.TRUE);
+            accountUser.setUsername(username);
+
+            accountUserRepository.save(accountUser);
 
             returnValue = true;
         }

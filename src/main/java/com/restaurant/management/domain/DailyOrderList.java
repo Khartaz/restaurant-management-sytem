@@ -45,10 +45,6 @@ public class DailyOrderList extends AbstractDateAudit {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getUniqueId() {
         return uniqueId;
     }

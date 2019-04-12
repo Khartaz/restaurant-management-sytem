@@ -5,12 +5,7 @@ import com.restaurant.management.domain.Order;
 import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.archive.LineItemArchive;
 import com.restaurant.management.domain.archive.ProductArchive;
-import com.restaurant.management.domain.dto.*;
-import com.restaurant.management.mapper.CartMapper;
-import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.repository.OrderRepository;
-import com.restaurant.management.utils.Utils;
-import com.restaurant.management.web.response.ApiResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,9 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)

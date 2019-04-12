@@ -1,8 +1,10 @@
 package com.restaurant.management.domain;
 
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Calendar;
 import java.util.stream.Stream;
 
 @Entity
@@ -18,7 +20,9 @@ public class Order  {
     private String orderNumber;
 
     @Column(name = "is_ordered")
-    private Instant ordered;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar ordered;
 
     @Column(name = "status")
     private String status;
@@ -33,7 +37,7 @@ public class Order  {
     }
 
     public Order(Long id, String orderNumber,
-                 Instant ordered, String status,
+                 Calendar ordered, String status,
                  Double totalPrice, Cart cart) {
         this.id = id;
         this.orderNumber = orderNumber;
@@ -44,7 +48,7 @@ public class Order  {
     }
 
     public Order(String orderNumber,
-                 Instant ordered, String status,
+                 Calendar ordered, String status,
                  Double totalPrice, Cart cart) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
@@ -57,10 +61,6 @@ public class Order  {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getOrderNumber() {
         return orderNumber;
     }
@@ -69,11 +69,11 @@ public class Order  {
         this.orderNumber = orderNumber;
     }
 
-    public Instant getOrdered() {
+    public Calendar getOrdered() {
         return ordered;
     }
 
-    public void setOrdered(Instant ordered) {
+    public void setOrdered(Calendar ordered) {
         this.ordered = ordered;
     }
 
@@ -112,7 +112,7 @@ public class Order  {
 
     public static class OrderBuilder {
         private String orderNumber;
-        private Instant ordered;
+        private Calendar ordered;
         private String status;
         private Double totalPrice;
         private Cart cart;
@@ -122,7 +122,7 @@ public class Order  {
             return this;
         }
 
-        public OrderBuilder setOrdered(Instant ordered) {
+        public OrderBuilder setOrdered(Calendar ordered) {
             this.ordered = ordered;
             return this;
         }

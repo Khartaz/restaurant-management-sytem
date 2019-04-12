@@ -49,4 +49,9 @@ public class Utils {
     public static String generateDailyOrderListUniqueId(int length) {
         return generateRandomStringWithBigLetters(length);
     }
+
+    public static String generateUsername(String name, String lastName, long id) {
+
+        return name + "." + lastName + "." + id;
+    }
 }

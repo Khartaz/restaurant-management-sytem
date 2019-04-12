@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.dto;
 
-import java.time.Instant;
+import java.util.Calendar;
 import java.util.List;
 
 public class ProductDto {
@@ -10,14 +10,14 @@ public class ProductDto {
     private String name;
     private String category;
     private Double price;
-    private Instant createdAt;
+    private Calendar createdAt;
     private List<IngredientDto> ingredients;
 
     public ProductDto() {
     }
 
     public ProductDto(Long id, String uniqueId, String name, String category, Double price,
-                      Instant createdAt, List<IngredientDto> ingredients) {
+                      Calendar createdAt, List<IngredientDto> ingredients) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
@@ -28,7 +28,7 @@ public class ProductDto {
     }
 
     public ProductDto(String uniqueId, String name, String category, Double price,
-                      Instant createdAt, List<IngredientDto> ingredients) {
+                      Calendar createdAt, List<IngredientDto> ingredients) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
@@ -72,7 +72,7 @@ public class ProductDto {
         return price;
     }
 
-    public Instant getCreatedAt() {
+    public Calendar getCreatedAt() {
         return createdAt;
     }
 

@@ -1,8 +1,8 @@
 package com.restaurant.management.domain.archive;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -27,7 +27,7 @@ public class ProductArchive  {
     private Double price;
 
     @Column(name = "createdAt")
-    private Instant createdAt;
+    private Calendar createdAt;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<IngredientArchive> ingredients = new ArrayList<>();
@@ -36,7 +36,7 @@ public class ProductArchive  {
     }
 
     public ProductArchive(String uniqueId, String name, String category,
-                          Double price, Instant createdAt,
+                          Double price, Calendar createdAt,
                           List<IngredientArchive> ingredients) {
         this.uniqueId = uniqueId;
         this.name = name;
@@ -86,11 +86,11 @@ public class ProductArchive  {
         this.price = price;
     }
 
-    public Instant getCreatedAt() {
+    public Calendar getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(Calendar createdAt) {
         this.createdAt = createdAt;
     }
 

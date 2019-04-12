@@ -10,14 +10,13 @@ import java.util.Set;
 @Table(name = "account_users")
 public class AccountUser extends AbstractUser {
 
-    @NotBlank
-    @Size(max = 15)
-    @Column(name = "username")
+    @Size(max = 100)
+    @Column(name = "username", unique = true)
     private String username;
 
     @NotBlank
     @Size(max = 40)
-    @Column(name = "user_unique_id")
+    @Column(name = "user_unique_id", unique = true)
     private String userUniqueId;
 
     @NotBlank

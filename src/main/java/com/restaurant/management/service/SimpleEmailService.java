@@ -28,6 +28,8 @@ public class SimpleEmailService {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleMailMessage.class);
+    private static final String SUBJECT_VERIFY_EMAIL = "Email verification Restaurant Admin System";
+    private static final String SUBJECT_RESET_PASSWORD = "Email password reset Restaurant Admin System";
 
 
     public void sendEmailVerification(final Mail mail, String token) {
@@ -47,7 +49,7 @@ public class SimpleEmailService {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(mail.getMailTo());
-            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setSubject(SUBJECT_VERIFY_EMAIL);
             messageHelper.setText(mailCreatorService.buildVerificationEmail(mail.getMessage(), token),true);
         };
     }
@@ -69,7 +71,7 @@ public class SimpleEmailService {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(mail.getMailTo());
-            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setSubject(SUBJECT_RESET_PASSWORD);
             messageHelper.setText(mailCreatorService.buildPasswordResetEmail(mail.getMessage(), token),true);
         };
     }

@@ -12,10 +12,6 @@ public class SignUpUserRequest {
     private String lastname;
 
     @NotBlank
-    @Size(min = 3, max = 15)
-    private String username;
-
-    @NotBlank
     @Size(max = 40)
     @Email
     private String email;
@@ -30,10 +26,6 @@ public class SignUpUserRequest {
 
     public String getLastname() {
         return lastname;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getEmail() {

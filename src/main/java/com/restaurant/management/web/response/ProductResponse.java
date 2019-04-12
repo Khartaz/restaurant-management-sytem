@@ -1,6 +1,6 @@
 package com.restaurant.management.web.response;
 
-import java.time.Instant;
+import java.util.Calendar;
 import java.util.List;
 
 public class ProductResponse {
@@ -9,14 +9,14 @@ public class ProductResponse {
     private String name;
     private String category;
     private Double price;
-    private Instant createdAt;
+    private Calendar createdAt;
     private List<IngredientResponse> ingredients;
 
     public ProductResponse() {
     }
 
     public ProductResponse(Long id, String uniqueId, String name,
-                           String category, Double price, Instant createdAt,
+                           String category, Double price, Calendar createdAt,
                            List<IngredientResponse> ingredients) {
         this.id = id;
         this.uniqueId = uniqueId;
@@ -47,7 +47,7 @@ public class ProductResponse {
         return price;
     }
 
-    public Instant getCreatedAt() {
+    public Calendar getCreatedAt() {
         return createdAt;
     }
 

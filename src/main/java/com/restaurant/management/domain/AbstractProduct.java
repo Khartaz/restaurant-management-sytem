@@ -1,9 +1,10 @@
 package com.restaurant.management.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Calendar;
 
 @MappedSuperclass
 @JsonIgnoreProperties(allowGetters = true)
@@ -27,13 +28,15 @@ public abstract class AbstractProduct {
     private Double price;
 
     @Column(name = "createdAt")
-    private Instant createdAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createdAt;
 
     public AbstractProduct() {
     }
 
     public AbstractProduct(Long id, String uniqueId, String name,
-                           String category, Double price, Instant createdAt) {
+                           String category, Double price, Calendar createdAt) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
@@ -43,7 +46,7 @@ public abstract class AbstractProduct {
     }
 
     public AbstractProduct(String uniqueId, String name,
-                           String category, Double price, Instant createdAt) {
+                           String category, Double price, Calendar createdAt) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
@@ -61,10 +64,6 @@ public abstract class AbstractProduct {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUniqueId() {
@@ -99,11 +98,11 @@ public abstract class AbstractProduct {
         this.price = price;
     }
 
-    public Instant getCreatedAt() {
+    public Calendar getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(Calendar createdAt) {
         this.createdAt = createdAt;
     }
 }

@@ -1,12 +1,12 @@
 package com.restaurant.management.domain.dto;
 
-import java.time.Instant;
+import java.util.Calendar;
 
 public class OrderDto {
 
     private Long id;
     private String orderNumber;
-    private Instant ordered;
+    private Calendar ordered;
     private String status;
     private Double totalPrice;
     private CartDto cart;
@@ -14,7 +14,7 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    public OrderDto(Long id, String orderNumber, Instant ordered,
+    public OrderDto(Long id, String orderNumber, Calendar ordered,
                     String status, Double totalPrice, CartDto cart) {
         this.id = id;
         this.orderNumber = orderNumber;
@@ -24,7 +24,7 @@ public class OrderDto {
         this.cart = cart;
     }
 
-    public OrderDto(String orderNumber, Instant ordered,
+    public OrderDto(String orderNumber, Calendar ordered,
                     String status, Double totalPrice, CartDto cart) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
@@ -41,7 +41,7 @@ public class OrderDto {
         return orderNumber;
     }
 
-    public Instant getOrdered() {
+    public Calendar getOrdered() {
         return ordered;
     }
 

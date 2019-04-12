@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class OrderService {
         Cart cart = cartService.confirmCart(id);
 
         Order order = new Order.OrderBuilder()
-                .setOrdered(new Date().toInstant())
+                .setOrdered(Calendar.getInstance())
                 .setStatus("ORDERED")
                 .setOrderNumber(Utils.generateOrderNumber(5))
                 .setTotalPrice(new Order().calculateTotalPrice(cart))

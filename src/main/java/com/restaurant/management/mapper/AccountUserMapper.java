@@ -4,6 +4,7 @@ import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.web.response.AccountUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -105,6 +106,11 @@ public class AccountUserMapper {
                 .collect(Collectors.toList());
     }
 
+    public Page<AccountUserDto> mapToAccountUserDtoPage(final Page<AccountUser> accountUsers) {
+        return accountUsers.map(this::mapToAccountUserDto);
+    }
+
+
     public List<AccountUserResponse> mapToAccountUserListResponse(final List<AccountUserDto> accountUsersDto) {
         return accountUsersDto.stream()
                 .map(u -> new AccountUserResponse(
@@ -121,4 +127,9 @@ public class AccountUserMapper {
                                 .collect(Collectors.toSet())
                 )).collect(Collectors.toList());
     }
+
+    public Page<AccountUserResponse> mapToAccountUserResponsePage(final Page<AccountUserDto> accountUsers) {
+        return accountUsers.map(this::mapToAccountUserResponse);
+    }
+
 }

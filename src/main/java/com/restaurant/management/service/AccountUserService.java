@@ -4,12 +4,10 @@ import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.Mail;
 import com.restaurant.management.domain.Role;
 import com.restaurant.management.domain.RoleName;
-import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
@@ -18,9 +16,12 @@ import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
+import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.request.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,20 +48,17 @@ public class AccountUserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
     private SimpleEmailService simpleEmailService;
-    private AccountUserMapper accountUserMapper;
 
     @Autowired
     public AccountUserService(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
                               RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                              JwtTokenProvider tokenProvider, SimpleEmailService simpleEmailService,
-                              AccountUserMapper accountUserMapper) {
+                              JwtTokenProvider tokenProvider, SimpleEmailService simpleEmailService) {
         this.authenticationManager = authenticationManager;
         this.accountUserRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.simpleEmailService = simpleEmailService;
-        this.accountUserMapper = accountUserMapper;
     }
 
     @Override
@@ -79,7 +77,7 @@ public class AccountUserService implements UserDetailsService {
         return UserPrincipal.create(adminUser);
     }
 
-    public AccountUserDto registerAdminAccount(SignUpUserRequest signUpUserRequest) {
+    public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
         if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
@@ -107,10 +105,10 @@ public class AccountUserService implements UserDetailsService {
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
 
-        return accountUserMapper.mapToAccountUserDto(newAdminUser);
+        return newAdminUser;
     }
 
-    public AccountUserDto registerManagerAccount(SignUpUserRequest signUpUserRequest) {
+    public AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest) {
         if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
@@ -138,21 +136,19 @@ public class AccountUserService implements UserDetailsService {
         simpleEmailService.sendEmailVerification(
                 new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
 
-        return accountUserMapper.mapToAccountUserDto(accountUser);
+        return accountUser;
     }
 
-    public boolean deleteUserById(Long id) {
-        Optional<AccountUser> accountUser = accountUserRepository.findById(id);
+    public ApiResponse deleteUserById(Long id) {
+        AccountUser accountUser = accountUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getErrorMessage() + id));
 
-        if (accountUser.isPresent()) {
-            accountUserRepository.deleteById(accountUser.get().getId());
-            return true;
-        } else {
-            throw new UserNotFoundException(UserMessages.ID_NOT_FOUND.getErrorMessage() + id);
-        }
+        accountUserRepository.deleteById(accountUser.getId());
+
+        return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getErrorMessage());
     }
 
-    public AccountUserDto updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
+    public AccountUser updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + request.getUsernameOrEmail()));
 
@@ -163,17 +159,17 @@ public class AccountUserService implements UserDetailsService {
 
         accountUserRepository.save(accountUser);
 
-        return accountUserMapper.mapToAccountUserDto(accountUser);
+        return accountUser;
     }
 
-    public AccountUserDto getUserByUserUniqueId(String userUniqueId) {
+    public AccountUser getUserByUserUniqueId(String userUniqueId) {
         Optional<AccountUser> accountUser = accountUserRepository.findByUserUniqueId(userUniqueId);
 
         if (!accountUser.isPresent()) {
             throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage());
         }
 
-        return accountUserMapper.mapToAccountUserDto(accountUser.get());
+        return accountUser.get();
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
@@ -279,10 +275,8 @@ public class AccountUserService implements UserDetailsService {
         return returnValue;
     }
 
-    public List<AccountUserDto> getAllAccountUsers() {
-        List<AccountUser> accountUsers = accountUserRepository.findAll();
-
-        return accountUserMapper.mapToAccountUserListDto(accountUsers);
+    public Page<AccountUser> getAllAccountUsers(Pageable pageable) {
+        return accountUserRepository.findAll(pageable);
     }
 
 }

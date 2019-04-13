@@ -2,7 +2,7 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
-import com.restaurant.management.service.AccountUserService;
+import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.response.AccountUserResponse;
@@ -23,24 +23,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/admin")
 public class AdminUserController {
 
-    private AccountUserService accountUserService;
+    private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
 
     @Autowired
-    public AdminUserController(AccountUserService accountUserService, AccountUserMapper accountUserMapper) {
-        this.accountUserService = accountUserService;
+    public AdminUserController(AccountUserFacade accountUserFacade, AccountUserMapper accountUserMapper) {
+        this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
     }
 
     @PostMapping(value = "/signin", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
+        return ResponseEntity.ok(accountUserFacade.authenticateUser(loginRequest));
     }
 
     @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> registerAdminUser(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-        AccountUserDto accountUserDto = accountUserService.registerAdminAccount(signUpUserRequest);
+        AccountUserDto accountUserDto = accountUserFacade.registerAdminAccount(signUpUserRequest);
 
         AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 

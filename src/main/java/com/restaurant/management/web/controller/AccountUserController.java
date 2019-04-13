@@ -4,15 +4,21 @@ import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.AccountUserService;
+import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.AccountUserResponse;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,25 +34,25 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/accounts")
 public class AccountUserController {
 
-    private AccountUserService accountUserService;
+    private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
 
     @Autowired
-    public AccountUserController(AccountUserService accountUserService, AccountUserMapper accountUserMapper) {
-        this.accountUserService = accountUserService;
+    public AccountUserController(AccountUserFacade accountUserFacade, AccountUserMapper accountUserMapper) {
+        this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
     }
 
     @PostMapping(value = "/signin", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(accountUserService.authenticateUser(loginRequest));
+        return ResponseEntity.ok(accountUserFacade.authenticateUser(loginRequest));
     }
 
 
     @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> registerUserAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-            AccountUserDto accountUserDto = accountUserService.registerManagerAccount(signUpUserRequest);
+            AccountUserDto accountUserDto = accountUserFacade.registerManagerAccount(signUpUserRequest);
 
         AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
@@ -58,7 +64,7 @@ public class AccountUserController {
     public @ResponseBody
     Resource<AccountUserResponse> updateAccountNameOrLastname(@Valid @RequestBody UpdateAccountNameOrLastname request) {
 
-        AccountUserDto accountUserDto = accountUserService.updateAccountNameOrLastname(request);
+        AccountUserDto accountUserDto = accountUserFacade.updateAccountNameOrLastname(request);
 
         AccountUserResponse response = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
@@ -69,25 +75,23 @@ public class AccountUserController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
-        accountUserService.deleteUserById(id);
-        return ResponseEntity.ok().body(new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getErrorMessage()));
+        return ResponseEntity.ok().body(accountUserFacade.deleteUserById(id));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resources<AccountUserResponse> showAllUsers() {
-        List<AccountUserDto> accountUsersDto = accountUserService.getAllAccountUsers();
+    ResponseEntity<PagedResources<AccountUserResponse>> showAllUsersPageable(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<AccountUserDto> accountUsersDto = accountUserFacade.getAllAccountUsers(pageable);
 
-        List<AccountUserResponse> accountUsersResponse = accountUserMapper.mapToAccountUserListResponse(accountUsersDto);
-        Link link = linkTo(AccountUserController.class).withSelfRel();
+        Page<AccountUserResponse> responsePage = accountUserMapper.mapToAccountUserResponsePage(accountUsersDto);
 
-        return new Resources<>(accountUsersResponse, link);
+        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{userUniqueId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> showUser(@PathVariable String userUniqueId) {
-        AccountUserDto accountUserDto = accountUserService.getUserByUserUniqueId(userUniqueId);
+        AccountUserDto accountUserDto = accountUserFacade.getUserByUserUniqueId(userUniqueId);
 
         AccountUserResponse accountUserResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 

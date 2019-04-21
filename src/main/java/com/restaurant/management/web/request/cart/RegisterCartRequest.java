@@ -2,7 +2,7 @@ package com.restaurant.management.web.request.cart;
 
 import javax.validation.constraints.NotNull;
 
-public class RegisterCartRequest {
+public final class RegisterCartRequest {
 
     @NotNull
     private Long phoneNumber;

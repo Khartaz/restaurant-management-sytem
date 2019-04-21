@@ -3,7 +3,7 @@ package com.restaurant.management.domain.dto;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class DailyOrderListDto {
+public final class DailyOrderListDto {
     private Long id;
     private String uniqueId;
     private Double dailyIncome;

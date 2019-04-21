@@ -37,7 +37,7 @@ public class CartController {
         this.cartMapper = cartMapper;
     }
 
-        @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<CartResponse>> showCarts(Pageable pageable, PagedResourcesAssembler assembler) {
         Page<CartDto> cartsDto = cartFacade.getAllCarts(pageable);

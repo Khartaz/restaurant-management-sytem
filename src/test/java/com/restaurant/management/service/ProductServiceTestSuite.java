@@ -74,7 +74,7 @@ public class ProductServiceTestSuite {
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 PRODUCT_PRICE,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 ingredients
         );
 
@@ -116,7 +116,7 @@ public class ProductServiceTestSuite {
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 PRODUCT_PRICE,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 ingredients
         ));
 
@@ -140,7 +140,7 @@ public class ProductServiceTestSuite {
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 PRODUCT_PRICE,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 Collections.singletonList(new Ingredient())
         );
 
@@ -149,7 +149,7 @@ public class ProductServiceTestSuite {
                 PRODUCT_NAME + 1,
                 PRODUCT_CATEGORY + 1,
                 PRODUCT_PRICE + 1,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 Collections.singletonList(new Ingredient())
         );
 

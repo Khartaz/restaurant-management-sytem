@@ -3,10 +3,10 @@ package com.restaurant.management.web.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UpdateAccountNameOrLastname {
+public final class UpdateAccountNameOrLastname {
 
     @NotBlank
-    private String usernameOrEmail;
+    private String email;
 
     @NotBlank
     @Size(min = 4, max = 40)
@@ -16,8 +16,8 @@ public class UpdateAccountNameOrLastname {
     @Size(min = 4, max = 40)
     private String lastname;
 
-    public String getUsernameOrEmail() {
-        return usernameOrEmail;
+    public String getEmail() {
+        return email;
     }
 
     public String getName() {

@@ -31,7 +31,7 @@ public class AuthController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest) {
 
-        return ResponseEntity.ok(accountUserService.requestResetPassword(passwordResetRequest.getUsernameOrEmail()));
+        return ResponseEntity.ok(accountUserService.requestResetPassword(passwordResetRequest.getEmail()));
     }
 
     @PostMapping(value = "/reset-password",

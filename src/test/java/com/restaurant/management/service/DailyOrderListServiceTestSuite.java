@@ -129,7 +129,7 @@ public class DailyOrderListServiceTestSuite {
         //GIVEN
         Order order = new Order(
                 ORDER_NUMBER,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 "ORDERED",
                 300.00,
                 new Cart()
@@ -160,7 +160,7 @@ public class DailyOrderListServiceTestSuite {
         //GIVEN
         Order order = new Order(
                 ORDER_NUMBER,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 "ORDERED",
                 300.00,
                 new Cart()
@@ -191,7 +191,7 @@ public class DailyOrderListServiceTestSuite {
         //GIVEN
         Order order = new Order(
                 ORDER_NUMBER,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 "ORDERED",
                 300.00,
                 new Cart()

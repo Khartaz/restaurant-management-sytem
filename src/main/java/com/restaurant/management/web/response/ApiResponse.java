@@ -1,6 +1,6 @@
 package com.restaurant.management.web.response;
 
-public class ApiResponse {
+public final class ApiResponse {
     private Boolean success;
     private String message;
 

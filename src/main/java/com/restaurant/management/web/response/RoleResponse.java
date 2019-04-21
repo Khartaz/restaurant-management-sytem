@@ -2,7 +2,7 @@ package com.restaurant.management.web.response;
 
 import com.restaurant.management.domain.RoleName;
 
-public class RoleResponse {
+public final class RoleResponse {
 
     private RoleName name;
 

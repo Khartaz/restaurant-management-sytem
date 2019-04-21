@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
-public class IngredientMapper {
+public final class IngredientMapper {
 
     public Ingredient mapToIngredient(final IngredientDto ingredientDto) {
         return new Ingredient(

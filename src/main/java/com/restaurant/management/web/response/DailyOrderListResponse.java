@@ -2,7 +2,7 @@ package com.restaurant.management.web.response;
 
 import java.util.Set;
 
-public class DailyOrderListResponse {
+public final class DailyOrderListResponse {
     private Long id;
     private String uniqueId;
     private Double dailyIncome;

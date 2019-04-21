@@ -1,7 +1,7 @@
 package com.restaurant.management.web.request.cart;
 
 
-public class UpdateCartRequest {
+public final class UpdateCartRequest {
 
     private String productName;
 

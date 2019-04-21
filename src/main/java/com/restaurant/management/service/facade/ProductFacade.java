@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ProductFacade {
+public final class ProductFacade {
     private ProductService productService;
     private ProductMapper productMapper;
 

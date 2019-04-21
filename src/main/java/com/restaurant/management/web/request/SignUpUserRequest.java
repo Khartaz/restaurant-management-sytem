@@ -2,7 +2,7 @@ package com.restaurant.management.web.request;
 
 import javax.validation.constraints.*;
 
-public class SignUpUserRequest {
+public final class SignUpUserRequest {
     @NotBlank
     @Size(min = 4, max = 40)
     private String name;

@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountUserFacade {
+public final class AccountUserFacade {
 
     private AccountUserService accountUserService;
     private AccountUserMapper accountUserMapper;

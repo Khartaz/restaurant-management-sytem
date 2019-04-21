@@ -2,7 +2,7 @@ package com.restaurant.management.web.request.product;
 
 import javax.validation.constraints.NotBlank;
 
-public class IngredientRequest {
+public final class IngredientRequest {
 
     @NotBlank
     private String name;

@@ -1,6 +1,6 @@
 package com.restaurant.management.web.request;
 
-public class PasswordReset {
+public final class PasswordReset {
     private String password;
     private String confirmPassword;
 

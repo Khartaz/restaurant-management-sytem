@@ -2,7 +2,7 @@ package com.restaurant.management.domain.dto;
 
 import com.restaurant.management.domain.RoleName;
 
-public class RoleDto {
+public final class RoleDto {
 
     private RoleName name;
 

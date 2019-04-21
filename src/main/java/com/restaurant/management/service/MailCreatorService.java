@@ -1,6 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.security.SecurityConstans;
+import com.restaurant.management.security.SecurityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class MailCreatorService {
 
     public String buildVerificationEmail(String message, String token) {
 
-        String verificationURL = SecurityConstans.BASE_URL + "/auth/email-verification?token=" + token;
+        String verificationURL = SecurityConstant.BASE_URL + "/auth/email-verification?token=" + token;
 
         Context context = new Context();
         context.setVariable("message", message);
@@ -32,7 +32,7 @@ public class MailCreatorService {
 
     public String buildPasswordResetEmail(String message, String token) {
 
-        String verificationURL = SecurityConstans.BASE_URL + "/auth/reset-password?token=" + token;
+        String verificationURL = SecurityConstant.BASE_URL + "/auth/reset-password?token=" + token;
 
         Context context = new Context();
         context.setVariable("message", message);

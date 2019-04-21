@@ -1,6 +1,6 @@
 package com.restaurant.management.security.jwt;
 
-import com.restaurant.management.security.SecurityConstans;
+import com.restaurant.management.security.SecurityConstant;
 import com.restaurant.management.security.UserPrincipal;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class JwtTokenProvider {
     public String generateEmailVerificationToken(String userUniqueId) {
 
         Date now = new Date();
-        Date expireDate = new Date(now.getTime() + SecurityConstans.EMAIL_VERIFICATION_EXPIRATION_TIME);
+        Date expireDate = new Date(now.getTime() + SecurityConstant.EMAIL_VERIFICATION_EXPIRATION_TIME);
 
         return Jwts.builder()
                 .setSubject(userUniqueId)
@@ -82,7 +82,7 @@ public class JwtTokenProvider {
     public String generatePasswordResetToken(String userUniqueId) {
 
         Date now = new Date();
-        Date expireDate = new Date(now.getTime() + SecurityConstans.PASSWORD_RESET_EXPIRATION_TIME);
+        Date expireDate = new Date(now.getTime() + SecurityConstant.PASSWORD_RESET_EXPIRATION_TIME);
 
         return Jwts.builder()
                 .setSubject(userUniqueId)

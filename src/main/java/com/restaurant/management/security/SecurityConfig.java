@@ -77,18 +77,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(SecurityConstans.REACT_FILES)
+                .antMatchers(SecurityConstant.REACT_FILES)
                 .permitAll()
-                .antMatchers(SecurityConstans.SWAGGER)
+                .antMatchers(SecurityConstant.SWAGGER)
                 .permitAll()
                 .antMatchers(
-                        SecurityConstans.AUTH_URL,
-                        SecurityConstans.CUSTOMER_URL,
-                        SecurityConstans.ACCOUNT_URL,
-                        SecurityConstans.ADMIN_URL,
-                        SecurityConstans.PRODUCT_URL,
-                        SecurityConstans.ORDER_URL,
-                        SecurityConstans.CART_URL)
+                        SecurityConstant.AUTH_URL,
+                        SecurityConstant.CUSTOMER_URL,
+                        SecurityConstant.ACCOUNT_URL,
+                        SecurityConstant.ADMIN_URL,
+                        SecurityConstant.PRODUCT_URL,
+                        SecurityConstant.ORDER_URL,
+                        SecurityConstant.CART_URL)
                 .permitAll()
                 .antMatchers(HttpMethod.POST)
                 .permitAll()

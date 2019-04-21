@@ -3,7 +3,7 @@ package com.restaurant.management.domain.dto;
 import java.util.Calendar;
 import java.util.List;
 
-public class ProductDto {
+public final class ProductDto {
 
     private Long id;
     private String uniqueId;

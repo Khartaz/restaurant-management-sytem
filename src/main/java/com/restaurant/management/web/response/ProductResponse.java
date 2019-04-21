@@ -3,7 +3,7 @@ package com.restaurant.management.web.response;
 import java.util.Calendar;
 import java.util.List;
 
-public class ProductResponse {
+public final class ProductResponse {
     private Long id;
     private String uniqueId;
     private String name;

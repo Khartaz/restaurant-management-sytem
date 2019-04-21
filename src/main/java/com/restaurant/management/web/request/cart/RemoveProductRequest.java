@@ -1,6 +1,6 @@
 package com.restaurant.management.web.request.cart;
 
-public class RemoveProductRequest {
+public final class RemoveProductRequest {
 
     private String productName;
 

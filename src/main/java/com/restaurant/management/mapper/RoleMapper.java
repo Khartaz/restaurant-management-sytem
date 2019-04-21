@@ -6,7 +6,7 @@ import com.restaurant.management.web.response.RoleResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RoleMapper {
+public final class RoleMapper {
 
     public Role mapToRole(final RoleDto roleDto) {
         return new Role(roleDto.getName());

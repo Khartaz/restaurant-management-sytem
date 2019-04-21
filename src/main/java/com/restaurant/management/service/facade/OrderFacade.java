@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderFacade {
+public final class OrderFacade {
 
     private OrderService orderService;
     private OrderMapper orderMapper;

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ProductMapper {
+public final class ProductMapper {
 
     private IngredientMapper ingredientMapper;
 

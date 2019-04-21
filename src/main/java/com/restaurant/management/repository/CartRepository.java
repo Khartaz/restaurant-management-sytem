@@ -19,9 +19,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     Page<Cart> findByCustomerId(Long id, Pageable pageable);
 
-    Optional<Cart> findByCustomerId(Long id);
-
-    List<Cart> findByCustomerPhoneNumber(Long phoneNumber);
-
     Optional<Cart> findByCustomerIdAndUniqueId(Long id, String uniqueId);
 }

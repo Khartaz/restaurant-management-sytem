@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -149,8 +148,8 @@ public class AccountUserService implements UserDetailsService {
     }
 
     public AccountUser updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
-        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + request.getUsernameOrEmail()));
+        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(request.getEmail(), request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + request.getEmail()));
 
         Stream.of(accountUser).forEach(acc -> {
             acc.setName(request.getName());
@@ -166,14 +165,14 @@ public class AccountUserService implements UserDetailsService {
         Optional<AccountUser> accountUser = accountUserRepository.findByUserUniqueId(userUniqueId);
 
         if (!accountUser.isPresent()) {
-            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage());
+            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage() + userUniqueId);
         }
 
         return accountUser.get();
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
-        String usernameOrEmail = loginRequest.getUsernameOrEmail();
+        String usernameOrEmail = loginRequest.getEmail();
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
 
@@ -184,7 +183,7 @@ public class AccountUserService implements UserDetailsService {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getEmail(),
                         loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

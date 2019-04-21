@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 new ArrayList<>()
         );
 
@@ -128,7 +129,7 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 new ArrayList<>()
         );
 
@@ -172,7 +173,7 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 "product category updated",
                 productDto.getPrice(),
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 new ArrayList<>()
         );
 
@@ -209,7 +210,7 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 new ArrayList<>()
         );
 

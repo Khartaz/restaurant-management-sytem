@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.dto;
 
-public class CustomerDto {
+public final class CustomerDto {
     private Long id;
     private String name;
     private String lastname;

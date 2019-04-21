@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 @SuppressWarnings("Duplicates")
-public class AccountUserMapper {
+public final class AccountUserMapper {
 
     private RoleMapper roleMapper;
 

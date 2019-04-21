@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,7 +99,6 @@ public class OrderServiceTestSuite {
         );
 
         Order order = new Order();
-        order.setId(1L);
         order.setOrderNumber(ORDER_NUMBER);
         order.setTotalPrice(200.00);
         order.setCart(cart);
@@ -145,7 +145,7 @@ public class OrderServiceTestSuite {
         );
 
         Order order1 = new Order.OrderBuilder()
-                .setOrdered(new Date().toInstant())
+                .setOrdered(Calendar.getInstance())
                 .setStatus("ORDERED")
                 .setOrderNumber(ORDER_NUMBER)
                 .setTotalPrice(new Order().calculateTotalPrice(cart1))
@@ -153,7 +153,7 @@ public class OrderServiceTestSuite {
                 .build();
 
         Order order2 = new Order.OrderBuilder()
-                .setOrdered(new Date().toInstant())
+                .setOrdered(Calendar.getInstance())
                 .setStatus("ORDERED")
                 .setOrderNumber(ORDER_NUMBER + 1)
                 .setTotalPrice(new Order().calculateTotalPrice(cart2))

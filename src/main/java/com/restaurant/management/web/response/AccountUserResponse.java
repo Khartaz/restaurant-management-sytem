@@ -2,7 +2,7 @@ package com.restaurant.management.web.response;
 
 import java.util.Set;
 
-public class AccountUserResponse {
+public final class AccountUserResponse {
     private Long id;
     private String name;
     private String lastname;

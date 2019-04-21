@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CustomerMapper {
+public final class CustomerMapper {
 
     public Customer mapToCustomer(final CustomerDto customerDto) {
         return new Customer(

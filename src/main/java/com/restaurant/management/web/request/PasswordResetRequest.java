@@ -1,10 +1,10 @@
 package com.restaurant.management.web.request;
 
-public class PasswordResetRequest {
-    private String usernameOrEmail;
+public final class PasswordResetRequest {
+    private String email;
 
-    public String getUsernameOrEmail() {
-        return usernameOrEmail;
+    public String getEmail() {
+        return email;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.restaurant.management.web.response;
 
-public class LineItemResponse {
+public final class LineItemResponse {
     private Long id;
     private ProductResponse product;
     private Integer quantity;

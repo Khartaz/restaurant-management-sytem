@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.dto;
 
-public class LineItemDto {
+public final class LineItemDto {
     private Long id;
     private ProductDto productDto;
     private Integer quantity;

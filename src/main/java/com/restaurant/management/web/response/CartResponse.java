@@ -2,7 +2,7 @@ package com.restaurant.management.web.response;
 
 import java.util.List;
 
-public class CartResponse {
+public final class CartResponse {
     private Long id;
     private String uniqueId;
     private Boolean isOpen;

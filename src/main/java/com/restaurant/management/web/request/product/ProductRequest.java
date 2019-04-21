@@ -4,9 +4,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class ProductRequest {
+public final class ProductRequest {
 
-//    @NotBlank
     private String uniqueId;
 
     @NotBlank

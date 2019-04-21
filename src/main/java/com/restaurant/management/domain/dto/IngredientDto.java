@@ -2,7 +2,7 @@ package com.restaurant.management.domain.dto;
 
 import java.util.stream.Stream;
 
-public class IngredientDto {
+public final class IngredientDto {
 
     private Long id;
 

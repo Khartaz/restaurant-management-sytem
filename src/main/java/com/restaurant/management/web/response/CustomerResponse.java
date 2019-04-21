@@ -1,6 +1,6 @@
 package com.restaurant.management.web.response;
 
-public class CustomerResponse {
+public final class CustomerResponse {
 
     private Long id;
     private String name;

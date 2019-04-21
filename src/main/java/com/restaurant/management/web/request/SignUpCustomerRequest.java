@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-public class SignUpCustomerRequest {
+public final class SignUpCustomerRequest {
 
     @NotBlank
     @Size(min = 4, max = 40)

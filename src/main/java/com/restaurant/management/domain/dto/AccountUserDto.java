@@ -2,7 +2,7 @@ package com.restaurant.management.domain.dto;
 
 import java.util.Set;
 
-public class AccountUserDto {
+public final class AccountUserDto {
     private Long id;
     private String name;
     private String lastname;

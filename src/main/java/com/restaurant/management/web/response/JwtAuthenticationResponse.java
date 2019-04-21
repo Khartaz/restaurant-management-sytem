@@ -1,6 +1,6 @@
 package com.restaurant.management.web.response;
 
-public class JwtAuthenticationResponse {
+public final class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
 

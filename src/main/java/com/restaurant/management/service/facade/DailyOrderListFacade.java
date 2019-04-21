@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DailyOrderListFacade {
+public final class DailyOrderListFacade {
 
     private DailyOrderListService dailyOrderListService;
     private DailyOrderListMapper dailyOrderListMapper;

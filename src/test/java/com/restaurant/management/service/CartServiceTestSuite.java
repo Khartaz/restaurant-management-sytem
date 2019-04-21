@@ -188,7 +188,6 @@ public class CartServiceTestSuite {
         SessionLineItem lineItem = new SessionLineItem();
         lineItem.setProduct(product);
         lineItem.setQuantity(3);
-        lineItem.setId(1L);
         lineItem.setPrice(product.getPrice() * 3);
 
         sessionCart.getSessionLineItems().add(lineItem);

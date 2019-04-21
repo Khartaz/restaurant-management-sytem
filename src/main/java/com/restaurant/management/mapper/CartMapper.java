@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CartMapper {
+public final class CartMapper {
 
     private CustomerMapper customerMapper;
     private LineItemMapper lineItemMapper;

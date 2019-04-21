@@ -2,7 +2,7 @@ package com.restaurant.management.domain.dto;
 
 import java.util.Calendar;
 
-public class OrderDto {
+public final class OrderDto {
 
     private Long id;
     private String orderNumber;

@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class OrderControllerTestSuite {
         //GIVEN
         OrderDto orderDto = new OrderDto(
                 ORDER_NUMBER,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 ORDER_STATUS,
                 TOTAL_PRICE,
                 new CartDto()
@@ -96,7 +97,7 @@ public class OrderControllerTestSuite {
         //GIVEN
         OrderDto orderDto = new OrderDto(
                 ORDER_NUMBER,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 ORDER_STATUS,
                 TOTAL_PRICE,
                 new CartDto()
@@ -127,7 +128,7 @@ public class OrderControllerTestSuite {
         //GIVEN
         OrderDto orderDto = new OrderDto(
                 ORDER_NUMBER,
-                new Date().toInstant(),
+                Calendar.getInstance(),
                 ORDER_STATUS,
                 TOTAL_PRICE,
                 new CartDto()

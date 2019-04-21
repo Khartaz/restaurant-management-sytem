@@ -2,7 +2,7 @@ package com.restaurant.management.web.response;
 
 import java.util.Calendar;
 
-public class OrderResponse {
+public final class OrderResponse {
     private Long id;
     private String orderNumber;
     private Calendar ordered;

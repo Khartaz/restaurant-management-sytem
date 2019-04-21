@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class CartFacade {
+public final class CartFacade {
 
     private CartService cartService;
     private CartMapper cartMapper;

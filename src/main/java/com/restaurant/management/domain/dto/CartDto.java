@@ -2,7 +2,7 @@ package com.restaurant.management.domain.dto;
 
 import java.util.List;
 
-public class CartDto {
+public final class CartDto {
 
     private Long id;
     private String uniqueId;

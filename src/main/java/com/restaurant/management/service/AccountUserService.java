@@ -180,7 +180,6 @@ public class AccountUserService implements UserDetailsService {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
         }
 
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),

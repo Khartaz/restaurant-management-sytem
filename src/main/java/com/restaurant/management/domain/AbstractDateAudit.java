@@ -21,13 +21,11 @@ public abstract class AbstractDateAudit implements Serializable {
     @CreatedDate
     @Column(name = "createdAt", nullable = false, updatable = false)
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @LastModifiedDate
     @Column(name = "updatedAt", nullable = false)
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     public Date getCreatedAt() {

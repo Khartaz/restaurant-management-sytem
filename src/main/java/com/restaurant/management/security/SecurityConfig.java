@@ -83,20 +83,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(
                         SecurityConstant.AUTH_URL,
-                        SecurityConstant.CUSTOMER_URL,
-                        SecurityConstant.ACCOUNT_URL,
-                        SecurityConstant.ADMIN_URL,
-                        SecurityConstant.PRODUCT_URL,
-                        SecurityConstant.ORDER_URL,
-                        SecurityConstant.CART_URL)
-                .permitAll()
-                .antMatchers(HttpMethod.POST)
-                .permitAll()
-                .antMatchers(HttpMethod.PUT)
-                .permitAll()
-                .antMatchers(HttpMethod.GET)
-                .permitAll()
-                .antMatchers(HttpMethod.DELETE)
+                        SecurityConstant.ACCOUNT_URL)
+//                        SecurityConstant.ADMIN_URL,
+//                        SecurityConstant.CUSTOMER_URL,
+//                        SecurityConstant.PRODUCT_URL,
+//                        SecurityConstant.ORDER_URL,
+//                        SecurityConstant.CART_URL)
+//                .permitAll()
+//                .antMatchers(HttpMethod.POST)
+//                .permitAll()
+//                .antMatchers(HttpMethod.PUT)
+//                .permitAll()
+//                .antMatchers(HttpMethod.GET)
+//                .permitAll()
+//                .antMatchers(HttpMethod.DELETE)
                 .permitAll()
                 .anyRequest()
                 .authenticated();

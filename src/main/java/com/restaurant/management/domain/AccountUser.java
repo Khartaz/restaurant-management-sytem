@@ -36,7 +36,7 @@ public class AccountUser extends AbstractUser {
     @Column(name = "isActive")
     private Boolean isActive;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
 
     public AccountUser() {

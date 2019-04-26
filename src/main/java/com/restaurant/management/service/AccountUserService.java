@@ -116,7 +116,7 @@ public class AccountUserService implements UserDetailsService {
 
         String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
 
-        Role userRole = roleRepository.findByName(RoleName.MANAGER)
+        Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
 
         AccountUser accountUser = new AccountUser.AccountUserBuilder()

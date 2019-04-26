@@ -68,6 +68,7 @@ public class AccountUserController {
         return new Resource<>(response, link);
     }
 
+    //Move this controller to AdminController?
     @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
@@ -84,7 +85,7 @@ public class AccountUserController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-    @RolesAllowed({"MANAGER", "ROLE_ADMIN"})
+    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
     @GetMapping(value = "/{userUniqueId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> showUser(@PathVariable String userUniqueId) {

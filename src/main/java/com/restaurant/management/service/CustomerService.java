@@ -31,7 +31,7 @@ public class CustomerService {
         this.sessionCartRepository = sessionCartRepository;
     }
 
-    //@RolesAllowed({"MANAGER", "ROLE_ADMIN"})
+    //@RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
     public Customer createCustomer(SignUpCustomerRequest request) {
         if (customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());

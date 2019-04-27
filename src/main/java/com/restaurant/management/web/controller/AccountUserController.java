@@ -1,5 +1,7 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.config.LogExecutionTime;
+import com.restaurant.management.config.LogLogin;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.facade.AccountUserFacade;
@@ -38,11 +40,11 @@ public class AccountUserController {
         this.accountUserMapper = accountUserMapper;
     }
 
+    @LogLogin
     @PostMapping(value = "/signin", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(accountUserFacade.authenticateUser(loginRequest));
     }
-
 
     @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -75,6 +77,7 @@ public class AccountUserController {
         return ResponseEntity.ok().body(accountUserFacade.deleteUserById(id));
     }
 
+    @LogExecutionTime
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<AccountUserResponse>> showAllUsersPageable(Pageable pageable, PagedResourcesAssembler assembler) {

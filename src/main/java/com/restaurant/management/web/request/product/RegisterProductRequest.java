@@ -6,16 +6,16 @@ import java.util.List;
 
 public final class RegisterProductRequest {
 
-    @NotBlank
+    @NotBlank(message = "name cannot be blank")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "category cannot be blank")
     private String category;
 
-    @NotNull
+    @NotNull(message = "price cannot be null")
     private double price;
 
-    @NotNull
+    @NotNull(message = "ingredients cannot be null")
     private List<IngredientRequest> ingredients;
 
     public RegisterProductRequest() {

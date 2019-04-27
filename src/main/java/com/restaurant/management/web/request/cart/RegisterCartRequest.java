@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public final class RegisterCartRequest {
 
-    @NotNull
+    @NotNull(message = "phone number cannot be null")
     private Long phoneNumber;
 
     public RegisterCartRequest() {

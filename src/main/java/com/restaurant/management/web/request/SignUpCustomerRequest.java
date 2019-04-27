@@ -4,24 +4,23 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 
 public final class SignUpCustomerRequest {
 
-    @NotBlank
-    @Size(min = 4, max = 40)
+    @NotBlank(message = "name cannot be blank")
+    @Size(min = 4, max = 40, message = "name must be between 4 - 40")
     private String name;
 
-    @NotBlank
-    @Size(min = 4, max = 40)
+    @NotBlank(message = "lastname cannot be blank")
+    @Size(min = 4, max = 40, message = "lastname must be between 4 - 40")
     private String lastname;
 
-    @NotBlank
-    @Size(max = 40)
-    @Email
+    @NotBlank(message = "email cannot be blank")
+    @Size(max = 40, message = "email max size is 40")
+    @Email(message = "email must be valid")
     private String email;
 
-    @NotNull
+    @NotNull(message = "phoneNumber cannot be null")
     private Long phoneNumber;
 
     public SignUpCustomerRequest() {

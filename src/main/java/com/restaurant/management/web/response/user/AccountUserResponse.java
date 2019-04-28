@@ -1,4 +1,6 @@
-package com.restaurant.management.web.response;
+package com.restaurant.management.web.response.user;
+
+import com.restaurant.management.web.response.RoleResponse;
 
 import java.util.Set;
 

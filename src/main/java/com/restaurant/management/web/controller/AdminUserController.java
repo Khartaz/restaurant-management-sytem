@@ -1,21 +1,6 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.dto.AccountUserDto;
-import com.restaurant.management.mapper.AccountUserMapper;
-import com.restaurant.management.service.facade.AccountUserFacade;
-import com.restaurant.management.web.request.LoginRequest;
-import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.response.AccountUserResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 //
 //
 //@CrossOrigin(origins = "*", maxAge = 3600)

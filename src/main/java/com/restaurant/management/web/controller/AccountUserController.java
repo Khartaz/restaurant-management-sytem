@@ -4,11 +4,14 @@ import com.restaurant.management.config.LogExecutionTime;
 import com.restaurant.management.config.LogLogin;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
-import com.restaurant.management.web.response.AccountUserResponse;
+import com.restaurant.management.web.response.user.AccountUserResponse;
+import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,9 +38,16 @@ public class AccountUserController {
     private AccountUserMapper accountUserMapper;
 
     @Autowired
-    public AccountUserController(AccountUserFacade accountUserFacade, AccountUserMapper accountUserMapper) {
+    public AccountUserController(AccountUserFacade accountUserFacade,
+                                 AccountUserMapper accountUserMapper) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
+    }
+
+    @GetMapping(value = "/me")
+    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
+    public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
     }
 
     @LogLogin
@@ -80,7 +90,8 @@ public class AccountUserController {
     @LogExecutionTime
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<AccountUserResponse>> showAllUsersPageable(Pageable pageable, PagedResourcesAssembler assembler) {
+    ResponseEntity<PagedResources<AccountUserResponse>> showAllUsersPageable(Pageable pageable,
+                                                                             PagedResourcesAssembler assembler) {
         Page<AccountUserDto> accountUsersDto = accountUserFacade.getAllAccountUsers(pageable);
 
         Page<AccountUserResponse> responsePage = accountUserMapper.mapToAccountUserResponsePage(accountUsersDto);

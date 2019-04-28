@@ -2,7 +2,7 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.dto.AccountUserDto;
-import com.restaurant.management.web.response.AccountUserResponse;
+import com.restaurant.management.web.response.user.AccountUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;

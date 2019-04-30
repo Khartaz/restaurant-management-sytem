@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     //@Value("${app.jwtSecret}")
     private String jwtSecret = "h2ia83mao20s";
@@ -51,7 +51,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            logger.info("Invalid JWT signature: " + e.getMessage());
+            LOGGER.info("Invalid JWT signature: " + e.getMessage());
             return false;
         }
     }

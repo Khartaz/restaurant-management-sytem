@@ -21,6 +21,7 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -45,7 +46,8 @@ public class AccountUserController {
     }
 
     @GetMapping(value = "/me")
-    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
+//    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
     }
@@ -81,7 +83,8 @@ public class AccountUserController {
     }
 
     //Move this controller to AdminController?
-    @RolesAllowed({"ROLE_ADMIN"})
+//    @RolesAllowed({"ROLE_ADMIN"})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
         return ResponseEntity.ok().body(accountUserFacade.deleteUserById(id));
@@ -99,7 +102,8 @@ public class AccountUserController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
+//    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/{userUniqueId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> showUser(@PathVariable String userUniqueId) {

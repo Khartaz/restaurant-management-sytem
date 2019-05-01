@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -28,18 +29,19 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        String userUniqueId = userPrincipal.getUserUniqueId();
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUserUniqueId())
+                .setSubject(userUniqueId)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 
     public String getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -48,7 +50,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             LOGGER.info("Invalid JWT signature: " + e.getMessage());
@@ -58,7 +60,7 @@ public class JwtTokenProvider {
 
     public boolean hasTokenExpired(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .parseClaimsJws(token).getBody();
 
         Date tokenExpirationDate = claims.getExpiration();
@@ -75,7 +77,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(userUniqueId)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 
@@ -87,7 +89,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(userUniqueId)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 }

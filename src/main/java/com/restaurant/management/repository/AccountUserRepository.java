@@ -17,8 +17,6 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
 
     void deleteById(Long id);
 
-    Optional<AccountUser> findAdminUserByUserUniqueId(String userUniqueId);
-
     Boolean existsByEmail(String email);
 
     Optional<AccountUser> findAdminUserByEmailVerificationToken(String token);

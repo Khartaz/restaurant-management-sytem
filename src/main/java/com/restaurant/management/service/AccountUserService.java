@@ -70,10 +70,10 @@ public class AccountUserService implements UserDetailsService {
 
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserByUserUniqueId(String userUniqueId) {
-        AccountUser adminUser = accountUserRepository.findAdminUserByUserUniqueId(userUniqueId)
+        AccountUser accountUser = accountUserRepository.findByUserUniqueId(userUniqueId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage()+ userUniqueId));
 
-        return UserPrincipal.create(adminUser);
+        return UserPrincipal.create(accountUser);
     }
 
     public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {

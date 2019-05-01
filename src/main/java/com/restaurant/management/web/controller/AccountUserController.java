@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -103,7 +102,7 @@ public class AccountUserController {
     }
 
 //    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/{userUniqueId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> showUser(@PathVariable String userUniqueId) {

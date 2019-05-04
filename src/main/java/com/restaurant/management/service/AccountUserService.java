@@ -119,20 +119,30 @@ public class AccountUserService implements UserDetailsService {
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
 
+        /**
+         *  Temporary changed Active to TRUE and EmailVerificationToken to NULL
+         *  Disabled email sending
+         *  Username setter to DELETE
+         *  Change it back to production version
+         */
+
+        String username = Utils.generateUsername(signUpUserRequest.getName(), signUpUserRequest.getLastname(), 1L);
+
         AccountUser accountUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
                 .setLastname(signUpUserRequest.getLastname())
                 .setEmail(signUpUserRequest.getEmail())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
-                .setIsActive(Boolean.FALSE)
+                .setIsActive(Boolean.TRUE)
+                .setUsername(username)
                 .setRoles(Collections.singleton(userRole))
-                .setEmailVerificationToken(token)
+                .setEmailVerificationToken(null)
                 .build();
 
         accountUserRepository.save(accountUser);
 
-        simpleEmailService.sendEmailVerification(
-                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
+//        simpleEmailService.sendEmailVerification(
+//                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
 
         return accountUser;
     }

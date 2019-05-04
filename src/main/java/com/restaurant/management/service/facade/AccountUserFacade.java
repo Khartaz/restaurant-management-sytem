@@ -67,4 +67,10 @@ public final class AccountUserFacade {
     public ApiResponse checkEmailAvailability(String email) {
         return accountUserService.checkEmailAvailability(email);
     }
+
+    public boolean activateAccount(String token) {
+        accountUserService.verifyEmailToken(token);
+        return true;
+    }
+
 }

@@ -23,6 +23,10 @@ public final class AccountUserMapper {
 
     public AccountUser mapToAccountUser(final AccountUserDto accountUserDto) {
         return new AccountUser(
+                accountUserDto.getCreatedAt(),
+                accountUserDto.getUpdatedAt(),
+                accountUserDto.getCreatedBy(),
+                accountUserDto.getUpdatedBy(),
                 accountUserDto.getId(),
                 accountUserDto.getName(),
                 accountUserDto.getLastname(),
@@ -38,6 +42,10 @@ public final class AccountUserMapper {
 
     public AccountUserDto mapToAccountUserDto(final AccountUser accountUser) {
         return new AccountUserDto(
+                accountUser.getCreatedAt(),
+                accountUser.getUpdatedAt(),
+                accountUser.getCreatedBy(),
+                accountUser.getUpdatedBy(),
                 accountUser.getId(),
                 accountUser.getName(),
                 accountUser.getLastname(),
@@ -53,6 +61,10 @@ public final class AccountUserMapper {
 
     public AccountUserResponse mapToAccountUserResponse(final AccountUserDto accountUserDto) {
         return new AccountUserResponse(
+                accountUserDto.getCreatedAt(),
+                accountUserDto.getUpdatedAt(),
+                accountUserDto.getCreatedBy(),
+                accountUserDto.getUpdatedBy(),
                 accountUserDto.getId(),
                 accountUserDto.getName(),
                 accountUserDto.getLastname(),
@@ -67,37 +79,14 @@ public final class AccountUserMapper {
     }
 
     public List<AccountUser> mapToAccountUserList(final List<AccountUserDto> accountUsersDto) {
-
         return accountUsersDto.stream()
-                .map(u -> new AccountUser(
-                        u.getId(),
-                        u.getName(),
-                        u.getLastname(),
-                        u.getEmail(),
-                        u.getUsername(),
-                        u.getEmailVerificationToken(),
-                        u.isActive(),
-                        u.getRoles().stream()
-                                .map(r -> roleMapper.mapToRole(r))
-                                .collect(Collectors.toSet())
-                ))
+                .map(this::mapToAccountUser)
                 .collect(Collectors.toList());
     }
 
     public List<AccountUserDto> mapToAccountUserListDto(final List<AccountUser> accountUsers) {
         return accountUsers.stream()
-                .map(u -> new AccountUserDto(
-                        u.getId(),
-                        u.getName(),
-                        u.getLastname(),
-                        u.getEmail(),
-                        u.getUsername(),
-                        u.getEmailVerificationToken(),
-                        u.isActive(),
-                        u.getRoles().stream()
-                                .map(r -> roleMapper.mapToRoleDto(r))
-                                .collect(Collectors.toSet())
-                ))
+                .map(this::mapToAccountUserDto)
                 .collect(Collectors.toList());
     }
 
@@ -108,18 +97,8 @@ public final class AccountUserMapper {
 
     public List<AccountUserResponse> mapToAccountUserListResponse(final List<AccountUserDto> accountUsersDto) {
         return accountUsersDto.stream()
-                .map(u -> new AccountUserResponse(
-                        u.getId(),
-                        u.getName(),
-                        u.getLastname(),
-                        u.getEmail(),
-                        u.getUsername(),
-                        u.getEmailVerificationToken(),
-                        u.isActive(),
-                        u.getRoles().stream()
-                        .map(r -> roleMapper.mapToRoleResponse(r))
-                                .collect(Collectors.toSet())
-                )).collect(Collectors.toList());
+                .map(this::mapToAccountUserResponse)
+                .collect(Collectors.toList());
     }
 
     public Page<AccountUserResponse> mapToAccountUserResponsePage(final Page<AccountUserDto> accountUsers) {

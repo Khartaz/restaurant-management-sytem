@@ -36,7 +36,9 @@ public abstract class AbstractUser extends AbstractAuditing {
     public AbstractUser() {
     }
 
-    public AbstractUser(Long id, String name, String lastname, String email) {
+    public AbstractUser(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+                        Long id, String name, String lastname, String email) {
+        super(createdAt, updatedAt, createdBy, updatedBy);
         this.id = id;
         this.name = name;
         this.lastname = lastname;

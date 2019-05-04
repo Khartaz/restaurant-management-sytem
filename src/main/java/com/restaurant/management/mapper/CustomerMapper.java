@@ -15,6 +15,10 @@ public final class CustomerMapper {
 
     public Customer mapToCustomer(final CustomerDto customerDto) {
         return new Customer(
+                customerDto.getCreatedAt(),
+                customerDto.getUpdatedAt(),
+                customerDto.getCreatedBy(),
+                customerDto.getUpdatedBy(),
                 customerDto.getId(),
                 customerDto.getName(),
                 customerDto.getLastname(),
@@ -25,6 +29,10 @@ public final class CustomerMapper {
 
     public CustomerArchive mapToCustomerArchive(final Customer customer) {
         return new CustomerArchive(
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
+                customer.getCreatedBy(),
+                customer.getUpdatedBy(),
                 customer.getName(),
                 customer.getLastname(),
                 customer.getEmail(),
@@ -34,6 +42,10 @@ public final class CustomerMapper {
 
     public CustomerArchive mapToCustomerArchive(final CustomerDto customerDto) {
         return new CustomerArchive(
+                customerDto.getCreatedAt(),
+                customerDto.getUpdatedAt(),
+                customerDto.getCreatedBy(),
+                customerDto.getUpdatedBy(),
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),
@@ -43,6 +55,10 @@ public final class CustomerMapper {
 
     public CustomerDto mapToCustomerDto(final Customer customer) {
         return new CustomerDto(
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
+                customer.getCreatedBy(),
+                customer.getUpdatedBy(),
                 customer.getId(),
                 customer.getName(),
                 customer.getLastname(),
@@ -52,6 +68,10 @@ public final class CustomerMapper {
 
     public CustomerDto mapToCustomerDto(final CustomerArchive customer) {
         return new CustomerDto(
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
+                customer.getCreatedBy(),
+                customer.getUpdatedBy(),
                 customer.getId(),
                 customer.getName(),
                 customer.getLastname(),
@@ -61,6 +81,10 @@ public final class CustomerMapper {
 
     public CustomerResponse mapToCustomerResponse(final CustomerDto customerDto) {
         return new CustomerResponse(
+                customerDto.getCreatedAt(),
+                customerDto.getUpdatedAt(),
+                customerDto.getCreatedBy(),
+                customerDto.getUpdatedBy(),
                 customerDto.getId(),
                 customerDto.getName(),
                 customerDto.getLastname(),
@@ -71,13 +95,7 @@ public final class CustomerMapper {
 
     public List<CustomerDto> mapToCustomerDtoList(final List<Customer> customers) {
         return customers.stream()
-                .map(v -> new CustomerDto(
-                        v.getId(),
-                        v.getName(),
-                        v.getLastname(),
-                        v.getPhoneNumber(),
-                        v.getEmail()
-                        ))
+                .map(this::mapToCustomerDto)
                 .collect(Collectors.toList());
     }
 
@@ -87,13 +105,7 @@ public final class CustomerMapper {
 
     public List<CustomerResponse> mapToCustomerResponseList(final List<CustomerDto> customers) {
         return customers.stream()
-                .map(v -> new CustomerResponse(
-                        v.getId(),
-                        v.getName(),
-                        v.getLastname(),
-                        v.getEmail(),
-                        v.getPhoneNumber()
-                ))
+                .map(this::mapToCustomerResponse)
                 .collect(Collectors.toList());
     }
 

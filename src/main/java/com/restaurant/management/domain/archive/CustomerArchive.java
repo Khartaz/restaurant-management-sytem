@@ -1,5 +1,7 @@
 package com.restaurant.management.domain.archive;
 
+import com.restaurant.management.domain.AbstractAuditing;
+
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
@@ -7,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "customer_archive")
-public class CustomerArchive {
+public class CustomerArchive extends AbstractAuditing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +37,9 @@ public class CustomerArchive {
     public CustomerArchive() {
     }
 
-    public CustomerArchive(String name, String lastname, String email, Long phoneNumber) {
+    public CustomerArchive(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+                           String name, String lastname, String email, Long phoneNumber) {
+        super(createdAt, updatedAt, createdBy, updatedBy);
         this.name = name;
         this.lastname = lastname;
         this.email = email;

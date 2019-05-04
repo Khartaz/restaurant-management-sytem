@@ -17,8 +17,9 @@ public class Customer extends AbstractUser  {
         this.phoneNumber = phoneNumber;
     }
 
-    public Customer(Long id, String name, String lastname, String email, Long phoneNumber) {
-        super(id, name, lastname, email);
+    public Customer(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+                    Long id, String name, String lastname, String email, Long phoneNumber) {
+        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email);
         this.phoneNumber = phoneNumber;
     }
 

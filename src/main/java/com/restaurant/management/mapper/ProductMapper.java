@@ -3,6 +3,9 @@ package com.restaurant.management.mapper;
 import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.domain.dto.ProductDto;
+import com.restaurant.management.domain.dto.ProductHistoryDto;
+import com.restaurant.management.domain.dto.RevisionTypeDto;
+import com.restaurant.management.domain.history.ProductHistory;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,23 +15,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@SuppressWarnings("Duplicates")
 public final class ProductMapper {
 
     private IngredientMapper ingredientMapper;
+    private RevisionTypeMapper revisionTypeMapper;
 
     @Autowired
-    public void setIngredientMapper(IngredientMapper ingredientMapper) {
+    public ProductMapper(IngredientMapper ingredientMapper,
+                         RevisionTypeMapper revisionTypeMapper) {
         this.ingredientMapper = ingredientMapper;
+        this.revisionTypeMapper = revisionTypeMapper;
     }
 
     public Product mapToProduct(final ProductDto productDto) {
         return new Product(
+                productDto.getCreatedAt(),
+                productDto.getUpdatedAt(),
+                productDto.getCreatedBy(),
+                productDto.getUpdatedBy(),
                 productDto.getId(),
                 productDto.getUniqueId(),
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                productDto.getCreatedAt(),
                 productDto.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredient(v))
                         .collect(Collectors.toList())
@@ -37,11 +47,14 @@ public final class ProductMapper {
 
     public ProductArchive mapToProductArchive(final Product product) {
         return new ProductArchive(
+                product.getCreatedAt(),
+                product.getUpdatedAt(),
+                product.getCreatedBy(),
+                product.getUpdatedBy(),
                 product.getUniqueId(),
                 product.getName(),
                 product.getCategory(),
                 product.getPrice(),
-                product.getCreatedAt(),
                 product.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientArchive(v))
                         .collect(Collectors.toList())
@@ -50,11 +63,14 @@ public final class ProductMapper {
 
     public ProductArchive mapToProductArchive(final ProductDto productDto) {
         return new ProductArchive(
+                productDto.getCreatedAt(),
+                productDto.getUpdatedAt(),
+                productDto.getCreatedBy(),
+                productDto.getUpdatedBy(),
                 productDto.getUniqueId(),
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                productDto.getCreatedAt(),
                 productDto.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientArchive(v))
                         .collect(Collectors.toList())
@@ -63,12 +79,15 @@ public final class ProductMapper {
 
     public ProductDto mapToProductDto(final Product product) {
         return new ProductDto(
+                product.getCreatedAt(),
+                product.getUpdatedAt(),
+                product.getCreatedBy(),
+                product.getUpdatedBy(),
                 product.getId(),
                 product.getUniqueId(),
                 product.getName(),
                 product.getCategory(),
                 product.getPrice(),
-                product.getCreatedAt(),
                 product.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientDto(v))
                         .collect(Collectors.toList())
@@ -77,12 +96,15 @@ public final class ProductMapper {
 
     public ProductDto mapToProductDto(final ProductArchive productArchive) {
         return new ProductDto(
+                productArchive.getCreatedAt(),
+                productArchive.getUpdatedAt(),
+                productArchive.getCreatedBy(),
+                productArchive.getUpdatedBy(),
                 productArchive.getId(),
                 productArchive.getUniqueId(),
                 productArchive.getName(),
                 productArchive.getCategory(),
                 productArchive.getPrice(),
-                productArchive.getCreatedAt(),
                 productArchive.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientDto(v))
                         .collect(Collectors.toList())
@@ -91,16 +113,37 @@ public final class ProductMapper {
 
     public ProductResponse mapToProductResponse(final ProductDto productDto) {
         return new ProductResponse(
+                productDto.getCreatedAt(),
+                productDto.getUpdatedAt(),
+                productDto.getCreatedBy(),
+                productDto.getUpdatedBy(),
                 productDto.getId(),
                 productDto.getUniqueId(),
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                productDto.getCreatedAt(),
                 productDto.getIngredients().stream()
                         .map(v -> ingredientMapper.mapToIngredientResponse(v))
                         .collect(Collectors.toList())
         );
+    }
+
+    public ProductHistoryDto mapToProductHistoryDto(ProductHistory productHistory) {
+        ProductDto productDto = mapToProductDto(productHistory.getProduct());
+        Long revision = productHistory.getRevisionType().getRepresentation().longValue();
+        RevisionTypeDto revisionTypeDto = revisionTypeMapper.mapToRevisionTypeDto(productHistory.getRevisionType());
+
+        return new ProductHistoryDto(productDto, revision, revisionTypeDto);
+    }
+
+    public List<ProductHistoryDto> mapToProductHistoryDtoList(final List<ProductHistory> productHistory) {
+        return productHistory.stream()
+                .map(this::mapToProductHistoryDto)
+                .collect(Collectors.toList());
+    }
+
+    public Page<ProductHistoryDto> mapToProductHistoryPage(final Page<ProductHistory> productHistory) {
+        return productHistory.map(this::mapToProductHistoryDto);
     }
 
     public List<ProductDto> mapToProductDtoList(final List<Product> products) {

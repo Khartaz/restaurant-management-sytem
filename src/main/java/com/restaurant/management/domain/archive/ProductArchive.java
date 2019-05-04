@@ -1,13 +1,16 @@
 package com.restaurant.management.domain.archive;
 
+import com.restaurant.management.domain.AbstractAuditing;
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Entity
 @Table(name = "products_archive")
-public class ProductArchive  {
+@Audited
+public class ProductArchive extends AbstractAuditing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,23 +29,21 @@ public class ProductArchive  {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "createdAt")
-    private Calendar createdAt;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<IngredientArchive> ingredients = new ArrayList<>();
 
     public ProductArchive() {
     }
 
-    public ProductArchive(String uniqueId, String name, String category,
-                          Double price, Calendar createdAt,
-                          List<IngredientArchive> ingredients) {
+    public ProductArchive(Long createdAt, Long updatedAt,
+                          String createdBy, String updatedBy,
+                          String uniqueId, String name, String category,
+                          Double price, List<IngredientArchive> ingredients) {
+        super(createdAt, updatedAt, createdBy, updatedBy);
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.createdAt = createdAt;
         this.ingredients = ingredients;
     }
 
@@ -84,14 +85,6 @@ public class ProductArchive  {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public Calendar getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Calendar createdAt) {
-        this.createdAt = createdAt;
     }
 
     public List<IngredientArchive> getIngredients() {

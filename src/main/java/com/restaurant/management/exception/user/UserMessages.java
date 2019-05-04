@@ -4,6 +4,7 @@ public enum UserMessages {
 
     REGISTER_SUCCESS("User registered successfully"),
     EMAIL_TAKEN("Email is already taken"),
+    EMAIL_AVAILABLE("Email available"),
     USERNAME_TAKEN("Username is already taken"),
     UNAUTHENTICATED("Unauthenticated"),
     ROLE_NOT_SET("Role not set."),

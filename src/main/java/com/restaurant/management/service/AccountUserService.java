@@ -69,21 +69,25 @@ public class AccountUserService implements UserDetailsService {
     }
 
     // This method is used by JWTAuthenticationFilter
-    public UserDetails loadUserByUserUniqueId(String userUniqueId) {
-        AccountUser accountUser = accountUserRepository.findByUserUniqueId(userUniqueId)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage()+ userUniqueId));
+    public UserDetails loadUserByUserId(Long id) {
+        AccountUser accountUser = accountUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage() + id));
 
         return UserPrincipal.create(accountUser);
     }
 
-    public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
-        if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
+    public ApiResponse checkEmailAvailability(String email) {
+        if(accountUserRepository.existsByEmail(email)) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
         }
+        return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getErrorMessage());
+    }
 
-        String userUniqueId = Utils.generateUserUniqueId(10);
+    public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
 
-        String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
+        checkEmailAvailability(signUpUserRequest.getEmail());
+
+        String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
@@ -94,7 +98,6 @@ public class AccountUserService implements UserDetailsService {
                 .setEmail(signUpUserRequest.getEmail())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.FALSE)
-                .setUserUniqueId(userUniqueId)
                 .setRoles(Collections.singleton(userRole))
                 .setEmailVerificationToken(token)
                 .build();
@@ -108,13 +111,10 @@ public class AccountUserService implements UserDetailsService {
     }
 
     public AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest) {
-        if(accountUserRepository.existsByEmail(signUpUserRequest.getEmail())) {
-            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
-        }
 
-        String userUniqueId = Utils.generateUserUniqueId(10);
+        checkEmailAvailability(signUpUserRequest.getEmail());
 
-        String token = tokenProvider.generateEmailVerificationToken(userUniqueId);
+        String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
@@ -125,7 +125,6 @@ public class AccountUserService implements UserDetailsService {
                 .setEmail(signUpUserRequest.getEmail())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.FALSE)
-                .setUserUniqueId(userUniqueId)
                 .setRoles(Collections.singleton(userRole))
                 .setEmailVerificationToken(token)
                 .build();
@@ -161,11 +160,11 @@ public class AccountUserService implements UserDetailsService {
         return accountUser;
     }
 
-    public AccountUser getUserByUserUniqueId(String userUniqueId) {
-        Optional<AccountUser> accountUser = accountUserRepository.findByUserUniqueId(userUniqueId);
+    public AccountUser getUserById(Long id) {
+        Optional<AccountUser> accountUser = accountUserRepository.findById(id);
 
         if (!accountUser.isPresent()) {
-            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage() + userUniqueId);
+            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage() + id);
         }
 
         return accountUser.get();
@@ -200,7 +199,7 @@ public class AccountUserService implements UserDetailsService {
             if (!u.isActive()) {
                 throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
             }
-             u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getUserUniqueId()));
+             u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getId()));
 
              accountUserRepository.save(u);
 

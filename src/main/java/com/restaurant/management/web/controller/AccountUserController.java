@@ -10,6 +10,7 @@ import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
+import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.user.AccountUserResponse;
 import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,15 @@ public class AccountUserController {
     @GetMapping(value = "/me")
 //    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
     @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-    public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
+    public @ResponseBody
+    UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        return new UserSummary(
+                currentUser.getId(),
+                currentUser.getUsername(),
+                currentUser.getName(),
+                currentUser.getLastname(),
+                currentUser.getEmail()
+        );
     }
 
     @LogLogin
@@ -64,10 +72,11 @@ public class AccountUserController {
 
         AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
-        Link link = linkTo(AccountUserController.class).slash(userResponse.getUserUniqueId()).withSelfRel();
+        Link link = linkTo(AccountUserController.class).slash(userResponse.getId()).withSelfRel();
         return new Resource<>(userResponse, link);
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<AccountUserResponse> updateAccountNameOrLastname(@Valid @RequestBody UpdateAccountNameOrLastname request) {
@@ -76,7 +85,7 @@ public class AccountUserController {
 
         AccountUserResponse response = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
-        Link link = linkTo(AccountUserController.class).slash(response.getUserUniqueId()).withSelfRel();
+        Link link = linkTo(AccountUserController.class).slash(response.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
@@ -103,16 +112,21 @@ public class AccountUserController {
 
 //    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
 //    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-    @GetMapping(value = "/{userUniqueId}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<AccountUserResponse> showUser(@PathVariable String userUniqueId) {
-        AccountUserDto accountUserDto = accountUserFacade.getUserByUserUniqueId(userUniqueId);
+    Resource<AccountUserResponse> showUser(@PathVariable Long id) {
+        AccountUserDto accountUserDto = accountUserFacade.getUserById(id);
 
         AccountUserResponse accountUserResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
-        Link link = linkTo(AccountUserController.class).slash(accountUserResponse.getUserUniqueId()).withSelfRel();
+        Link link = linkTo(AccountUserController.class).slash(accountUserResponse.getId()).withSelfRel();
 
         return new Resource<>(accountUserResponse, link);
+    }
+
+    @GetMapping(value = "/checkEmailAvailability", produces = APPLICATION_JSON_VALUE)
+    public ApiResponse checkEmailAvailability(@RequestParam String email) {
+        return accountUserFacade.checkEmailAvailability(email);
     }
 
 }

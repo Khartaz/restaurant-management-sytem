@@ -52,8 +52,8 @@ public final class AccountUserFacade {
         return accountUserMapper.mapToAccountUserDtoPage(accountUsers);
     }
 
-    public AccountUserDto getUserByUserUniqueId(String userUniqueId) {
-        AccountUser accountUser = accountUserService.getUserByUserUniqueId(userUniqueId);
+    public AccountUserDto getUserById(Long id) {
+        AccountUser accountUser = accountUserService.getUserById(id);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }
@@ -62,5 +62,9 @@ public final class AccountUserFacade {
         AccountUser accountUser = accountUserService.registerAdminAccount(request);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
+    }
+
+    public ApiResponse checkEmailAvailability(String email) {
+        return accountUserService.checkEmailAvailability(email);
     }
 }

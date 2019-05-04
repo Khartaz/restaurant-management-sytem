@@ -1,44 +1,40 @@
 package com.restaurant.management.domain.dto;
 
-import java.util.Calendar;
 import java.util.List;
 
 public final class ProductDto {
 
+    private Long createdAt;
+    private Long updatedAt;
+    private String createdBy;
+    private String updatedBy;
     private Long id;
     private String uniqueId;
     private String name;
     private String category;
     private Double price;
-    private Calendar createdAt;
     private List<IngredientDto> ingredients;
 
     public ProductDto() {
     }
 
-    public ProductDto(Long id, String uniqueId, String name, String category, Double price,
-                      Calendar createdAt, List<IngredientDto> ingredients) {
+    public ProductDto(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+                      Long id, String uniqueId, String name,
+                      String category, Double price, List<IngredientDto> ingredients) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.createdAt = createdAt;
         this.ingredients = ingredients;
     }
 
-    public ProductDto(String uniqueId, String name, String category, Double price,
-                      Calendar createdAt, List<IngredientDto> ingredients) {
-        this.uniqueId = uniqueId;
-        this.name = name;
-        this.category = category;
-        this.price = price;
-        this.createdAt = createdAt;
-        this.ingredients = ingredients;
-    }
-
-    public ProductDto(String uniqueId, String name, String category, Double price,
-                      List<IngredientDto> ingredients) {
+    public ProductDto(String uniqueId, String name, String category,
+                      Double price, List<IngredientDto> ingredients) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
@@ -50,6 +46,22 @@ public final class ProductDto {
         this.name = name;
         this.category = category;
         this.price = price;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
     }
 
     public Long getId() {
@@ -72,12 +84,10 @@ public final class ProductDto {
         return price;
     }
 
-    public Calendar getCreatedAt() {
-        return createdAt;
-    }
-
     public List<IngredientDto> getIngredients() {
         return ingredients;
     }
+
+
 
 }

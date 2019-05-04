@@ -17,15 +17,15 @@ import java.util.TimeZone;
 })
 public class RestaurantApplication extends SpringBootServletInitializer {
 
-    /**
-     *   init()
-     *   Date/Time fields in the domain models automatically
-     *   get converted to SQL types when we persist them in the database.
-     */
-    @PostConstruct
-    void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }
+//    /**
+//     *   init()
+//     *   Date/Time fields in the domain models automatically
+//     *   get converted to SQL types when we persist them in the database.
+//     */
+//    @PostConstruct
+//    void init() {
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(RestaurantApplication.class, args);

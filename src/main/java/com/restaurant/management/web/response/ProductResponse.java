@@ -1,30 +1,63 @@
 package com.restaurant.management.web.response;
 
-import java.util.Calendar;
 import java.util.List;
 
 public final class ProductResponse {
+
+    private Long createdAt;
+    private Long updatedAt;
+    private String createdBy;
+    private String updatedBy;
     private Long id;
     private String uniqueId;
     private String name;
     private String category;
     private Double price;
-    private Calendar createdAt;
     private List<IngredientResponse> ingredients;
 
     public ProductResponse() {
     }
 
+    public ProductResponse(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+                           Long id, String uniqueId, String name,
+                           String category, Double price, List<IngredientResponse> ingredients) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.id = id;
+        this.uniqueId = uniqueId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.ingredients = ingredients;
+    }
+
     public ProductResponse(Long id, String uniqueId, String name,
-                           String category, Double price, Calendar createdAt,
+                           String category, Double price,
                            List<IngredientResponse> ingredients) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.createdAt = createdAt;
         this.ingredients = ingredients;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
     }
 
     public Long getId() {
@@ -45,10 +78,6 @@ public final class ProductResponse {
 
     public Double getPrice() {
         return price;
-    }
-
-    public Calendar getCreatedAt() {
-        return createdAt;
     }
 
     public List<IngredientResponse> getIngredients() {

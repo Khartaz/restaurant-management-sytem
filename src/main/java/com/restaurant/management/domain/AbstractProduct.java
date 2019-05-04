@@ -1,15 +1,14 @@
 package com.restaurant.management.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
-import java.util.Calendar;
 
 @MappedSuperclass
 @JsonIgnoreProperties(allowGetters = true)
-public abstract class AbstractProduct {
-
+@Audited
+public abstract class AbstractProduct extends AbstractAuditing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -27,31 +26,28 @@ public abstract class AbstractProduct {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "createdAt")
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar createdAt;
-
     public AbstractProduct() {
     }
 
-    public AbstractProduct(Long id, String uniqueId, String name,
-                           String category, Double price, Calendar createdAt) {
+    public AbstractProduct(Long createdAt, Long updatedAt,
+                           String createdBy, String updatedBy,
+                           Long id, String uniqueId, String name,
+                           String category, Double price) {
+        super(createdAt, updatedAt, createdBy, updatedBy);
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.createdAt = createdAt;
     }
 
-    public AbstractProduct(String uniqueId, String name,
-                           String category, Double price, Calendar createdAt) {
+    public AbstractProduct(Long id, String uniqueId, String name,
+                           String category, Double price) {
+        this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.createdAt = createdAt;
     }
 
     public AbstractProduct(String uniqueId, String name,
@@ -98,11 +94,4 @@ public abstract class AbstractProduct {
         this.price = price;
     }
 
-    public Calendar getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Calendar createdAt) {
-        this.createdAt = createdAt;
-    }
 }

@@ -28,7 +28,6 @@ public final class AccountUserMapper {
                 accountUserDto.getLastname(),
                 accountUserDto.getEmail(),
                 accountUserDto.getUsername(),
-                accountUserDto.getUserUniqueId(),
                 accountUserDto.getEmailVerificationToken(),
                 accountUserDto.isActive(),
                 accountUserDto.getRoles().stream()
@@ -44,7 +43,6 @@ public final class AccountUserMapper {
                 accountUser.getLastname(),
                 accountUser.getEmail(),
                 accountUser.getUsername(),
-                accountUser.getUserUniqueId(),
                 accountUser.getEmailVerificationToken(),
                 accountUser.isActive(),
                 accountUser.getRoles().stream()
@@ -60,7 +58,6 @@ public final class AccountUserMapper {
                 accountUserDto.getLastname(),
                 accountUserDto.getEmail(),
                 accountUserDto.getUsername(),
-                accountUserDto.getUserUniqueId(),
                 accountUserDto.getEmailVerificationToken(),
                 accountUserDto.isActive(),
                 accountUserDto.getRoles().stream()
@@ -78,7 +75,6 @@ public final class AccountUserMapper {
                         u.getLastname(),
                         u.getEmail(),
                         u.getUsername(),
-                        u.getUserUniqueId(),
                         u.getEmailVerificationToken(),
                         u.isActive(),
                         u.getRoles().stream()
@@ -96,7 +92,6 @@ public final class AccountUserMapper {
                         u.getLastname(),
                         u.getEmail(),
                         u.getUsername(),
-                        u.getUserUniqueId(),
                         u.getEmailVerificationToken(),
                         u.isActive(),
                         u.getRoles().stream()
@@ -119,7 +114,6 @@ public final class AccountUserMapper {
                         u.getLastname(),
                         u.getEmail(),
                         u.getUsername(),
-                        u.getUserUniqueId(),
                         u.getEmailVerificationToken(),
                         u.isActive(),
                         u.getRoles().stream()

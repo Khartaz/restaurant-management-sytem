@@ -1,12 +1,14 @@
 package com.restaurant.management.domain;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Entity
 @Table(name = "products")
+@Audited
 public class Product extends AbstractProduct {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -15,15 +17,23 @@ public class Product extends AbstractProduct {
     public Product() {
     }
 
-    public Product(Long id, String uniqueId, String name, String category, Double price,
-                   Calendar createdAt, List<Ingredient> ingredients) {
-        super(id, uniqueId, name, category, price, createdAt);
+    public Product(Long createdAt, Long updatedAt,
+                   String createdBy, String updatedBy,
+                   Long id, String uniqueId, String name, String category,
+                   Double price, List<Ingredient> ingredients) {
+        super(createdAt, updatedAt, createdBy, updatedBy, id, uniqueId, name, category, price);
         this.ingredients = ingredients;
     }
 
-    public Product(String uniqueId, String name, String category, Double price,
-                   Calendar createdAt, List<Ingredient> ingredients) {
-        super(uniqueId, name, category, price, createdAt);
+    public Product(Long id, String uniqueId, String name, String category,
+                   Double price, List<Ingredient> ingredients) {
+        super(id, uniqueId, name, category, price);
+        this.ingredients = ingredients;
+    }
+
+    public Product(String uniqueId, String name, String category,
+                   Double price, List<Ingredient> ingredients) {
+        super(uniqueId, name, category, price);
         this.ingredients = ingredients;
     }
 
@@ -40,7 +50,6 @@ public class Product extends AbstractProduct {
         private String name;
         private String category;
         private Double price;
-        private Calendar createdAt;
         private List<Ingredient> ingredients;
 
         public ProductBuilder setUniqueId(String uniqueId) {
@@ -63,11 +72,6 @@ public class Product extends AbstractProduct {
             return this;
         }
 
-        public ProductBuilder setCreatedAt(Calendar createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
         public ProductBuilder setIngredients(List<Ingredient> ingredients) {
             this.ingredients = ingredients;
             return this;
@@ -75,7 +79,7 @@ public class Product extends AbstractProduct {
 
         public Product build() {
             return new Product(this.uniqueId, this.name, this.category,
-                    this.price, this.createdAt, this.ingredients);
+                    this.price, this.ingredients);
         }
     }
 

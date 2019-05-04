@@ -15,11 +15,6 @@ public class AccountUser extends AbstractUser {
     private String username;
 
     @NotBlank
-    @Size(max = 40)
-    @Column(name = "user_unique_id", unique = true)
-    private String userUniqueId;
-
-    @NotBlank
     @Size(max = 100)
     @Column(name = "password")
     private String password;
@@ -37,17 +32,22 @@ public class AccountUser extends AbstractUser {
     private Boolean isActive;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="account_users_roles",
+            joinColumns = @JoinColumn( name="user_id"),
+            inverseJoinColumns = @JoinColumn( name="role_id")
+    )
     private Set<Role> roles = new HashSet<>();
 
     public AccountUser() {
     }
 
     public AccountUser(String name, String lastname, String email,
-                       String username, String userUniqueId, String password,
-                       String emailVerificationToken, Boolean isActive, Set<Role> roles) {
+                       String username, String password,
+                       String emailVerificationToken,
+                       Boolean isActive, Set<Role> roles) {
         super(name, lastname, email);
         this.username = username;
-        this.userUniqueId = userUniqueId;
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
@@ -55,11 +55,10 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(Long id, String name, String lastname, String email,
-                         String username, String userUniqueId, String emailVerificationToken,
+                       String username, String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
         super(id, name, lastname, email);
         this.username = username;
-        this.userUniqueId = userUniqueId;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -72,14 +71,6 @@ public class AccountUser extends AbstractUser {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getUserUniqueId() {
-        return userUniqueId;
-    }
-
-    public void setUserUniqueId(String userUniqueId) {
-        this.userUniqueId = userUniqueId;
     }
 
     public String getPassword() {
@@ -135,7 +126,6 @@ public class AccountUser extends AbstractUser {
         private String lastname;
         private String email;
         private String username;
-        private String userUniqueId;
         private String password;
         private String emailVerificationToken;
         private Boolean isActive;
@@ -157,11 +147,6 @@ public class AccountUser extends AbstractUser {
 
         public AccountUserBuilder setUsername(String username) {
             this.username = username;
-            return this;
-        }
-
-        public AccountUserBuilder setUserUniqueId(String userUniqueId) {
-            this.userUniqueId = userUniqueId;
             return this;
         }
 
@@ -187,7 +172,7 @@ public class AccountUser extends AbstractUser {
 
         public AccountUser build() {
             return new AccountUser(this.name, this.lastname, this.email,
-                    this.username, this.userUniqueId, this.password,
+                    this.username, this.password,
                     this.emailVerificationToken, this.isActive, this.roles);
         }
     }

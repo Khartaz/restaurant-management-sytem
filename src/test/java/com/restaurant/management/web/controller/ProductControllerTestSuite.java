@@ -66,7 +66,6 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                Calendar.getInstance(),
                 new ArrayList<>()
         );
 
@@ -129,7 +128,6 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                Calendar.getInstance(),
                 new ArrayList<>()
         );
 
@@ -173,7 +171,6 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 "product category updated",
                 productDto.getPrice(),
-                Calendar.getInstance(),
                 new ArrayList<>()
         );
 
@@ -210,7 +207,6 @@ public class ProductControllerTestSuite {
                 productDto.getName(),
                 productDto.getCategory(),
                 productDto.getPrice(),
-                Calendar.getInstance(),
                 new ArrayList<>()
         );
 

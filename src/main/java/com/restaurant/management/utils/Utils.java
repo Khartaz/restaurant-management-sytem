@@ -42,10 +42,6 @@ public class Utils {
         return generateRandomStringWithBigLetters(length);
     }
 
-    public static String generateUserUniqueId(int length) {
-        return generateRandomStringWithSmallLetters(length);
-    }
-
     public static String generateDailyOrderListUniqueId(int length) {
         return generateRandomStringWithBigLetters(length);
     }

@@ -8,14 +8,13 @@ public final class AccountUserDto {
     private String lastname;
     private String email;
     private String username;
-    private String userUniqueId;
     private String password;
     private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleDto> roles;
 
     public AccountUserDto(Long id, String name, String lastname,
-                          String email, String username, String userUniqueId,
+                          String email, String username,
                           String emailVerificationToken,
                           Boolean isActive, Set<RoleDto> roles) {
         this.id = id;
@@ -23,7 +22,6 @@ public final class AccountUserDto {
         this.lastname = lastname;
         this.email = email;
         this.username = username;
-        this.userUniqueId = userUniqueId;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -47,10 +45,6 @@ public final class AccountUserDto {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getUserUniqueId() {
-        return userUniqueId;
     }
 
     public String getPassword() {

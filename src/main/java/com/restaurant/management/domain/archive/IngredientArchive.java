@@ -1,9 +1,12 @@
 package com.restaurant.management.domain.archive;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ingredients_archive")
+@Audited
 public class IngredientArchive {
 
     @Id

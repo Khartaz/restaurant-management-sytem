@@ -10,7 +10,6 @@ public final class AccountUserResponse {
     private String lastname;
     private String email;
     private String username;
-    private String userUniqueId;
     private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleResponse> roles;
@@ -19,14 +18,13 @@ public final class AccountUserResponse {
     }
 
     public AccountUserResponse(Long id, String name, String lastname, String email,
-                               String username, String userUniqueId, String emailVerificationToken,
+                               String username, String emailVerificationToken,
                                Boolean isActive, Set<RoleResponse> roles) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.username = username;
-        this.userUniqueId = userUniqueId;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -50,10 +48,6 @@ public final class AccountUserResponse {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getUserUniqueId() {
-        return userUniqueId;
     }
 
     public String getEmailVerificationToken() {

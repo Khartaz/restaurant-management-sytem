@@ -29,7 +29,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 //
 //        AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 //
-//        Link link = linkTo(AdminUserController.class).slash(userResponse.getUserUniqueId()).withSelfRel();
+//        Link link = linkTo(AdminUserController.class).slash(userResponse.getId()).withSelfRel();
 //        return new Resource<>(userResponse, link);
 //    }
 //

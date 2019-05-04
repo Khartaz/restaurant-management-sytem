@@ -32,21 +32,27 @@ dependencies {
 
     // JAVA SIMPLE EMAIL
     compile('org.springframework.boot:spring-boot-starter-mail')
+    
     // SECURITY
     compile('org.springframework.boot:spring-boot-starter-security')
+    
     // LOCAL TOMCAT
     compile('mysql:mysql-connector-java:8.0.13')
+    
     // REMOTE POSTGRESQL
     compile('org.postgresql:postgresql')
+    
     // HATEOAS
     compile('org.springframework.boot:spring-boot-starter-hateoas')
 
     compile('org.thymeleaf:thymeleaf-spring5:3.0.10.RELEASE')
+    
     // TEST UNIT
     compile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.security:spring-security-test')
     
     compile('com.google.code.gson:gson')
+    
     //J-UNIT 5
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testCompile('org.junit.jupiter:junit-jupiter-params')
@@ -54,11 +60,17 @@ dependencies {
     testCompile("org.mockito:mockito-core")
     testCompile('org.mockito:mockito-junit-jupiter')
     testCompile('org.junit.platform:junit-platform-launcher')
+    
+    //HIBERNATE
+    compile('org.hibernate:hibernate-envers:5.4.0.Final')
+//    compile('org.hibernate:hibernate-core:5.4.0.Final')
+
 
     //Swagger
     compile('io.springfox:springfox-swagger2:2.9.2')
     compile('io.springfox:springfox-bean-validators:2.9.2')
     compile('io.springfox:springfox-swagger-ui:2.9.2')
+    
     // JSON WEB TOKEN
     compile('io.jsonwebtoken:jjwt:0.9.0')
 

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @JsonIgnoreProperties(allowGetters = true)
-public abstract class AbstractCart {
+public abstract class AbstractCart extends AbstractAuditing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

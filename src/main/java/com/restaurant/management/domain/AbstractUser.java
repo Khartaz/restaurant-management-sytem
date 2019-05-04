@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 @JsonIgnoreProperties(allowGetters = true)
-public abstract class AbstractUser extends AbstractDateAudit {
+public abstract class AbstractUser extends AbstractAuditing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

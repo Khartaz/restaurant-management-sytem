@@ -29,23 +29,25 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-        String userUniqueId = userPrincipal.getUserUniqueId();
+        Long id = userPrincipal.getId();
 
         return Jwts.builder()
-                .setSubject(userUniqueId)
+                .setSubject(id.toString())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 
-    public String getUserIdFromJWT(String token) {
+    public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        String id = claims.getSubject();
+
+        return Long.parseLong(id);
     }
 
     public boolean validateToken(String authToken) {
@@ -69,25 +71,25 @@ public class JwtTokenProvider {
         return tokenExpirationDate.before(todayDate);
     }
 
-    public String generateEmailVerificationToken(String userUniqueId) {
+    public String generateEmailVerificationToken(String email) {
 
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + SecurityConstant.EMAIL_VERIFICATION_EXPIRATION_TIME);
 
         return Jwts.builder()
-                .setSubject(userUniqueId)
+                .setSubject(email)
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 
-    public String generatePasswordResetToken(String userUniqueId) {
+    public String generatePasswordResetToken(Long id) {
 
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + SecurityConstant.PASSWORD_RESET_EXPIRATION_TIME);
 
         return Jwts.builder()
-                .setSubject(userUniqueId)
+                .setSubject(id.toString())
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
                 .compact();

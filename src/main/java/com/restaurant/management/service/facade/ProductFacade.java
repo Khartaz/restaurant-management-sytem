@@ -2,7 +2,10 @@ package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.Product;
 import com.restaurant.management.domain.dto.ProductDto;
+import com.restaurant.management.domain.dto.ProductHistoryDto;
+import com.restaurant.management.domain.history.ProductHistory;
 import com.restaurant.management.mapper.ProductMapper;
+import com.restaurant.management.service.ProductHistoryService;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
@@ -18,11 +21,15 @@ import java.util.List;
 public final class ProductFacade {
     private ProductService productService;
     private ProductMapper productMapper;
+    private ProductHistoryService productHistoryService;
 
     @Autowired
-    public ProductFacade(ProductService productService, ProductMapper productMapper) {
+    public ProductFacade(ProductService productService,
+                         ProductMapper productMapper,
+                         ProductHistoryService productHistoryService) {
         this.productService = productService;
         this.productMapper = productMapper;
+        this.productHistoryService = productHistoryService;
     }
 
     public ProductDto registerProduct(RegisterProductRequest request) {
@@ -58,5 +65,11 @@ public final class ProductFacade {
         List<Product> products = productService.getAllByName(name, pageable);
 
         return productMapper.mapToProductDtoList(products);
+    }
+
+    public List<ProductHistoryDto> getProductHistory(Long productId) {
+        List<ProductHistory> productHistory = productHistoryService.productRevisions(productId);
+
+        return productMapper.mapToProductHistoryDtoList(productHistory);
     }
 }

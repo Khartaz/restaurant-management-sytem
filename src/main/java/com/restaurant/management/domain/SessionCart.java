@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "session_carts")
 public class SessionCart extends AbstractCart {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

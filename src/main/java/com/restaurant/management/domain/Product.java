@@ -1,6 +1,7 @@
 package com.restaurant.management.domain;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,20 +15,23 @@ public class Product extends AbstractProduct {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ingredient> ingredients = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
+
     public Product() {
     }
 
     public Product(Long createdAt, Long updatedAt,
                    String createdBy, String updatedBy,
-                   Long id, String uniqueId, String name, String category,
+                   Long id, String name, String category,
                    Double price, List<Ingredient> ingredients) {
-        super(createdAt, updatedAt, createdBy, updatedBy, id, uniqueId, name, category, price);
+        super(createdAt, updatedAt, createdBy, updatedBy, id, name, category, price);
         this.ingredients = ingredients;
     }
 
-    public Product(Long id, String uniqueId, String name, String category,
+    public Product(Long id, String name, String category,
                    Double price, List<Ingredient> ingredients) {
-        super(id, uniqueId, name, category, price);
+        super(id, name, category, price);
         this.ingredients = ingredients;
     }
 
@@ -43,6 +47,14 @@ public class Product extends AbstractProduct {
 
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 
     public static class ProductBuilder {

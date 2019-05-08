@@ -16,23 +16,23 @@ public enum UserMessages {
     ACCOUNT_DISABLED("Account is disabled. Please verify email first.");
 
 
-    private String errorMessage;
+    private String message;
 
-    UserMessages(String errorMessage) {
-        this.errorMessage = errorMessage;
+    UserMessages(String message) {
+        this.message = message;
     }
 
     /**
-     * @return the errorMessage
+     * @return the message
      */
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * @param errorMessage the errorMessage to set
+     * @param errorMessage the message to set
      */
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setMessage(String errorMessage) {
+        this.message = errorMessage;
     }
 }

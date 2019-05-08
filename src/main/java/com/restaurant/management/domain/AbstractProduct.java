@@ -14,9 +14,6 @@ public abstract class AbstractProduct extends AbstractAuditing {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "unique_id")
-    private String uniqueId;
-
     @Column(name = "name")
     private String name;
 
@@ -31,20 +28,18 @@ public abstract class AbstractProduct extends AbstractAuditing {
 
     public AbstractProduct(Long createdAt, Long updatedAt,
                            String createdBy, String updatedBy,
-                           Long id, String uniqueId, String name,
+                           Long id, String name,
                            String category, Double price) {
         super(createdAt, updatedAt, createdBy, updatedBy);
         this.id = id;
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
     }
 
-    public AbstractProduct(Long id, String uniqueId, String name,
+    public AbstractProduct(Long id, String name,
                            String category, Double price) {
         this.id = id;
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -52,7 +47,6 @@ public abstract class AbstractProduct extends AbstractAuditing {
 
     public AbstractProduct(String uniqueId, String name,
                            String category, Double price) {
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -60,14 +54,6 @@ public abstract class AbstractProduct extends AbstractAuditing {
 
     public Long getId() {
         return id;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
     }
 
     public String getName() {

@@ -17,9 +17,6 @@ public class ProductArchive extends AbstractAuditing {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "unique_id")
-    private String uniqueId;
-
     @Column(name = "name")
     private String name;
 
@@ -37,10 +34,9 @@ public class ProductArchive extends AbstractAuditing {
 
     public ProductArchive(Long createdAt, Long updatedAt,
                           String createdBy, String updatedBy,
-                          String uniqueId, String name, String category,
+                          String name, String category,
                           Double price, List<IngredientArchive> ingredients) {
         super(createdAt, updatedAt, createdBy, updatedBy);
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -54,15 +50,6 @@ public class ProductArchive extends AbstractAuditing {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
     public String getName() {
         return name;
     }

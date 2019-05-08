@@ -9,7 +9,6 @@ public final class ProductResponse {
     private String createdBy;
     private String updatedBy;
     private Long id;
-    private String uniqueId;
     private String name;
     private String category;
     private Double price;
@@ -18,26 +17,25 @@ public final class ProductResponse {
     public ProductResponse() {
     }
 
-    public ProductResponse(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
-                           Long id, String uniqueId, String name,
-                           String category, Double price, List<IngredientResponse> ingredients) {
+    public ProductResponse(Long createdAt, Long updatedAt,
+                           String createdBy, String updatedBy, Long id,
+                           String name, String category, Double price,
+                           List<IngredientResponse> ingredients) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.id = id;
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.ingredients = ingredients;
     }
 
-    public ProductResponse(Long id, String uniqueId, String name,
+    public ProductResponse(Long id, String name,
                            String category, Double price,
                            List<IngredientResponse> ingredients) {
         this.id = id;
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -62,10 +60,6 @@ public final class ProductResponse {
 
     public Long getId() {
         return id;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
     }
 
     public String getName() {

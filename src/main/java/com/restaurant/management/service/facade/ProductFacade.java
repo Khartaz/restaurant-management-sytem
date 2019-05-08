@@ -5,6 +5,8 @@ import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.domain.dto.ProductHistoryDto;
 import com.restaurant.management.domain.history.ProductHistory;
 import com.restaurant.management.mapper.ProductMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ProductHistoryService;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.web.request.product.ProductRequest;
@@ -32,16 +34,39 @@ public final class ProductFacade {
         this.productHistoryService = productHistoryService;
     }
 
-    public ProductDto registerProduct(RegisterProductRequest request) {
-        Product product = productService.registerProduct(request);
+    public ProductDto registerProduct(@CurrentUser UserPrincipal currentUser, RegisterProductRequest request) {
+        Product product = productService.registerProduct(currentUser, request);
 
         return productMapper.mapToProductDto(product);
     }
 
-    public ProductDto updateProduct(ProductRequest request) {
-        Product product = productService.updateProduct(request);
+    public ProductDto updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
+        Product product = productService.updateProduct(request, currentUser);
 
         return productMapper.mapToProductDto(product);
+    }
+
+    public ProductDto getProductById(Long id, @CurrentUser UserPrincipal currentUser) {
+        Product product = productService.getProductById(id, currentUser);
+
+        return productMapper.mapToProductDto(product);
+    }
+
+    public ApiResponse deleteById(Long id, @CurrentUser UserPrincipal currentUser) {
+
+        return productService.deleteById(id, currentUser);
+    }
+
+    public List<ProductHistoryDto> getProductHistory(Long productId, @CurrentUser UserPrincipal currentUser) {
+        List<ProductHistory> productHistory = productHistoryService.productRevisions(productId, currentUser);
+
+        return productMapper.mapToProductHistoryDtoList(productHistory);
+    }
+
+    public Page<ProductDto> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
+        Page<Product> products = productService.getAllByRestaurant(pageable, currentUser);
+
+        return productMapper.mapToProductDtoPage(products);
     }
 
     public Page<ProductDto> getAllProducts(Pageable pageable) {
@@ -50,26 +75,9 @@ public final class ProductFacade {
         return productMapper.mapToProductDtoPage(products);
     }
 
-    public ProductDto getProductByUniqueId(String uniqueId) {
-        Product product = productService.getProductByUniqueId(uniqueId);
+    public ProductDto getProductById(Long id) {
+        Product product = productService.getProductById(id);
 
         return productMapper.mapToProductDto(product);
-    }
-
-    public ApiResponse deleteByUniqueId(String uniqueId) {
-
-        return productService.deleteByUniqueId(uniqueId);
-    }
-
-    public List<ProductDto> getAllByName(String name, Pageable pageable) {
-        List<Product> products = productService.getAllByName(name, pageable);
-
-        return productMapper.mapToProductDtoList(products);
-    }
-
-    public List<ProductHistoryDto> getProductHistory(Long productId) {
-        List<ProductHistory> productHistory = productHistoryService.productRevisions(productId);
-
-        return productMapper.mapToProductHistoryDtoList(productHistory);
     }
 }

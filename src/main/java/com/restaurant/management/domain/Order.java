@@ -2,9 +2,11 @@ package com.restaurant.management.domain;
 
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Entity
@@ -32,6 +34,10 @@ public class Order  {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Cart cart;
+
+    @NotAudited
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
 
     public Order() {
     }
@@ -108,6 +114,14 @@ public class Order  {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 
     public static class OrderBuilder {

@@ -9,7 +9,6 @@ public final class ProductDto {
     private String createdBy;
     private String updatedBy;
     private Long id;
-    private String uniqueId;
     private String name;
     private String category;
     private Double price;
@@ -19,23 +18,21 @@ public final class ProductDto {
     }
 
     public ProductDto(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
-                      Long id, String uniqueId, String name,
+                      Long id, String name,
                       String category, Double price, List<IngredientDto> ingredients) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.id = id;
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.ingredients = ingredients;
     }
 
-    public ProductDto(String uniqueId, String name, String category,
+    public ProductDto(String name, String category,
                       Double price, List<IngredientDto> ingredients) {
-        this.uniqueId = uniqueId;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -66,10 +63,6 @@ public final class ProductDto {
 
     public Long getId() {
         return id;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
     }
 
     public String getName() {

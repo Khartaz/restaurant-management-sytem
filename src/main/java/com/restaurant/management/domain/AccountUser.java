@@ -1,5 +1,7 @@
 package com.restaurant.management.domain;
 
+import org.hibernate.envers.NotAudited;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -38,6 +40,10 @@ public class AccountUser extends AbstractUser {
             inverseJoinColumns = @JoinColumn( name="role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @NotAudited
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
 
     public AccountUser() {
     }
@@ -119,6 +125,14 @@ public class AccountUser extends AbstractUser {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 
     public static class AccountUserBuilder {

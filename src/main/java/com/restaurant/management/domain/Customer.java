@@ -1,5 +1,7 @@
 package com.restaurant.management.domain;
 
+import org.hibernate.envers.NotAudited;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,10 @@ public class Customer extends AbstractUser  {
 
     @Column(name = "phone_number")
     private Long phoneNumber;
+
+    @NotAudited
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
 
     public Customer() {
     }
@@ -62,4 +68,11 @@ public class Customer extends AbstractUser  {
     }
 
 
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
+    }
 }

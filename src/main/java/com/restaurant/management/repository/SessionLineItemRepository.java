@@ -11,6 +11,6 @@ public interface SessionLineItemRepository extends JpaRepository<SessionLineItem
 
     void deleteById(Long id);
 
-    List<SessionLineItem> findAllByProductUniqueId(String uniqueId);
+    List<SessionLineItem> findAllByProductId(Long id);
 
 }

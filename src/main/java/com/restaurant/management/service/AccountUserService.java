@@ -1,9 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.AccountUser;
-import com.restaurant.management.domain.Mail;
-import com.restaurant.management.domain.Role;
-import com.restaurant.management.domain.RoleName;
+import com.restaurant.management.domain.*;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -63,7 +60,7 @@ public class AccountUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
         AccountUser adminUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
 
         return UserPrincipal.create(adminUser);
     }
@@ -71,16 +68,16 @@ public class AccountUserService implements UserDetailsService {
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserByUserId(Long id) {
         AccountUser accountUser = accountUserRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage() + id));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getMessage() + id));
 
         return UserPrincipal.create(accountUser);
     }
 
     public ApiResponse checkEmailAvailability(String email) {
         if(accountUserRepository.existsByEmail(email)) {
-            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getErrorMessage());
+            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
         }
-        return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getErrorMessage());
+        return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
     }
 
     public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
@@ -90,7 +87,7 @@ public class AccountUserService implements UserDetailsService {
         String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
+                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
 
         AccountUser newAdminUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
@@ -117,7 +114,7 @@ public class AccountUserService implements UserDetailsService {
         String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
-                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getErrorMessage()));
+                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
 
         /**
          *  Temporary changed Active to TRUE and EmailVerificationToken to NULL
@@ -139,6 +136,11 @@ public class AccountUserService implements UserDetailsService {
                 .setEmailVerificationToken(null)
                 .build();
 
+        RestaurantInfo restaurantInfo = new RestaurantInfo();
+        restaurantInfo.setName("New Restaurant");
+
+        accountUser.setRestaurantInfo(restaurantInfo);
+
         accountUserRepository.save(accountUser);
 
 //        simpleEmailService.sendEmailVerification(
@@ -149,16 +151,16 @@ public class AccountUserService implements UserDetailsService {
 
     public ApiResponse deleteUserById(Long id) {
         AccountUser accountUser = accountUserRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getErrorMessage() + id));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
 
         accountUserRepository.deleteById(accountUser.getId());
 
-        return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getErrorMessage());
+        return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getMessage());
     }
 
     public AccountUser updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(request.getEmail(), request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + request.getEmail()));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + request.getEmail()));
 
         Stream.of(accountUser).forEach(acc -> {
             acc.setName(request.getName());
@@ -174,7 +176,7 @@ public class AccountUserService implements UserDetailsService {
         Optional<AccountUser> accountUser = accountUserRepository.findById(id);
 
         if (!accountUser.isPresent()) {
-            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getErrorMessage() + id);
+            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getMessage() + id);
         }
 
         return accountUser.get();
@@ -183,10 +185,10 @@ public class AccountUserService implements UserDetailsService {
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         String usernameOrEmail = loginRequest.getEmail();
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
 
         if (!accountUser.isActive()) {
-            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
+            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
         }
 
         Authentication authentication = authenticationManager.authenticate(
@@ -203,11 +205,11 @@ public class AccountUserService implements UserDetailsService {
 
     public boolean requestResetPassword(String usernameOrEmail) {
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
 
         Stream.of(accountUser).forEach(u -> {
             if (!u.isActive()) {
-                throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
+                throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
             }
              u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getId()));
 
@@ -222,7 +224,7 @@ public class AccountUserService implements UserDetailsService {
 
     public boolean resendEmailVerificationToken(String usernameOrEmail) {
         AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getErrorMessage() + usernameOrEmail));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
 
         String token = accountUser.getEmailVerificationToken();
 
@@ -236,7 +238,7 @@ public class AccountUserService implements UserDetailsService {
         boolean returnValue = false;
 
         AccountUser accountUser = accountUserRepository.findAdminUserByEmailVerificationToken(token)
-                .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getErrorMessage()));
+                .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
@@ -259,14 +261,14 @@ public class AccountUserService implements UserDetailsService {
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
         AccountUser accountUser = accountUserRepository.findAdminUserByPasswordResetToken(token)
-                .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getErrorMessage()));
+                .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
         if (!accountUser.isActive()) {
-            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getErrorMessage());
+            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
         }
 
         if (!passwordReset.getPassword().equals(passwordReset.getConfirmPassword())) {
-            throw new UserAuthenticationException(UserMessages.PASSWORDS_EQUALS.getErrorMessage());
+            throw new UserAuthenticationException(UserMessages.PASSWORDS_EQUALS.getMessage());
         }
 
         if (!hasTokenExpired) {

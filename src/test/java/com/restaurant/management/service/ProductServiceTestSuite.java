@@ -32,7 +32,7 @@ public class ProductServiceTestSuite {
     @Mock
     private IngredientMapper ingredientMapper;
 
-    private static final String UNIQUE_ID = "JD3ND2E";
+    private static final Long ID = 1L;
     private static final String PRODUCT_NAME = "Product name";
     private static final String PRODUCT_CATEGORY = "Product category";
     private static final Double PRODUCT_PRICE = 2.20;
@@ -54,7 +54,6 @@ public class ProductServiceTestSuite {
         Product result = productService.registerProduct(request);
         //THEN
         assertAll(
-                () -> assertEquals(result.getUniqueId().length(), 7),
                 () -> assertEquals(result.getIngredients().get(0).getName(), request.getIngredients().get(0).getName()),
                 () -> assertEquals(result.getCategory(), request.getCategory()),
                 () -> assertEquals(result.getPrice().doubleValue(), request.getPrice())
@@ -70,7 +69,7 @@ public class ProductServiceTestSuite {
         ingredients.add(new Ingredient(INGREDIENT));
 
         Product product = new Product(
-                UNIQUE_ID,
+                ID,
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 PRODUCT_PRICE,
@@ -83,14 +82,14 @@ public class ProductServiceTestSuite {
         ingredientsRequest.add(new IngredientRequest(INGREDIENT));
 
         ProductRequest request = new ProductRequest(
-                UNIQUE_ID,
+                ID,
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 3.50,
                 ingredientsRequest
         );
 
-        when(productRepository.findProductByUniqueId(UNIQUE_ID)).thenReturn(Optional.of(product));
+        when(productRepository.findById(ID)).thenReturn(Optional.of(product));
         when(productRepository.existsByName(request.getName())).thenReturn(Boolean.FALSE);
         //WHEN
         Product result = productService.updateProduct(request);
@@ -98,7 +97,7 @@ public class ProductServiceTestSuite {
         assertAll(
                 () -> assertEquals(result.getCategory(), request.getCategory()),
                 () -> assertTrue(!result.getPrice().equals(PRODUCT_PRICE)),
-                () -> assertEquals(result.getUniqueId(), request.getUniqueId())
+                () -> assertEquals(result.getId(), request.getId())
         );
     }
 
@@ -111,16 +110,16 @@ public class ProductServiceTestSuite {
         ingredients.add(new Ingredient(INGREDIENT));
 
         Optional<Product> optionalProduct = Optional.of(new Product(
-                UNIQUE_ID,
+                ID,
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 PRODUCT_PRICE,
                 ingredients
         ));
 
-        when(productRepository.findProductByUniqueId(UNIQUE_ID)).thenReturn(optionalProduct);
+        when(productRepository.findById(ID)).thenReturn(optionalProduct);
         //WHEN
-        Product result = productService.getProductByUniqueId(UNIQUE_ID);
+        Product result = productService.getProductById(ID);
         //THEN
         Product product = optionalProduct.get();
         assertAll(
@@ -134,7 +133,7 @@ public class ProductServiceTestSuite {
     public void shouldGetAllProducts() {
         //GIVEN
         Product product1 = new Product(
-                UNIQUE_ID,
+                ID,
                 PRODUCT_NAME,
                 PRODUCT_CATEGORY,
                 PRODUCT_PRICE,
@@ -142,7 +141,7 @@ public class ProductServiceTestSuite {
         );
 
         Product product2 = new Product(
-                UNIQUE_ID + 1,
+                ID + 1,
                 PRODUCT_NAME + 1,
                 PRODUCT_CATEGORY + 1,
                 PRODUCT_PRICE + 1,

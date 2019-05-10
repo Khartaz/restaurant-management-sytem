@@ -1,20 +1,20 @@
 package com.restaurant.management.web.request.cart;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public final class RemoveProductRequest {
 
-    @NotBlank(message = "product name cannot be blank")
-    private String productName;
+    @NotNull(message = "product id cannot be null")
+    private Long productId;
 
     public RemoveProductRequest() {
     }
 
-    public RemoveProductRequest(String productName) {
-        this.productName = productName;
+    public RemoveProductRequest(Long productId) {
+        this.productId = productId;
     }
 
-    public String getProductName() {
-        return productName;
+    public Long getProductId() {
+        return productId;
     }
 }

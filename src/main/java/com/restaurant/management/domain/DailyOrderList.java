@@ -27,6 +27,9 @@ public class DailyOrderList extends AbstractAuditing {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Order> orders = new LinkedHashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
+
     public DailyOrderList(Long id, String uniqueId, Double dailyIncome,
                           Integer numberOfOrders,
                           Boolean isOpen, Set<Order> orders) {
@@ -85,4 +88,11 @@ public class DailyOrderList extends AbstractAuditing {
         this.orders = orders;
     }
 
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
+    }
 }

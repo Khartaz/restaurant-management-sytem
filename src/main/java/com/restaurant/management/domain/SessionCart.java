@@ -14,6 +14,9 @@ public class SessionCart extends AbstractCart {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SessionLineItem> sessionLineItems = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
+
     public SessionCart() {
     }
 
@@ -45,6 +48,14 @@ public class SessionCart extends AbstractCart {
 
     public void setSessionLineItems(List<SessionLineItem> sessionLineItems) {
         this.sessionLineItems = sessionLineItems;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 
     public Double calculateTotal(){

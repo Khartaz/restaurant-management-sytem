@@ -2,6 +2,8 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.mapper.CartMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.CartFacade;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
@@ -90,8 +92,8 @@ public class CartController {
 
     @PostMapping(value = "/customer/{customerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> registerCustomerCart(@PathVariable Long customerId) {
-        CartDto cartDto = cartFacade.openSessionCart(customerId);
+    Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser, @PathVariable Long customerId) {
+        CartDto cartDto = cartFacade.openSessionCart(currentUser, customerId);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 
@@ -102,8 +104,10 @@ public class CartController {
 
     @PutMapping(value = "/session/{customerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> addToSessionCart(@PathVariable Long customerId, @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = cartFacade.addToCart(customerId, request);
+    Resource<CartResponse> addToSessionCart(@CurrentUser UserPrincipal currentUser,
+                                            @PathVariable Long customerId,
+                                            @RequestBody UpdateCartRequest request) {
+        CartDto cartDto = cartFacade.addToCart(currentUser, customerId, request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -114,8 +118,10 @@ public class CartController {
 
     @DeleteMapping(value = "/session/{customerId}/product", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> removeProductFromCart(@PathVariable Long customerId, @Valid @RequestBody RemoveProductRequest request) {
-        CartDto cartDto = cartFacade.removeProductFromCart(customerId, request);
+    Resource<CartResponse> removeProductFromCart(@CurrentUser UserPrincipal currentUser,
+                                                 @PathVariable Long customerId,
+                                                 @Valid @RequestBody RemoveProductRequest request) {
+        CartDto cartDto = cartFacade.removeProductFromCart(currentUser, customerId, request);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 
@@ -126,8 +132,10 @@ public class CartController {
 
     @PutMapping(value = "/session/{customerId}/product", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> updateProductQuantity(@PathVariable Long customerId, @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = cartFacade.updateProductQuantity(customerId, request);
+    Resource<CartResponse> updateProductQuantity(@CurrentUser UserPrincipal currentUser,
+                                                 @PathVariable Long customerId,
+                                                 @RequestBody UpdateCartRequest request) {
+        CartDto cartDto = cartFacade.updateProductQuantity(currentUser, customerId, request);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 

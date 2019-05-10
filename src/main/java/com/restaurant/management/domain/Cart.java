@@ -17,6 +17,9 @@ public class Cart extends AbstractCart {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<LineItemArchive> lineItems = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
+
     public Cart() {
     }
 
@@ -43,4 +46,11 @@ public class Cart extends AbstractCart {
         this.lineItems = lineItems;
     }
 
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
+    }
 }

@@ -1,5 +1,6 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.config.LogExecutionTime;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.mapper.AccountUserMapper;
@@ -21,13 +22,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RolesAllowed({"ROLE_ADMIN"})
+//@RolesAllowed({"ROLE_ADMIN"})
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/admin")
@@ -65,7 +65,7 @@ public class AdminUserController {
         return new Resource<>(userResponse, link);
     }
 
-    @GetMapping(value = "/all-products", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/products", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<ProductResponse>> showProductsPageable(Pageable pageable, PagedResourcesAssembler assembler) {
         Page<ProductDto> dtoPage = productFacade.getAllProducts(pageable);
@@ -75,7 +75,7 @@ public class AdminUserController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}",produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/products/{id}",produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductResponse> showProduct(@PathVariable Long id) {
 
@@ -88,4 +88,32 @@ public class AdminUserController {
         return new Resource<>(productResponse, link);
     }
 
+    @LogExecutionTime
+    @GetMapping(value = "/all-accounts", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<PagedResources<AccountUserResponse>> showAllUsersPageable(Pageable pageable,
+                                                                             PagedResourcesAssembler assembler) {
+        Page<AccountUserDto> accountUsersDto = accountUserFacade.getAllAccountUsers(pageable);
+
+        Page<AccountUserResponse> responsePage = accountUserMapper.mapToAccountUserResponsePage(accountUsersDto);
+
+        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/users/{id}")
+    public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(accountUserFacade.deleteUserById(id));
+    }
+
+    @GetMapping(value = "/users/{id}", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<AccountUserResponse> showUser(@PathVariable Long id) {
+        AccountUserDto accountUserDto = accountUserFacade.getUserById(id);
+
+        AccountUserResponse accountUserResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
+
+        Link link = linkTo(AccountUserController.class).slash(accountUserResponse.getId()).withSelfRel();
+
+        return new Resource<>(accountUserResponse, link);
+    }
 }

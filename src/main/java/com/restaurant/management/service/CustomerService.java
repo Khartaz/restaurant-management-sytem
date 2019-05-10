@@ -1,12 +1,19 @@
 package com.restaurant.management.service;
 
+import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.RestaurantInfo;
 import com.restaurant.management.domain.SessionCart;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
+import com.restaurant.management.exception.user.UserMessages;
+import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.SessionCartRepository;
 import com.restaurant.management.repository.CustomerRepository;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +29,19 @@ import java.util.Optional;
 public class CustomerService {
     private CustomerRepository customerRepository;
     private SessionCartRepository sessionCartRepository;
-
+    private AccountUserRepository accountUserRepository;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
-                           SessionCartRepository sessionCartRepository) {
+                           SessionCartRepository sessionCartRepository,
+                           AccountUserRepository accountUserRepository) {
         this.customerRepository = customerRepository;
         this.sessionCartRepository = sessionCartRepository;
+        this.accountUserRepository = accountUserRepository;
     }
 
-    //@RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
-    public Customer createCustomer(SignUpCustomerRequest request) {
+    public Customer createCustomer(@CurrentUser UserPrincipal currentUser,
+                                   SignUpCustomerRequest request) {
         if (customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
         }
@@ -40,46 +49,58 @@ public class CustomerService {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
         }
 
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
+
+        RestaurantInfo restaurantInfo = accountUser.getRestaurantInfo();
+
         Customer customer = new Customer();
 
         customer.setName(request.getName());
         customer.setLastname(request.getLastname());
         customer.setEmail(request.getEmail());
         customer.setPhoneNumber(request.getPhoneNumber());
+        customer.setRestaurantInfo(restaurantInfo);
 
         customerRepository.save(customer);
 
         return customer;
     }
 
-    public Page<Customer> getAllCustomers(Pageable pageable) {
-        return customerRepository.findAll(pageable);
+    public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        return customerRepository.findAllByRestaurantInfoId(pageable, restaurantId);
     }
 
-    public ApiResponse deleteCustomerById(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
+    public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        if (customer.isPresent()) {
-            Optional<SessionCart> sessionCart = sessionCartRepository.findByCustomer(customer.get());
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        Customer customer = customerRepository.findByIdAndRestaurantInfoId(id, restaurantId)
+                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id));
+
+            Optional<SessionCart> sessionCart = sessionCartRepository.findByCustomer(customer);
 
             sessionCart.ifPresent(v -> sessionCartRepository.delete(v));
 
-            customerRepository.deleteById(customer.get().getId());
+            customerRepository.deleteById(customer.getId());
 
-            return new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage());
-
-        } else {
-            throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id);
-        }
+        return new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage());
     }
 
-    public Customer getCustomerById(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
+    public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        if (!customer.isPresent()) {
-            throw new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id);
-        }
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        return customer.get();
+        return customerRepository.findByIdAndRestaurantInfoId(id, restaurantId)
+                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id));
     }
 }

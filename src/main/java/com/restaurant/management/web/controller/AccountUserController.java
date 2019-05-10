@@ -1,6 +1,5 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.config.LogExecutionTime;
 import com.restaurant.management.config.LogLogin;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
@@ -22,7 +21,6 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,8 +44,6 @@ public class AccountUserController {
     }
 
     @GetMapping(value = "/me")
-//    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     public @ResponseBody
     UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         return new UserSummary(
@@ -76,12 +72,11 @@ public class AccountUserController {
         return new Resource<>(userResponse, link);
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<AccountUserResponse> updateAccountNameOrLastname(@Valid @RequestBody UpdateAccountNameOrLastname request) {
-
-        AccountUserDto accountUserDto = accountUserFacade.updateAccountNameOrLastname(request);
+    Resource<AccountUserResponse> updateAccountNameOrLastname(@CurrentUser UserPrincipal currentUser,
+                                                              @Valid @RequestBody UpdateAccountNameOrLastname request) {
+        AccountUserDto accountUserDto = accountUserFacade.updateAccountNameOrLastname(currentUser, request);
 
         AccountUserResponse response = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
@@ -90,43 +85,34 @@ public class AccountUserController {
         return new Resource<>(response, link);
     }
 
-    //Move this controller to AdminController?
-//    @RolesAllowed({"ROLE_ADMIN"})
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(accountUserFacade.deleteUserById(id));
+    @GetMapping(value = "/checkEmailAvailability", produces = APPLICATION_JSON_VALUE)
+    public ApiResponse checkEmailAvailability(@RequestParam String email) {
+        return accountUserFacade.checkEmailAvailability(email);
     }
 
-    @LogExecutionTime
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<AccountUserResponse>> showAllUsersPageable(Pageable pageable,
-                                                                             PagedResourcesAssembler assembler) {
-        Page<AccountUserDto> accountUsersDto = accountUserFacade.getAllAccountUsers(pageable);
+    ResponseEntity<PagedResources<AccountUserResponse>> showRestaurantUsersPageable(@CurrentUser UserPrincipal currentUser,
+                                                                                    Pageable pageable,
+                                                                                    PagedResourcesAssembler assembler) {
+        Page<AccountUserDto> accountUsersDto = accountUserFacade.getRestaurantUsers(currentUser, pageable);
 
         Page<AccountUserResponse> responsePage = accountUserMapper.mapToAccountUserResponsePage(accountUsersDto);
 
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-//    @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
-//    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<AccountUserResponse> showUser(@PathVariable Long id) {
-        AccountUserDto accountUserDto = accountUserFacade.getUserById(id);
+    Resource<AccountUserResponse> showUserDetails(@CurrentUser UserPrincipal currentUser,
+                                                  @PathVariable Long id) {
+        AccountUserDto accountUserDto = accountUserFacade.getRestaurantUserById(currentUser, id);
 
         AccountUserResponse accountUserResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 
         Link link = linkTo(AccountUserController.class).slash(accountUserResponse.getId()).withSelfRel();
 
         return new Resource<>(accountUserResponse, link);
-    }
-
-    @GetMapping(value = "/checkEmailAvailability", produces = APPLICATION_JSON_VALUE)
-    public ApiResponse checkEmailAvailability(@RequestParam String email) {
-        return accountUserFacade.checkEmailAvailability(email);
     }
 
 }

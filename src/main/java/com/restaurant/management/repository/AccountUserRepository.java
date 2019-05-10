@@ -28,6 +28,7 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
     @Override
     Page<AccountUser> findAll(Pageable pageable);
 
-    List<AccountUser> findByRestaurantInfoId(Long id);
+    Optional<AccountUser> findByIdAndRestaurantInfoId(Long id, Long restaurantId);
 
+    Page<AccountUser> findAllByRestaurantInfoId(Long id, Pageable pageable);
 }

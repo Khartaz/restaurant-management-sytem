@@ -3,6 +3,8 @@ package com.restaurant.management.service.facade;
 import com.restaurant.management.domain.Customer;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.mapper.CustomerMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -25,24 +27,24 @@ public final class CustomerFacade {
         this.customerService = customerService;
     }
 
-    public CustomerDto createCustomer(SignUpCustomerRequest request) {
-        Customer customer = customerService.createCustomer(request);
+    public CustomerDto createCustomer(@CurrentUser UserPrincipal currentUser, SignUpCustomerRequest request) {
+        Customer customer = customerService.createCustomer(currentUser, request);
 
         return customerMapper.mapToCustomerDto(customer);
     }
 
-    public Page<CustomerDto> getAllCustomers(Pageable pageable) {
-        Page<Customer> customers = customerService.getAllCustomers(pageable);
+    public Page<CustomerDto> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<Customer> customers = customerService.getAllCustomers(currentUser, pageable);
 
         return customerMapper.mapToCustomerDtoPage(customers);
     }
 
-    public ApiResponse deleteCustomerById(Long id) {
-        return customerService.deleteCustomerById(id);
+    public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
+        return customerService.deleteCustomerById(currentUser, id);
     }
 
-    public CustomerDto getCustomerById(Long id) {
-        Customer customer = customerService.getCustomerById(id);
+    public CustomerDto getCustomerById(@CurrentUser UserPrincipal currentUser,Long id) {
+        Customer customer = customerService.getCustomerById(currentUser, id);
 
         return customerMapper.mapToCustomerDto(customer);
     }

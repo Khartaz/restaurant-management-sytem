@@ -18,6 +18,8 @@ public interface SessionCartRepository extends JpaRepository<SessionCart, Long> 
 
     Optional<SessionCart> findSessionCartByCustomerId(Long id);
 
+    Optional<SessionCart> findSessionCartByCustomerIdAndRestaurantInfoId(Long customerId, Long restaurantId);
+
     Optional<SessionCart> findByUniqueId(String uniqueId);
 
     boolean existsByCustomerAndIsOpenTrue(Customer customer);

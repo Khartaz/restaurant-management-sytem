@@ -7,6 +7,7 @@ import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.AccountUserRepository;
+import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.utils.Utils;
@@ -68,7 +69,7 @@ public class AccountUserService implements UserDetailsService {
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserByUserId(Long id) {
         AccountUser accountUser = accountUserRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getMessage() + id));
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
 
         return UserPrincipal.create(accountUser);
     }
@@ -158,9 +159,11 @@ public class AccountUserService implements UserDetailsService {
         return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getMessage());
     }
 
-    public AccountUser updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
-        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(request.getEmail(), request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + request.getEmail()));
+    public AccountUser updateAccountNameOrLastname(@CurrentUser UserPrincipal currentUser,
+                                                   UpdateAccountNameOrLastname request) {
+
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
 
         Stream.of(accountUser).forEach(acc -> {
             acc.setName(request.getName());
@@ -173,13 +176,18 @@ public class AccountUserService implements UserDetailsService {
     }
 
     public AccountUser getUserById(Long id) {
-        Optional<AccountUser> accountUser = accountUserRepository.findById(id);
+       return accountUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
+    }
 
-        if (!accountUser.isPresent()) {
-            throw new UserNotFoundException(UserMessages.UNIQUE_ID_NOT_FOUND.getMessage() + id);
-        }
+    public AccountUser getRestaurantUserById(@CurrentUser UserPrincipal currentUser, Long id) {
+        AccountUser currentUserResult = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
 
-        return accountUser.get();
+        Long restaurantId = currentUserResult.getRestaurantInfo().getId();
+
+        return accountUserRepository.findByIdAndRestaurantInfoId(id, restaurantId)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
@@ -286,6 +294,15 @@ public class AccountUserService implements UserDetailsService {
 
     public Page<AccountUser> getAllAccountUsers(Pageable pageable) {
         return accountUserRepository.findAll(pageable);
+    }
+
+    public Page<AccountUser> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
+
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        return accountUserRepository.findAllByRestaurantInfoId(restaurantId, pageable);
     }
 
 }

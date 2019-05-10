@@ -15,10 +15,16 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Boolean existsByEmail(String email);
 
+    Boolean existsByIdAndRestaurantInfoId(Long id, Long restaurantId);
+
     Optional<Customer> findById(Long id);
+
+    Optional<Customer> findByIdAndRestaurantInfoId(Long id, Long restaurantId);
 
     void deleteById(Long id);
 
     @Override
     Page<Customer> findAll(Pageable pageable);
+
+    Page<Customer> findAllByRestaurantInfoId(Pageable pageable, Long restaurantId);
 }

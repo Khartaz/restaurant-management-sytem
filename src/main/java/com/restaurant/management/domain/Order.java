@@ -35,7 +35,6 @@ public class Order  {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Cart cart;
 
-    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RestaurantInfo restaurantInfo;
 

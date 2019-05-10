@@ -3,6 +3,8 @@ package com.restaurant.management.service.facade;
 import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
@@ -36,8 +38,9 @@ public final class AccountUserFacade {
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }
 
-    public AccountUserDto updateAccountNameOrLastname(UpdateAccountNameOrLastname request) {
-        AccountUser accountUser = accountUserService.updateAccountNameOrLastname(request);
+    public AccountUserDto updateAccountNameOrLastname(@CurrentUser UserPrincipal currentUser,
+                                                      UpdateAccountNameOrLastname request) {
+        AccountUser accountUser = accountUserService.updateAccountNameOrLastname(currentUser, request);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }
@@ -52,8 +55,20 @@ public final class AccountUserFacade {
         return accountUserMapper.mapToAccountUserDtoPage(accountUsers);
     }
 
+    public Page<AccountUserDto> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<AccountUser> accountUsers = accountUserService.getRestaurantUsers(currentUser, pageable);
+
+        return accountUserMapper.mapToAccountUserDtoPage(accountUsers);
+    }
+
     public AccountUserDto getUserById(Long id) {
         AccountUser accountUser = accountUserService.getUserById(id);
+
+        return accountUserMapper.mapToAccountUserDto(accountUser);
+    }
+
+    public AccountUserDto getRestaurantUserById(@CurrentUser UserPrincipal currentUser,  Long id) {
+        AccountUser accountUser = accountUserService.getRestaurantUserById(currentUser, id);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }

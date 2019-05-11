@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @GetMapping(value = "/email-verification", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> verifyEmailToken(@RequestParam(value = "token") String token) {
+    public ResponseEntity<?> verifyEmailToken(@RequestParam String token) {
         return ResponseEntity.ok(accountUserService.verifyEmailToken(token));
     }
 
@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping(value = "/reset-password",
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> resetPassword(@RequestParam(value = "token") String token,
+    public ResponseEntity<?> resetPassword(@RequestParam String token,
                                            @RequestBody PasswordReset passwordReset) {
         return ResponseEntity.ok(accountUserService.resetPassword(token, passwordReset));
     }

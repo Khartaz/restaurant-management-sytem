@@ -1,6 +1,7 @@
 package com.restaurant.management.domain.archive;
 
 import com.restaurant.management.domain.AbstractAuditing;
+import com.restaurant.management.domain.RestaurantInfo;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -28,6 +29,9 @@ public class ProductArchive extends AbstractAuditing {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<IngredientArchive> ingredients = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
 
     public ProductArchive() {
     }
@@ -80,5 +84,13 @@ public class ProductArchive extends AbstractAuditing {
 
     public void setIngredients(List<IngredientArchive> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 }

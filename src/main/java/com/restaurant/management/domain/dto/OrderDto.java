@@ -1,34 +1,36 @@
 package com.restaurant.management.domain.dto;
 
+import com.restaurant.management.domain.OrderStatus;
+
 import java.util.Calendar;
 
 public final class OrderDto {
 
     private Long id;
-    private String orderNumber;
+    private Long orderNumber;
     private Calendar ordered;
-    private String status;
+    private OrderStatus orderStatus;
     private Double totalPrice;
     private CartDto cart;
 
     public OrderDto() {
     }
 
-    public OrderDto(Long id, String orderNumber, Calendar ordered,
-                    String status, Double totalPrice, CartDto cart) {
+    public OrderDto(Long id, Long orderNumber, Calendar ordered,
+                    OrderStatus orderStatus, Double totalPrice, CartDto cart) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.ordered = ordered;
-        this.status = status;
+        this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
         this.cart = cart;
     }
 
-    public OrderDto(String orderNumber, Calendar ordered,
-                    String status, Double totalPrice, CartDto cart) {
+    public OrderDto(Long orderNumber, Calendar ordered,
+                    OrderStatus orderStatus, Double totalPrice, CartDto cart) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
-        this.status = status;
+        this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
         this.cart = cart;
     }
@@ -37,7 +39,7 @@ public final class OrderDto {
         return id;
     }
 
-    public String getOrderNumber() {
+    public Long getOrderNumber() {
         return orderNumber;
     }
 
@@ -45,8 +47,8 @@ public final class OrderDto {
         return ordered;
     }
 
-    public String getStatus() {
-        return status;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
     public Double getTotalPrice() {

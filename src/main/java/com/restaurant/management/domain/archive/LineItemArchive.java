@@ -1,6 +1,7 @@
 package com.restaurant.management.domain.archive;
 
 import com.restaurant.management.domain.AbstractLineItem;
+import com.restaurant.management.domain.RestaurantInfo;
 
 import javax.persistence.*;
 
@@ -10,6 +11,9 @@ public class LineItemArchive extends AbstractLineItem {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ProductArchive product;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
 
     public LineItemArchive() {
     }
@@ -25,5 +29,13 @@ public class LineItemArchive extends AbstractLineItem {
 
     public void setProduct(ProductArchive product) {
         this.product = product;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 }

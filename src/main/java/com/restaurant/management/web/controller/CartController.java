@@ -41,58 +41,66 @@ public class CartController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<CartResponse>> showCarts(Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<CartDto> cartsDto = cartFacade.getAllCarts(pageable);
+    ResponseEntity<PagedResources<CartResponse>> showCarts(@CurrentUser UserPrincipal currentUser,
+                                                           Pageable pageable,
+                                                           PagedResourcesAssembler assembler) {
+        Page<CartDto> cartsDto = cartFacade.getAllCarts(currentUser, pageable);
 
         Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
 
         return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{cartId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> showCart(@PathVariable String uniqueId) {
-        CartDto cartDto = cartFacade.getCartByUniqueId(uniqueId);
+    Resource<CartResponse> showCart(@CurrentUser UserPrincipal currentUser,
+                                    @PathVariable Long cartId) {
+        CartDto cartDto = cartFacade.getCartById(currentUser, cartId);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
-        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+        Link link = linkTo(CartController.class).slash(response.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
 
     @GetMapping(value = "/session", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<CartResponse>> showSessionCarts(Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<CartDto> cartsDto = cartFacade.getSessionCarts(pageable);
+    ResponseEntity<PagedResources<CartResponse>> showSessionCarts(@CurrentUser UserPrincipal currentUser,
+                                                                  Pageable pageable,
+                                                                  PagedResourcesAssembler assembler) {
+        Page<CartDto> cartsDto = cartFacade.getSessionCarts(currentUser, pageable);
 
         Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
 
         return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/session/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/session/{cartId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> showSessionCart(@PathVariable String uniqueId) {
-        CartDto cartDto = cartFacade.getSessionCartByUniqueId(uniqueId);
+    Resource<CartResponse> showSessionCart(@CurrentUser UserPrincipal currentUser,
+                                           @PathVariable Long cartId) {
+        CartDto cartDto = cartFacade.getSessionCartById(currentUser, cartId);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
-        Link link = linkTo(CartController.class).slash(response.getUniqueId()).withSelfRel();
+        Link link = linkTo(CartController.class).slash(response.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/session/{uniqueId}")
-    public ResponseEntity<?> deleteSessionCart(@PathVariable String uniqueId) {
-        ApiResponse response = cartFacade.deleteSessionCart(uniqueId);
+    @DeleteMapping(value = "/session/{cartId}")
+    public ResponseEntity<?> deleteSessionCart(@CurrentUser UserPrincipal currentUser,
+                                               @PathVariable Long cartId) {
+        ApiResponse response = cartFacade.deleteSessionCart(currentUser, cartId);
 
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "/customer/{customerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser, @PathVariable Long customerId) {
+    Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser,
+                                                @PathVariable Long customerId) {
         CartDto cartDto = cartFacade.openSessionCart(currentUser, customerId);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);

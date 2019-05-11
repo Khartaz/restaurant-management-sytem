@@ -19,15 +19,16 @@ public class Order  {
     private Long id;
 
     @Column(name = "order_number")
-    private String orderNumber;
+    private Long orderNumber;
 
     @Column(name = "is_ordered")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar ordered;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private OrderStatus orderStatus;
 
     @Column(name = "total_price")
     private Double totalPrice;
@@ -41,36 +42,38 @@ public class Order  {
     public Order() {
     }
 
-    public Order(Long id, String orderNumber,
-                 Calendar ordered, String status,
+    public Order(Long id, Long orderNumber,
+                 Calendar ordered, OrderStatus orderStatus,
                  Double totalPrice, Cart cart) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.ordered = ordered;
-        this.status = status;
+        this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
         this.cart = cart;
     }
 
-    public Order(String orderNumber,
-                 Calendar ordered, String status,
-                 Double totalPrice, Cart cart) {
+    public Order(Long orderNumber,
+                 Calendar ordered, OrderStatus orderStatus,
+                 Double totalPrice, Cart cart,
+                 RestaurantInfo restaurantInfo) {
         this.orderNumber = orderNumber;
         this.ordered = ordered;
-        this.status = status;
+        this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
         this.cart = cart;
+        this.restaurantInfo = restaurantInfo;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getOrderNumber() {
+    public Long getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(String orderNumber) {
+    public void setOrderNumber(Long orderNumber) {
         this.orderNumber = orderNumber;
     }
 
@@ -82,12 +85,12 @@ public class Order  {
         this.ordered = ordered;
     }
 
-    public String getStatus() {
-        return status;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Double getTotalPrice() {
@@ -124,13 +127,14 @@ public class Order  {
     }
 
     public static class OrderBuilder {
-        private String orderNumber;
+        private Long orderNumber;
         private Calendar ordered;
-        private String status;
+        private OrderStatus orderStatus;
         private Double totalPrice;
         private Cart cart;
+        private RestaurantInfo restaurantInfo;
 
-        public OrderBuilder setOrderNumber(String orderNumber) {
+        public OrderBuilder setOrderNumber(Long orderNumber) {
             this.orderNumber = orderNumber;
             return this;
         }
@@ -140,8 +144,8 @@ public class Order  {
             return this;
         }
 
-        public OrderBuilder setStatus(String status) {
-            this.status = status;
+        public OrderBuilder setStatus(OrderStatus orderStatus) {
+            this.orderStatus = orderStatus;
             return this;
         }
 
@@ -155,8 +159,13 @@ public class Order  {
             return this;
         }
 
+        public OrderBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
+            this.restaurantInfo = restaurantInfo;
+            return this;
+        }
+
         public Order build() {
-            return new Order(this.orderNumber, this.ordered, this.status, this.totalPrice, this.cart);
+            return new Order(this.orderNumber, this.ordered, this.orderStatus, this.totalPrice, this.cart, this.restaurantInfo);
         }
     }
 

@@ -7,7 +7,6 @@ import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CartService;
-import com.restaurant.management.web.request.cart.RegisterCartRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public final class CartFacade {
@@ -30,38 +27,38 @@ public final class CartFacade {
         this.cartMapper = cartMapper;
     }
 
-    public Page<CartDto> getAllCarts(Pageable pageable) {
-        Page<Cart> carts = cartService.getAllCarts(pageable);
+    public Page<CartDto> getAllCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<Cart> carts = cartService.getAllCarts(currentUser, pageable);
 
         return cartMapper.mapToCartDtoPage(carts);
     }
 
-    public Page<CartDto> getCustomerCarts(Long id, Pageable pageable) {
-        Page<Cart> carts = cartService.getCustomerCarts(id, pageable);
+    public Page<CartDto> getCustomerCarts(@CurrentUser UserPrincipal currentUser, Long id, Pageable pageable) {
+        Page<Cart> carts = cartService.getCustomerCarts(currentUser, id, pageable);
 
         return cartMapper.mapToCartDtoPage(carts);
     }
 
-    public CartDto getCustomerCartByUniqueId(Long id, String uniqueId) {
-        Cart cart = cartService.getCustomerCartByUniqueId(id, uniqueId);
+    public CartDto getCustomerCartById(@CurrentUser UserPrincipal currentUser, Long customerId, Long cartId) {
+        Cart cart = cartService.getCustomerCartById(currentUser, customerId, cartId);
 
         return cartMapper.mapToCartDto(cart);
     }
 
-    public CartDto getCartByUniqueId(String uniqueId) {
-        Cart cart = cartService.getCartByUniqueId(uniqueId);
+    public CartDto getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
+        Cart cart = cartService.getCartById(currentUser, cartId);
 
         return cartMapper.mapToCartDto(cart);
     }
 
-    public Page<CartDto> getSessionCarts(Pageable pageable) {
-        Page<SessionCart> carts = cartService.getSessionCarts(pageable);
+    public Page<CartDto> getSessionCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<SessionCart> carts = cartService.getSessionCarts(currentUser, pageable);
 
         return cartMapper.mapToCartDto(carts);
     }
 
-    public CartDto getSessionCartByUniqueId(String uniqueId) {
-        SessionCart cart = cartService.getSessionCartByUniqueId(uniqueId);
+    public CartDto getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
+        SessionCart cart = cartService.getSessionCartById(currentUser, cartId);
 
         return cartMapper.mapToCartDto(cart);
     }
@@ -72,8 +69,8 @@ public final class CartFacade {
         return cartMapper.mapToCartDto(sessionCart);
     }
 
-    public ApiResponse deleteSessionCart(String uniqueId) {
-        return cartService.deleteSessionCart(uniqueId);
+    public ApiResponse deleteSessionCart(@CurrentUser UserPrincipal currentUser, Long cartId) {
+        return cartService.deleteSessionCart(currentUser, cartId);
     }
 
     public CartDto removeProductFromCart(@CurrentUser UserPrincipal currentUser, Long id, RemoveProductRequest request) {

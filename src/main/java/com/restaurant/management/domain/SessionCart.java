@@ -20,16 +20,16 @@ public class SessionCart extends AbstractCart {
     public SessionCart() {
     }
 
-    public SessionCart(Long id, String uniqueId, Boolean isOpen,
+    public SessionCart(Long id, Boolean isOpen,
                        Customer customer, List<SessionLineItem> sessionLineItems) {
-        super(id, uniqueId, isOpen);
+        super(id, isOpen);
         this.customer = customer;
         this.sessionLineItems = sessionLineItems;
     }
 
-    public SessionCart(String uniqueId, Boolean isOpen,
+    public SessionCart(Boolean isOpen,
                        Customer customer, List<SessionLineItem> sessionLineItems) {
-        super(uniqueId, isOpen);
+        super(isOpen);
         this.customer = customer;
         this.sessionLineItems = sessionLineItems;
     }

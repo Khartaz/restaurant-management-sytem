@@ -27,7 +27,6 @@ public final class CartMapper {
     public SessionCart mapToSessionCart(final CartDto cartDto) {
         return new SessionCart(
                 cartDto.getId(),
-                cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 customerMapper.mapToCustomer(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
@@ -39,7 +38,6 @@ public final class CartMapper {
     public CartDto mapToCartDto(SessionCart sessionCart) {
         return new CartDto(
                 sessionCart.getId(),
-                sessionCart.getUniqueId(),
                 sessionCart.isOpen(),
                 customerMapper.mapToCustomerDto(sessionCart.getCustomer()),
                 sessionCart.getSessionLineItems().stream()
@@ -51,7 +49,6 @@ public final class CartMapper {
     public CartDto mapToCartDto(final Cart cart) {
         return new CartDto(
                 cart.getId(),
-                cart.getUniqueId(),
                 cart.isOpen(),
                 customerMapper.mapToCustomerDto(cart.getCustomer()),
                 cart.getLineItems().stream()
@@ -63,7 +60,6 @@ public final class CartMapper {
     public CartResponse mapToCartResponse(final CartDto cartDto) {
         return new CartResponse(
                 cartDto.getId(),
-                cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 customerMapper.mapToCustomerResponse(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
@@ -74,7 +70,6 @@ public final class CartMapper {
 
     public Cart mapToCart(SessionCart sessionCart) {
         return new Cart(
-                sessionCart.getUniqueId(),
                 sessionCart.isOpen(),
                 customerMapper.mapToCustomerArchive(sessionCart.getCustomer()),
                 sessionCart.getSessionLineItems().stream()
@@ -85,7 +80,6 @@ public final class CartMapper {
 
     public Cart mapToCart(CartDto cartDto) {
         return new Cart(
-                cartDto.getUniqueId(),
                 cartDto.isOpen(),
                 customerMapper.mapToCustomerArchive(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()

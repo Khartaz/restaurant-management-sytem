@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,7 +104,7 @@ public class OrderServiceTestSuite {
 
         when(orderRepository.findByOrderNumber(ORDER_NUMBER)).thenReturn(java.util.Optional.of(order));
         //WHEN
-        Order result = orderService.getByOrderNumber(ORDER_NUMBER);
+        Order result = orderService.getByOrderId(ORDER_NUMBER);
         //THEN
         assertAll(
                 () -> assertEquals(result.getOrderNumber(), ORDER_NUMBER),

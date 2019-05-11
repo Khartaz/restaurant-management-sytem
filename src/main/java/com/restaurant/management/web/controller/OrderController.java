@@ -2,6 +2,8 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.OrderFacade;
 import com.restaurant.management.web.response.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +36,27 @@ public class OrderController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<OrderResponse>> showOrdersPageable(Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<OrderDto> ordersDto = orderFacade.getAllOrders(pageable);
+    ResponseEntity<PagedResources<OrderResponse>> showOrdersPageable(@CurrentUser UserPrincipal currentUser,
+                                                                     Pageable pageable,
+                                                                     PagedResourcesAssembler assembler) {
+        Page<OrderDto> ordersDto = orderFacade.getAllOrders(currentUser, pageable);
 
         Page<OrderResponse> responsePage = orderMapper.mapToOrderResponsePage(ordersDto);
 
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{orderNumber}",
+    @GetMapping(value = "/count", produces = APPLICATION_JSON_VALUE)
+    public Long countOrders(@CurrentUser UserPrincipal currentUser){
+        return orderFacade.countRestaurantOrders(currentUser);
+    }
+
+    @GetMapping(value = "/{orderId}",
             produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<OrderResponse> showOrder(@PathVariable String orderNumber) {
-        OrderDto orderDto = orderFacade.getByOrderNumber(orderNumber);
+    Resource<OrderResponse> showOrder(@CurrentUser UserPrincipal currentUser,
+                                      @PathVariable Long orderId) {
+        OrderDto orderDto = orderFacade.getByOrderNumber(currentUser, orderId);
 
         OrderResponse response = orderMapper.mapToOrderResponse(orderDto);
 
@@ -55,9 +65,10 @@ public class OrderController {
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/{orderNumber}")
-    public ResponseEntity<?> deleteOrder(@PathVariable String orderNumber) {
+    @DeleteMapping(value = "/{orderId}")
+    public ResponseEntity<?> deleteOrder(@CurrentUser UserPrincipal currentUser,
+                                         @PathVariable Long orderId) {
 
-        return ResponseEntity.ok().body(orderFacade.deleteOrder(orderNumber));
+        return ResponseEntity.ok().body(orderFacade.deleteOrder(currentUser, orderId));
     }
 }

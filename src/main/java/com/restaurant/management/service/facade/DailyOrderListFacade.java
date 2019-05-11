@@ -44,14 +44,14 @@ public final class DailyOrderListFacade {
         return dailyOrderListService.deleteByUniqueId(uniqueId);
     }
 
-    public DailyOrderListDto addOrderToList(String orderNumber) {
-        DailyOrderList dailyOrderList = dailyOrderListService.addOrderToList(orderNumber);
+    public DailyOrderListDto addOrderToList(Long orderId) {
+        DailyOrderList dailyOrderList = dailyOrderListService.addOrderToList(orderId);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public DailyOrderListDto removeOrderFromList(String orderNumber) {
-        DailyOrderList dailyOrderList = dailyOrderListService.removeOrderFromList(orderNumber);
+    public DailyOrderListDto removeOrderFromList(Long orderId) {
+        DailyOrderList dailyOrderList = dailyOrderListService.removeOrderFromList(orderId);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }

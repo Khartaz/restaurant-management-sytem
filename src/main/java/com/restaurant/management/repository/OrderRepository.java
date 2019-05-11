@@ -14,6 +14,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Override
     Page<Order> findAll(Pageable pageable);
 
-    Optional<Order> findByOrderNumber(String orderNumber);
+    Page<Order> findAllByRestaurantInfoId(Long restaurantId, Pageable pageable);
+
+    Optional<Order> findByIdAndRestaurantInfoId(Long orderId, Long restaurantId);
+
+    Long countAllByRestaurantInfoId(Long id);
 
 }

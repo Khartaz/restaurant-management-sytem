@@ -64,9 +64,9 @@ public class DailyOrderListService {
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
-    public DailyOrderList addOrderToList(String orderNumber) {
-        Order order = orderRepository.findByOrderNumber(orderNumber)
-                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_NUMBER_NOT_FOUND.getMessage()));
+    public DailyOrderList addOrderToList(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
 
         DailyOrderList dailyOrderList = getOpenedOrderList();
 
@@ -88,9 +88,9 @@ public class DailyOrderListService {
         return dailyOrderList;
     }
 
-    public DailyOrderList removeOrderFromList(String orderNumber) {
-        Order order = orderRepository.findByOrderNumber(orderNumber)
-                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_NUMBER_NOT_FOUND.getMessage()));
+    public DailyOrderList removeOrderFromList(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
 
         DailyOrderList dailyOrderList = getOpenedOrderList();
 

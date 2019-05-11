@@ -1,6 +1,5 @@
 package com.restaurant.management.web.controller;
 
-import com.google.gson.Gson;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.mapper.CartMapper;
@@ -9,7 +8,6 @@ import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -102,7 +100,7 @@ public class CartControllerTestSuite {
                 new ArrayList<>()
         );
 
-        when(cartFacade.getCartByUniqueId(cartDto.getUniqueId())).thenReturn(cartDto);
+        when(cartFacade.getCartById(cartDto.getUniqueId())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
         mockMvc.perform(get(PATH + "/" + CART_UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))
@@ -171,7 +169,7 @@ public class CartControllerTestSuite {
                 new ArrayList<>()
         );
 
-        when(cartFacade.getSessionCartByUniqueId(cartDto.getUniqueId())).thenReturn(cartDto);
+        when(cartFacade.getSessionCartById(cartDto.getUniqueId())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
         mockMvc.perform(get(PATH + "/session/" + CART_UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))

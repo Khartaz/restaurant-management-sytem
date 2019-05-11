@@ -1,6 +1,7 @@
 package com.restaurant.management.domain.archive;
 
 import com.restaurant.management.domain.AbstractAuditing;
+import com.restaurant.management.domain.RestaurantInfo;
 
 import javax.persistence.*;
 
@@ -33,6 +34,9 @@ public class CustomerArchive extends AbstractAuditing {
 
     @Column(name = "phone_number")
     private Long phoneNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RestaurantInfo restaurantInfo;
 
     public CustomerArchive() {
     }
@@ -84,5 +88,13 @@ public class CustomerArchive extends AbstractAuditing {
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public RestaurantInfo getRestaurantInfo() {
+        return restaurantInfo;
+    }
+
+    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
+        this.restaurantInfo = restaurantInfo;
     }
 }

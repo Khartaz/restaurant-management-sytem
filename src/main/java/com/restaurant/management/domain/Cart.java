@@ -23,9 +23,9 @@ public class Cart extends AbstractCart {
     public Cart() {
     }
 
-    public Cart(String uniqueId, Boolean isOpen,
+    public Cart(Boolean isOpen,
                 CustomerArchive customer, List<LineItemArchive> lineItems) {
-        super(uniqueId, isOpen);
+        super(isOpen);
         this.customer = customer;
         this.lineItems = lineItems;
     }

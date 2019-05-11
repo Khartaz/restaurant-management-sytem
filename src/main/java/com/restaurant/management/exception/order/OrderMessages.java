@@ -6,7 +6,7 @@ public enum  OrderMessages {
     ORDER_LIST_DELETED("Order list deleted. "),
     ORDER_DELETED("Order deleted"),
     ORDER_LIST_NOT_OPEN("Order list required to close daily list."),
-    ORDER_NUMBER_NOT_FOUND("Order with provided order number not found. ");
+    ORDER_ID_NOT_FOUND("Order with provided order id not found. ");
 
     private String errorMessage;
 

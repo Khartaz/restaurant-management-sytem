@@ -3,6 +3,8 @@ package com.restaurant.management.service.facade;
 import com.restaurant.management.domain.Order;
 import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,37 +24,41 @@ public final class OrderFacade {
         this.orderMapper = orderMapper;
     }
 
-    public Page<OrderDto> getAllOrders(Pageable pageable) {
-        Page<Order> orders = orderService.getAllOrders(pageable);
+    public Page<OrderDto> getAllOrders(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<Order> orders = orderService.getAllOrders(currentUser, pageable);
 
         return orderMapper.mapToProductDtoPage(orders);
     }
 
-    public OrderDto getByOrderNumber(String orderNumber) {
-        Order order = orderService.getByOrderNumber(orderNumber);
+    public OrderDto getByOrderNumber(@CurrentUser UserPrincipal currentUser, Long orderId) {
+        Order order = orderService.getByOrderId(currentUser, orderId);
 
         return orderMapper.mapToOrderDto(order);
     }
 
-    public ApiResponse deleteOrder(String orderNumber) {
-        return orderService.deleteOrder(orderNumber);
+    public ApiResponse deleteOrder(@CurrentUser UserPrincipal currentUser, Long orderId) {
+        return orderService.deleteOrder(currentUser, orderId);
     }
 
-    public OrderDto processOrder(Long id) {
-        Order order = orderService.processOrder(id);
+    public OrderDto processOrder(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        Order order = orderService.processOrder(currentUser, customerId);
 
         return orderMapper.mapToOrderDto(order);
     }
 
-    public Page<OrderDto> getOrdersByCustomerId(Long id, Pageable pageable) {
-        Page<Order> orders = orderService.getOrdersByCustomerId(id, pageable);
+    public Page<OrderDto> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable) {
+        Page<Order> orders = orderService.getCustomerOrdersById(currentUser, customerId, pageable);
 
         return orderMapper.mapToProductDtoPage(orders);
     }
 
-    public OrderDto getOrderByCustomerIdAndOrderNumber(Long id, String orderNumber) {
-        Order order = orderService.getOrderByCustomerIdAndOrderNumber(id, orderNumber);
+    public OrderDto getOrderByCustomerIdAndOrderId(@CurrentUser UserPrincipal currentUser, Long customerId, Long orderId) {
+        Order order = orderService.getOrderByCustomerIdAndOrderId(currentUser, customerId, orderId);
 
         return orderMapper.mapToOrderDto(order);
+    }
+
+    public Long countRestaurantOrders(@CurrentUser UserPrincipal currentUser) {
+        return orderService.countRestaurantOrders(currentUser);
     }
  }

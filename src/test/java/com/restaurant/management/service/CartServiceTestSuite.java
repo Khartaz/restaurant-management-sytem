@@ -310,7 +310,7 @@ public class CartServiceTestSuite {
 
         when(cartRepository.findByUniqueId(UNIQUE_CART_ID)).thenReturn(Optional.of(cart));
         //WHEN
-        Cart result = cartService.getCartByUniqueId(UNIQUE_CART_ID);
+        Cart result = cartService.getCartById(UNIQUE_CART_ID);
         //THEN
         assertAll(
                 () -> assertEquals(result.getUniqueId(), UNIQUE_CART_ID)
@@ -329,7 +329,7 @@ public class CartServiceTestSuite {
 
         when(sessionCartRepository.findByUniqueId(UNIQUE_CART_ID)).thenReturn(Optional.of(sessionCart));
         //WHEN
-        SessionCart result = cartService.getSessionCartByUniqueId(UNIQUE_CART_ID);
+        SessionCart result = cartService.getSessionCartById(UNIQUE_CART_ID);
         //THEN
         assertAll(
                 () -> assertEquals(result.getUniqueId(), UNIQUE_CART_ID)

@@ -75,8 +75,8 @@ public class DailyOrderListController {
     @PatchMapping(value = "/add",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> addOrder(@RequestBody String orderNumber) {
-        DailyOrderListDto orderList = dailyOrderListFacade.addOrderToList(orderNumber);
+    Resource<DailyOrderListResponse> addOrder(@RequestBody Long orderId) {
+        DailyOrderListDto orderList = dailyOrderListFacade.addOrderToList(orderId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -88,8 +88,8 @@ public class DailyOrderListController {
     @PatchMapping(value = "/remove",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> removeOrder(@RequestBody String orderNumber) {
-        DailyOrderListDto orderList = dailyOrderListFacade.removeOrderFromList(orderNumber);
+    Resource<DailyOrderListResponse> removeOrder(@RequestBody Long orderId) {
+        DailyOrderListDto orderList = dailyOrderListFacade.removeOrderFromList(orderId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 

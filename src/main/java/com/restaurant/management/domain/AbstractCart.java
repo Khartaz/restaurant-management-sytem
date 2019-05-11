@@ -13,36 +13,23 @@ public abstract class AbstractCart extends AbstractAuditing {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "unique_id")
-    private String uniqueId;
-
     @Column(name = "isOpen")
     private Boolean isOpen;
 
     public AbstractCart() {
     }
 
-    public AbstractCart(Long id, String uniqueId, Boolean isOpen) {
+    public AbstractCart(Long id, Boolean isOpen) {
         this.id = id;
-        this.uniqueId = uniqueId;
         this.isOpen = isOpen;
     }
 
-    public AbstractCart(String uniqueId, Boolean isOpen) {
-        this.uniqueId = uniqueId;
+    public AbstractCart(Boolean isOpen) {
         this.isOpen = isOpen;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
     }
 
     public Boolean isOpen() {

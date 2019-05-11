@@ -176,58 +176,66 @@ public class CustomerController {
 
     @GetMapping(value = "/{id}/carts", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<CartResponse>> showCustomerCarts
-            (@PathVariable Long id, Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<CartDto> cartsDto = cartFacade.getCustomerCarts(id, pageable);
+    ResponseEntity<PagedResources<CartResponse>> showCustomerCarts(@CurrentUser UserPrincipal currentUser,
+                                                                   @PathVariable Long id, Pageable pageable,
+                                                                   PagedResourcesAssembler assembler) {
+        Page<CartDto> cartsDto = cartFacade.getCustomerCarts(currentUser, id, pageable);
 
         Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
 
         return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/carts/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{customerId}/carts/{cartId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CartResponse> showCustomerCart(@PathVariable Long id, @PathVariable String uniqueId) {
-        CartDto cartDto = cartFacade.getCustomerCartByUniqueId(id, uniqueId);
+    Resource<CartResponse> showCustomerCart(@CurrentUser UserPrincipal currentUser,
+                                            @PathVariable Long customerId,
+                                            @PathVariable Long cartId) {
+        CartDto cartDto = cartFacade.getCustomerCartById(currentUser, customerId, cartId);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 
-        Link link = linkTo(CustomerController.class).slash(id).slash("carts").slash(cartResponse.getUniqueId()).withSelfRel();
+        Link link = linkTo(CustomerController.class).slash(customerId).slash("carts").slash(cartResponse.getId()).withSelfRel();
 
         return new Resource<>(cartResponse, link);
     }
 
-    @PostMapping(value = "{id}/orders", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{customerId}/orders", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<OrderResponse> processSessionCartToOrder(@PathVariable Long id) {
-        OrderDto orderDto = orderFacade.processOrder(id);
+    Resource<OrderResponse> processSessionCartToOrder(@CurrentUser UserPrincipal currentUser,
+                                                      @PathVariable Long customerId) {
+        OrderDto orderDto = orderFacade.processOrder(currentUser, customerId);
 
         OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
 
-        Link link = linkTo(CustomerController.class).slash(id).slash("orders").slash(orderResponse.getOrderNumber()).withSelfRel();
+        Link link = linkTo(CustomerController.class).slash(customerId).slash("orders").slash(orderResponse.getOrderNumber()).withSelfRel();
 
         return new Resource<>(orderResponse, link);
     }
 
-    @GetMapping(value = "{id}/orders", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{customerId}/orders", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<OrderResponse>> showCustomerOrders
-            (@PathVariable Long id, Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<OrderDto> ordersDto = orderFacade.getOrdersByCustomerId(id, pageable);
+    ResponseEntity<PagedResources<OrderResponse>> showCustomerOrders(@CurrentUser UserPrincipal currentUser,
+                                                                     @PathVariable Long customerId,
+                                                                     Pageable pageable,
+                                                                     PagedResourcesAssembler assembler) {
+        Page<OrderDto> ordersDto = orderFacade.getCustomerOrdersById(currentUser, customerId, pageable);
 
         Page<OrderResponse> ordersResponse = orderMapper.mapToOrderResponsePage(ordersDto);
 
         return new ResponseEntity<>(assembler.toResource(ordersResponse), HttpStatus.OK);
     }
 
-    @GetMapping(value = "{id}/orders/{orderNumber}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{customerId}/orders/{orderId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<OrderResponse> showCustomerOrder(@PathVariable Long id, @PathVariable String orderNumber) {
-        OrderDto ordersDto = orderFacade.getOrderByCustomerIdAndOrderNumber(id, orderNumber);
+    Resource<OrderResponse> showCustomerOrder(@CurrentUser UserPrincipal currentUser,
+                                              @PathVariable Long customerId,
+                                              @PathVariable Long orderId) {
+        OrderDto ordersDto = orderFacade.getOrderByCustomerIdAndOrderId(currentUser, customerId, orderId);
 
         OrderResponse orderResponse = orderMapper.mapToOrderResponse(ordersDto);
 
-        Link link = linkTo(CustomerController.class).slash(id).slash("orders").slash(orderResponse.getOrderNumber()).withSelfRel();
+        Link link = linkTo(CustomerController.class).slash(customerId).slash("orders").slash(orderResponse.getId()).withSelfRel();
 
         return new Resource<>(orderResponse, link);
     }

@@ -12,12 +12,17 @@ import java.util.Optional;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    Optional<Cart> findByUniqueId(String uniqueId);
-
     @Override
     Page<Cart> findAll(Pageable pageable);
 
+    Page<Cart> findAllByRestaurantInfoId(Long restaurantId, Pageable pageable);
+
     Page<Cart> findByCustomerId(Long id, Pageable pageable);
 
-    Optional<Cart> findByCustomerIdAndUniqueId(Long id, String uniqueId);
+    Page<Cart> findByCustomerIdAndRestaurantInfoId(Long customerId, Long restaurantId, Pageable pageable);
+
+    Optional<Cart> findByIdAndRestaurantInfoIdAndCustomerId(Long id, Long customerId, Long restaurantId);
+
+    Optional<Cart> findByIdAndRestaurantInfoId(Long cartId, Long restaurantId);
+
 }

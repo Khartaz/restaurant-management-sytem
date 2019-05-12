@@ -5,10 +5,10 @@ import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.AccountUserService;
+import com.restaurant.management.service.impl.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
+import com.restaurant.management.web.request.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.response.user.UserSummary;
@@ -43,9 +43,9 @@ public final class AccountUserFacade {
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }
 
-    public AccountUserDto updateAccountNameOrLastname(@CurrentUser UserPrincipal currentUser,
-                                                      UpdateAccountNameOrLastname request) {
-        AccountUser accountUser = accountUserService.updateAccountNameOrLastname(currentUser, request);
+    public AccountUserDto updateAccountInfo(@CurrentUser UserPrincipal currentUser,
+                                            UpdateAccountInfo request) {
+        AccountUser accountUser = accountUserService.updateAccountInfo(currentUser, request);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }

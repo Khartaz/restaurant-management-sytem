@@ -1,6 +1,7 @@
-package com.restaurant.management.service;
+package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.Mail;
+import com.restaurant.management.service.impl.MailCreatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

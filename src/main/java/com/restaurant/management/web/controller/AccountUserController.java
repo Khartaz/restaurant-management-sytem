@@ -1,7 +1,6 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogLogin;
-import com.restaurant.management.domain.Role;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
@@ -9,11 +8,10 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
+import com.restaurant.management.web.request.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.user.AccountUserResponse;
 import com.restaurant.management.web.response.user.UserSummary;
-import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +21,9 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -77,9 +68,9 @@ public class AccountUserController {
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<AccountUserResponse> updateAccountNameOrLastname(@CurrentUser UserPrincipal currentUser,
-                                                              @Valid @RequestBody UpdateAccountNameOrLastname request) {
-        AccountUserDto accountUserDto = accountUserFacade.updateAccountNameOrLastname(currentUser, request);
+    Resource<AccountUserResponse> updateAccountInfo(@CurrentUser UserPrincipal currentUser,
+                                                    @Valid @RequestBody UpdateAccountInfo request) {
+        AccountUserDto accountUserDto = accountUserFacade.updateAccountInfo(currentUser, request);
 
         AccountUserResponse response = accountUserMapper.mapToAccountUserResponse(accountUserDto);
 

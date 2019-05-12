@@ -1,4 +1,4 @@
-package com.restaurant.management.service;
+package com.restaurant.management.service.impl;
 
 import com.restaurant.management.audit.query.AuditQueryResult;
 import com.restaurant.management.audit.query.AuditQueryUtils;

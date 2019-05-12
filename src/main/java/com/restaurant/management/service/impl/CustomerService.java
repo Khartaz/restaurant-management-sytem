@@ -1,4 +1,4 @@
-package com.restaurant.management.service;
+package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.Customer;

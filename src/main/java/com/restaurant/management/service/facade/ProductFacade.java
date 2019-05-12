@@ -7,7 +7,7 @@ import com.restaurant.management.domain.history.ProductHistory;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.ProductHistoryService;
+import com.restaurant.management.service.impl.ProductHistoryService;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;

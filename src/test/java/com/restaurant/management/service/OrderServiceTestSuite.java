@@ -6,6 +6,8 @@ import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.archive.LineItemArchive;
 import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.repository.OrderRepository;
+import com.restaurant.management.service.impl.CartService;
+import com.restaurant.management.service.impl.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

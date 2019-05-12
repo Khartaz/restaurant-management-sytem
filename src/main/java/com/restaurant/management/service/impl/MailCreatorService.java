@@ -1,4 +1,4 @@
-package com.restaurant.management.service;
+package com.restaurant.management.service.impl;
 
 import com.restaurant.management.security.SecurityConstant;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,6 +5,7 @@ import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
 import com.restaurant.management.repository.DailyOrderListRepository;
 import com.restaurant.management.repository.OrderRepository;
+import com.restaurant.management.service.impl.DailyOrderListService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

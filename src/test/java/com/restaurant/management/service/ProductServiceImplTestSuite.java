@@ -4,6 +4,9 @@ import com.restaurant.management.domain.Ingredient;
 import com.restaurant.management.domain.Product;
 import com.restaurant.management.mapper.IngredientMapper;
 import com.restaurant.management.repository.ProductRepository;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.impl.ProductServiceImpl;
 import com.restaurant.management.web.request.product.IngredientRequest;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
@@ -24,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductServiceTestSuite {
+public class ProductServiceImplTestSuite {
     @InjectMocks
     private ProductService productService;
     @Mock
@@ -49,9 +52,19 @@ public class ProductServiceTestSuite {
         RegisterProductRequest request = new RegisterProductRequest(
                 PRODUCT_NAME, PRODUCT_CATEGORY, PRODUCT_PRICE, ingredientsRequest);
 
+        UserPrincipal userPrincipal = new UserPrincipal(
+                1L,
+                "Name",
+                "Lastname",
+                "Username",
+                "Email",
+                "password",
+                new ArrayList<>()
+        );
+
         when(ingredientMapper.mapToIngredientListFromRequest(ingredientsRequest)).thenCallRealMethod();
         //WHEN
-        Product result = productService.registerProduct(request);
+        Product result = productService.registerProduct(userPrincipal, request);
         //THEN
         assertAll(
                 () -> assertEquals(result.getIngredients().get(0).getName(), request.getIngredients().get(0).getName()),
@@ -92,7 +105,7 @@ public class ProductServiceTestSuite {
         when(productRepository.findById(ID)).thenReturn(Optional.of(product));
         when(productRepository.existsByName(request.getName())).thenReturn(Boolean.FALSE);
         //WHEN
-        Product result = productService.updateProduct(request);
+        Product result = productServiceImpl.updateProduct(request);
         //THEN
         assertAll(
                 () -> assertEquals(result.getCategory(), request.getCategory()),
@@ -119,7 +132,7 @@ public class ProductServiceTestSuite {
 
         when(productRepository.findById(ID)).thenReturn(optionalProduct);
         //WHEN
-        Product result = productService.getProductById(ID);
+        Product result = productServiceImpl.getProductById(ID);
         //THEN
         Product product = optionalProduct.get();
         assertAll(
@@ -156,7 +169,7 @@ public class ProductServiceTestSuite {
 
         when(productRepository.findAll(pageable)).thenReturn(new PageImpl<>(products));
         //WHEN
-        Page<Product> productsPage = productService.getAllProducts(pageable);
+        Page<Product> productsPage = productServiceImpl.getAllProducts(pageable);
         List<Product> result = productsPage.get().collect(Collectors.toList());
         //THEN
         assertAll(

@@ -1,6 +1,6 @@
 package com.restaurant.management.security.jwt;
 
-import com.restaurant.management.service.AccountUserService;
+import com.restaurant.management.service.impl.AccountUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

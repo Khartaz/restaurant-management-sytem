@@ -3,7 +3,7 @@ package com.restaurant.management.service.facade;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.mapper.DailyOrderListMapper;
-import com.restaurant.management.service.DailyOrderListService;
+import com.restaurant.management.service.impl.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

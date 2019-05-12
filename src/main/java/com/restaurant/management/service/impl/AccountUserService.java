@@ -1,4 +1,4 @@
-package com.restaurant.management.service;
+package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
 import com.restaurant.management.exception.user.UserAuthenticationException;
@@ -13,7 +13,7 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
+import com.restaurant.management.web.request.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.request.PasswordReset;
@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -175,8 +174,8 @@ public class AccountUserService implements UserDetailsService {
         return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getMessage());
     }
 
-    public AccountUser updateAccountNameOrLastname(@CurrentUser UserPrincipal currentUser,
-                                                   UpdateAccountNameOrLastname request) {
+    public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser,
+                                         UpdateAccountInfo request) {
 
         AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
@@ -184,9 +183,9 @@ public class AccountUserService implements UserDetailsService {
         Stream.of(accountUser).forEach(acc -> {
             acc.setName(request.getName());
             acc.setLastname(request.getLastname());
+            acc.setPhoneNumber(request.getPhoneNumber());
+            accountUserRepository.save(acc);
         });
-
-        accountUserRepository.save(accountUser);
 
         return accountUser;
     }

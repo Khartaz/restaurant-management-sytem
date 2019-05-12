@@ -1,6 +1,7 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogLogin;
+import com.restaurant.management.domain.Role;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
@@ -12,6 +13,7 @@ import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.user.AccountUserResponse;
 import com.restaurant.management.web.response.user.UserSummary;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +23,16 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -46,13 +55,7 @@ public class AccountUserController {
     @GetMapping(value = "/me")
     public @ResponseBody
     UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return new UserSummary(
-                currentUser.getId(),
-                currentUser.getUsername(),
-                currentUser.getName(),
-                currentUser.getLastname(),
-                currentUser.getEmail()
-        );
+        return accountUserFacade.getUserSummary(currentUser);
     }
 
     @LogLogin

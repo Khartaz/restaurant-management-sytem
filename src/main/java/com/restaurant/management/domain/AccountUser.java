@@ -48,11 +48,11 @@ public class AccountUser extends AbstractUser {
     public AccountUser() {
     }
 
-    public AccountUser(String name, String lastname, String email,
+    public AccountUser(String name, String lastname, String email, Long phoneNumber,
                        String username, String password,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
-        super(name, lastname, email);
+        super(name, lastname, email, phoneNumber);
         this.username = username;
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
@@ -61,10 +61,10 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
-                       Long id, String name, String lastname, String email,
+                       Long id, String name, String lastname, String email, Long phoneNumber,
                        String username, String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
-        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email);
+        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email, phoneNumber);
         this.username = username;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
@@ -139,6 +139,7 @@ public class AccountUser extends AbstractUser {
         private String name;
         private String lastname;
         private String email;
+        private Long phoneNumber;
         private String username;
         private String password;
         private String emailVerificationToken;
@@ -156,6 +157,11 @@ public class AccountUser extends AbstractUser {
 
         public AccountUserBuilder setEmail(String email) {
             this.email = email;
+            return this;
+        }
+
+        public AccountUserBuilder setPhoneNumber(Long phoneNumber) {
+            this.phoneNumber = phoneNumber;
             return this;
         }
 
@@ -186,7 +192,7 @@ public class AccountUser extends AbstractUser {
 
         public AccountUser build() {
             return new AccountUser(this.name, this.lastname, this.email,
-                    this.username, this.password,
+                    this.phoneNumber, this.username, this.password,
                     this.emailVerificationToken, this.isActive, this.roles);
         }
     }

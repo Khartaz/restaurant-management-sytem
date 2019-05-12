@@ -14,6 +14,7 @@ public final class AccountUserResponse {
     private String name;
     private String lastname;
     private String email;
+    private Long phoneNumber;
     private String username;
     private String emailVerificationToken;
     private Boolean isActive;
@@ -24,7 +25,7 @@ public final class AccountUserResponse {
 
     public AccountUserResponse(Long createdAt, Long updatedAt, String createdBy,
                                String updatedBy, Long id, String name,
-                               String lastname, String email, String username,
+                               String lastname, String email, Long phoneNumber, String username,
                                String emailVerificationToken, Boolean isActive,
                                Set<RoleResponse> roles) {
         this.createdAt = createdAt;
@@ -35,6 +36,7 @@ public final class AccountUserResponse {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.username = username;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
@@ -71,6 +73,10 @@ public final class AccountUserResponse {
 
     public String getEmail() {
         return email;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getUsername() {

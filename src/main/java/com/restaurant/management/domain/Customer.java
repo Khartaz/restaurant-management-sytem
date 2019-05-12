@@ -6,9 +6,6 @@ import javax.persistence.*;
 @Table(name = "customers")
 public class Customer extends AbstractUser  {
 
-    @Column(name = "phone_number")
-    private Long phoneNumber;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RestaurantInfo restaurantInfo;
 
@@ -16,14 +13,12 @@ public class Customer extends AbstractUser  {
     }
 
     public Customer(String name, String lastname, String email, Long phoneNumber) {
-        super(name, lastname, email);
-        this.phoneNumber = phoneNumber;
+        super(name, lastname, email, phoneNumber);
     }
 
     public Customer(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
                     Long id, String name, String lastname, String email, Long phoneNumber) {
-        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email);
-        this.phoneNumber = phoneNumber;
+        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email, phoneNumber);
     }
 
     @Override
@@ -55,15 +50,6 @@ public class Customer extends AbstractUser  {
     public void setEmail(String email) {
         super.setEmail(email);
     }
-
-    public Long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
 
     public RestaurantInfo getRestaurantInfo() {
         return restaurantInfo;

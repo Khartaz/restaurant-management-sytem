@@ -11,6 +11,7 @@ import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
+import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,10 @@ public final class AccountUserFacade {
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         return accountUserService.authenticateUser(loginRequest);
+    }
+
+    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
+        return accountUserService.getUserSummary(currentUser);
     }
 
     public AccountUserDto registerManagerAccount(SignUpUserRequest request) {

@@ -17,6 +17,7 @@ import com.restaurant.management.web.request.UpdateAccountNameOrLastname;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.request.PasswordReset;
+import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +57,21 @@ public class AccountUserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.simpleEmailService = simpleEmailService;
+    }
+
+    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+
+        return new UserSummary(
+                accountUser.getId(),
+                accountUser.getUsername(),
+                accountUser.getName(),
+                accountUser.getLastname(),
+                accountUser.getEmail(),
+                accountUser.getPhoneNumber(),
+                accountUser.getRoles()
+        );
     }
 
     @Override

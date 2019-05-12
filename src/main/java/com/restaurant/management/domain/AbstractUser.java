@@ -33,22 +33,27 @@ public abstract class AbstractUser extends AbstractAuditing {
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "phone_number")
+    private Long phoneNumber;
+
     public AbstractUser() {
     }
 
     public AbstractUser(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
-                        Long id, String name, String lastname, String email) {
+                        Long id, String name, String lastname, String email, Long phoneNumber) {
         super(createdAt, updatedAt, createdBy, updatedBy);
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
-    public AbstractUser(String name, String lastname, String email) {
+    public AbstractUser(String name, String lastname, String email, Long phoneNumber) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -79,4 +84,11 @@ public abstract class AbstractUser extends AbstractAuditing {
         this.email = email;
     }
 
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

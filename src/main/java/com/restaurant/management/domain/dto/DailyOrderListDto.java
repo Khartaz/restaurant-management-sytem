@@ -5,7 +5,6 @@ import java.util.Set;
 
 public final class DailyOrderListDto {
     private Long id;
-    private String uniqueId;
     private Double dailyIncome;
     private Integer numberOfOrders;
     private Boolean isOpen;
@@ -14,12 +13,10 @@ public final class DailyOrderListDto {
     public DailyOrderListDto() {
     }
 
-    public DailyOrderListDto(Long id, String uniqueId,
-                             Double dailyIncome, Integer numberOfOrders,
-                             Boolean isOpen,
+    public DailyOrderListDto(Long id, Double dailyIncome,
+                             Integer numberOfOrders, Boolean isOpen,
                              Set<OrderDto> ordersDto) {
         this.id = id;
-        this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
         this.numberOfOrders = numberOfOrders;
         this.isOpen = isOpen;
@@ -30,9 +27,6 @@ public final class DailyOrderListDto {
         return id;
     }
 
-    public String getUniqueId() {
-        return uniqueId;
-    }
 
     public Double getDailyIncome() {
         return dailyIncome;

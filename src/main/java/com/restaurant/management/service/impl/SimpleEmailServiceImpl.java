@@ -1,7 +1,8 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.Mail;
-import com.restaurant.management.service.impl.MailCreatorService;
+import com.restaurant.management.service.MailCreatorService;
+import com.restaurant.management.service.SimpleEmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,13 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SimpleEmailService {
+public class SimpleEmailServiceImpl implements SimpleEmailService {
 
     private MailCreatorService mailCreatorService;
     private JavaMailSender javaMailSender;
 
     @Autowired
-    public void setMailCreatorService(MailCreatorService mailCreatorService) {
+    public SimpleEmailServiceImpl(MailCreatorService mailCreatorService) {
         this.mailCreatorService = mailCreatorService;
     }
 

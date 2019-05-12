@@ -11,6 +11,7 @@ import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.history.ProductHistoryRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.ProductHistoryService;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
@@ -25,14 +26,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductHistoryService implements ProductHistoryRepository {
+public class ProductHistoryServiceImpl implements ProductHistoryService {
 
     private AccountUserRepository accountUserRepository;
 
     private static final String RESTAURANT_INFO_ID = "restaurantInfo";
 
     @Autowired
-    public ProductHistoryService(AccountUserRepository accountUserRepository) {
+    public ProductHistoryServiceImpl(AccountUserRepository accountUserRepository) {
         this.accountUserRepository = accountUserRepository;
     }
 
@@ -57,7 +58,7 @@ public class ProductHistoryService implements ProductHistoryRepository {
                 .add(AuditEntity.relatedId(RESTAURANT_INFO_ID).eq(restaurantId));
 
         return AuditQueryUtils.getAuditQueryResult(auditQuery, Product.class).stream()
-                .map(ProductHistoryService::getProductHistory)
+                .map(ProductHistoryServiceImpl::getProductHistory)
                 .collect(Collectors.toList());
     }
 

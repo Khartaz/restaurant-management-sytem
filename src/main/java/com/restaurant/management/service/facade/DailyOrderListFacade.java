@@ -3,7 +3,7 @@ package com.restaurant.management.service.facade;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.mapper.DailyOrderListMapper;
-import com.restaurant.management.service.impl.DailyOrderListService;
+import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,14 +34,14 @@ public final class DailyOrderListFacade {
         return dailyOrderListMapper.mapToDailyOrderListDtoPage(dailyOrderLists);
     }
 
-    public DailyOrderListDto getOrderListByUniqueId(String uniqueId) {
-        DailyOrderList dailyOrderList = dailyOrderListService.getOrderListByUniqueId(uniqueId);
+    public DailyOrderListDto getOrderListById(Long orderListId) {
+        DailyOrderList dailyOrderList = dailyOrderListService.getOrderListById(orderListId);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public ApiResponse deleteByUniqueId(String uniqueId) {
-        return dailyOrderListService.deleteByUniqueId(uniqueId);
+    public ApiResponse deleteById(Long orderListId) {
+        return dailyOrderListService.deleteById(orderListId);
     }
 
     public DailyOrderListDto addOrderToList(Long orderId) {

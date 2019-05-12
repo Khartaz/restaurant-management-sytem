@@ -1,6 +1,6 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.service.impl.AccountUserService;
+import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.PasswordReset;
 import com.restaurant.management.web.request.PasswordResetRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class AuthController {
     private AccountUserService accountUserService;
 
     @Autowired
-    public void setAccountUserService(AccountUserService accountUserService) {
+    public AuthController(AccountUserService accountUserService) {
         this.accountUserService = accountUserService;
     }
 

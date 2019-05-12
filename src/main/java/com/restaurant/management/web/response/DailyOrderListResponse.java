@@ -4,7 +4,6 @@ import java.util.Set;
 
 public final class DailyOrderListResponse {
     private Long id;
-    private String uniqueId;
     private Double dailyIncome;
     private Integer numberOfOrders;
     private Boolean isOpen;
@@ -13,11 +12,10 @@ public final class DailyOrderListResponse {
     public DailyOrderListResponse() {
     }
 
-    public DailyOrderListResponse(Long id, String uniqueId, Double dailyIncome,
+    public DailyOrderListResponse(Long id, Double dailyIncome,
                                   Integer numberOfOrders,
                                   Boolean isOpen, Set<OrderResponse> orderResponse) {
         this.id = id;
-        this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
         this.numberOfOrders = numberOfOrders;
         this.isOpen = isOpen;
@@ -26,10 +24,6 @@ public final class DailyOrderListResponse {
 
     public Long getId() {
         return id;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
     }
 
     public Double getDailyIncome() {

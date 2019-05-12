@@ -5,7 +5,7 @@ import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
 import com.restaurant.management.repository.DailyOrderListRepository;
 import com.restaurant.management.repository.OrderRepository;
-import com.restaurant.management.service.impl.DailyOrderListService;
+import com.restaurant.management.service.impl.DailyOrderListServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,9 +19,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DailyOrderListServiceTestSuite {
+public class DailyOrderListServiceImplTestSuite {
     @InjectMocks
-    private DailyOrderListService dailyOrderListService;
+    private DailyOrderListServiceImpl dailyOrderListServiceImpl;
     @Mock
     private DailyOrderListRepository dailyOrderListRepository;
     @Mock
@@ -42,7 +42,7 @@ public class DailyOrderListServiceTestSuite {
 
         when(dailyOrderListRepository.findByUniqueId(ORDER_LIST_UNIQUE_ID)).thenReturn(Optional.of(dailyOrderList));
         //WHEN
-        DailyOrderList result = dailyOrderListService.getOrderListByUniqueId(ORDER_LIST_UNIQUE_ID);
+        DailyOrderList result = dailyOrderListServiceImpl.getOrderListById(ORDER_LIST_UNIQUE_ID);
         //THEN
         assertAll(
                 () -> assertEquals(result.getUniqueId(), ORDER_LIST_UNIQUE_ID),
@@ -95,7 +95,7 @@ public class DailyOrderListServiceTestSuite {
 
         when(dailyOrderListRepository.existsByIsOpenTrue()).thenReturn(Boolean.FALSE);
         //WHEN
-        DailyOrderList result = dailyOrderListService.openOrderList();
+        DailyOrderList result = dailyOrderListServiceImpl.openOrderList();
         //THEN
         assertAll(
                 () -> assertTrue(result.isOpen()),
@@ -116,7 +116,7 @@ public class DailyOrderListServiceTestSuite {
 
         when(dailyOrderListRepository.findDailyOrderListByIsOpenTrue()).thenReturn(Optional.of(dailyOrderList));
         //WHEN
-        DailyOrderList result = dailyOrderListService.getOpenedOrderList();
+        DailyOrderList result = dailyOrderListServiceImpl.getOpenedOrderList();
         //THEN
         assertAll(
                 () -> assertNotNull(result),
@@ -146,7 +146,7 @@ public class DailyOrderListServiceTestSuite {
         when(orderRepository.findByOrderNumber(anyString())).thenReturn(Optional.of(order));
         when(dailyOrderListRepository.findDailyOrderListByIsOpenTrue()).thenReturn(Optional.of(dailyOrderList));
         //WHEN
-        DailyOrderList result = dailyOrderListService.addOrderToList(ORDER_LIST_UNIQUE_ID);
+        DailyOrderList result = dailyOrderListServiceImpl.addOrderToList(ORDER_LIST_UNIQUE_ID);
         //THEN
         assertAll(
                 () -> assertNotNull(result),
@@ -177,7 +177,7 @@ public class DailyOrderListServiceTestSuite {
         when(orderRepository.findByOrderNumber(anyString())).thenReturn(Optional.of(order));
         when(dailyOrderListRepository.findDailyOrderListByIsOpenTrue()).thenReturn(Optional.of(dailyOrderList));
         //WHEN
-        DailyOrderList result = dailyOrderListService.removeOrderFromList(ORDER_NUMBER);
+        DailyOrderList result = dailyOrderListServiceImpl.removeOrderFromList(ORDER_NUMBER);
         //THEN
         assertAll(
                 () -> assertEquals(result.getOrders().size(), 0),
@@ -207,7 +207,7 @@ public class DailyOrderListServiceTestSuite {
 
         when(dailyOrderListRepository.findDailyOrderListByIsOpenTrue()).thenReturn(Optional.of(dailyOrderList));
         //WHEN
-        DailyOrderList result = dailyOrderListService.closeDailyList();
+        DailyOrderList result = dailyOrderListServiceImpl.closeDailyList();
         //THEN
         assertAll(
                 () -> assertNotNull(result),

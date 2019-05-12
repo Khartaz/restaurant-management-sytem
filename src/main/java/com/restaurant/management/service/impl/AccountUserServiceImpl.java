@@ -10,6 +10,8 @@ import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.AccountUserService;
+import com.restaurant.management.service.SimpleEmailService;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
@@ -26,7 +28,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ import java.util.stream.Stream;
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
-public class AccountUserService implements UserDetailsService {
+public class AccountUserServiceImpl implements AccountUserService {
 
     private AuthenticationManager authenticationManager;
     private AccountUserRepository accountUserRepository;
@@ -47,9 +48,9 @@ public class AccountUserService implements UserDetailsService {
     private SimpleEmailService simpleEmailService;
 
     @Autowired
-    public AccountUserService(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
-                              RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                              JwtTokenProvider tokenProvider, SimpleEmailService simpleEmailService) {
+    public AccountUserServiceImpl(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
+                                  RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                                  JwtTokenProvider tokenProvider,  SimpleEmailService simpleEmailService) {
         this.authenticationManager = authenticationManager;
         this.accountUserRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -238,7 +239,7 @@ public class AccountUserService implements UserDetailsService {
 
              accountUserRepository.save(u);
 
-             simpleEmailService.sendResetPasswordEmail(
+            simpleEmailService.sendResetPasswordEmail(
                     new Mail(u.getEmail(), u.getName()), u.getPasswordResetToken());
         });
 

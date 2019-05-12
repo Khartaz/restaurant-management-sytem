@@ -20,6 +20,7 @@ import com.restaurant.management.repository.archive.CustomerArchiveRepository;
 import com.restaurant.management.repository.archive.ProductArchiveRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.CartService;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
-public class CartService {
+public class CartServiceImpl implements CartService {
 
     private SessionCartRepository sessionCartRepository;
     private CartRepository cartRepository;
@@ -49,15 +50,15 @@ public class CartService {
     private AccountUserRepository accountUserRepository;
 
     @Autowired
-    public CartService(SessionCartRepository sessionCartRepository,
-                       CartRepository cartRepository,
-                       ProductRepository productRepository,
-                       CustomerRepository customerRepository,
-                       CartMapper cartMapper,
-                       SessionLineItemRepository sessionLineItemRepository,
-                       ProductArchiveRepository productArchiveRepository,
-                       CustomerArchiveRepository customerArchiveRepository,
-                       AccountUserRepository accountUserRepository) {
+    public CartServiceImpl(SessionCartRepository sessionCartRepository,
+                           CartRepository cartRepository,
+                           ProductRepository productRepository,
+                           CustomerRepository customerRepository,
+                           CartMapper cartMapper,
+                           SessionLineItemRepository sessionLineItemRepository,
+                           ProductArchiveRepository productArchiveRepository,
+                           CustomerArchiveRepository customerArchiveRepository,
+                           AccountUserRepository accountUserRepository) {
         this.sessionCartRepository = sessionCartRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
@@ -313,7 +314,7 @@ public class CartService {
         return new ApiResponse(true, CartMessages.CART_DELETED.getMessage());
     }
 
-    private void deleteCart(Long cartId) {
+    public void deleteCart(Long cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_UNIQUE_ID_NOT_FOUND.getMessage() + cartId));
 

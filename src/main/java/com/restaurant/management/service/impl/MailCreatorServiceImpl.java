@@ -1,6 +1,7 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.security.SecurityConstant;
+import com.restaurant.management.service.MailCreatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Service
-public class MailCreatorService {
+public class MailCreatorServiceImpl implements MailCreatorService {
 
     @Qualifier("templateEngine")
     private TemplateEngine templateEngine;

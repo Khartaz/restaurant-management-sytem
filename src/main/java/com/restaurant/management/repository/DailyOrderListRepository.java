@@ -16,7 +16,7 @@ public interface DailyOrderListRepository extends JpaRepository<DailyOrderList, 
 
     boolean existsByIsOpenTrue();
 
-    Optional<DailyOrderList> findByUniqueId(String uniqueId);
+    Optional<DailyOrderList> findById(Long orderListId);
 
     @Override
     Page<DailyOrderList> findAll(Pageable pageable);

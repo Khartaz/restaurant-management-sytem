@@ -2,7 +2,7 @@ package com.restaurant.management.security;
 
 import com.restaurant.management.security.jwt.JwtAuthenticationEntryPoint;
 import com.restaurant.management.security.jwt.JwtAuthenticationFilter;
-import com.restaurant.management.service.impl.AccountUserService;
+import com.restaurant.management.service.AccountUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(

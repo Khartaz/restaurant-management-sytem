@@ -2,7 +2,6 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Customer;
 import com.restaurant.management.repository.CustomerRepository;
-import com.restaurant.management.service.impl.CustomerService;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import org.junit.Test;
 
@@ -26,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerServiceTestSuite {
+public class CustomerServiceImplTestSuite {
     @InjectMocks
     private CustomerService customerService;
     @Mock

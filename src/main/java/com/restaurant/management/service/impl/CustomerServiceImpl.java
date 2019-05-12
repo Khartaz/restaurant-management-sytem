@@ -14,6 +14,7 @@ import com.restaurant.management.repository.SessionCartRepository;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,15 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CustomerService {
+public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
     private SessionCartRepository sessionCartRepository;
     private AccountUserRepository accountUserRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository,
-                           SessionCartRepository sessionCartRepository,
-                           AccountUserRepository accountUserRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               SessionCartRepository sessionCartRepository,
+                               AccountUserRepository accountUserRepository) {
         this.customerRepository = customerRepository;
         this.sessionCartRepository = sessionCartRepository;
         this.accountUserRepository = accountUserRepository;

@@ -5,7 +5,7 @@ import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.impl.CustomerService;
+import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;

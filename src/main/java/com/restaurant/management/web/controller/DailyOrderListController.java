@@ -40,7 +40,7 @@ public class DailyOrderListController {
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
-        Link link = linkTo(DailyOrderListController.class).slash(orderList.getUniqueId()).withSelfRel();
+        Link link = linkTo(DailyOrderListController.class).slash(orderList.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
@@ -55,21 +55,21 @@ public class DailyOrderListController {
         return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{uniqueId}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{orderListId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> showOrderList(@PathVariable String uniqueId) {
-        DailyOrderListDto dailyOrderList = dailyOrderListFacade.getOrderListByUniqueId(uniqueId);
+    Resource<DailyOrderListResponse> showOrderList(@PathVariable Long orderListId) {
+        DailyOrderListDto dailyOrderList = dailyOrderListFacade.getOrderListById(orderListId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(dailyOrderList);
 
-        Link link = linkTo(DailyOrderListController.class).slash(dailyOrderList.getUniqueId()).withSelfRel();
+        Link link = linkTo(DailyOrderListController.class).slash(dailyOrderList.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
 
-    @DeleteMapping(value = "/{uniqueId}")
-    public ResponseEntity<?> deleteListByUniqueId(@PathVariable String uniqueId) {
-        return ResponseEntity.ok().body(dailyOrderListFacade.deleteByUniqueId(uniqueId));
+    @DeleteMapping(value = "/{orderListId}")
+    public ResponseEntity<?> deleteListByUniqueId(@PathVariable Long orderListId) {
+        return ResponseEntity.ok().body(dailyOrderListFacade.deleteById(orderListId));
     }
 
     @PatchMapping(value = "/add",
@@ -80,7 +80,7 @@ public class DailyOrderListController {
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
-        Link link = linkTo(DailyOrderListController.class).slash(orderList.getUniqueId()).withSelfRel();
+        Link link = linkTo(DailyOrderListController.class).slash(orderList.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
@@ -93,7 +93,7 @@ public class DailyOrderListController {
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
-        Link link = linkTo(DailyOrderListController.class).slash(orderList.getUniqueId()).withSelfRel();
+        Link link = linkTo(DailyOrderListController.class).slash(orderList.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
@@ -106,7 +106,7 @@ public class DailyOrderListController {
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
-        Link link = linkTo(DailyOrderListController.class).slash(orderList.getUniqueId()).withSelfRel();
+        Link link = linkTo(DailyOrderListController.class).slash(orderList.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }

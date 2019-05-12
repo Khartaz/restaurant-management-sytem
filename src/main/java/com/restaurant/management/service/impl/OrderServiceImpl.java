@@ -10,6 +10,8 @@ import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.*;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.CartService;
+import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,17 +26,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class OrderService {
+public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private CartService cartService;
     private CustomerRepository customerRepository;
     private AccountUserRepository accountUserRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository,
-                        CartService cartService,
-                        CustomerRepository customerRepository,
-                        AccountUserRepository accountUserRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            CartService cartService,
+                            CustomerRepository customerRepository,
+                            AccountUserRepository accountUserRepository) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
         this.customerRepository = customerRepository;
@@ -95,6 +97,19 @@ public class OrderService {
 
         return new ApiResponse(true, OrderMessages.ORDER_DELETED.getMessage());
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public Page<Order> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable) {
         AccountUser accountUser = accountUserRepository.findById(currentUser.getId())

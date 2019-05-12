@@ -5,7 +5,7 @@ import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.impl.AccountUserService;
+import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.LoginRequest;
 import com.restaurant.management.web.request.SignUpUserRequest;
 import com.restaurant.management.web.request.UpdateAccountInfo;
@@ -24,8 +24,8 @@ public final class AccountUserFacade {
     private AccountUserMapper accountUserMapper;
 
     @Autowired
-    public AccountUserFacade(AccountUserService accountUserService, AccountUserMapper accountUserMapper) {
-        this.accountUserService = accountUserService;
+    public AccountUserFacade(AccountUserService AccountUserService, AccountUserMapper accountUserMapper) {
+        this.accountUserService = AccountUserService;
         this.accountUserMapper = accountUserMapper;
     }
 

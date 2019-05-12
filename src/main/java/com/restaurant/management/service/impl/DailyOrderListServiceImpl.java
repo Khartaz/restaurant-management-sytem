@@ -8,7 +8,7 @@ import com.restaurant.management.exception.order.OrderMessages;
 import com.restaurant.management.exception.order.OrderNotFoundException;
 import com.restaurant.management.repository.DailyOrderListRepository;
 import com.restaurant.management.repository.OrderRepository;
-import com.restaurant.management.utils.Utils;
+import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,19 +21,19 @@ import java.util.*;
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
-public class DailyOrderListService {
+public class DailyOrderListServiceImpl implements DailyOrderListService {
     private DailyOrderListRepository dailyOrderListRepository;
     private OrderRepository orderRepository;
 
     @Autowired
-    public DailyOrderListService(DailyOrderListRepository dailyOrderListRepository,
-                                 OrderRepository orderRepository) {
+    public DailyOrderListServiceImpl(DailyOrderListRepository dailyOrderListRepository,
+                                     OrderRepository orderRepository) {
         this.dailyOrderListRepository = dailyOrderListRepository;
         this.orderRepository = orderRepository;
     }
 
-    public DailyOrderList getOrderListByUniqueId(String uniqueId) {
-        return dailyOrderListRepository.findByUniqueId(uniqueId)
+    public DailyOrderList getOrderListById(Long orderListId) {
+        return dailyOrderListRepository.findById(orderListId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
@@ -48,7 +48,6 @@ public class DailyOrderListService {
 
         DailyOrderList orderList = new DailyOrderList();
 
-        orderList.setUniqueId(Utils.generateDailyOrderListUniqueId(10));
         orderList.setDailyIncome(0.00);
         orderList.setNumberOfOrders(0);
         orderList.setOpened(Boolean.TRUE);
@@ -122,17 +121,14 @@ public class DailyOrderListService {
         return dailyOrderList;
     }
 
-    public ApiResponse deleteByUniqueId(String uniqueId) {
-        Optional<DailyOrderList> orderList = dailyOrderListRepository.findByUniqueId(uniqueId);
+    public ApiResponse deleteById(Long orderListId) {
+        DailyOrderList orderList = dailyOrderListRepository.findById(orderListId)
+                .orElseThrow(() -> new OrderListExistsException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
 
-        if (orderList.isPresent()) {
-            dailyOrderListRepository.delete(orderList.get());
+        dailyOrderListRepository.delete(orderList);
 
-            return new ApiResponse(true, OrderMessages.ORDER_LIST_DELETED.getMessage());
+        return new ApiResponse(true, OrderMessages.ORDER_LIST_DELETED.getMessage());
 
-        } else {
-            throw new OrderListExistsException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage());
-        }
     }
 
 }

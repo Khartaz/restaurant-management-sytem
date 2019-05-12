@@ -12,9 +12,6 @@ public class DailyOrderList extends AbstractAuditing {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "unique_id")
-    private String uniqueId;
-
     @Column(name = "daily_income")
     private Double dailyIncome;
 
@@ -30,11 +27,10 @@ public class DailyOrderList extends AbstractAuditing {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RestaurantInfo restaurantInfo;
 
-    public DailyOrderList(Long id, String uniqueId, Double dailyIncome,
+    public DailyOrderList(Long id, Double dailyIncome,
                           Integer numberOfOrders,
                           Boolean isOpen, Set<Order> orders) {
         this.id = id;
-        this.uniqueId = uniqueId;
         this.dailyIncome = dailyIncome;
         this.numberOfOrders = numberOfOrders;
         this.isOpen = isOpen;
@@ -46,14 +42,6 @@ public class DailyOrderList extends AbstractAuditing {
 
     public Long getId() {
         return id;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
     }
 
     public Double getDailyIncome() {

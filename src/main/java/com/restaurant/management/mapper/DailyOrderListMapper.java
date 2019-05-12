@@ -22,7 +22,6 @@ public final class DailyOrderListMapper {
     public DailyOrderList mapToDailyOrderList(final DailyOrderListDto orderListDto) {
         return new DailyOrderList(
                 orderListDto.getId(),
-                orderListDto.getUniqueId(),
                 orderListDto.getDailyIncome(),
                 orderListDto.getNumberOfOrders(),
                 orderListDto.isOpen(),
@@ -35,7 +34,6 @@ public final class DailyOrderListMapper {
     public DailyOrderListDto mapToDailyOrderListDto(final DailyOrderList orderList) {
         return new DailyOrderListDto(
                 orderList.getId(),
-                orderList.getUniqueId(),
                 orderList.getDailyIncome(),
                 orderList.getNumberOfOrders(),
                 orderList.isOpen(),
@@ -48,7 +46,6 @@ public final class DailyOrderListMapper {
     public DailyOrderListResponse mapToDailyOrderListResponse(final DailyOrderListDto orderListDto) {
         return new DailyOrderListResponse(
                 orderListDto.getId(),
-                orderListDto.getUniqueId(),
                 orderListDto.getDailyIncome(),
                 orderListDto.getNumberOfOrders(),
                 orderListDto.isOpen(),

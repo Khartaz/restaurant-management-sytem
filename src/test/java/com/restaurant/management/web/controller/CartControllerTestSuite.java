@@ -3,7 +3,7 @@ package com.restaurant.management.web.controller;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.mapper.CartMapper;
-import com.restaurant.management.service.facade.CartFacade;
+import com.restaurant.management.service.facade.SessionCartFacade;
 import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class CartControllerTestSuite {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private CartFacade cartFacade;
+    private SessionCartFacade sessionCartFacade;
     @MockBean
     private CartMapper cartMapper;
 
@@ -70,7 +70,7 @@ public class CartControllerTestSuite {
         Page<CartDto> cartsDtoPage = new PageImpl<>(cartsDto);
         Page<CartResponse> cartsResponsePage = new PageImpl<>(cartsResponse);
 
-        when(cartFacade.getAllCarts(pageable)).thenReturn(cartsDtoPage);
+        when(sessionCartFacade.getAllCarts(pageable)).thenReturn(cartsDtoPage);
         when(cartMapper.mapToCartResponsePage(cartsDtoPage)).thenReturn(cartsResponsePage);
         //WHEN & THEN
         mockMvc.perform(get(PATH)
@@ -100,7 +100,7 @@ public class CartControllerTestSuite {
                 new ArrayList<>()
         );
 
-        when(cartFacade.getCartById(cartDto.getUniqueId())).thenReturn(cartDto);
+        when(sessionCartFacade.getCartById(cartDto.getUniqueId())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
         mockMvc.perform(get(PATH + "/" + CART_UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))
@@ -139,7 +139,7 @@ public class CartControllerTestSuite {
         Page<CartDto> cartsDtoPage = new PageImpl<>(cartsDto);
         Page<CartResponse> cartsResponsePage = new PageImpl<>(cartsResponse);
 
-        when(cartFacade.getSessionCarts(pageable)).thenReturn(cartsDtoPage);
+        when(sessionCartFacade.getSessionCarts(pageable)).thenReturn(cartsDtoPage);
         when(cartMapper.mapToCartResponsePage(cartsDtoPage)).thenReturn(cartsResponsePage);
         //WHEN & THEN
         mockMvc.perform(get(PATH + "/session")
@@ -169,7 +169,7 @@ public class CartControllerTestSuite {
                 new ArrayList<>()
         );
 
-        when(cartFacade.getSessionCartById(cartDto.getUniqueId())).thenReturn(cartDto);
+        when(sessionCartFacade.getSessionCartById(cartDto.getUniqueId())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
         mockMvc.perform(get(PATH + "/session/" + CART_UNIQUE_ID).contentType(APPLICATION_JSON_VALUE))

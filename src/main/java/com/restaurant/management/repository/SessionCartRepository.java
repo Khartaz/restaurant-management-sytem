@@ -24,6 +24,8 @@ public interface SessionCartRepository extends JpaRepository<SessionCart, Long> 
 
     boolean existsByCustomerAndIsOpenTrue(Customer customer);
 
+    boolean existsByCustomerIdAndIsOpenTrue(Long id);
+
     @Override
     Page<SessionCart> findAll(Pageable pageable);
 

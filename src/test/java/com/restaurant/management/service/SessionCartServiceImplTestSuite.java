@@ -25,9 +25,9 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CartServiceImplTestSuite {
+public class SessionCartServiceImplTestSuite {
     @InjectMocks
-    private CartService cartService;
+    private SessionCartService sessionCartService;
     @Mock
     private SessionCartRepository sessionCartRepository;
     @Mock
@@ -63,7 +63,7 @@ public class CartServiceImplTestSuite {
         when(customerRepository.findById(CUSTOMER_ID)).thenReturn(customer);
         when(sessionCartRepository.existsByCustomerAndIsOpenTrue(customer.get())).thenReturn(Boolean.FALSE);
         //WHEN
-        SessionCart result = cartService.openSessionCart(CUSTOMER_ID);
+        SessionCart result = sessionCartService.openSessionCart(CUSTOMER_ID);
         //THEN
         assertAll(
                 () -> assertTrue(result.isOpen()),
@@ -101,7 +101,7 @@ public class CartServiceImplTestSuite {
         when(productRepository.findProductByName(anyString())).thenReturn(Optional.of(product));
         when(sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(CUSTOMER_ID)).thenReturn(Optional.of(sessionCart));
         //WHEN
-        SessionCart result = cartService.addToCart(CUSTOMER_ID, request);
+        SessionCart result = sessionCartService.addToCart(CUSTOMER_ID, request);
         //THEN
 
         int resultQuantity = result.getSessionLineItems().get(0).getQuantity();
@@ -149,7 +149,7 @@ public class CartServiceImplTestSuite {
         when(customerRepository.existsById(CUSTOMER_ID)).thenReturn(Boolean.TRUE);
         when(sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(CUSTOMER_ID)).thenReturn(Optional.of(sessionCart));
         //WHEN
-        SessionCart result = cartService.updateProductQuantity(CUSTOMER_ID, request);
+        SessionCart result = sessionCartService.updateProductQuantity(CUSTOMER_ID, request);
         //THEN
         int resultQuantity = result.getSessionLineItems().get(0).getQuantity();
         long resultPhoneNumber = result.getCustomer().getPhoneNumber();
@@ -196,7 +196,7 @@ public class CartServiceImplTestSuite {
         when(sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(CUSTOMER_ID)).thenReturn(Optional.of(sessionCart));
         when(sessionLineItemRepository.findById(anyLong())).thenReturn(Optional.of(lineItem));
         //WHEN
-        SessionCart result = cartService.removeProductFromCart(CUSTOMER_ID, request);
+        SessionCart result = sessionCartService.removeProductFromCart(CUSTOMER_ID, request);
         //THEN
 
         int lineItemsSize = result.getSessionLineItems().size();
@@ -249,7 +249,7 @@ public class CartServiceImplTestSuite {
 
         when(cartRepository.findAll(pageable)).thenReturn(new PageImpl<>(carts));
         //WHEN
-        Page<Cart> cartsPage = cartService.getAllCarts(pageable);
+        Page<Cart> cartsPage = sessionCartService.getAllCarts(pageable);
         List<Cart> result = cartsPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
@@ -290,7 +290,7 @@ public class CartServiceImplTestSuite {
 
         when(sessionCartRepository.findAll(pageable)).thenReturn(new PageImpl<>(sessionCarts));
         //WHEN
-        Page<SessionCart> sessionCartsPage = cartService.getSessionCarts(pageable);
+        Page<SessionCart> sessionCartsPage = sessionCartService.getSessionCarts(pageable);
         List<SessionCart> result = sessionCartsPage.get().collect(Collectors.toList());
         //THEN
         assertAll(
@@ -310,7 +310,7 @@ public class CartServiceImplTestSuite {
 
         when(cartRepository.findByUniqueId(UNIQUE_CART_ID)).thenReturn(Optional.of(cart));
         //WHEN
-        Cart result = cartService.getCartById(UNIQUE_CART_ID);
+        Cart result = sessionCartService.getCartById(UNIQUE_CART_ID);
         //THEN
         assertAll(
                 () -> assertEquals(result.getUniqueId(), UNIQUE_CART_ID)
@@ -329,7 +329,7 @@ public class CartServiceImplTestSuite {
 
         when(sessionCartRepository.findByUniqueId(UNIQUE_CART_ID)).thenReturn(Optional.of(sessionCart));
         //WHEN
-        SessionCart result = cartService.getSessionCartById(UNIQUE_CART_ID);
+        SessionCart result = sessionCartService.getSessionCartById(UNIQUE_CART_ID);
         //THEN
         assertAll(
                 () -> assertEquals(result.getUniqueId(), UNIQUE_CART_ID)

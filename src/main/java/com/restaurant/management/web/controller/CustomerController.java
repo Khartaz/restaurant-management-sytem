@@ -9,6 +9,7 @@ import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.CartFacade;
+import com.restaurant.management.service.facade.SessionCartFacade;
 import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.service.facade.OrderFacade;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
@@ -41,24 +42,27 @@ public class CustomerController {
 
     private CustomerFacade customerFacade;
     private CustomerMapper customerMapper;
-    private CartFacade cartFacade;
+    private SessionCartFacade sessionCartFacade;
     private CartMapper cartMapper;
     private OrderFacade orderFacade;
     private OrderMapper orderMapper;
+    private CartFacade cartFacade;
 
     @Autowired
     public CustomerController(CustomerFacade customerFacade,
                               CustomerMapper customerMapper,
-                              CartFacade cartFacade,
+                              SessionCartFacade sessionCartFacade,
                               CartMapper cartMapper,
                               OrderFacade orderFacade,
-                              OrderMapper orderMapper) {
+                              OrderMapper orderMapper,
+                              CartFacade cartFacade) {
         this.customerFacade = customerFacade;
         this.customerMapper = customerMapper;
-        this.cartFacade = cartFacade;
+        this.sessionCartFacade = sessionCartFacade;
         this.cartMapper = cartMapper;
         this.orderFacade = orderFacade;
         this.orderMapper = orderMapper;
+        this.cartFacade = cartFacade;
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -107,7 +111,7 @@ public class CustomerController {
     @PostMapping(value = "/{id}/carts/session", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
-        CartDto cartDto = cartFacade.openSessionCart(currentUser, id);
+        CartDto cartDto = sessionCartFacade.openSessionCart(currentUser, id);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -122,7 +126,7 @@ public class CustomerController {
     Resource<CartResponse> addToSessionCart(@CurrentUser UserPrincipal currentUser,
                                             @PathVariable Long customerId,
                                             @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = cartFacade.addToCart(currentUser, customerId, request);
+        CartDto cartDto = sessionCartFacade.addToCart(currentUser, customerId, request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -137,7 +141,7 @@ public class CustomerController {
     Resource<CartResponse> updateProductQuantity(@CurrentUser UserPrincipal currentUser,
                                                  @PathVariable Long id,
                                                  @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = cartFacade.updateProductQuantity(currentUser, id, request);
+        CartDto cartDto = sessionCartFacade.updateProductQuantity(currentUser, id, request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -152,7 +156,7 @@ public class CustomerController {
     Resource<CartResponse> removeProductCart(@CurrentUser UserPrincipal currentUser,
                                              @PathVariable Long id,
                                              @Valid @RequestBody RemoveProductRequest request) {
-        CartDto cartDto = cartFacade.removeProductFromCart(currentUser, id, request);
+        CartDto cartDto = sessionCartFacade.removeProductFromCart(currentUser, id, request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -165,7 +169,7 @@ public class CustomerController {
     public @ResponseBody
     Resource<CartResponse> showCustomerSessionCart(@CurrentUser UserPrincipal currentUser,
                                                    @PathVariable Long id) {
-        CartDto cartDto = cartFacade.getSessionCartByCustomerId(currentUser, id);
+        CartDto cartDto = sessionCartFacade.getSessionCartByCustomerId(currentUser, id);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 

@@ -46,8 +46,8 @@ public final class ProductFacade {
         return productMapper.mapToProductDto(product);
     }
 
-    public ProductDto getProductById(Long id, @CurrentUser UserPrincipal currentUser) {
-        Product product = productService.getProductById(id, currentUser);
+    public ProductDto getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
+        Product product = productService.getRestaurantProductById(id, currentUser);
 
         return productMapper.mapToProductDto(product);
     }

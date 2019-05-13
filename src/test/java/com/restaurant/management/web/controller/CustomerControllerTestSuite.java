@@ -5,7 +5,7 @@ import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.mapper.CustomerMapper;
-import com.restaurant.management.service.facade.CartFacade;
+import com.restaurant.management.service.facade.SessionCartFacade;
 import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.is;
@@ -47,7 +46,7 @@ public class CustomerControllerTestSuite {
     @MockBean
     private CustomerMapper customerMapper;
     @MockBean
-    private CartFacade cartFacade;
+    private SessionCartFacade sessionCartFacade;
     @MockBean
     private CartMapper cartMapper;
 
@@ -219,7 +218,7 @@ public class CustomerControllerTestSuite {
         Gson gson = new Gson();
         String json = gson.toJson(cartResponse);
 
-        when(cartFacade.removeProductFromCart(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(cartDto);
+        when(sessionCartFacade.removeProductFromCart(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(cartDto);
         when(cartMapper.mapToCartResponse(cartDto)).thenReturn(cartResponse);
         //WHEN & THEN
         mockMvc.perform(delete(PATH + "/1/carts/session/product").contentType(APPLICATION_JSON_VALUE)

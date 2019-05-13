@@ -15,7 +15,7 @@ public interface ProductService {
 
     Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser);
 
-    Product getProductById(Long id, @CurrentUser UserPrincipal currentUser);
+    Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser);
 
     Page<Product> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser);
 
@@ -25,5 +25,5 @@ public interface ProductService {
 
     Product getProductById(Long id);
 
-    Product updateProduct(ProductRequest productRequest);
+//    Product updateProduct(ProductRequest productRequest);
 }

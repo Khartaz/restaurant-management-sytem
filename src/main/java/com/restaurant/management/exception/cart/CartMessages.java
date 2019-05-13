@@ -14,7 +14,7 @@ public enum  CartMessages {
     CUSTOMER_CART_NOT_FOUND2("Cart with provided customer id not found"),
     CUSTOMER_CART_NOT_FOUND("Customer cart with provided id and cart unique id not found"),
     CUSTOMER_SESSION_CART_NOT_FOUND("Customer session cart with provided id not found. "),
-    CART_UNIQUE_ID_NOT_FOUND("SessionCart with provided unique id not found. ");
+    CART_ID_NOT_FOUND("SessionCart with provided id not found. ");
 
     private String errorMessage;
 

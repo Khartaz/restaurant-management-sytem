@@ -21,9 +21,9 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
 
     Boolean existsByEmail(String email);
 
-    Optional<AccountUser> findAdminUserByEmailVerificationToken(String token);
+    Optional<AccountUser> findUserByEmailVerificationToken(String token);
 
-    Optional<AccountUser> findAdminUserByPasswordResetToken(String token);
+    Optional<AccountUser> findUserByPasswordResetToken(String token);
 
     @Override
     Page<AccountUser> findAll(Pageable pageable);

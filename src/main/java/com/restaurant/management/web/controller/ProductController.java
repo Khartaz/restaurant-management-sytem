@@ -85,10 +85,10 @@ public class ProductController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductResponse> showProduct(@PathVariable Long id,
-                                          @CurrentUser UserPrincipal currentUser) {
+    Resource<ProductResponse> showRestaurantProductById(@PathVariable Long id,
+                                                        @CurrentUser UserPrincipal currentUser) {
 
-        ProductDto productDto = productFacade.getProductById(id, currentUser);
+        ProductDto productDto = productFacade.getRestaurantProductById(id, currentUser);
 
         ProductResponse response = productMapper.mapToProductResponse(productDto);
 

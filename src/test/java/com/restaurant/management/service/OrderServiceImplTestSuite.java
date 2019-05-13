@@ -31,7 +31,7 @@ public class OrderServiceImplTestSuite {
     @Mock
     private OrderRepository orderRepository;
     @Mock
-    private CartService cartService;
+    private SessionCartService sessionCartService;
 
     private static final String CART_UNIQUE_ID = "DK3S4D";
 
@@ -64,7 +64,7 @@ public class OrderServiceImplTestSuite {
                 lineItemArchives
         );
 
-        when(cartService.confirmCart(PHONE_NUMBER)).thenReturn(cart);
+        when(sessionCartService.confirmCart(PHONE_NUMBER)).thenReturn(cart);
         //WHEN
         Order result = orderService.processOrder(PHONE_NUMBER);
         //THEN

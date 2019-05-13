@@ -14,6 +14,7 @@ import com.restaurant.management.repository.SessionCartRepository;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.request.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -43,63 +44,61 @@ public class CustomerServiceImpl implements CustomerService {
 
     public Customer createCustomer(@CurrentUser UserPrincipal currentUser,
                                    SignUpCustomerRequest request) {
-        if (customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
-        }
-        if (customerRepository.existsByEmail(request.getEmail())) {
-            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
-        }
 
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
-
-        RestaurantInfo restaurantInfo = accountUser.getRestaurantInfo();
-
+        validateEmailAndPhoneNumber(request.getPhoneNumber(), request.getEmail());
+        
         Customer customer = new Customer();
 
         customer.setName(request.getName());
         customer.setLastname(request.getLastname());
         customer.setEmail(request.getEmail());
         customer.setPhoneNumber(request.getPhoneNumber());
-        customer.setRestaurantInfo(restaurantInfo);
+        customer.setRestaurantInfo(getRestaurantInfo(currentUser));
 
         customerRepository.save(customer);
 
         return customer;
     }
 
-    public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    private void validateEmailAndPhoneNumber(Long phoneNumber, String email) {
+        if (customerRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
+        }
+        if (customerRepository.existsByEmail(email)) {
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
+        }
+    }
+
+    private RestaurantInfo getRestaurantInfo(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        return accountUser.getRestaurantInfo();
+    }
+
+    public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
 
         return customerRepository.findAllByRestaurantInfoId(pageable, restaurantId);
     }
 
-    public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Customer customer = customerRepository.findByIdAndRestaurantInfoId(customerId, restaurantId)
+                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
 
-        Customer customer = customerRepository.findByIdAndRestaurantInfoId(id, restaurantId)
-                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id));
+        Optional<SessionCart> sessionCart = sessionCartRepository.findByCustomer(customer);
 
-            Optional<SessionCart> sessionCart = sessionCartRepository.findByCustomer(customer);
+        sessionCart.ifPresent(v -> sessionCartRepository.delete(v));
 
-            sessionCart.ifPresent(v -> sessionCartRepository.delete(v));
-
-            customerRepository.deleteById(customer.getId());
+        customerRepository.deleteById(customer.getId());
 
         return new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage());
     }
 
     public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
-
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
 
         return customerRepository.findByIdAndRestaurantInfoId(id, restaurantId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id));

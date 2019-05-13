@@ -11,6 +11,7 @@ import com.restaurant.management.repository.SessionLineItemRepository;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.product.ProductRequest;
@@ -46,10 +47,14 @@ public class ProductServiceImpl implements ProductService {
         this.accountUserRepository = accountUserRepository;
     }
 
+    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
+        return accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    }
+
     public Product registerProduct(@CurrentUser UserPrincipal currentUser, RegisterProductRequest request) {
 
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+        AccountUser accountUser = getUserById(currentUser);
 
         List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(request.getIngredients());
 
@@ -71,15 +76,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
-
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
-
-        Product product = productRepository.findByIdAndRestaurantInfoId(productRequest.getId(), restaurantId)
-                .orElseThrow(() -> new ProductNotFoundException(
-                        ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productRequest.getId()
-                ));
+        Product product = getRestaurantProductById(productRequest.getId(), currentUser);
 
         List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients());
 
@@ -95,37 +92,32 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    public Product getProductById(Long id, @CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    public Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser) {
+
+        AccountUser accountUser = getUserById(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        return productRepository.findByIdAndRestaurantInfoId(id, restaurantId)
-                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + id));
+        return productRepository.findByIdAndRestaurantInfoId(productId, restaurantId)
+                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productId));
     }
 
     public Page<Product> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+
+        AccountUser accountUser = getUserById(currentUser);
 
         return productRepository.findByRestaurantInfo(pageable, accountUser.getRestaurantInfo());
     }
 
-    public ApiResponse deleteById(Long id, @CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        getRestaurantProductById(productId, currentUser);
 
-        productRepository.findByIdAndRestaurantInfoId(id, restaurantId)
-                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + id));
-
-        List<SessionLineItem> sessionLineItems = sessionLineItemRepository.findAllByProductId(id);
+        List<SessionLineItem> sessionLineItems = sessionLineItemRepository.findAllByProductId(productId);
 
         sessionLineItemRepository.deleteAll(sessionLineItems);
 
-        productRepository.deleteProductById(id);
+        productRepository.deleteProductById(productId);
 
         return new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage());
     }
@@ -141,23 +133,22 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
     }
 
-    public Product updateProduct(ProductRequest productRequest) {
-        Product product = productRepository.findById(productRequest.getId())
-                .orElseThrow(() -> new ProductNotFoundException(
-                        ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productRequest.getId()
-                ));
-
-        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients());
-
-        Stream.of(product).forEach(p -> {
-            p.setName(productRequest.getName());
-            p.setPrice(productRequest.getPrice());
-            p.setCategory(productRequest.getCategory());
-            p.setIngredients(ingredients);
-        });
-
-        productRepository.save(product);
-
-        return product;
-    }
+//    public Product updateProduct(ProductRequest productRequest) {
+//        Product product = productRepository.findById(productRequest.getId())
+//                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productRequest.getId()
+//                ));
+//
+//        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients());
+//
+//        Stream.of(product).forEach(p -> {
+//            p.setName(productRequest.getName());
+//            p.setPrice(productRequest.getPrice());
+//            p.setCategory(productRequest.getCategory());
+//            p.setIngredients(ingredients);
+//        });
+//
+//        productRepository.save(product);
+//
+//        return product;
+//    }
 }

@@ -5,6 +5,7 @@ import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.CartFacade;
+import com.restaurant.management.service.facade.SessionCartFacade;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -29,14 +30,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
+    private SessionCartFacade sessionCartFacade;
     private CartFacade cartFacade;
     private CartMapper cartMapper;
 
     @Autowired
-    public CartController(CartFacade cartFacade,
-                          CartMapper cartMapper) {
-        this.cartFacade = cartFacade;
+    public CartController(SessionCartFacade sessionCartFacade,
+                          CartMapper cartMapper,
+                          CartFacade cartFacade) {
+        this.sessionCartFacade = sessionCartFacade;
         this.cartMapper = cartMapper;
+        this.cartFacade = cartFacade;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -69,7 +73,7 @@ public class CartController {
     ResponseEntity<PagedResources<CartResponse>> showSessionCarts(@CurrentUser UserPrincipal currentUser,
                                                                   Pageable pageable,
                                                                   PagedResourcesAssembler assembler) {
-        Page<CartDto> cartsDto = cartFacade.getSessionCarts(currentUser, pageable);
+        Page<CartDto> cartsDto = sessionCartFacade.getSessionCarts(currentUser, pageable);
 
         Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
 
@@ -80,7 +84,7 @@ public class CartController {
     public @ResponseBody
     Resource<CartResponse> showSessionCart(@CurrentUser UserPrincipal currentUser,
                                            @PathVariable Long cartId) {
-        CartDto cartDto = cartFacade.getSessionCartById(currentUser, cartId);
+        CartDto cartDto = sessionCartFacade.getSessionCartById(currentUser, cartId);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -92,7 +96,7 @@ public class CartController {
     @DeleteMapping(value = "/session/{cartId}")
     public ResponseEntity<?> deleteSessionCart(@CurrentUser UserPrincipal currentUser,
                                                @PathVariable Long cartId) {
-        ApiResponse response = cartFacade.deleteSessionCart(currentUser, cartId);
+        ApiResponse response = sessionCartFacade.deleteSessionCart(currentUser, cartId);
 
         return ResponseEntity.ok().body(response);
     }
@@ -101,7 +105,7 @@ public class CartController {
     public @ResponseBody
     Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser,
                                                 @PathVariable Long customerId) {
-        CartDto cartDto = cartFacade.openSessionCart(currentUser, customerId);
+        CartDto cartDto = sessionCartFacade.openSessionCart(currentUser, customerId);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 
@@ -115,7 +119,7 @@ public class CartController {
     Resource<CartResponse> addToSessionCart(@CurrentUser UserPrincipal currentUser,
                                             @PathVariable Long customerId,
                                             @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = cartFacade.addToCart(currentUser, customerId, request);
+        CartDto cartDto = sessionCartFacade.addToCart(currentUser, customerId, request);
 
         CartResponse response = cartMapper.mapToCartResponse(cartDto);
 
@@ -129,7 +133,7 @@ public class CartController {
     Resource<CartResponse> removeProductFromCart(@CurrentUser UserPrincipal currentUser,
                                                  @PathVariable Long customerId,
                                                  @Valid @RequestBody RemoveProductRequest request) {
-        CartDto cartDto = cartFacade.removeProductFromCart(currentUser, customerId, request);
+        CartDto cartDto = sessionCartFacade.removeProductFromCart(currentUser, customerId, request);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 
@@ -143,7 +147,7 @@ public class CartController {
     Resource<CartResponse> updateProductQuantity(@CurrentUser UserPrincipal currentUser,
                                                  @PathVariable Long customerId,
                                                  @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = cartFacade.updateProductQuantity(currentUser, customerId, request);
+        CartDto cartDto = sessionCartFacade.updateProductQuantity(currentUser, customerId, request);
 
         CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
 

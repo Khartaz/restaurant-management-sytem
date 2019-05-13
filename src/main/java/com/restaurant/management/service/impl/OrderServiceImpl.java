@@ -11,6 +11,7 @@ import com.restaurant.management.repository.*;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CartService;
+import com.restaurant.management.service.SessionCartService;
 import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,19 @@ import java.util.stream.Collectors;
 @Transactional
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
-    private CartService cartService;
     private CustomerRepository customerRepository;
     private AccountUserRepository accountUserRepository;
+    private CartService cartService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
-                            CartService cartService,
                             CustomerRepository customerRepository,
-                            AccountUserRepository accountUserRepository) {
+                            AccountUserRepository accountUserRepository,
+                            CartService cartService) {
         this.orderRepository = orderRepository;
-        this.cartService = cartService;
         this.customerRepository = customerRepository;
         this.accountUserRepository = accountUserRepository;
+        this.cartService = cartService;
     }
 
     public Long countRestaurantOrders(@CurrentUser UserPrincipal currentUser) {

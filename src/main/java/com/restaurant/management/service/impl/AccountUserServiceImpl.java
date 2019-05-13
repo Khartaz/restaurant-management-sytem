@@ -235,14 +235,14 @@ public class AccountUserServiceImpl implements AccountUserService {
             if (!u.isActive()) {
                 throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
             }
-             u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getId()));
 
-             accountUserRepository.save(u);
+            u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getId()));
+
+            accountUserRepository.save(u);
 
             simpleEmailService.sendResetPasswordEmail(
                     new Mail(u.getEmail(), u.getName()), u.getPasswordResetToken());
         });
-
         return true;
     }
 
@@ -261,7 +261,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 
-        AccountUser accountUser = accountUserRepository.findAdminUserByEmailVerificationToken(token)
+        AccountUser accountUser = accountUserRepository.findUserByEmailVerificationToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
@@ -284,7 +284,7 @@ public class AccountUserServiceImpl implements AccountUserService {
         boolean returnValue = false;
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
-        AccountUser accountUser = accountUserRepository.findAdminUserByPasswordResetToken(token)
+        AccountUser accountUser = accountUserRepository.findUserByPasswordResetToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
         if (!accountUser.isActive()) {

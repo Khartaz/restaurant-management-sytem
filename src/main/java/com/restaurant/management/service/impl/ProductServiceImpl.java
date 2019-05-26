@@ -66,9 +66,8 @@ public class ProductServiceImpl implements ProductService {
                 .setCategory(request.getCategory())
                 .setPrice(price)
                 .setIngredients(ingredients)
+                .setRestaurantInfo(accountUser.getRestaurantInfo())
                 .build();
-
-        newProduct.setRestaurantInfo(accountUser.getRestaurantInfo());
 
         productRepository.save(newProduct);
 
@@ -141,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
 //        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients());
 //
 //        Stream.of(product).forEach(p -> {
-//            p.setName(productRequest.getName());
+//            p.setName(productRequest.getUserName());
 //            p.setPrice(productRequest.getPrice());
 //            p.setCategory(productRequest.getCategory());
 //            p.setIngredients(ingredients);

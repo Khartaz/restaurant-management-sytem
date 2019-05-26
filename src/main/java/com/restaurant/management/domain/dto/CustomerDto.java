@@ -3,8 +3,8 @@ package com.restaurant.management.domain.dto;
 public final class CustomerDto {
     private Long createdAt;
     private Long updatedAt;
-    private String createdBy;
-    private String updatedBy;
+    private String createdByUserId;
+    private String updatedByUserId;
     private Long id;
     private String name;
     private String lastname;
@@ -21,12 +21,12 @@ public final class CustomerDto {
         this.email = email;
     }
 
-    public CustomerDto(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+    public CustomerDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                        Long id, String name, String lastname, Long phoneNumber, String email) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -42,12 +42,12 @@ public final class CustomerDto {
         return updatedAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreatedByUserId() {
+        return createdByUserId;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getUpdatedByUserId() {
+        return updatedByUserId;
     }
 
     public Long getId() {

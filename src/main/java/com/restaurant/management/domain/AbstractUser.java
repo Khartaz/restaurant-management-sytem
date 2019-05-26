@@ -26,7 +26,6 @@ public abstract class AbstractUser extends AbstractAuditing {
     @Column(name = "lastname")
     private String lastname;
 
-    @NaturalId
     @NotBlank
     @Size(max = 40)
     @Email
@@ -39,9 +38,9 @@ public abstract class AbstractUser extends AbstractAuditing {
     public AbstractUser() {
     }
 
-    public AbstractUser(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+    public AbstractUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                         Long id, String name, String lastname, String email, Long phoneNumber) {
-        super(createdAt, updatedAt, createdBy, updatedBy);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
         this.id = id;
         this.name = name;
         this.lastname = lastname;

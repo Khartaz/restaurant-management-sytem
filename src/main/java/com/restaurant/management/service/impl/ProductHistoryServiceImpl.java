@@ -8,7 +8,6 @@ import com.restaurant.management.domain.history.ProductHistory;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.AccountUserRepository;
-import com.restaurant.management.repository.history.ProductHistoryRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ProductHistoryService;
@@ -69,8 +68,8 @@ public class ProductHistoryServiceImpl implements ProductHistoryService {
                 auditQueryResult.getRevisionType(),
                 auditQueryResult.getEntity().getCreatedAt(),
                 auditQueryResult.getEntity().getUpdatedAt(),
-                auditQueryResult.getEntity().getCreatedBy(),
-                auditQueryResult.getEntity().getUpdatedBy()
+                auditQueryResult.getEntity().getCreatedByUserId(),
+                auditQueryResult.getEntity().getUpdatedByUserId()
         );
     }
 }

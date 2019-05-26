@@ -6,7 +6,6 @@ import java.util.Set;
 
 public final class UserSummary {
     private Long id;
-    private String username;
     private String name;
     private String lastname;
     private String email;
@@ -16,11 +15,10 @@ public final class UserSummary {
     public UserSummary() {
     }
 
-    public UserSummary(Long id, String username, String name,
+    public UserSummary(Long id, String name,
                        String lastname, String email, Long phoneNumber,
                       Set<Role> roles) {
         this.id = id;
-        this.username = username;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -30,10 +28,6 @@ public final class UserSummary {
 
     public Long getId() {
         return id;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getName() {

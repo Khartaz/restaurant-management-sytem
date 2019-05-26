@@ -1,4 +1,4 @@
-package com.restaurant.management.web.request;
+package com.restaurant.management.web.request.account;
 
 import javax.validation.constraints.*;
 
@@ -17,8 +17,12 @@ public final class SignUpUserRequest {
     private String email;
 
     @NotBlank(message = "password cannot be blank")
-    @Size(min = 6, max = 100, message = "password must be between 6 - 100")
+    @Size(min = 8, max = 100, message = "password must be between 8 - 100")
     private String password;
+
+    @NotNull(message = "phone number cannot be null")
+//    @Size(min = 4, max = 15, message = "phone number cannot be null")
+    private Long phoneNumber;
 
     public SignUpUserRequest() {
     }
@@ -37,5 +41,9 @@ public final class SignUpUserRequest {
 
     public String getPassword() {
         return password;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
     }
 }

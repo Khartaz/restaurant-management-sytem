@@ -22,10 +22,10 @@ public class Product extends AbstractProduct {
     }
 
     public Product(Long createdAt, Long updatedAt,
-                   String createdBy, String updatedBy,
+                   String createdByUserId, String updatedByUserId,
                    Long id, String name, String category,
                    Double price, List<Ingredient> ingredients) {
-        super(createdAt, updatedAt, createdBy, updatedBy, id, name, category, price);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, category, price);
         this.ingredients = ingredients;
     }
 
@@ -35,10 +35,11 @@ public class Product extends AbstractProduct {
         this.ingredients = ingredients;
     }
 
-    public Product(String uniqueId, String name, String category,
-                   Double price, List<Ingredient> ingredients) {
-        super(uniqueId, name, category, price);
+    public Product(String name, String category,
+                   Double price, List<Ingredient> ingredients, RestaurantInfo restaurantInfo) {
+        super(name, category, price);
         this.ingredients = ingredients;
+        this.restaurantInfo = restaurantInfo;
     }
 
     public List<Ingredient> getIngredients() {
@@ -53,21 +54,12 @@ public class Product extends AbstractProduct {
         return restaurantInfo;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
-    }
-
     public static class ProductBuilder {
-        private String uniqueId;
         private String name;
         private String category;
         private Double price;
         private List<Ingredient> ingredients;
-
-        public ProductBuilder setUniqueId(String uniqueId) {
-            this.uniqueId = uniqueId;
-            return this;
-        }
+        private RestaurantInfo restaurantInfo;
 
         public ProductBuilder setName(String name) {
             this.name = name;
@@ -89,9 +81,14 @@ public class Product extends AbstractProduct {
             return this;
         }
 
+        public ProductBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
+            this.restaurantInfo = restaurantInfo;
+            return this;
+        }
+
         public Product build() {
-            return new Product(this.uniqueId, this.name, this.category,
-                    this.price, this.ingredients);
+            return new Product(this.name, this.category,
+                    this.price, this.ingredients, this.restaurantInfo);
         }
     }
 

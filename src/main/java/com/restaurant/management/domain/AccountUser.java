@@ -12,10 +12,6 @@ import java.util.Set;
 @Table(name = "account_users")
 public class AccountUser extends AbstractUser {
 
-    @Size(max = 100)
-    @Column(name = "username", unique = true)
-    private String username;
-
     @NotBlank
     @Size(max = 100)
     @Column(name = "password")
@@ -48,35 +44,26 @@ public class AccountUser extends AbstractUser {
     public AccountUser() {
     }
 
-    public AccountUser(String name, String lastname, String email, Long phoneNumber,
-                       String username, String password,
+    public AccountUser(String name, String lastname, String email,
+                       Long phoneNumber,String password,
                        String emailVerificationToken,
-                       Boolean isActive, Set<Role> roles) {
+                       Boolean isActive, Set<Role> roles, RestaurantInfo restaurantInfo) {
         super(name, lastname, email, phoneNumber);
-        this.username = username;
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
+        this.restaurantInfo = restaurantInfo;
     }
 
-    public AccountUser(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+    public AccountUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                        Long id, String name, String lastname, String email, Long phoneNumber,
-                       String username, String emailVerificationToken,
+                       String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
-        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email, phoneNumber);
-        this.username = username;
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -93,14 +80,6 @@ public class AccountUser extends AbstractUser {
 
     public void setPasswordResetToken(String passwordResetToken) {
         this.passwordResetToken = passwordResetToken;
-    }
-
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
     }
 
     public String getEmailVerificationToken() {
@@ -123,10 +102,6 @@ public class AccountUser extends AbstractUser {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     public RestaurantInfo getRestaurantInfo() {
         return restaurantInfo;
     }
@@ -140,11 +115,11 @@ public class AccountUser extends AbstractUser {
         private String lastname;
         private String email;
         private Long phoneNumber;
-        private String username;
         private String password;
         private String emailVerificationToken;
         private Boolean isActive;
         private Set<Role> roles = new HashSet<>();
+        private RestaurantInfo restaurantInfo;
 
         public AccountUserBuilder setName(String name) {
             this.name = name;
@@ -162,11 +137,6 @@ public class AccountUser extends AbstractUser {
 
         public AccountUserBuilder setPhoneNumber(Long phoneNumber) {
             this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        public AccountUserBuilder setUsername(String username) {
-            this.username = username;
             return this;
         }
 
@@ -190,10 +160,16 @@ public class AccountUser extends AbstractUser {
             return this;
         }
 
+        public AccountUserBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
+            this.restaurantInfo = restaurantInfo;
+            return this;
+        }
+
         public AccountUser build() {
             return new AccountUser(this.name, this.lastname, this.email,
-                    this.phoneNumber, this.username, this.password,
-                    this.emailVerificationToken, this.isActive, this.roles);
+                    this.phoneNumber, this.password,
+                    this.emailVerificationToken, this.isActive, this.roles,
+                    this.restaurantInfo);
         }
     }
 }

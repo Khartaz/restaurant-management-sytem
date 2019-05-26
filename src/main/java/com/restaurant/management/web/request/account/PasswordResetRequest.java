@@ -1,4 +1,4 @@
-package com.restaurant.management.web.request;
+package com.restaurant.management.web.request.account;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

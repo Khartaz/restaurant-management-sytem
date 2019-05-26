@@ -12,43 +12,15 @@ public class Customer extends AbstractUser  {
     public Customer() {
     }
 
-    public Customer(String name, String lastname, String email, Long phoneNumber) {
+    public Customer(String name, String lastname, String email, Long phoneNumber,
+                    RestaurantInfo restaurantInfo) {
         super(name, lastname, email, phoneNumber);
+        this.restaurantInfo = restaurantInfo;
     }
 
-    public Customer(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+    public Customer(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                     Long id, String name, String lastname, String email, Long phoneNumber) {
-        super(createdAt, updatedAt, createdBy, updatedBy, id, name, lastname, email, phoneNumber);
-    }
-
-    @Override
-    public String getName() {
-        return super.getName();
-    }
-
-    @Override
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    @Override
-    public String getLastname() {
-        return super.getLastname();
-    }
-
-    @Override
-    public void setLastname(String lastname) {
-        super.setLastname(lastname);
-    }
-
-    @Override
-    public String getEmail() {
-        return super.getEmail();
-    }
-
-    @Override
-    public void setEmail(String email) {
-        super.setEmail(email);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
     }
 
     public RestaurantInfo getRestaurantInfo() {
@@ -57,5 +29,42 @@ public class Customer extends AbstractUser  {
 
     public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
         this.restaurantInfo = restaurantInfo;
+    }
+
+    public static class CustomerBuilder {
+        private String name;
+        private String lastname;
+        private String email;
+        private Long phoneNumber;
+        private RestaurantInfo restaurantInfo;
+
+        public CustomerBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CustomerBuilder setLastname(String lastname) {
+            this.lastname = lastname;
+            return this;
+        }
+
+        public CustomerBuilder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public CustomerBuilder setPhoneNumber(Long phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public CustomerBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
+            this.restaurantInfo = restaurantInfo;
+            return this;
+        }
+
+        public Customer build() {
+            return new Customer(this.name, this.lastname, this.email, this.phoneNumber, this.restaurantInfo);
+        }
     }
 }

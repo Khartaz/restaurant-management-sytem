@@ -6,33 +6,30 @@ public final class AccountUserDto {
 
     private Long createdAt;
     private Long updatedAt;
-    private String createdBy;
-    private String updatedBy;
+    private String createdByUserId;
+    private String updatedByUserId;
     private Long id;
     private String name;
     private String lastname;
     private String email;
-    private Long phoneNumber;
-    private String username;
-    private String emailVerificationToken;
+    private Long phoneNumber;private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleDto> roles;
 
-    public AccountUserDto(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+    public AccountUserDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                           Long id, String name, String lastname,
-                          String email, Long phoneNumber, String username,
+                          String email, Long phoneNumber,
                           String emailVerificationToken,
                           Boolean isActive, Set<RoleDto> roles) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.username = username;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -46,12 +43,12 @@ public final class AccountUserDto {
         return updatedAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreatedByUserId() {
+        return createdByUserId;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getUpdatedByUserId() {
+        return updatedByUserId;
     }
 
     public Boolean getActive() {
@@ -76,10 +73,6 @@ public final class AccountUserDto {
 
     public Long getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getEmailVerificationToken() {

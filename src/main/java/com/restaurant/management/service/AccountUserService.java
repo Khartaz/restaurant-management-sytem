@@ -2,12 +2,15 @@ package com.restaurant.management.service;
 
 
 import com.restaurant.management.domain.AccountUser;
+import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.RoleName;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.web.request.LoginRequest;
-import com.restaurant.management.web.request.PasswordReset;
-import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.request.UpdateAccountInfo;
+import com.restaurant.management.web.request.account.LoginRequest;
+import com.restaurant.management.web.request.account.PasswordReset;
+import com.restaurant.management.web.request.account.SignUpUserRequest;
+import com.restaurant.management.web.request.account.UpdateAccountInfo;
+import com.restaurant.management.web.request.restaurant.RegisterRestaurantRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.response.user.UserSummary;
@@ -41,9 +44,9 @@ public interface AccountUserService extends UserDetailsService {
 
     JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest);
 
-    boolean requestResetPassword(String usernameOrEmail);
+    boolean requestResetPassword(String email);
 
-    boolean resendEmailVerificationToken(String usernameOrEmail);
+    boolean resendEmailVerificationToken(String email);
 
     boolean verifyEmailToken(String token);
 
@@ -52,5 +55,7 @@ public interface AccountUserService extends UserDetailsService {
     Page<AccountUser> getAllAccountUsers(Pageable pageable);
 
     Page<AccountUser> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable);
+
+    RoleName[] getRoles();
 
 }

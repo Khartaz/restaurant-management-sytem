@@ -2,6 +2,7 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.Cart;
+import com.restaurant.management.domain.RestaurantInfo;
 import com.restaurant.management.domain.SessionCart;
 import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.archive.LineItemArchive;
@@ -58,36 +59,47 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
-    private ApiResponse deleteSessionCart(@CurrentUser UserPrincipal currentUser, Long cartId) {
+    private SessionCart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
         AccountUser accountUser = getUserById(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        SessionCart sessionCart = sessionCartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
+        return sessionCartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));
+    }
+
+    private ApiResponse deleteSessionCart(@CurrentUser UserPrincipal currentUser, Long cartId) {
+
+        SessionCart sessionCart = getSessionCartById(currentUser, cartId);
 
         sessionCartRepository.deleteById(sessionCart.getId());
 
         return new ApiResponse(true, CartMessages.CART_DELETED.getMessage());
     }
 
-    public Cart confirmCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
+    private SessionCart getSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        SessionCart sessionCart = sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId)
-                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
+        return sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId)
+                .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
+    }
+
+    public Cart confirmCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        SessionCart sessionCart = getSessionCartByCustomerId(currentUser, customerId);
 
         sessionCart.setOpen(Boolean.FALSE);
 
         Cart cart = cartMapper.mapToCart(sessionCart);
 
-        cart.setRestaurantInfo(accountUser.getRestaurantInfo()); /// TO FIX add to mapper
-        cart.getLineItems().forEach(v -> v.setRestaurantInfo(accountUser.getRestaurantInfo()));
+        RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
+
+        cart.setRestaurantInfo(restaurantInfo);
+        cart.getLineItems().forEach(v -> v.setRestaurantInfo(restaurantInfo));
 
         CustomerArchive customerArchive = cart.getCustomer();
-        customerArchive.setRestaurantInfo(accountUser.getRestaurantInfo());
+        customerArchive.setRestaurantInfo(restaurantInfo);
 
         customerArchiveRepository.save(customerArchive);
 
@@ -95,7 +107,7 @@ public class CartServiceImpl implements CartService {
                 .map(LineItemArchive::getProduct)
                 .collect(Collectors.toList());
 
-        productArchives.forEach(v -> v.setRestaurantInfo(accountUser.getRestaurantInfo()));
+        productArchives.forEach(v -> v.setRestaurantInfo(restaurantInfo));
 
         productArchiveRepository.saveAll(productArchives);
 

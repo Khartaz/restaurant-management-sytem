@@ -27,10 +27,10 @@ public abstract class AbstractProduct extends AbstractAuditing {
     }
 
     public AbstractProduct(Long createdAt, Long updatedAt,
-                           String createdBy, String updatedBy,
+                           String createdByUserId, String updatedByUserId,
                            Long id, String name,
                            String category, Double price) {
-        super(createdAt, updatedAt, createdBy, updatedBy);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
         this.id = id;
         this.name = name;
         this.category = category;
@@ -45,8 +45,7 @@ public abstract class AbstractProduct extends AbstractAuditing {
         this.price = price;
     }
 
-    public AbstractProduct(String uniqueId, String name,
-                           String category, Double price) {
+    public AbstractProduct(String name, String category, Double price) {
         this.name = name;
         this.category = category;
         this.price = price;

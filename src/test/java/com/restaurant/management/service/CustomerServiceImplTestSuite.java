@@ -2,7 +2,7 @@ package com.restaurant.management.service;
 
 import com.restaurant.management.domain.Customer;
 import com.restaurant.management.repository.CustomerRepository;
-import com.restaurant.management.web.request.SignUpCustomerRequest;
+import com.restaurant.management.web.request.account.SignUpCustomerRequest;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
@@ -45,7 +45,7 @@ public class CustomerServiceImplTestSuite {
         when(customerRepository.existsByPhoneNumber(PHONE_NUMBER)).thenReturn(Boolean.FALSE);
         when(customerRepository.existsByEmail(anyString())).thenReturn(Boolean.FALSE);
         //WHEN
-        Customer result = customerService.createCustomer(request);
+        Customer result = customerService.registerCustomer(request);
         //THEN
         assertAll(
                 () -> assertEquals(result.getPhoneNumber(), request.getPhoneNumber()),

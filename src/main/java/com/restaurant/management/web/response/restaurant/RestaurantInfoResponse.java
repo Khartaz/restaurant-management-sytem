@@ -1,30 +1,27 @@
-package com.restaurant.management.web.response;
+package com.restaurant.management.web.response.restaurant;
 
-public final class CustomerResponse {
+public final class RestaurantInfoResponse {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
     private String name;
-    private String lastname;
-    private String email;
-    private Long phoneNumber;
 
-    public CustomerResponse() {
+    private RestaurantAddressResponse restaurantAddressResponse;
+
+    public RestaurantInfoResponse() {
     }
 
-    public CustomerResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                            Long id, String name, String lastname, String email, Long phoneNumber) {
+    public RestaurantInfoResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                                  Long id, String name, RestaurantAddressResponse restaurantAddressResponse) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.restaurantAddressResponse = restaurantAddressResponse;
     }
 
     public Long getCreatedAt() {
@@ -51,15 +48,7 @@ public final class CustomerResponse {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Long getPhoneNumber() {
-        return phoneNumber;
+    public RestaurantAddressResponse getRestaurantAddressResponse() {
+        return restaurantAddressResponse;
     }
 }

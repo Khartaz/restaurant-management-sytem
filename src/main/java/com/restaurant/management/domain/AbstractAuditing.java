@@ -23,22 +23,22 @@ public abstract class AbstractAuditing {
     private Long updatedAt;
 
     @CreatedBy
-    @Column(name = "created_by_username")
-    private String createdBy;
+    @Column(name = "created_by_user_id")
+    private String createdByUserId;
 
     @LastModifiedBy
-    @Column(name = "updated_by_username")
-    private String updatedBy;
+    @Column(name = "updated_by_user_id")
+    private String updatedByUserId;
 
     public AbstractAuditing() {
     }
 
     public AbstractAuditing(Long createdAt, Long updatedAt,
-                            String createdBy, String updatedBy) {
+                            String createdByUserId, String updatedByUserId) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
     }
 
     public Long getCreatedAt() {
@@ -57,19 +57,19 @@ public abstract class AbstractAuditing {
         this.updatedAt = updatedAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreatedByUserId() {
+        return createdByUserId;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedByUserId(String createdByUserId) {
+        this.createdByUserId = createdByUserId;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getUpdatedByUserId() {
+        return updatedByUserId;
     }
 
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setUpdatedByUserId(String updatedByUserId) {
+        this.updatedByUserId = updatedByUserId;
     }
 }

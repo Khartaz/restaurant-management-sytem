@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface AccountUserRepository extends JpaRepository<AccountUser, Long> {
 
-    Optional<AccountUser> findByUsernameOrEmail(String username, String email);
+    Optional<AccountUser> findByEmail(String email);
 
     Optional<AccountUser> findById(Long id);
 
@@ -31,4 +31,5 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
     Optional<AccountUser> findByIdAndRestaurantInfoId(Long id, Long restaurantId);
 
     Page<AccountUser> findAllByRestaurantInfoId(Long id, Pageable pageable);
+
 }

@@ -6,8 +6,8 @@ public final class ProductResponse {
 
     private Long createdAt;
     private Long updatedAt;
-    private String createdBy;
-    private String updatedBy;
+    private String createdByUserId;
+    private String updatedByUserId;
     private Long id;
     private String name;
     private String category;
@@ -18,13 +18,13 @@ public final class ProductResponse {
     }
 
     public ProductResponse(Long createdAt, Long updatedAt,
-                           String createdBy, String updatedBy, Long id,
+                           String createdByUserId, String updatedByUserId, Long id,
                            String name, String category, Double price,
                            List<IngredientResponse> ingredients) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
         this.category = category;
@@ -50,12 +50,12 @@ public final class ProductResponse {
         return updatedAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreatedByUserId() {
+        return createdByUserId;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getUpdatedByUserId() {
+        return updatedByUserId;
     }
 
     public Long getId() {

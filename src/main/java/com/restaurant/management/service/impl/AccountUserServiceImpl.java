@@ -12,13 +12,12 @@ import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.SimpleEmailService;
-import com.restaurant.management.utils.Utils;
-import com.restaurant.management.web.request.LoginRequest;
-import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.request.UpdateAccountInfo;
+import com.restaurant.management.web.request.account.LoginRequest;
+import com.restaurant.management.web.request.account.SignUpUserRequest;
+import com.restaurant.management.web.request.account.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
-import com.restaurant.management.web.request.PasswordReset;
+import com.restaurant.management.web.request.account.PasswordReset;
 import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,13 +58,23 @@ public class AccountUserServiceImpl implements AccountUserService {
         this.simpleEmailService = simpleEmailService;
     }
 
+    private AccountUser getByEmail(String email) {
+        return accountUserRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + email));
+    }
+
+    private boolean checkAccountActivationStatus(Boolean status) {
+        if (!status) {
+            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
+        }
+        return true;
+    }
+
     public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+        AccountUser accountUser = getUserById(currentUser.getId());
 
         return new UserSummary(
                 accountUser.getId(),
-                accountUser.getUsername(),
                 accountUser.getName(),
                 accountUser.getLastname(),
                 accountUser.getEmail(),
@@ -74,18 +83,17 @@ public class AccountUserServiceImpl implements AccountUserService {
         );
     }
 
+    //This method is necessary for spring security context
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) {
-        AccountUser adminUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
+    public UserDetails loadUserByUsername(String email) {
+        AccountUser accountUser = getByEmail(email);
 
-        return UserPrincipal.create(adminUser);
+        return UserPrincipal.create(accountUser);
     }
 
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserByUserId(Long id) {
-        AccountUser accountUser = accountUserRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
+        AccountUser accountUser = getUserById(id);
 
         return UserPrincipal.create(accountUser);
     }
@@ -110,6 +118,7 @@ public class AccountUserServiceImpl implements AccountUserService {
                 .setName(signUpUserRequest.getName())
                 .setLastname(signUpUserRequest.getLastname())
                 .setEmail(signUpUserRequest.getEmail())
+                .setPhoneNumber(signUpUserRequest.getPhoneNumber())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.FALSE)
                 .setRoles(Collections.singleton(userRole))
@@ -136,50 +145,43 @@ public class AccountUserServiceImpl implements AccountUserService {
         /**
          *  Temporary changed Active to TRUE and EmailVerificationToken to NULL
          *  Disabled email sending
-         *  Username setter to DELETE
          *  Change it back to production version
          */
-
-        String username = Utils.generateUsername(signUpUserRequest.getName(), signUpUserRequest.getLastname(), 1L);
 
         AccountUser accountUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
                 .setLastname(signUpUserRequest.getLastname())
                 .setEmail(signUpUserRequest.getEmail())
+                .setPhoneNumber(signUpUserRequest.getPhoneNumber())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.TRUE)
-                .setUsername(username)
                 .setRoles(Collections.singleton(userRole))
                 .setEmailVerificationToken(null)
                 .build();
 
-        RestaurantInfo restaurantInfo = new RestaurantInfo();
-        restaurantInfo.setName("New Restaurant");
-
-        accountUser.setRestaurantInfo(restaurantInfo);
-
         accountUserRepository.save(accountUser);
 
-//        simpleEmailService.sendEmailVerification(
-//                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
+        simpleEmailService.sendEmailVerification(
+                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
 
         return accountUser;
     }
 
+    public RoleName[] getRoles() {
+       return   RoleName.values();
+    }
+
     public ApiResponse deleteUserById(Long id) {
-        AccountUser accountUser = accountUserRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
+        AccountUser accountUser = getUserById(id);
 
         accountUserRepository.deleteById(accountUser.getId());
 
         return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getMessage());
     }
 
-    public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser,
-                                         UpdateAccountInfo request) {
+    public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, UpdateAccountInfo request) {
 
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
+        AccountUser accountUser = getUserById(currentUser.getId());
 
         Stream.of(accountUser).forEach(acc -> {
             acc.setName(request.getName());
@@ -197,8 +199,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public AccountUser getRestaurantUserById(@CurrentUser UserPrincipal currentUser, Long id) {
-        AccountUser currentUserResult = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
+        AccountUser currentUserResult = getUserById(currentUser.getId());
 
         Long restaurantId = currentUserResult.getRestaurantInfo().getId();
 
@@ -207,13 +208,9 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
-        String usernameOrEmail = loginRequest.getEmail();
-        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
+        AccountUser accountUser = getByEmail(loginRequest.getEmail());
 
-        if (!accountUser.isActive()) {
-            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
-        }
+        checkAccountActivationStatus(accountUser.isActive());
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -227,14 +224,12 @@ public class AccountUserServiceImpl implements AccountUserService {
         return new JwtAuthenticationResponse(jwt);
     }
 
-    public boolean requestResetPassword(String usernameOrEmail) {
-        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
+    public boolean requestResetPassword(String email) {
+        AccountUser accountUser = getByEmail(email);
+
+        checkAccountActivationStatus(accountUser.isActive());
 
         Stream.of(accountUser).forEach(u -> {
-            if (!u.isActive()) {
-                throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
-            }
 
             u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getId()));
 
@@ -246,9 +241,8 @@ public class AccountUserServiceImpl implements AccountUserService {
         return true;
     }
 
-    public boolean resendEmailVerificationToken(String usernameOrEmail) {
-        AccountUser accountUser = accountUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + usernameOrEmail));
+    public boolean resendEmailVerificationToken(String email) {
+        AccountUser accountUser = getByEmail(email);
 
         String token = accountUser.getEmailVerificationToken();
 
@@ -266,12 +260,10 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
-        String username = Utils.generateUsername(accountUser.getName(), accountUser.getLastname(), accountUser.getId());
-
         if (!hasTokenExpired) {
+
             accountUser.setEmailVerificationToken(null);
             accountUser.setActive(Boolean.TRUE);
-            accountUser.setUsername(username);
 
             accountUserRepository.save(accountUser);
 
@@ -287,23 +279,21 @@ public class AccountUserServiceImpl implements AccountUserService {
         AccountUser accountUser = accountUserRepository.findUserByPasswordResetToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
-        if (!accountUser.isActive()) {
-            throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
-        }
+        checkAccountActivationStatus(accountUser.isActive());
 
         if (!passwordReset.getPassword().equals(passwordReset.getConfirmPassword())) {
             throw new UserAuthenticationException(UserMessages.PASSWORDS_EQUALS.getMessage());
         }
 
         if (!hasTokenExpired) {
-                String encodedPassword = passwordEncoder.encode(passwordReset.getPassword());
+            String encodedPassword = passwordEncoder.encode(passwordReset.getPassword());
 
-                accountUser.setPassword(encodedPassword);
-                accountUser.setPasswordResetToken(null);
+            accountUser.setPassword(encodedPassword);
+            accountUser.setPasswordResetToken(null);
 
-                accountUserRepository.save(accountUser);
+            accountUserRepository.save(accountUser);
 
-                returnValue = true;
+            returnValue = true;
         }
         return returnValue;
     }
@@ -313,8 +303,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public Page<AccountUser> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + currentUser.getId()));
+        AccountUser accountUser = getUserById(currentUser.getId());
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 

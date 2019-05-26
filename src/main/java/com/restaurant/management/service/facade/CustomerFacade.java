@@ -6,7 +6,7 @@ import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CustomerService;
-import com.restaurant.management.web.request.SignUpCustomerRequest;
+import com.restaurant.management.web.request.account.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public final class CustomerFacade {
     }
 
     public CustomerDto createCustomer(@CurrentUser UserPrincipal currentUser, SignUpCustomerRequest request) {
-        Customer customer = customerService.createCustomer(currentUser, request);
+        Customer customer = customerService.registerCustomer(currentUser, request);
 
         return customerMapper.mapToCustomerDto(customer);
     }

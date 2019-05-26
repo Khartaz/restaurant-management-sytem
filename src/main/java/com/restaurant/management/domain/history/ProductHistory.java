@@ -10,20 +10,20 @@ public final class ProductHistory {
     private RevisionType revisionType;
     private Long createdAt;
     private Long updatedAt;
-    private String createdBy;
-    private String updatedBy;
+    private String createdByUserId;
+    private String updatedByUserId;
 
     public ProductHistory(Product product, Number revision,
                           RevisionType revisionType,
                           Long createdAt, Long updatedAt,
-                          String createdBy, String updatedBy) {
+                          String createdByUserId, String updatedByUserId) {
         this.product = product;
         this.revision = revision;
         this.revisionType = revisionType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
     }
 
     public Product getProduct() {
@@ -46,11 +46,11 @@ public final class ProductHistory {
         return updatedAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getCreatedByUserId() {
+        return createdByUserId;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getUpdatedByUserId() {
+        return updatedByUserId;
     }
 }

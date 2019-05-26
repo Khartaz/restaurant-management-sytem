@@ -1,14 +1,16 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogLogin;
+import com.restaurant.management.domain.RoleName;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
+import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.AccountUserFacade;
-import com.restaurant.management.web.request.LoginRequest;
-import com.restaurant.management.web.request.SignUpUserRequest;
-import com.restaurant.management.web.request.UpdateAccountInfo;
+import com.restaurant.management.web.request.account.LoginRequest;
+import com.restaurant.management.web.request.account.SignUpUserRequest;
+import com.restaurant.management.web.request.account.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.user.AccountUserResponse;
 import com.restaurant.management.web.response.user.UserSummary;
@@ -35,12 +37,15 @@ public class AccountUserController {
 
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
+    private RoleMapper roleMapper;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
-                                 AccountUserMapper accountUserMapper) {
+                                 AccountUserMapper accountUserMapper,
+                                 RoleMapper roleMapper) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
+        this.roleMapper = roleMapper;
     }
 
     @GetMapping(value = "/me")
@@ -109,4 +114,14 @@ public class AccountUserController {
         return new Resource<>(accountUserResponse, link);
     }
 
+    @GetMapping(value = "/roles", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<RoleName[]> showRoles() {
+
+        RoleName[] roles = accountUserFacade.getRoles();
+
+        Link link = linkTo(AccountUserController.class).slash("roles").withSelfRel();
+
+        return new Resource<>(roles, link);
+    }
 }

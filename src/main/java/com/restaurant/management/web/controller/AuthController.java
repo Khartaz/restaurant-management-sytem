@@ -1,8 +1,8 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.service.AccountUserService;
-import com.restaurant.management.web.request.PasswordReset;
-import com.restaurant.management.web.request.PasswordResetRequest;
+import com.restaurant.management.web.request.account.PasswordReset;
+import com.restaurant.management.web.request.account.PasswordResetRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +45,8 @@ public class AuthController {
     @PostMapping(value = "/email-token",
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendEmailToken(@RequestParam String usernameOrEmail) {
-        return ResponseEntity.ok(accountUserService.resendEmailVerificationToken(usernameOrEmail));
+    public ResponseEntity<?> sendEmailToken(@RequestParam String email) {
+        return ResponseEntity.ok(accountUserService.resendEmailVerificationToken(email));
     }
 
 }

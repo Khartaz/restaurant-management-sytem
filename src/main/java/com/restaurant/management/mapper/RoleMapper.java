@@ -5,6 +5,9 @@ import com.restaurant.management.domain.dto.RoleDto;
 import com.restaurant.management.web.response.RoleResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public final class RoleMapper {
 
@@ -18,5 +21,17 @@ public final class RoleMapper {
 
     public RoleResponse mapToRoleResponse(final RoleDto roleDto) {
         return new RoleResponse(roleDto.getName());
+    }
+
+    public List<RoleDto> mapToRoleDtoList(final List<Role> roles) {
+        return roles.stream()
+                .map(this::mapToRoleDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<RoleResponse> mapToRoleResponseList(final List<RoleDto> roles) {
+        return roles.stream()
+                .map(this::mapToRoleResponse)
+                .collect(Collectors.toList());
     }
 }

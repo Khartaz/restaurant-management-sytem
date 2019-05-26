@@ -5,7 +5,7 @@ import org.hibernate.envers.RevisionType;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RevisionTypeMapper {
+public final class RevisionTypeMapper {
 
     public RevisionTypeDto mapToRevisionTypeDto(RevisionType revisionType) {
 

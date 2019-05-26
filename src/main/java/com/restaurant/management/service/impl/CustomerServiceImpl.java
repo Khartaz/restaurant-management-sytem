@@ -14,9 +14,8 @@ import com.restaurant.management.repository.SessionCartRepository;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.CustomerService;
-import com.restaurant.management.web.request.SignUpCustomerRequest;
+import com.restaurant.management.web.request.account.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,18 +41,18 @@ public class CustomerServiceImpl implements CustomerService {
         this.accountUserRepository = accountUserRepository;
     }
 
-    public Customer createCustomer(@CurrentUser UserPrincipal currentUser,
-                                   SignUpCustomerRequest request) {
+    public Customer registerCustomer(@CurrentUser UserPrincipal currentUser,
+                                     SignUpCustomerRequest request) {
 
         validateEmailAndPhoneNumber(request.getPhoneNumber(), request.getEmail());
         
-        Customer customer = new Customer();
-
-        customer.setName(request.getName());
-        customer.setLastname(request.getLastname());
-        customer.setEmail(request.getEmail());
-        customer.setPhoneNumber(request.getPhoneNumber());
-        customer.setRestaurantInfo(getRestaurantInfo(currentUser));
+        Customer customer = new Customer.CustomerBuilder()
+                .setName(request.getName())
+                .setLastname(request.getLastname())
+                .setEmail(request.getEmail())
+                .setPhoneNumber(request.getPhoneNumber())
+                .setRestaurantInfo(getRestaurantInfo(currentUser))
+                .build();
 
         customerRepository.save(customer);
 

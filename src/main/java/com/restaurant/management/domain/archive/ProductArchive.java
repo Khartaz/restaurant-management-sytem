@@ -37,10 +37,10 @@ public class ProductArchive extends AbstractAuditing {
     }
 
     public ProductArchive(Long createdAt, Long updatedAt,
-                          String createdBy, String updatedBy,
+                          String createdByUserId, String updatedByUserId,
                           String name, String category,
                           Double price, List<IngredientArchive> ingredients) {
-        super(createdAt, updatedAt, createdBy, updatedBy);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
         this.name = name;
         this.category = category;
         this.price = price;

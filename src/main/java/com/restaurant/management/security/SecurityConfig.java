@@ -83,7 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(
                         SecurityConstant.AUTH_URL,
-                        SecurityConstant.ACCOUNT_URL)
+                        SecurityConstant.ACCOUNT_URL, // < --- Remove it after restaurant register form be ready
+                        SecurityConstant.RESTAURANT_REGISTER)
 //                        SecurityConstant.ADMIN_URL,
 //                        SecurityConstant.CUSTOMER_URL,
 //                        SecurityConstant.PRODUCT_URL,

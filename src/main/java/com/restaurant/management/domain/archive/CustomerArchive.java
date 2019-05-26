@@ -41,9 +41,9 @@ public class CustomerArchive extends AbstractAuditing {
     public CustomerArchive() {
     }
 
-    public CustomerArchive(Long createdAt, Long updatedAt, String createdBy, String updatedBy,
+    public CustomerArchive(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                            String name, String lastname, String email, Long phoneNumber) {
-        super(createdAt, updatedAt, createdBy, updatedBy);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
         this.name = name;
         this.lastname = lastname;
         this.email = email;

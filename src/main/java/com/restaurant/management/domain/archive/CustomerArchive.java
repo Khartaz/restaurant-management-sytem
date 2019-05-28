@@ -42,12 +42,13 @@ public class CustomerArchive extends AbstractAuditing {
     }
 
     public CustomerArchive(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                           String name, String lastname, String email, Long phoneNumber) {
+                           String name, String lastname, String email, Long phoneNumber, RestaurantInfo restaurantInfo) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId);
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.restaurantInfo = restaurantInfo;
     }
 
     public Long getId() {

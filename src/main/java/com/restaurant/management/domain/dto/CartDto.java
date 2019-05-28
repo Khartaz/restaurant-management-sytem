@@ -3,9 +3,9 @@ package com.restaurant.management.domain.dto;
 import java.util.List;
 
 public final class CartDto {
-
     private Long id;
     private Boolean isOpen;
+    private Double totalPrice;
     private CustomerDto customer;
     private List<LineItemDto> lineItems;
 
@@ -14,10 +14,12 @@ public final class CartDto {
 
     public CartDto(Long id,
                    Boolean isOpen,
+                   Double totalPrice,
                    CustomerDto customer,
                    List<LineItemDto> lineItems) {
         this.id = id;
         this.isOpen = isOpen;
+        this.totalPrice = totalPrice;
         this.customer = customer;
         this.lineItems = lineItems;
     }
@@ -49,7 +51,12 @@ public final class CartDto {
         return customer;
     }
 
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
     public List<LineItemDto> getLineItems() {
         return lineItems;
     }
+
+
 }

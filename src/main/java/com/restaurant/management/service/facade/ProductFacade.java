@@ -69,15 +69,4 @@ public final class ProductFacade {
         return productMapper.mapToProductDtoPage(products);
     }
 
-    public Page<ProductDto> getAllProducts(Pageable pageable) {
-        Page<Product> products = productService.getAllProducts(pageable);
-
-        return productMapper.mapToProductDtoPage(products);
-    }
-
-    public ProductDto getProductById(Long id) {
-        Product product = productService.getProductById(id);
-
-        return productMapper.mapToProductDto(product);
-    }
 }

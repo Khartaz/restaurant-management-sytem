@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -65,6 +67,7 @@ public class OrderController {
         return new Resource<>(response, link);
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/{orderId}")
     public ResponseEntity<?> deleteOrder(@CurrentUser UserPrincipal currentUser,
                                          @PathVariable Long orderId) {

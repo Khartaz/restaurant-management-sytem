@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -35,23 +36,12 @@ public class AdminUserController {
 
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
-    private ProductFacade productFacade;
-    private ProductMapper productMapper;
 
     @Autowired
     public AdminUserController(AccountUserFacade accountUserFacade,
-                               AccountUserMapper accountUserMapper,
-                               ProductFacade productFacade,
-                               ProductMapper productMapper) {
+                               AccountUserMapper accountUserMapper) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
-        this.productFacade = productFacade;
-        this.productMapper = productMapper;
-    }
-
-    @PostMapping(value = "/signin", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(accountUserFacade.authenticateUser(loginRequest));
     }
 
     @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -63,29 +53,6 @@ public class AdminUserController {
 
         Link link = linkTo(AdminUserController.class).slash(userResponse.getId()).withSelfRel();
         return new Resource<>(userResponse, link);
-    }
-
-    @GetMapping(value = "/products", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<PagedResources<ProductResponse>> showProductsPageable(Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<ProductDto> dtoPage = productFacade.getAllProducts(pageable);
-
-        Page<ProductResponse> responsePage = productMapper.mapToProductResponsePage(dtoPage);
-
-        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/products/{id}",produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<ProductResponse> showProduct(@PathVariable Long id) {
-
-        ProductDto productDto = productFacade.getProductById(id);
-
-        ProductResponse productResponse = productMapper.mapToProductResponse(productDto);
-
-        Link link = linkTo(ProductController.class).slash(productResponse.getId()).withSelfRel();
-
-        return new Resource<>(productResponse, link);
     }
 
     @LogExecutionTime
@@ -100,6 +67,7 @@ public class AdminUserController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/users/{id}")
     public ResponseEntity<?> deleteAccountById(@PathVariable Long id) {
         return ResponseEntity.ok().body(accountUserFacade.deleteUserById(id));

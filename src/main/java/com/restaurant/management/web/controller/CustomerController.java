@@ -34,7 +34,7 @@ import javax.validation.Valid;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/customers")
 @SuppressWarnings("Duplicates")
@@ -108,7 +108,7 @@ public class CustomerController {
         return new Resource<>(response, link);
     }
 
-    @PostMapping(value = "/{id}/carts/session", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/carts/session", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
         CartDto cartDto = sessionCartFacade.openSessionCart(currentUser, id);
@@ -204,7 +204,7 @@ public class CustomerController {
         return new Resource<>(cartResponse, link);
     }
 
-    @PostMapping(value = "{customerId}/orders", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{customerId}/orders", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<OrderResponse> processSessionCartToOrder(@CurrentUser UserPrincipal currentUser,
                                                       @PathVariable Long customerId) {

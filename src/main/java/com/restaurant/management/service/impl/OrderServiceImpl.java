@@ -59,10 +59,9 @@ public class OrderServiceImpl implements OrderService {
         Long orderNumber = countRestaurantOrders(currentUser) + 1;
 
         Order order = new Order.OrderBuilder()
-                .setOrdered(Calendar.getInstance())
                 .setStatus(OrderStatus.ORDERED)
                 .setOrderNumber(orderNumber)
-                .setTotalPrice(new Order().calculateTotalPrice(cart))
+                .setTotalPrice(cart.getTotalPrice())
                 .setCart(cart)
                 .setRestaurantInfo(cart.getRestaurantInfo())
                 .build();

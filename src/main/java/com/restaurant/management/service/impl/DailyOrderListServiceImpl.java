@@ -1,13 +1,19 @@
 package com.restaurant.management.service.impl;
 
+import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
 import com.restaurant.management.exception.order.OrderListExistsException;
 import com.restaurant.management.exception.order.OrderListNotFoundException;
 import com.restaurant.management.exception.order.OrderMessages;
 import com.restaurant.management.exception.order.OrderNotFoundException;
+import com.restaurant.management.exception.user.UserMessages;
+import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.DailyOrderListRepository;
 import com.restaurant.management.repository.OrderRepository;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,86 +30,131 @@ import java.util.*;
 public class DailyOrderListServiceImpl implements DailyOrderListService {
     private DailyOrderListRepository dailyOrderListRepository;
     private OrderRepository orderRepository;
+    private AccountUserRepository accountUserRepository;
 
     @Autowired
     public DailyOrderListServiceImpl(DailyOrderListRepository dailyOrderListRepository,
-                                     OrderRepository orderRepository) {
+                                     OrderRepository orderRepository,
+                                     AccountUserRepository accountUserRepository) {
         this.dailyOrderListRepository = dailyOrderListRepository;
         this.orderRepository = orderRepository;
+        this.accountUserRepository = accountUserRepository;
     }
 
-    public DailyOrderList getOrderListById(Long orderListId) {
-        return dailyOrderListRepository.findById(orderListId)
+    private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {
+        return accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    }
+
+    private Order getOrderByIdAndRestaurantId(Long orderId, Long restaurantId) {
+        return orderRepository.findByIdAndRestaurantInfoId(orderId, restaurantId)
+                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
+    }
+
+    public DailyOrderList getOrderListById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        return dailyOrderListRepository.findByIdAndRestaurantInfoId(orderListId, restaurantId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
-    public Page<DailyOrderList> getAll(Pageable pageable) {
-        return dailyOrderListRepository.findAll(pageable);
+    public Page<DailyOrderList> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        AccountUser accountUser = getUser(currentUser);
+
+        return dailyOrderListRepository.findAllByRestaurantInfoId(accountUser.getRestaurantInfo().getId(), pageable);
     }
 
-    public DailyOrderList openOrderList() {
-        if (dailyOrderListRepository.existsByIsOpenTrue()) {
+    public DailyOrderList openOrderList(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        if (dailyOrderListRepository.existsByIsOpenTrueAndRestaurantInfoId(restaurantId)) {
             throw new OrderListExistsException(OrderMessages.ORDER_LIST_EXISTS.getMessage());
         }
 
-        DailyOrderList orderList = new DailyOrderList();
-
-        orderList.setDailyIncome(0.00);
-        orderList.setNumberOfOrders(0);
-        orderList.setOpened(Boolean.TRUE);
-        orderList.setOrders(new LinkedHashSet<>());
+        DailyOrderList orderList = new DailyOrderList.DailyOrderListBuilder()
+                .setDailyIncome(0.00)
+                .setNumberOfOrders(0)
+                .setIsOpen(Boolean.TRUE)
+                .setOrders(new LinkedHashSet<>())
+                .setRestaurantInfo(accountUser.getRestaurantInfo())
+                .build();
 
         dailyOrderListRepository.save(orderList);
 
         return orderList;
     }
 
-    public DailyOrderList getOpenedOrderList() {
-        return dailyOrderListRepository.findDailyOrderListByIsOpenTrue()
+    public DailyOrderList getOpenedOrderList(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        return dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndRestaurantInfoId(restaurantId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
-    public DailyOrderList addOrderToList(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
+    public DailyOrderList addOrderToList(@CurrentUser UserPrincipal currentUser, Long orderId) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        DailyOrderList dailyOrderList = getOpenedOrderList();
+        Order order = getOrderByIdAndRestaurantId(orderId, restaurantId);
 
-        int oldSize = dailyOrderList.getOrders().size();
+        DailyOrderList dailyOrderList = getOpenedOrderList(currentUser);
+
+        Optional<Order> result = getOptionalOrder(dailyOrderList, orderId);
+
+        if (result.isPresent()) {
+            throw new OrderListExistsException(OrderMessages.ORDER_EXISTS_ON_LIST.getMessage());
+        }
 
         Set<Order> orders  = new LinkedHashSet<>(dailyOrderList.getOrders());
         orders.add(order);
 
-        if (orders.size() >= oldSize) {
-            double income = order.getTotalPrice() + dailyOrderList.getDailyIncome();
-            income = Math.floor(income * 100) / 100;
-            dailyOrderList.setDailyIncome(income);
-            dailyOrderList.setNumberOfOrders(orders.size());
-            dailyOrderList.setOrders(orders);
-        }
+        double income = order.getTotalPrice() + dailyOrderList.getDailyIncome();
+        income = Math.floor(income * 100) / 100;
+
+        dailyOrderList.setDailyIncome(income);
+        dailyOrderList.setNumberOfOrders(orders.size());
+        dailyOrderList.setOrders(orders);
 
         dailyOrderListRepository.save(dailyOrderList);
 
         return dailyOrderList;
     }
 
-    public DailyOrderList removeOrderFromList(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
+    private Optional<Order> getOptionalOrder(DailyOrderList dailyOrderList, Long orderId) {
+        return dailyOrderList.getOrders().stream()
+                .filter(v -> v.getId().equals(orderId))
+                .findAny();
+    }
 
-        DailyOrderList dailyOrderList = getOpenedOrderList();
+    public DailyOrderList removeOrderFromList(@CurrentUser UserPrincipal currentUser, Long orderId) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        int oldSize = dailyOrderList.getOrders().size();
+        Order order = getOrderByIdAndRestaurantId(orderId, restaurantId);
+
+        DailyOrderList dailyOrderList = getOpenedOrderList(currentUser);
+
+        Optional<Order> result = getOptionalOrder(dailyOrderList, orderId);
+
+        if (!result.isPresent()) {
+            throw new OrderListExistsException(OrderMessages.ORDER_NO_EXISTS_ON_LIST.getMessage());
+        }
 
         Set<Order> orders = new LinkedHashSet<>(dailyOrderList.getOrders());
         orders.remove(order);
 
-        if (orders.size() <= oldSize) {
-            double income = dailyOrderList.getDailyIncome() - order.getTotalPrice();
-            income = Math.floor(income * 100) / 100;
-            dailyOrderList.setDailyIncome(income);
-            dailyOrderList.setNumberOfOrders(orders.size());
-            dailyOrderList.setOrders(orders);
+        double income = dailyOrderList.getDailyIncome() - order.getTotalPrice();
+        income = Math.floor(income * 100) / 100;
+
+        dailyOrderList.setDailyIncome(income);
+        dailyOrderList.setNumberOfOrders(orders.size());
+        dailyOrderList.setOrders(orders);
+
+        if(dailyOrderList.getOrders().size() == 0) {
+            dailyOrderList.setDailyIncome(0.0);
         }
 
         dailyOrderListRepository.save(dailyOrderList);
@@ -111,24 +162,30 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         return dailyOrderList;
     }
 
-    public DailyOrderList closeDailyList() {
-        DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenTrue()
+    public DailyOrderList closeDailyList(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndRestaurantInfoId(restaurantId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_OPEN.getMessage()));
 
-        dailyOrderList.setOpened(Boolean.FALSE);
+        dailyOrderList.setIsOpen(Boolean.FALSE);
+
         dailyOrderListRepository.save(dailyOrderList);
 
         return dailyOrderList;
     }
 
-    public ApiResponse deleteById(Long orderListId) {
-        DailyOrderList orderList = dailyOrderListRepository.findById(orderListId)
+    public ApiResponse deleteById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        DailyOrderList orderList = dailyOrderListRepository.findByIdAndRestaurantInfoId(orderListId, restaurantId)
                 .orElseThrow(() -> new OrderListExistsException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
 
         dailyOrderListRepository.delete(orderList);
 
         return new ApiResponse(true, OrderMessages.ORDER_LIST_DELETED.getMessage());
-
     }
 
 }

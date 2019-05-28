@@ -28,6 +28,7 @@ public final class CartMapper {
         return new SessionCart(
                 cartDto.getId(),
                 cartDto.isOpen(),
+                cartDto.getTotalPrice(),
                 customerMapper.mapToCustomer(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToSessionLineItem(v))
@@ -39,6 +40,7 @@ public final class CartMapper {
         return new CartDto(
                 sessionCart.getId(),
                 sessionCart.isOpen(),
+                sessionCart.getTotalPrice(),
                 customerMapper.mapToCustomerDto(sessionCart.getCustomer()),
                 sessionCart.getSessionLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
@@ -50,6 +52,7 @@ public final class CartMapper {
         return new CartDto(
                 cart.getId(),
                 cart.isOpen(),
+                cart.getTotalPrice(),
                 customerMapper.mapToCustomerDto(cart.getCustomer()),
                 cart.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
@@ -61,6 +64,7 @@ public final class CartMapper {
         return new CartResponse(
                 cartDto.getId(),
                 cartDto.isOpen(),
+                cartDto.getTotalPrice(),
                 customerMapper.mapToCustomerResponse(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemResponse(v))
@@ -71,6 +75,7 @@ public final class CartMapper {
     public Cart mapToCart(SessionCart sessionCart) {
         return new Cart(
                 sessionCart.isOpen(),
+                sessionCart.getTotalPrice(),
                 customerMapper.mapToCustomerArchive(sessionCart.getCustomer()),
                 sessionCart.getSessionLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemArchive(v))
@@ -81,6 +86,7 @@ public final class CartMapper {
     public Cart mapToCart(CartDto cartDto) {
         return new Cart(
                 cartDto.isOpen(),
+                cartDto.getTotalPrice(),
                 customerMapper.mapToCustomerArchive(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemArchive(v))

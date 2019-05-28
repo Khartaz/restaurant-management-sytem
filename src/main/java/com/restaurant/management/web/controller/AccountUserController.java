@@ -37,15 +37,12 @@ public class AccountUserController {
 
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
-    private RoleMapper roleMapper;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
-                                 AccountUserMapper accountUserMapper,
-                                 RoleMapper roleMapper) {
+                                 AccountUserMapper accountUserMapper) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
-        this.roleMapper = roleMapper;
     }
 
     @GetMapping(value = "/me")

@@ -120,34 +120,4 @@ public class ProductServiceImpl implements ProductService {
 
         return new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage());
     }
-
-    //ADMIN PRODUCT SERVICE
-
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
-    }
-
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
-    }
-
-//    public Product updateProduct(ProductRequest productRequest) {
-//        Product product = productRepository.findById(productRequest.getId())
-//                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productRequest.getId()
-//                ));
-//
-//        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients());
-//
-//        Stream.of(product).forEach(p -> {
-//            p.setName(productRequest.getUserName());
-//            p.setPrice(productRequest.getPrice());
-//            p.setCategory(productRequest.getCategory());
-//            p.setIngredients(ingredients);
-//        });
-//
-//        productRepository.save(product);
-//
-//        return product;
-//    }
 }

@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -93,6 +94,7 @@ public class CartController {
         return new Resource<>(response, link);
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/session/{cartId}")
     public ResponseEntity<?> deleteSessionCart(@CurrentUser UserPrincipal currentUser,
                                                @PathVariable Long cartId) {
@@ -101,7 +103,7 @@ public class CartController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping(value = "/customer/{customerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/customer/{customerId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser,
                                                 @PathVariable Long customerId) {

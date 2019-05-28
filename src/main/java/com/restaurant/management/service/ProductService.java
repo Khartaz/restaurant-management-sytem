@@ -21,9 +21,4 @@ public interface ProductService {
 
     ApiResponse deleteById(Long id, @CurrentUser UserPrincipal currentUser);
 
-    Page<Product> getAllProducts(Pageable pageable);
-
-    Product getProductById(Long id);
-
-//    Product updateProduct(ProductRequest productRequest);
 }

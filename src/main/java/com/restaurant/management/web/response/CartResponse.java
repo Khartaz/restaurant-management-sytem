@@ -5,6 +5,7 @@ import java.util.List;
 public final class CartResponse {
     private Long id;
     private Boolean isOpen;
+    private Double totalPrice;
     private CustomerResponse customer;
     private List<LineItemResponse> lineItems;
 
@@ -13,10 +14,12 @@ public final class CartResponse {
 
     public CartResponse(Long id,
                         Boolean isOpen,
+                        Double totalPrice,
                         CustomerResponse customer,
                         List<LineItemResponse> lineItems) {
         this.id = id;
         this.isOpen = isOpen;
+        this.totalPrice = totalPrice;
         this.customer = customer;
         this.lineItems = lineItems;
     }
@@ -39,5 +42,9 @@ public final class CartResponse {
 
     public List<LineItemResponse> getLineItems() {
         return lineItems;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
     }
 }

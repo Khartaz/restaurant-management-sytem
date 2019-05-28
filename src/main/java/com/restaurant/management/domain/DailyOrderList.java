@@ -37,6 +37,15 @@ public class DailyOrderList extends AbstractAuditing {
         this.orders = orders;
     }
 
+    public DailyOrderList(Double dailyIncome, Integer numberOfOrders,
+                          Boolean isOpen, Set<Order> orders, RestaurantInfo restaurantInfo) {
+        this.dailyIncome = dailyIncome;
+        this.numberOfOrders = numberOfOrders;
+        this.isOpen = isOpen;
+        this.orders = orders;
+        this.restaurantInfo = restaurantInfo;
+    }
+
     public DailyOrderList() {
     }
 
@@ -64,8 +73,8 @@ public class DailyOrderList extends AbstractAuditing {
         return isOpen;
     }
 
-    public void setOpened(Boolean opened) {
-        isOpen = opened;
+    public void setIsOpen(Boolean isOpen) {
+        this.isOpen = isOpen;
     }
 
     public Set<Order> getOrders() {
@@ -82,5 +91,42 @@ public class DailyOrderList extends AbstractAuditing {
 
     public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
         this.restaurantInfo = restaurantInfo;
+    }
+
+    public static class DailyOrderListBuilder {
+        private Double dailyIncome;
+        private Integer numberOfOrders;
+        private Boolean isOpen;
+        private Set<Order> orders;
+        private RestaurantInfo restaurantInfo;
+
+        public DailyOrderListBuilder setDailyIncome(Double dailyIncome) {
+            this.dailyIncome = dailyIncome;
+            return this;
+        }
+
+        public DailyOrderListBuilder setNumberOfOrders(Integer numberOfOrders) {
+            this.numberOfOrders = numberOfOrders;
+            return this;
+        }
+
+        public DailyOrderListBuilder setIsOpen(Boolean isOpen) {
+            this.isOpen = isOpen;
+            return this;
+        }
+
+        public DailyOrderListBuilder setOrders(Set<Order> orders) {
+            this.orders = orders;
+            return this;
+        }
+
+        public DailyOrderListBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
+            this.restaurantInfo = restaurantInfo;
+            return this;
+        }
+
+        public DailyOrderList build() {
+            return new DailyOrderList(this.dailyIncome, this.numberOfOrders, this.isOpen, this.orders, this.restaurantInfo);
+        }
     }
 }

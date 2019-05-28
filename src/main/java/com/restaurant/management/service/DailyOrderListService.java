@@ -1,25 +1,27 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.DailyOrderList;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface DailyOrderListService {
 
-    DailyOrderList getOrderListById(Long orderListId);
+    DailyOrderList getOrderListById(@CurrentUser UserPrincipal currentUser, Long orderListId);
 
-    Page<DailyOrderList> getAll(Pageable pageable);
+    Page<DailyOrderList> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
-    DailyOrderList openOrderList();
+    DailyOrderList openOrderList(@CurrentUser UserPrincipal currentUser);
 
-    DailyOrderList getOpenedOrderList();
+    DailyOrderList getOpenedOrderList(@CurrentUser UserPrincipal currentUser);
 
-    DailyOrderList addOrderToList(Long orderId);
+    DailyOrderList addOrderToList(@CurrentUser UserPrincipal currentUser, Long orderId);
 
-    DailyOrderList removeOrderFromList(Long orderId);
+    DailyOrderList removeOrderFromList(@CurrentUser UserPrincipal currentUser, Long orderId);
 
-    DailyOrderList closeDailyList();
+    DailyOrderList closeDailyList(@CurrentUser UserPrincipal currentUser);
 
-    ApiResponse deleteById(Long orderListId);
+    ApiResponse deleteById(@CurrentUser UserPrincipal currentUser, Long orderListId);
 }

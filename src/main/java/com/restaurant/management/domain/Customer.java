@@ -19,8 +19,10 @@ public class Customer extends AbstractUser  {
     }
 
     public Customer(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                    Long id, String name, String lastname, String email, Long phoneNumber) {
+                    Long id, String name, String lastname, String email, Long phoneNumber,
+                    RestaurantInfo restaurantInfo) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
+        this.restaurantInfo = restaurantInfo;
     }
 
     public RestaurantInfo getRestaurantInfo() {

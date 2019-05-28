@@ -1,9 +1,6 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
-import com.restaurant.management.domain.archive.CustomerArchive;
-import com.restaurant.management.domain.archive.LineItemArchive;
-import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.exception.cart.CartExistsException;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.cart.CartNotFoundException;
@@ -14,10 +11,7 @@ import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.repository.*;
-import com.restaurant.management.repository.archive.CustomerArchiveRepository;
-import com.restaurant.management.repository.archive.ProductArchiveRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.SessionCartService;
@@ -30,9 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -61,46 +53,6 @@ public class SessionCartServiceImpl implements SessionCartService {
         this.accountUserRepository = accountUserRepository;
     }
 
-    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
-    }
-
-    private Customer getCustomerByIdAndRestaurantId(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        AccountUser accountUser = getUserById(currentUser);
-
-        return customerRepository.findByIdAndRestaurantInfoId(customerId, accountUser.getRestaurantInfo().getId())
-                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
-    }
-
-    private boolean checkSessionCartStatus(Long customerId) {
-        if (sessionCartRepository.existsByCustomerIdAndIsOpenTrue(customerId)) {
-            throw new CartExistsException(CartMessages.CART_EXISTS.getMessage());
-        }
-        return true;
-    }
-
-    private boolean validateCustomer(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Long restaurantId = getUserById(currentUser).getRestaurantInfo().getId();
-
-        if (!customerRepository.existsByIdAndRestaurantInfoId(customerId, restaurantId)) {
-            throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
-        }
-        return true;
-    }
-
-    private Product getProductById(@CurrentUser UserPrincipal currentUser, Long productId) {
-        Long restaurantId = getUserById(currentUser).getRestaurantInfo().getId();
-
-        return productRepository.findByIdAndRestaurantInfoId(productId, restaurantId)
-                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
-    }
-
-    private SessionCart getOpenSessionCartByCustomerId(Long customerId) {
-        return sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(customerId)
-                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
-    }
-
     public SessionCart getSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
@@ -117,18 +69,20 @@ public class SessionCartServiceImpl implements SessionCartService {
 
         RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
 
-        SessionCart newSessionCart = new SessionCart();
-
-        newSessionCart.setOpen(Boolean.TRUE);
-        newSessionCart.setCustomer(customer);
-        newSessionCart.setRestaurantInfo(restaurantInfo);
+        SessionCart newSessionCart = new SessionCart.SessionCartBuilder()
+                .setIsOpen(Boolean.TRUE)
+                .setCustomer(customer)
+                .setRestaurantInfo(restaurantInfo)
+                .setTotalPrice(0.0)
+                .build();
 
         sessionCartRepository.save(newSessionCart);
 
         return newSessionCart;
     }
 
-    public SessionCart addToCart(@CurrentUser UserPrincipal currentUser, Long customerId, UpdateCartRequest request) {
+    public SessionCart addToCart(@CurrentUser UserPrincipal currentUser,
+                                 Long customerId, UpdateCartRequest request) {
         validateCustomer(currentUser, customerId);
 
         Product product = getProductById(currentUser, request.getProductId());
@@ -162,6 +116,8 @@ public class SessionCartServiceImpl implements SessionCartService {
             sessionLineItem.get().setPrice(price);
         }
 
+        newSessionCart.setTotalPrice(newSessionCart.calculateTotalPriceOf(newSessionCart));
+
         sessionCartRepository.save(newSessionCart);
 
         return newSessionCart;
@@ -184,6 +140,7 @@ public class SessionCartServiceImpl implements SessionCartService {
 
         sessionLineItem.setQuantity(request.getQuantity());
         sessionLineItem.setPrice(sessionLineItem.getProduct().getPrice() * request.getQuantity());
+        sessionCart.setTotalPrice(sessionCart.calculateTotalPriceOf(sessionCart));
 
         sessionCartRepository.save(sessionCart);
 
@@ -201,6 +158,8 @@ public class SessionCartServiceImpl implements SessionCartService {
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + request.getProductId()));
 
         sessionCart.getSessionLineItems().remove(sessionLineItem);
+
+        sessionCart.setTotalPrice(sessionCart.calculateTotalPriceOf(sessionCart));
 
         deleteLineItem(sessionLineItem.getId());
 
@@ -247,5 +206,45 @@ public class SessionCartServiceImpl implements SessionCartService {
         sessionLineItemRepository.deleteById(lineItem.getId());
 
         return new ApiResponse(true, CartMessages.LINE_ITEM_DELETED.getMessage());
+    }
+
+    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
+        return accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    }
+
+    private Customer getCustomerByIdAndRestaurantId(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        AccountUser accountUser = getUserById(currentUser);
+
+        return customerRepository.findByIdAndRestaurantInfoId(customerId, accountUser.getRestaurantInfo().getId())
+                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
+    }
+
+    private boolean checkSessionCartStatus(Long customerId) {
+        if (sessionCartRepository.existsByCustomerIdAndIsOpenTrue(customerId)) {
+            throw new CartExistsException(CartMessages.CART_EXISTS.getMessage());
+        }
+        return true;
+    }
+
+    private boolean validateCustomer(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        Long restaurantId = getUserById(currentUser).getRestaurantInfo().getId();
+
+        if (!customerRepository.existsByIdAndRestaurantInfoId(customerId, restaurantId)) {
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
+        }
+        return true;
+    }
+
+    private Product getProductById(@CurrentUser UserPrincipal currentUser, Long productId) {
+        Long restaurantId = getUserById(currentUser).getRestaurantInfo().getId();
+
+        return productRepository.findByIdAndRestaurantInfoId(productId, restaurantId)
+                .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
+    }
+
+    private SessionCart getOpenSessionCartByCustomerId(Long customerId) {
+        return sessionCartRepository.findSessionCartByCustomerIdAndIsOpenTrue(customerId)
+                .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
     }
 }

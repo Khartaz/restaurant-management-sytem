@@ -23,7 +23,8 @@ public final class CustomerMapper {
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),
-                customerDto.getPhoneNumber()
+                customerDto.getPhoneNumber(),
+                customerDto.getRestaurantInfo()
         );
     }
 
@@ -36,7 +37,8 @@ public final class CustomerMapper {
                 customer.getName(),
                 customer.getLastname(),
                 customer.getEmail(),
-                customer.getPhoneNumber()
+                customer.getPhoneNumber(),
+                customer.getRestaurantInfo()
         );
     }
 
@@ -49,7 +51,8 @@ public final class CustomerMapper {
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),
-                customerDto.getPhoneNumber()
+                customerDto.getPhoneNumber(),
+                customerDto.getRestaurantInfo()
         );
     }
 
@@ -63,7 +66,9 @@ public final class CustomerMapper {
                 customer.getName(),
                 customer.getLastname(),
                 customer.getPhoneNumber(),
-                customer.getEmail());
+                customer.getEmail(),
+                customer.getRestaurantInfo()
+        );
     }
 
     public CustomerDto mapToCustomerDto(final CustomerArchive customer) {
@@ -76,7 +81,9 @@ public final class CustomerMapper {
                 customer.getName(),
                 customer.getLastname(),
                 customer.getPhoneNumber(),
-                customer.getEmail());
+                customer.getEmail(),
+                customer.getRestaurantInfo()
+        );
     }
 
     public CustomerResponse mapToCustomerResponse(final CustomerDto customerDto) {
@@ -89,7 +96,8 @@ public final class CustomerMapper {
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),
-                customerDto.getPhoneNumber()
+                customerDto.getPhoneNumber(),
+                customerDto.getRestaurantInfo()
         );
     }
 

@@ -87,19 +87,16 @@ public class CartServiceImpl implements CartService {
     }
 
     public Cart confirmCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
+
         SessionCart sessionCart = getSessionCartByCustomerId(currentUser, customerId);
 
-        sessionCart.setOpen(Boolean.FALSE);
-
         Cart cart = cartMapper.mapToCart(sessionCart);
-
-        RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
 
         cart.setRestaurantInfo(restaurantInfo);
         cart.getLineItems().forEach(v -> v.setRestaurantInfo(restaurantInfo));
 
         CustomerArchive customerArchive = cart.getCustomer();
-        customerArchive.setRestaurantInfo(restaurantInfo);
 
         customerArchiveRepository.save(customerArchive);
 

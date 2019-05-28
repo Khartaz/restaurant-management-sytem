@@ -3,6 +3,8 @@ package com.restaurant.management.service.facade;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.mapper.DailyOrderListMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,42 +24,42 @@ public final class DailyOrderListFacade {
         this.dailyOrderListMapper = dailyOrderListMapper;
     }
 
-    public DailyOrderListDto openOrderList() {
-        DailyOrderList dailyOrderList = dailyOrderListService.openOrderList();
+    public DailyOrderListDto openOrderList(@CurrentUser UserPrincipal currentUser) {
+        DailyOrderList dailyOrderList = dailyOrderListService.openOrderList(currentUser);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public Page<DailyOrderListDto> getAll(Pageable pageable) {
-        Page<DailyOrderList> dailyOrderLists = dailyOrderListService.getAll(pageable);
+    public Page<DailyOrderListDto> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<DailyOrderList> dailyOrderLists = dailyOrderListService.getAll(currentUser, pageable);
 
         return dailyOrderListMapper.mapToDailyOrderListDtoPage(dailyOrderLists);
     }
 
-    public DailyOrderListDto getOrderListById(Long orderListId) {
-        DailyOrderList dailyOrderList = dailyOrderListService.getOrderListById(orderListId);
+    public DailyOrderListDto getOrderListById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
+        DailyOrderList dailyOrderList = dailyOrderListService.getOrderListById(currentUser, orderListId);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public ApiResponse deleteById(Long orderListId) {
-        return dailyOrderListService.deleteById(orderListId);
+    public ApiResponse deleteById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
+        return dailyOrderListService.deleteById(currentUser, orderListId);
     }
 
-    public DailyOrderListDto addOrderToList(Long orderId) {
-        DailyOrderList dailyOrderList = dailyOrderListService.addOrderToList(orderId);
+    public DailyOrderListDto addOrderToList(@CurrentUser UserPrincipal currentUser, Long orderId) {
+        DailyOrderList dailyOrderList = dailyOrderListService.addOrderToList(currentUser, orderId);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public DailyOrderListDto removeOrderFromList(Long orderId) {
-        DailyOrderList dailyOrderList = dailyOrderListService.removeOrderFromList(orderId);
+    public DailyOrderListDto removeOrderFromList(@CurrentUser UserPrincipal currentUser, Long orderId) {
+        DailyOrderList dailyOrderList = dailyOrderListService.removeOrderFromList(currentUser, orderId);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }
 
-    public DailyOrderListDto closeDailyList() {
-        DailyOrderList dailyOrderList = dailyOrderListService.closeDailyList();
+    public DailyOrderListDto closeDailyList(@CurrentUser UserPrincipal currentUser) {
+        DailyOrderList dailyOrderList = dailyOrderListService.closeDailyList(currentUser);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
     }

@@ -12,13 +12,15 @@ import java.util.Optional;
 @Repository
 public interface DailyOrderListRepository extends JpaRepository<DailyOrderList, Long> {
 
-    Optional<DailyOrderList> findDailyOrderListByIsOpenTrue();
+    Optional<DailyOrderList> findDailyOrderListByIsOpenTrueAndRestaurantInfoId(Long restaurantId);
 
-    boolean existsByIsOpenTrue();
+    boolean existsByIsOpenTrueAndRestaurantInfoId(Long id);
 
-    Optional<DailyOrderList> findById(Long orderListId);
+    Optional<DailyOrderList> findByIdAndRestaurantInfoId(Long orderListId, Long restaurantId);
 
     @Override
     Page<DailyOrderList> findAll(Pageable pageable);
+
+    Page<DailyOrderList> findAllByRestaurantInfoId(Long restaurantId, Pageable pageable);
 
 }

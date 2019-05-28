@@ -37,7 +37,7 @@ public class DailyOrderListServiceImplTestSuite {
 
         dailyOrderList.setUniqueId(ORDER_LIST_UNIQUE_ID);
         dailyOrderList.setDailyIncome(532.00);
-        dailyOrderList.setOpened(Boolean.TRUE);
+        dailyOrderList.setIsOpen(Boolean.TRUE);
         dailyOrderList.setOrders(new LinkedHashSet<>());
 
         when(dailyOrderListRepository.findByUniqueId(ORDER_LIST_UNIQUE_ID)).thenReturn(Optional.of(dailyOrderList));
@@ -57,13 +57,13 @@ public class DailyOrderListServiceImplTestSuite {
 //        DailyOrderList list1 = new DailyOrderList();
 //        list1.setUniqueId(ORDER_LIST_UNIQUE_ID);
 //        list1.setDailyIncome(532.00);
-//        list1.setOpened(Boolean.TRUE);
+//        list1.setIsOpen(Boolean.TRUE);
 //        list1.setOrders(new LinkedHashSet<>());
 //
 //        DailyOrderList list2 = new DailyOrderList();
 //        list2.setUniqueId(ORDER_LIST_UNIQUE_ID + 1);
 //        list2.setDailyIncome(68.00);
-//        list2.setOpened(Boolean.TRUE);
+//        list2.setIsOpen(Boolean.TRUE);
 //        list2.setOrders(new LinkedHashSet<>());
 //
 //        List<DailyOrderList> dailyOrdersLists = new ArrayList<>();
@@ -90,7 +90,7 @@ public class DailyOrderListServiceImplTestSuite {
 
         dailyOrderList.setUniqueId(ORDER_LIST_UNIQUE_ID);
         dailyOrderList.setDailyIncome(0.00);
-        dailyOrderList.setOpened(Boolean.TRUE);
+        dailyOrderList.setIsOpen(Boolean.TRUE);
         dailyOrderList.setOrders(new LinkedHashSet<>());
 
         when(dailyOrderListRepository.existsByIsOpenTrue()).thenReturn(Boolean.FALSE);
@@ -111,7 +111,7 @@ public class DailyOrderListServiceImplTestSuite {
 
         dailyOrderList.setUniqueId(ORDER_LIST_UNIQUE_ID);
         dailyOrderList.setDailyIncome(124.00);
-        dailyOrderList.setOpened(Boolean.TRUE);
+        dailyOrderList.setIsOpen(Boolean.TRUE);
         dailyOrderList.setOrders(new LinkedHashSet<>());
 
         when(dailyOrderListRepository.findDailyOrderListByIsOpenTrue()).thenReturn(Optional.of(dailyOrderList));
@@ -140,7 +140,7 @@ public class DailyOrderListServiceImplTestSuite {
 
         dailyOrderList.setUniqueId(ORDER_LIST_UNIQUE_ID);
         dailyOrderList.setDailyIncome(0.00);
-        dailyOrderList.setOpened(Boolean.TRUE);
+        dailyOrderList.setIsOpen(Boolean.TRUE);
         dailyOrderList.setOrders(Collections.singleton(order));
 
         when(orderRepository.findByOrderNumber(anyString())).thenReturn(Optional.of(order));
@@ -171,7 +171,7 @@ public class DailyOrderListServiceImplTestSuite {
 
         dailyOrderList.setUniqueId(ORDER_LIST_UNIQUE_ID);
         dailyOrderList.setDailyIncome(300.00);
-        dailyOrderList.setOpened(Boolean.TRUE);
+        dailyOrderList.setIsOpen(Boolean.TRUE);
         dailyOrderList.setOrders(Collections.singleton(order));
 
         when(orderRepository.findByOrderNumber(anyString())).thenReturn(Optional.of(order));
@@ -202,7 +202,7 @@ public class DailyOrderListServiceImplTestSuite {
 
         dailyOrderList.setUniqueId(ORDER_LIST_UNIQUE_ID);
         dailyOrderList.setDailyIncome(300.00);
-        dailyOrderList.setOpened(Boolean.TRUE);
+        dailyOrderList.setIsOpen(Boolean.TRUE);
         dailyOrderList.setOrders(Collections.singleton(order));
 
         when(dailyOrderListRepository.findDailyOrderListByIsOpenTrue()).thenReturn(Optional.of(dailyOrderList));

@@ -2,6 +2,8 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.mapper.DailyOrderListMapper;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.DailyOrderListFacade;
 import com.restaurant.management.web.response.DailyOrderListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,10 @@ public class DailyOrderListController {
         this.orderListMapper = orderListMapper;
     }
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> registerDailyOrderList() {
-        DailyOrderListDto orderList = dailyOrderListFacade.openOrderList();
+    Resource<DailyOrderListResponse> registerDailyOrderList(@CurrentUser UserPrincipal currentUser) {
+        DailyOrderListDto orderList = dailyOrderListFacade.openOrderList(currentUser);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -47,8 +49,9 @@ public class DailyOrderListController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<DailyOrderListResponse>> showOrdersList(Pageable pageable, PagedResourcesAssembler assembler) {
-        Page<DailyOrderListDto> dailyOrderList = dailyOrderListFacade.getAll(pageable);
+    ResponseEntity<PagedResources<DailyOrderListResponse>> showOrdersLists(@CurrentUser UserPrincipal currentUser,
+                                                                          Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<DailyOrderListDto> dailyOrderList = dailyOrderListFacade.getAll(currentUser, pageable);
 
         Page<DailyOrderListResponse> response = orderListMapper.mapToDailyOrderListResponsePage(dailyOrderList);
 
@@ -57,8 +60,9 @@ public class DailyOrderListController {
 
     @GetMapping(value = "/{orderListId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> showOrderList(@PathVariable Long orderListId) {
-        DailyOrderListDto dailyOrderList = dailyOrderListFacade.getOrderListById(orderListId);
+    Resource<DailyOrderListResponse> showOrderList(@CurrentUser UserPrincipal currentUser,
+                                                   @PathVariable Long orderListId) {
+        DailyOrderListDto dailyOrderList = dailyOrderListFacade.getOrderListById(currentUser, orderListId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(dailyOrderList);
 
@@ -68,15 +72,16 @@ public class DailyOrderListController {
     }
 
     @DeleteMapping(value = "/{orderListId}")
-    public ResponseEntity<?> deleteListByUniqueId(@PathVariable Long orderListId) {
-        return ResponseEntity.ok().body(dailyOrderListFacade.deleteById(orderListId));
+    public ResponseEntity<?> deleteListById(@CurrentUser UserPrincipal currentUser,
+                                                  @PathVariable Long orderListId) {
+        return ResponseEntity.ok().body(dailyOrderListFacade.deleteById(currentUser, orderListId));
     }
 
-    @PatchMapping(value = "/add",
-            consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/add/{orderId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> addOrder(@RequestBody Long orderId) {
-        DailyOrderListDto orderList = dailyOrderListFacade.addOrderToList(orderId);
+    Resource<DailyOrderListResponse> addOrder(@CurrentUser UserPrincipal currentUser,
+                                              @PathVariable Long orderId) {
+        DailyOrderListDto orderList = dailyOrderListFacade.addOrderToList(currentUser, orderId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -85,11 +90,10 @@ public class DailyOrderListController {
         return new Resource<>(response, link);
     }
 
-    @PatchMapping(value = "/remove",
-            consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/remove/{orderId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> removeOrder(@RequestBody Long orderId) {
-        DailyOrderListDto orderList = dailyOrderListFacade.removeOrderFromList(orderId);
+    Resource<DailyOrderListResponse> removeOrder(@CurrentUser UserPrincipal currentUser, @PathVariable Long orderId) {
+        DailyOrderListDto orderList = dailyOrderListFacade.removeOrderFromList(currentUser, orderId);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 
@@ -98,11 +102,10 @@ public class DailyOrderListController {
         return new Resource<>(response, link);
     }
 
-    @PatchMapping(value = "/close",
-            consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/close", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<DailyOrderListResponse> closeDailyList() {
-        DailyOrderListDto orderList = dailyOrderListFacade.closeDailyList();
+    Resource<DailyOrderListResponse> closeDailyList(@CurrentUser UserPrincipal currentUser) {
+        DailyOrderListDto orderList = dailyOrderListFacade.closeDailyList(currentUser);
 
         DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
 

@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -97,6 +98,7 @@ public class ProductController {
         return new Resource<>(response, link);
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id,
                                         @CurrentUser UserPrincipal currentUser) {

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public final class SessionCartFacade {
 
@@ -54,21 +56,21 @@ public final class SessionCartFacade {
         return cartMapper.mapToCartDto(sessionCart);
     }
 
-    public CartDto openSessionCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        SessionCart sessionCart = sessionCartService.openSessionCart(currentUser, customerId);
-
-        return cartMapper.mapToCartDto(sessionCart);
-    }
-
-    public CartDto addToCart(@CurrentUser UserPrincipal currentUser, Long id, UpdateCartRequest request) {
-        SessionCart sessionCart = sessionCartService.addToCart(currentUser, id, request);
-
-        return cartMapper.mapToCartDto(sessionCart);
-    }
-
     public CartDto updateProductQuantity(@CurrentUser UserPrincipal currentUser, Long customerId, UpdateCartRequest request) {
         SessionCart sessionCart = sessionCartService.updateProductQuantity(currentUser, customerId, request);
 
         return cartMapper.mapToCartDto(sessionCart);
+    }
+
+    public CartDto addToCart(@CurrentUser UserPrincipal currentUser, Long customerId, UpdateCartRequest request) {
+        Optional<SessionCart> sessionCart = sessionCartService.getSessionCart(currentUser, customerId);
+
+        if (!sessionCart.isPresent()) {
+            sessionCartService.openSessionCart(currentUser, customerId);
+        }
+
+        sessionCart = Optional.ofNullable(sessionCartService.addToCart(currentUser, customerId, request));
+
+        return cartMapper.mapToCartDto(sessionCart.get());
     }
 }

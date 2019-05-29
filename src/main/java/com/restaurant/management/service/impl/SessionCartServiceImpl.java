@@ -7,6 +7,7 @@ import com.restaurant.management.exception.cart.CartNotFoundException;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
+import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -21,9 +22,11 @@ import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -53,6 +56,13 @@ public class SessionCartServiceImpl implements SessionCartService {
         this.accountUserRepository = accountUserRepository;
     }
 
+    public Optional<SessionCart> getSessionCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        AccountUser accountUser = getUserById(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        return sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId);
+    }
+
     public SessionCart getSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
@@ -76,6 +86,8 @@ public class SessionCartServiceImpl implements SessionCartService {
                 .setTotalPrice(0.0)
                 .build();
 
+        newSessionCart.setSessionLineItems(new ArrayList<>());
+
         sessionCartRepository.save(newSessionCart);
 
         return newSessionCart;
@@ -93,28 +105,20 @@ public class SessionCartServiceImpl implements SessionCartService {
                 .filter(p -> p.getProduct().getId().equals(request.getProductId()))
                 .findFirst();
 
-        sessionLineItem.ifPresent(item -> {
-            Integer quantity = item.getQuantity() + request.getQuantity();
-
-            double price = item.getProduct().getPrice() * quantity;
-            price = Math.floor(price * 100) / 100;
-
-            item.setQuantity(quantity);
-            item.setPrice(price);
-        });
-
-        if (!sessionLineItem.isPresent()) {
-            double price = product.getPrice() * request.getQuantity();
-            price = Math.floor(price * 100) / 100;
-
-            sessionLineItem = Optional.of(new SessionLineItem());
-            newSessionCart.getSessionLineItems().add(sessionLineItem.get());
-
-            sessionLineItem.get().setRestaurantInfo(getUserById(currentUser).getRestaurantInfo());
-            sessionLineItem.get().setProduct(product);
-            sessionLineItem.get().setQuantity(request.getQuantity());
-            sessionLineItem.get().setPrice(price);
+        if (sessionLineItem.isPresent()) {
+            throw new ProductExsitsException(ProductMessages.PROCUCT_ALREADY_IN_CART.getMessage());
         }
+
+        double price = product.getPrice() * request.getQuantity();
+        price = Math.floor(price * 100) / 100;
+
+        sessionLineItem = Optional.of(new SessionLineItem());
+        newSessionCart.getSessionLineItems().add(sessionLineItem.get());
+
+        sessionLineItem.get().setRestaurantInfo(getUserById(currentUser).getRestaurantInfo());
+        sessionLineItem.get().setProduct(product);
+        sessionLineItem.get().setQuantity(request.getQuantity());
+        sessionLineItem.get().setPrice(price);
 
         newSessionCart.setTotalPrice(newSessionCart.calculateTotalPriceOf(newSessionCart));
 
@@ -142,7 +146,13 @@ public class SessionCartServiceImpl implements SessionCartService {
         sessionLineItem.setPrice(sessionLineItem.getProduct().getPrice() * request.getQuantity());
         sessionCart.setTotalPrice(sessionCart.calculateTotalPriceOf(sessionCart));
 
+        if (request.getQuantity() == 0) {
+            sessionCart.getSessionLineItems().remove(sessionLineItem);
+        }
+
         sessionCartRepository.save(sessionCart);
+
+        sessionLineItemRepository.deleteById(sessionLineItem.getId());
 
         return sessionCart;
     }

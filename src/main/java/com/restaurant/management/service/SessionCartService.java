@@ -9,6 +9,8 @@ import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface SessionCartService {
 
     SessionCart openSessionCart(@CurrentUser UserPrincipal currentUser, Long customerId);
@@ -24,6 +26,8 @@ public interface SessionCartService {
     SessionCart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId);
 
     SessionCart getSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long id);
+
+    Optional<SessionCart> getSessionCart(@CurrentUser UserPrincipal currentUser, Long customerId);
 
     ApiResponse deleteSessionCart(@CurrentUser UserPrincipal currentUser, Long cartId);
 

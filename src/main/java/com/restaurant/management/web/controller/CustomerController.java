@@ -108,33 +108,6 @@ public class CustomerController {
         return new Resource<>(response, link);
     }
 
-    @PostMapping(value = "/{id}/carts/session", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<CartResponse> registerCustomerCart(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
-        CartDto cartDto = sessionCartFacade.openSessionCart(currentUser, id);
-
-        CartResponse response = cartMapper.mapToCartResponse(cartDto);
-
-        Link link = linkTo(CustomerController.class).slash(id).slash("carts/session").withSelfRel();
-
-        return new Resource<>(response, link);
-    }
-
-    @PutMapping(value = "/{customerId}/carts/session",
-            produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<CartResponse> addToSessionCart(@CurrentUser UserPrincipal currentUser,
-                                            @PathVariable Long customerId,
-                                            @RequestBody UpdateCartRequest request) {
-        CartDto cartDto = sessionCartFacade.addToCart(currentUser, customerId, request);
-
-        CartResponse response = cartMapper.mapToCartResponse(cartDto);
-
-        Link link = linkTo(CustomerController.class).slash(customerId).slash("carts/session").withSelfRel();
-
-        return new Resource<>(response, link);
-    }
-
     @PutMapping(value = "/{id}/carts/session/product",
             consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody

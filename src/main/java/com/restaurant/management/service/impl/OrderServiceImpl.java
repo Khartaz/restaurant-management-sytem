@@ -56,12 +56,13 @@ public class OrderServiceImpl implements OrderService {
     public Order processOrder(@CurrentUser UserPrincipal currentUser, Long customerId) {
         Cart cart = cartService.confirmCart(currentUser, customerId);
 
-        Long orderNumber = countRestaurantOrders(currentUser) + 1;
+        String orderNumber = String.valueOf(countRestaurantOrders(currentUser) + 1);
 
         Order order = new Order.OrderBuilder()
                 .setStatus(OrderStatus.ORDERED)
-                .setOrderNumber(orderNumber)
-                .setTotalPrice(cart.getTotalPrice())
+                .setOrderNumber(Order.createOrderNumber(orderNumber))
+                .setAssignedTo(currentUser.getId())
+                .setOrderType(OrderType.DELIVERY)
                 .setCart(cart)
                 .setRestaurantInfo(cart.getRestaurantInfo())
                 .build();
@@ -97,19 +98,6 @@ public class OrderServiceImpl implements OrderService {
 
         return new ApiResponse(true, OrderMessages.ORDER_DELETED.getMessage());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public Page<Order> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable) {
         AccountUser accountUser = accountUserRepository.findById(currentUser.getId())

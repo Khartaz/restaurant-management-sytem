@@ -1,6 +1,7 @@
 package com.restaurant.management.domain;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "orders")
@@ -12,14 +13,18 @@ public class Order extends AbstractAuditing {
     private Long id;
 
     @Column(name = "order_number")
-    private Long orderNumber;
+    private String orderNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private OrderStatus orderStatus;
 
-    @Column(name = "total_price")
-    private Double totalPrice;
+    @Column(name = "assigned_to_user_id")
+    private Long assignedToUserId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_type")
+    private OrderType orderType;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Cart cart;
@@ -31,23 +36,25 @@ public class Order extends AbstractAuditing {
     }
 
     public Order(
-                 Long id, Long orderNumber,
-                 OrderStatus orderStatus,
-                 Double totalPrice, Cart cart) {
+            Long id, String orderNumber,
+            OrderStatus orderStatus, Long assignedToUserId,
+            OrderType orderType, Cart cart) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
-        this.totalPrice = totalPrice;
+        this.assignedToUserId = assignedToUserId;
+        this.orderType = orderType;
         this.cart = cart;
     }
 
-    public Order(Long orderNumber,
-                 OrderStatus orderStatus,
-                 Double totalPrice, Cart cart,
+    public Order(String orderNumber,
+                 OrderStatus orderStatus, Long assignedToUserId,
+                 OrderType orderType, Cart cart,
                  RestaurantInfo restaurantInfo) {
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
-        this.totalPrice = totalPrice;
+        this.assignedToUserId = assignedToUserId;
+        this.orderType = orderType;
         this.cart = cart;
         this.restaurantInfo = restaurantInfo;
     }
@@ -56,11 +63,11 @@ public class Order extends AbstractAuditing {
         return id;
     }
 
-    public Long getOrderNumber() {
+    public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(Long orderNumber) {
+    public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
@@ -70,14 +77,6 @@ public class Order extends AbstractAuditing {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public Cart getCart() {
@@ -96,14 +95,40 @@ public class Order extends AbstractAuditing {
         this.restaurantInfo = restaurantInfo;
     }
 
+    public Long getAssignedToUserId() {
+        return assignedToUserId;
+    }
+
+    public void setAssignedToUserId(Long assignedToUserId) {
+        this.assignedToUserId = assignedToUserId;
+    }
+
+    public OrderType getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(OrderType orderType) {
+        this.orderType = orderType;
+    }
+
+    public static String createOrderNumber(String orderNumber) {
+        int orderYear;
+
+        Calendar calendar = Calendar.getInstance();
+        orderYear = calendar.get(Calendar.YEAR);
+
+        return orderNumber + "/" + orderYear;
+    }
+
     public static class OrderBuilder {
-        private Long orderNumber;
+        private String orderNumber;
         private OrderStatus orderStatus;
-        private Double totalPrice;
+        private Long assignedTo;
+        private OrderType orderType;
         private Cart cart;
         private RestaurantInfo restaurantInfo;
 
-        public OrderBuilder setOrderNumber(Long orderNumber) {
+        public OrderBuilder setOrderNumber(String orderNumber) {
             this.orderNumber = orderNumber;
             return this;
         }
@@ -113,8 +138,13 @@ public class Order extends AbstractAuditing {
             return this;
         }
 
-        public OrderBuilder setTotalPrice(Double totalPrice) {
-            this.totalPrice = totalPrice;
+        public OrderBuilder setAssignedTo(Long assignedTo) {
+            this.assignedTo = assignedTo;
+            return this;
+        }
+
+        public OrderBuilder setOrderType(OrderType orderType) {
+            this.orderType = orderType;
             return this;
         }
 
@@ -129,7 +159,7 @@ public class Order extends AbstractAuditing {
         }
 
         public Order build() {
-            return new Order(this.orderNumber, this.orderStatus, this.totalPrice, this.cart, this.restaurantInfo);
+            return new Order(this.orderNumber, this.orderStatus, this.assignedTo, this.orderType, this.cart, this.restaurantInfo);
         }
     }
 

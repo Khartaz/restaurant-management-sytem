@@ -1,5 +1,8 @@
 package com.restaurant.management.domain;
 
 public enum OrderStatus {
-    ORDERED
+    IN_PROGRESS,
+    ORDERED,
+    DELIVERED,
+    CANCELLED
 }

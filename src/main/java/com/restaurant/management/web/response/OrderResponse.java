@@ -1,24 +1,26 @@
 package com.restaurant.management.web.response;
 
 import com.restaurant.management.domain.OrderStatus;
-
-import java.util.Calendar;
+import com.restaurant.management.domain.OrderType;
 
 public final class OrderResponse {
     private Long id;
-    private Long orderNumber;
+    private String orderNumber;
     private OrderStatus orderStatus;
-    private Double totalPrice;
+    private Long assignedToUserId;
+    private OrderType orderType;
     private CartResponse cartResponse;
 
     public OrderResponse() {
     }
 
-    public OrderResponse(Long id, Long orderNumber, OrderStatus orderStatus, Double totalPrice, CartResponse cartResponse) {
+    public OrderResponse(Long id, String orderNumber, OrderStatus orderStatus,
+                         Long assignedToUserId, OrderType orderType, CartResponse cartResponse) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
-        this.totalPrice = totalPrice;
+        this.assignedToUserId = assignedToUserId;
+        this.orderType = orderType;
         this.cartResponse = cartResponse;
     }
 
@@ -26,7 +28,7 @@ public final class OrderResponse {
         return id;
     }
 
-    public Long getOrderNumber() {
+    public String getOrderNumber() {
         return orderNumber;
     }
 
@@ -34,8 +36,12 @@ public final class OrderResponse {
         return orderStatus;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
+    public Long getAssignedToUserId() {
+        return assignedToUserId;
+    }
+
+    public OrderType getOrderType() {
+        return orderType;
     }
 
     public CartResponse getCartResponse() {

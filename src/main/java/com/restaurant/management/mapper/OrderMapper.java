@@ -25,7 +25,8 @@ public final class OrderMapper {
                 orderDto.getId(),
                 orderDto.getOrderNumber(),
                 orderDto.getOrderStatus(),
-                orderDto.getTotalPrice(),
+                orderDto.getAssignedToUserId(),
+                orderDto.getOrderType(),
                 cartMapper.mapToCart(orderDto.getCart())
         );
     }
@@ -35,7 +36,8 @@ public final class OrderMapper {
                 order.getId(),
                 order.getOrderNumber(),
                 order.getOrderStatus(),
-                order.getTotalPrice(),
+                order.getAssignedToUserId(),
+                order.getOrderType(),
                 cartMapper.mapToCartDto(order.getCart())
         );
     }
@@ -45,7 +47,8 @@ public final class OrderMapper {
                 orderDto.getId(),
                 orderDto.getOrderNumber(),
                 orderDto.getOrderStatus(),
-                orderDto.getTotalPrice(),
+                orderDto.getAssignedToUserId(),
+                orderDto.getOrderType(),
                 cartMapper.mapToCartResponse(orderDto.getCart())
         );
     }

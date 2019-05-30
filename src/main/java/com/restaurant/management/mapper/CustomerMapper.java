@@ -4,6 +4,7 @@ import com.restaurant.management.domain.Customer;
 import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.dto.CustomerDto;
 import com.restaurant.management.web.response.CustomerResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,12 @@ import java.util.stream.Collectors;
 
 @Component
 public final class CustomerMapper {
+    private AddressMapper addressMapper;
+
+    @Autowired
+    public CustomerMapper(AddressMapper addressMapper) {
+        this.addressMapper = addressMapper;
+    }
 
     public Customer mapToCustomer(final CustomerDto customerDto) {
         return new Customer(
@@ -24,7 +31,8 @@ public final class CustomerMapper {
                 customerDto.getLastname(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber(),
-                customerDto.getRestaurantInfo()
+                customerDto.getRestaurantInfo(),
+                addressMapper.mapToCustomerAddress(customerDto.getAddressDto())
         );
     }
 
@@ -34,11 +42,13 @@ public final class CustomerMapper {
                 customer.getUpdatedAt(),
                 customer.getCreatedByUserId(),
                 customer.getUpdatedByUserId(),
+                customer.getId(),
                 customer.getName(),
                 customer.getLastname(),
                 customer.getEmail(),
                 customer.getPhoneNumber(),
-                customer.getRestaurantInfo()
+                customer.getRestaurantInfo(),
+                addressMapper.mapToCustomerArchiveAddress(customer.getCustomerAddress())
         );
     }
 
@@ -48,11 +58,13 @@ public final class CustomerMapper {
                 customerDto.getUpdatedAt(),
                 customerDto.getCreatedByUserId(),
                 customerDto.getUpdatedByUserId(),
+                customerDto.getId(),
                 customerDto.getName(),
                 customerDto.getLastname(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber(),
-                customerDto.getRestaurantInfo()
+                customerDto.getRestaurantInfo(),
+                addressMapper.mapToCustomerArchiveAddress(customerDto.getAddressDto())
         );
     }
 
@@ -67,7 +79,8 @@ public final class CustomerMapper {
                 customer.getLastname(),
                 customer.getPhoneNumber(),
                 customer.getEmail(),
-                customer.getRestaurantInfo()
+                customer.getRestaurantInfo(),
+                addressMapper.mapToAddressDto(customer.getCustomerAddress())
         );
     }
 
@@ -82,7 +95,8 @@ public final class CustomerMapper {
                 customer.getLastname(),
                 customer.getPhoneNumber(),
                 customer.getEmail(),
-                customer.getRestaurantInfo()
+                customer.getRestaurantInfo(),
+                addressMapper.mapToAddressDto(customer.getCustomerArchiveAddress())
         );
     }
 
@@ -97,7 +111,8 @@ public final class CustomerMapper {
                 customerDto.getLastname(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber(),
-                customerDto.getRestaurantInfo()
+                customerDto.getRestaurantInfo(),
+                addressMapper.mapToAddressResponse(customerDto.getAddressDto())
         );
     }
 

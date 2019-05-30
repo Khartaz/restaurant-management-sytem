@@ -1,6 +1,6 @@
-package com.restaurant.management.web.response.restaurant;
+package com.restaurant.management.web.response;
 
-public final class RestaurantAddressResponse {
+public final class AddressResponse {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
@@ -11,12 +11,12 @@ public final class RestaurantAddressResponse {
     private String city;
     private String country;
 
-    public RestaurantAddressResponse() {
+    public AddressResponse() {
     }
 
-    public RestaurantAddressResponse(Long createdAt, Long updatedAt, String createdByUserId,
-                                     String updatedByUserId, Long id, String streetAndNumber,
-                                     String postCode, String city, String country) {
+    public AddressResponse(Long createdAt, Long updatedAt, String createdByUserId,
+                           String updatedByUserId, Long id, String streetAndNumber,
+                           String postCode, String city, String country) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;

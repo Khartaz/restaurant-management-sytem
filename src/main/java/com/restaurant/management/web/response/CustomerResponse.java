@@ -1,6 +1,7 @@
 package com.restaurant.management.web.response;
 
 import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.dto.AddressDto;
 
 public final class CustomerResponse {
     private Long createdAt;
@@ -13,13 +14,14 @@ public final class CustomerResponse {
     private String email;
     private Long phoneNumber;
     private RestaurantInfo restaurantInfo;
+    private AddressResponse addressResponse;
 
     public CustomerResponse() {
     }
 
     public CustomerResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                             Long id, String name, String lastname, String email, Long phoneNumber,
-                            RestaurantInfo restaurantInfo) {
+                            RestaurantInfo restaurantInfo, AddressResponse addressResponse) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -30,6 +32,7 @@ public final class CustomerResponse {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.restaurantInfo = restaurantInfo;
+        this.addressResponse = addressResponse;
     }
 
     public Long getCreatedAt() {
@@ -70,5 +73,9 @@ public final class CustomerResponse {
 
     public RestaurantInfo getRestaurantInfo() {
         return restaurantInfo;
+    }
+
+    public AddressResponse getAddressResponse() {
+        return addressResponse;
     }
 }

@@ -1,94 +1,29 @@
 package com.restaurant.management.domain.archive;
 
-import com.restaurant.management.domain.AbstractAuditing;
+import com.restaurant.management.domain.AbstractUser;
 import com.restaurant.management.domain.RestaurantInfo;
 
 import javax.persistence.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 @Entity
 @Table(name = "customer_archive")
-public class CustomerArchive extends AbstractAuditing {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @NotBlank
-    @Size(max = 40)
-    @Column(name = "name")
-    private String name;
-
-    @NotBlank
-    @Size(max = 40)
-    @Column(name = "lastname")
-    private String lastname;
-
-    @Size(max = 40)
-    @NotBlank
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "phone_number")
-    private Long phoneNumber;
+public class CustomerArchive extends AbstractUser {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RestaurantInfo restaurantInfo;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private CustomerArchiveAddress customerArchiveAddress;
 
     public CustomerArchive() {
     }
 
     public CustomerArchive(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                           String name, String lastname, String email, Long phoneNumber, RestaurantInfo restaurantInfo) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
-        this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
+                           Long id, String name, String lastname, String email, Long phoneNumber,
+                           RestaurantInfo restaurantInfo, CustomerArchiveAddress customerArchiveAddress) {
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
         this.restaurantInfo = restaurantInfo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.customerArchiveAddress = customerArchiveAddress;
     }
 
     public RestaurantInfo getRestaurantInfo() {
@@ -97,5 +32,13 @@ public class CustomerArchive extends AbstractAuditing {
 
     public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
         this.restaurantInfo = restaurantInfo;
+    }
+
+    public CustomerArchiveAddress getCustomerArchiveAddress() {
+        return customerArchiveAddress;
+    }
+
+    public void setCustomerArchiveAddress(CustomerArchiveAddress customerArchiveAddress) {
+        this.customerArchiveAddress = customerArchiveAddress;
     }
 }

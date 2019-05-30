@@ -1,5 +1,7 @@
 package com.restaurant.management.web.response.restaurant;
 
+import com.restaurant.management.web.response.AddressResponse;
+
 public final class RestaurantInfoResponse {
     private Long createdAt;
     private Long updatedAt;
@@ -8,20 +10,20 @@ public final class RestaurantInfoResponse {
     private Long id;
     private String name;
 
-    private RestaurantAddressResponse restaurantAddressResponse;
+    private AddressResponse addressResponse;
 
     public RestaurantInfoResponse() {
     }
 
     public RestaurantInfoResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                                  Long id, String name, RestaurantAddressResponse restaurantAddressResponse) {
+                                  Long id, String name, AddressResponse addressResponse) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.restaurantAddressResponse = restaurantAddressResponse;
+        this.addressResponse = addressResponse;
     }
 
     public Long getCreatedAt() {
@@ -48,7 +50,7 @@ public final class RestaurantInfoResponse {
         return name;
     }
 
-    public RestaurantAddressResponse getRestaurantAddressResponse() {
-        return restaurantAddressResponse;
+    public AddressResponse getAddressResponse() {
+        return addressResponse;
     }
 }

@@ -13,6 +13,7 @@ public final class CustomerDto {
     private Long phoneNumber;
     private String email;
     private RestaurantInfo restaurantInfo;
+    private AddressDto addressDto;
 
     public CustomerDto() {
     }
@@ -26,7 +27,7 @@ public final class CustomerDto {
 
     public CustomerDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                        Long id, String name, String lastname, Long phoneNumber, String email,
-                       RestaurantInfo restaurantInfo) {
+                       RestaurantInfo restaurantInfo, AddressDto addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -37,6 +38,7 @@ public final class CustomerDto {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.restaurantInfo = restaurantInfo;
+        this.addressDto = addressDto;
     }
 
     public Long getCreatedAt() {
@@ -77,5 +79,9 @@ public final class CustomerDto {
 
     public RestaurantInfo getRestaurantInfo() {
         return restaurantInfo;
+    }
+
+    public AddressDto getAddressDto() {
+        return addressDto;
     }
 }

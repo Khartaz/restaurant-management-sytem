@@ -1,56 +1,54 @@
 package com.restaurant.management.domain;
 
-import org.hibernate.envers.Audited;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "restaurant_address")
-@Audited
-public class RestaurantAddress extends AbstractAddress {
+@Table(name = "customer_address")
+public class CustomerAddress extends AbstractAddress {
 
-    public RestaurantAddress() {
+    public CustomerAddress() {
     }
 
-    public RestaurantAddress(String streetAndNumber, String postCode,
+    public CustomerAddress(String streetAndNumber, String postCode,
                              String city, String country) {
         super(streetAndNumber, postCode, city, country);
     }
 
-    public RestaurantAddress(Long createdAt, Long updatedAt,
+    public CustomerAddress(Long createdAt, Long updatedAt,
                              String createdByUserId, String updatedByUserId, Long id,
                              String streetAndNumber, String postCode, String city, String country) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, streetAndNumber, postCode, city, country);
     }
 
-    public static class RestaurantAddressBuilder {
+    public static class CustomerAddressBuilder {
         private String streetAndNumber;
         private String postCode;
         private String city;
         private String country;
 
-        public RestaurantAddressBuilder setStreetAndNumber(String streetAndNumber) {
+        public CustomerAddressBuilder setStreetAndNumber(String streetAndNumber) {
             this.streetAndNumber = streetAndNumber;
             return this;
         }
 
-        public RestaurantAddressBuilder setPostCode(String postCode) {
+        public CustomerAddressBuilder setPostCode(String postCode) {
             this.postCode = postCode;
             return this;
         }
 
-        public RestaurantAddressBuilder setCity(String city) {
+        public CustomerAddressBuilder setCity(String city) {
             this.city = city;
             return this;
         }
 
-        public RestaurantAddressBuilder setCountry(String country) {
+        public CustomerAddressBuilder setCountry(String country) {
             this.country = country;
             return this;
         }
 
-        public RestaurantAddress build(){
-            return new RestaurantAddress(
+        public CustomerAddress build(){
+            return new CustomerAddress(
                     this.streetAndNumber,
                     this.postCode,
                     this.city,

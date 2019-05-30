@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public final class RestaurantInfoMapper {
 
-    private RestaurantAddressMapper addressMapper;
+    private AddressMapper addressMapper;
 
     @Autowired
-    public void setAddressMapper(RestaurantAddressMapper addressMapper) {
+    public void setAddressMapper(AddressMapper addressMapper) {
         this.addressMapper = addressMapper;
     }
 
@@ -24,7 +24,7 @@ public final class RestaurantInfoMapper {
                 restaurantInfo.getUpdatedByUserId(),
                 restaurantInfo.getId(),
                 restaurantInfo.getName(),
-                addressMapper.mapToRestaurantAddressResponse(restaurantInfo.getRestaurantAddress())
+                addressMapper.mapToAddressResponse(restaurantInfo.getRestaurantAddress())
         );
     }
 }

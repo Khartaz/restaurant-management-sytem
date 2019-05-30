@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.archive;
 
-import com.restaurant.management.domain.AbstractAuditing;
+import com.restaurant.management.domain.AbstractProduct;
 import com.restaurant.management.domain.RestaurantInfo;
 import org.hibernate.envers.Audited;
 
@@ -11,21 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "products_archive")
 @Audited
-public class ProductArchive extends AbstractAuditing {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "category")
-    private String category;
-
-    @Column(name = "price")
-    private Double price;
+public class ProductArchive extends AbstractProduct {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<IngredientArchive> ingredients = new ArrayList<>();
@@ -38,44 +24,10 @@ public class ProductArchive extends AbstractAuditing {
 
     public ProductArchive(Long createdAt, Long updatedAt,
                           String createdByUserId, String updatedByUserId,
-                          String name, String category,
+                          Long id, String name, String category,
                           Double price, List<IngredientArchive> ingredients) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
-        this.name = name;
-        this.category = category;
-        this.price = price;
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, category, price);
         this.ingredients = ingredients;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public List<IngredientArchive> getIngredients() {

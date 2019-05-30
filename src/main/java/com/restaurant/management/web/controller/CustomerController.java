@@ -12,7 +12,7 @@ import com.restaurant.management.service.facade.CartFacade;
 import com.restaurant.management.service.facade.SessionCartFacade;
 import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.service.facade.OrderFacade;
-import com.restaurant.management.web.request.account.SignUpCustomerRequest;
+import com.restaurant.management.web.request.customer.SignUpCustomerRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.CartResponse;

@@ -1,9 +1,9 @@
-package com.restaurant.management.web.request.restaurant;
+package com.restaurant.management.web.request.customer;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public final class RestaurantAddressRequest {
+public final class CustomerAddressRequest {
 
     @NotBlank(message = "street and number cannot be blank")
     @Size(min = 8, max = 40, message = "street and number name must be between 8 - 40")
@@ -21,8 +21,7 @@ public final class RestaurantAddressRequest {
     @Size(min = 4, max = 80, message = "country must be between 4 - 80")
     private String country;
 
-    public RestaurantAddressRequest() {
-
+    public CustomerAddressRequest() {
     }
 
     public String getStreetAndNumber() {

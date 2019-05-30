@@ -1,4 +1,4 @@
-package com.restaurant.management.web.request.account;
+package com.restaurant.management.web.request.customer;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -22,6 +22,9 @@ public final class SignUpCustomerRequest {
 
     @NotNull(message = "phoneNumber cannot be null")
     private Long phoneNumber;
+
+    @NotNull(message = "customer address cannot be null")
+    private CustomerAddressRequest customerAddressRequest;
 
     public SignUpCustomerRequest() {
     }
@@ -47,5 +50,9 @@ public final class SignUpCustomerRequest {
 
     public Long getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public CustomerAddressRequest getCustomerAddressRequest() {
+        return customerAddressRequest;
     }
 }

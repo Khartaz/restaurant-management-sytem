@@ -3,7 +3,7 @@ package com.restaurant.management.service;
 import com.restaurant.management.domain.Customer;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.web.request.account.SignUpCustomerRequest;
+import com.restaurant.management.web.request.customer.SignUpCustomerRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

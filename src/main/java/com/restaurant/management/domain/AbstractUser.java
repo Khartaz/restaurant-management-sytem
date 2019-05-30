@@ -29,7 +29,7 @@ public abstract class AbstractUser extends AbstractAuditing {
     @NotBlank
     @Size(max = 40)
     @Email
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "phone_number")

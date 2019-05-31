@@ -21,7 +21,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +49,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Long countRestaurantOrders(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+        AccountUser accountUser = getUser(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
@@ -73,8 +76,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Page<Order> getAllOrders(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+        AccountUser accountUser = getUser(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
@@ -82,8 +84,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order getByOrderId(@CurrentUser UserPrincipal currentUser, Long orderId) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+        AccountUser accountUser = getUser(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
@@ -130,5 +131,36 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByIdAndRestaurantInfoId(orderId, restaurantId)
                 .filter(v -> v.getCart().getCustomer().getPhoneNumber().equals(customer.getPhoneNumber()))
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
+    }
+
+    public Page<Order> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        Calendar currentYear = new GregorianCalendar();
+        int YEAR = currentYear.get(Calendar.YEAR);
+//        int YEAR = 2020;
+
+        Calendar startDate = new GregorianCalendar(YEAR,Calendar.JANUARY,1,0,0,1);
+        Calendar endDate = new GregorianCalendar(YEAR,Calendar.DECEMBER,31,23,59,59);
+
+        System.out.println("YEAR");
+        System.out.println(YEAR);
+        System.out.println("START DATE");
+        System.out.println(startDate.getTime());
+        System.out.println("TIMESTAMP");
+        System.out.println(startDate.getTimeInMillis());
+        System.out.println("END DATE");
+        System.out.println(endDate.getTime());
+        System.out.println("TIMESTAMP");
+        System.out.println(endDate.getTimeInMillis());
+        System.out.println();
+
+        return orderRepository.findByRestaurantInfoIdAndCreatedAtBetween(restaurantId, startDate.getTimeInMillis(), endDate.getTimeInMillis(), pageable);
+    }
+
+    private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {
+        return accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 }

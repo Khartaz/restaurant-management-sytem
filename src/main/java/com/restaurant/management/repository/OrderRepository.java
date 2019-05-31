@@ -1,6 +1,7 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.RestaurantInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByIdAndRestaurantInfoId(Long orderId, Long restaurantId);
 
     Long countAllByRestaurantInfoId(Long id);
+
+    Long countAllByRestaurantInfoIdAndCreatedAtBetween(Long restaurantId, Long startDate, Long endDate);
+
+    Page<Order> findByRestaurantInfoIdAndCreatedAtBetween(Long restaurantId, Long startDate, Long endDate, Pageable pageable);
 }

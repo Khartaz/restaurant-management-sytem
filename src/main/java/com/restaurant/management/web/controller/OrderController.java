@@ -74,4 +74,17 @@ public class OrderController {
 
         return ResponseEntity.ok().body(orderFacade.deleteOrder(currentUser, orderId));
     }
+
+    @GetMapping(value = "/year", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<PagedResources<OrderResponse>> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser,
+                                                                      Pageable pageable,
+                                                                      PagedResourcesAssembler assembler) {
+        Page<OrderDto> ordersDto = orderFacade.getAllOfCurrentYear(currentUser, pageable);
+
+        Page<OrderResponse> ordersResponse = orderMapper.mapToOrderResponsePage(ordersDto);
+
+
+        return new ResponseEntity<>(assembler.toResource(ordersResponse), HttpStatus.OK);
+    }
 }

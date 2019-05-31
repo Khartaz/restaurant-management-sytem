@@ -22,4 +22,6 @@ public interface OrderService {
     Page<Order> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable);
 
     Order getOrderByCustomerIdAndOrderId(@CurrentUser UserPrincipal currentUser, Long customerId, Long orderId);
+
+    Page<Order> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 }

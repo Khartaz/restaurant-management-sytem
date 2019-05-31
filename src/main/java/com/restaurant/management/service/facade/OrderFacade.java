@@ -61,4 +61,10 @@ public final class OrderFacade {
     public Long countRestaurantOrders(@CurrentUser UserPrincipal currentUser) {
         return orderService.countRestaurantOrders(currentUser);
     }
+
+    public Page<OrderDto> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Page<Order> orders = orderService.getAllOfCurrentYear(currentUser, pageable);
+
+        return orderMapper.mapToProductDtoPage(orders);
+    }
  }

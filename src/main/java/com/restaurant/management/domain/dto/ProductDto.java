@@ -3,7 +3,6 @@ package com.restaurant.management.domain.dto;
 import java.util.List;
 
 public final class ProductDto {
-
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;

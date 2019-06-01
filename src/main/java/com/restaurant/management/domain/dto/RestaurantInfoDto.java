@@ -1,28 +1,27 @@
-package com.restaurant.management.web.response.restaurant;
+package com.restaurant.management.domain.dto;
 
-import com.restaurant.management.web.response.AddressResponse;
-
-public final class RestaurantInfoResponse {
+public class RestaurantInfoDto {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
     private String name;
-    private AddressResponse addressResponse;
+    private AddressDto addressDto;
 
-    public RestaurantInfoResponse() {
+    public RestaurantInfoDto() {
     }
 
-    public RestaurantInfoResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                                  Long id, String name, AddressResponse addressResponse) {
+    public RestaurantInfoDto(Long createdAt, Long updatedAt, String createdByUserId,
+                             String updatedByUserId, Long id, String name,
+                             AddressDto addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.addressResponse = addressResponse;
+        this.addressDto = addressDto;
     }
 
     public Long getCreatedAt() {
@@ -49,7 +48,7 @@ public final class RestaurantInfoResponse {
         return name;
     }
 
-    public AddressResponse getAddressResponse() {
-        return addressResponse;
+    public AddressDto getAddressDto() {
+        return addressDto;
     }
 }

@@ -5,6 +5,7 @@ import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.repository.RestaurantInfoRepository;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -68,19 +69,6 @@ public class AccountUserServiceImpl implements AccountUserService {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
         }
         return true;
-    }
-
-    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUserById(currentUser.getId());
-
-        return new UserSummary(
-                accountUser.getId(),
-                accountUser.getName(),
-                accountUser.getLastname(),
-                accountUser.getEmail(),
-                accountUser.getPhoneNumber(),
-                accountUser.getRoles()
-        );
     }
 
     //This method is necessary for spring security context
@@ -194,7 +182,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public AccountUser getUserById(Long id) {
-       return accountUserRepository.findById(id)
+        return accountUserRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 

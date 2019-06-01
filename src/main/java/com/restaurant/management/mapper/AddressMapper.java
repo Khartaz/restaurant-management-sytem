@@ -52,6 +52,20 @@ public final class AddressMapper {
         );
     }
 
+    public AddressDto mapToAddressDto(final RestaurantAddress restaurantAddress) {
+        return new AddressDto(
+                restaurantAddress.getCreatedAt(),
+                restaurantAddress.getUpdatedAt(),
+                restaurantAddress.getCreatedByUserId(),
+                restaurantAddress.getUpdatedByUserId(),
+                restaurantAddress.getId(),
+                restaurantAddress.getStreetAndNumber(),
+                restaurantAddress.getPostCode(),
+                restaurantAddress.getCity(),
+                restaurantAddress.getCountry()
+        );
+    }
+
     public AddressDto mapToAddressDto(final CustomerArchiveAddress customerArchiveAddress) {
         return new AddressDto(
                 customerArchiveAddress.getCreatedAt(),

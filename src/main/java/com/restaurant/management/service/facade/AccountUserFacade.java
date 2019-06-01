@@ -24,22 +24,16 @@ public final class AccountUserFacade {
 
     private AccountUserService accountUserService;
     private AccountUserMapper accountUserMapper;
-    private RoleMapper roleMapper;
 
     @Autowired
     public AccountUserFacade(AccountUserService AccountUserService,
-                             AccountUserMapper accountUserMapper,
-                             RoleMapper roleMapper) {
+                             AccountUserMapper accountUserMapper) {
         this.accountUserService = AccountUserService;
         this.accountUserMapper = accountUserMapper;
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
         return accountUserService.authenticateUser(loginRequest);
-    }
-
-    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
-        return accountUserService.getUserSummary(currentUser);
     }
 
     public AccountUserDto registerManagerAccount(SignUpUserRequest request) {

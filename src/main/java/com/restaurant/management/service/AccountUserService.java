@@ -21,8 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountUserService extends UserDetailsService {
 
-    UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser);
-
     @Override
     UserDetails loadUserByUsername(String usernameOrEmail);
 

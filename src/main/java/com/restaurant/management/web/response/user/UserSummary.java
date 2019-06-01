@@ -1,6 +1,7 @@
 package com.restaurant.management.web.response.user;
 
 import com.restaurant.management.domain.Role;
+import com.restaurant.management.web.response.restaurant.RestaurantInfoResponse;
 
 import java.util.Set;
 
@@ -12,18 +13,21 @@ public final class UserSummary {
     private Long phoneNumber;
     private Set<Role> roles;
 
+    private RestaurantInfoResponse restaurantInfoResponse;
+
     public UserSummary() {
     }
 
     public UserSummary(Long id, String name,
                        String lastname, String email, Long phoneNumber,
-                      Set<Role> roles) {
+                       Set<Role> roles, RestaurantInfoResponse restaurantInfoResponse) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.roles = roles;
+        this.restaurantInfoResponse = restaurantInfoResponse;
     }
 
     public Long getId() {
@@ -48,5 +52,9 @@ public final class UserSummary {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public RestaurantInfoResponse getRestaurantInfoResponse() {
+        return restaurantInfoResponse;
     }
 }

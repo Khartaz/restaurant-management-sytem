@@ -8,6 +8,7 @@ import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.AccountUserFacade;
+import com.restaurant.management.service.facade.RestaurantInfoAccountUserFacade;
 import com.restaurant.management.web.request.account.LoginRequest;
 import com.restaurant.management.web.request.account.SignUpUserRequest;
 import com.restaurant.management.web.request.account.UpdateAccountInfo;
@@ -37,18 +38,21 @@ public class AccountUserController {
 
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
+    private RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
-                                 AccountUserMapper accountUserMapper) {
+                                 AccountUserMapper accountUserMapper,
+                                 RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
+        this.restaurantInfoAccountUserFacade = restaurantInfoAccountUserFacade;
     }
 
     @GetMapping(value = "/me")
     public @ResponseBody
-    UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return accountUserFacade.getUserSummary(currentUser);
+    UserSummary getCurrentUserSummary(@CurrentUser UserPrincipal currentUser) {
+        return restaurantInfoAccountUserFacade.getUserSummary(currentUser);
     }
 
     @LogLogin

@@ -1,14 +1,19 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
+import com.restaurant.management.exception.restaurant.RestaurantMessages;
+import com.restaurant.management.exception.restaurant.RestaurantNotFoundException;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
+import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.mapper.RestaurantInfoMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.RestaurantInfoRepository;
 import com.restaurant.management.repository.RoleRepository;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.service.RestaurantInfoService;
 import com.restaurant.management.service.SimpleEmailService;
@@ -129,5 +134,19 @@ public class RestaurantInfoServiceImpl implements RestaurantInfoService {
                 .setRoles(Collections.singleton(userRole))
                 .setEmailVerificationToken(null)
                 .build();
+    }
+
+    public RestaurantInfo getRestaurantInfoById(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUserById(currentUser.getId());
+
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        return restaurantInfoRepository.findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(RestaurantMessages.RESTAURANT_NOT_FOUND.getMessage()));
+    }
+
+    private AccountUser getUserById(Long id) {
+        return accountUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 }

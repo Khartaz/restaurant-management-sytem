@@ -65,8 +65,6 @@ public final class OrderFacade {
     public Page<OrderDto> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Order> orders = orderService.getAllOfCurrentYear(currentUser, pageable);
 
-        Page<OrderDto> orderDtos =  orderMapper.mapToOrderDtoPage(orders);
-
-        return orderDtos;
+        return orderMapper.mapToOrderDtoPage(orders);
     }
  }

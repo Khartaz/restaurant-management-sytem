@@ -62,7 +62,7 @@ public class OrderController {
 
         OrderResponse response = orderMapper.mapToOrderResponse(orderDto);
 
-        Link link = linkTo(OrderController.class).slash(response.getOrderNumber()).withSelfRel();
+        Link link = linkTo(OrderController.class).slash(response.getId()).withSelfRel();
 
         return new Resource<>(response, link);
     }
@@ -84,7 +84,19 @@ public class OrderController {
 
         Page<OrderResponse> ordersResponse = orderMapper.mapToOrderResponsePage(ordersDto);
 
-
         return new ResponseEntity<>(assembler.toResource(ordersResponse), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/order/{customerId}", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<OrderResponse> processOrder(@CurrentUser UserPrincipal currentUser,
+                                         @PathVariable Long customerId) {
+        OrderDto orderDto = orderFacade.processOrder(currentUser, customerId);
+
+        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
+
+        Link link = linkTo(OrderController.class).slash(orderResponse.getId()).withSelfRel();
+
+        return new Resource<>(orderResponse, link);
     }
 }

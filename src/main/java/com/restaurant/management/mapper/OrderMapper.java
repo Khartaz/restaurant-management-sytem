@@ -59,7 +59,7 @@ public final class OrderMapper {
                 .collect(Collectors.toList());
     }
 
-    public Page<OrderDto> mapToProductDtoPage(final Page<Order> orders) {
+    public Page<OrderDto> mapToOrderDtoPage(final Page<Order> orders) {
         return orders.map(this::mapToOrderDto);
     }
 

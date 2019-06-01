@@ -6,4 +6,5 @@ import com.restaurant.management.web.response.restaurant.RegisterRestaurantRespo
 public interface RestaurantInfoService {
 
     RegisterRestaurantResponse registerRestaurant(RegisterRestaurantRequest registerRestaurantRequest);
+
 }

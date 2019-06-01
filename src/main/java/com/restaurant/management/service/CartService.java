@@ -8,13 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface CartService {
 
-    Cart confirmCart(@CurrentUser UserPrincipal currentUser, Long customerId);
+    Cart processSessionCartToCart(@CurrentUser UserPrincipal currentUser, Long customerId);
 
     Page<Cart> getAllCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable);
-
-    Page<Cart> getCustomerCarts(@CurrentUser UserPrincipal currentUser, Long id, Pageable pageable);
-
-    Cart getCustomerCartById(@CurrentUser UserPrincipal currentUser, Long customerId, Long cartId);
 
     Cart getCartById(@CurrentUser UserPrincipal currentUser, Long cartId);
 

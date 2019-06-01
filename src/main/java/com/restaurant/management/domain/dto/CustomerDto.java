@@ -1,7 +1,5 @@
 package com.restaurant.management.domain.dto;
 
-import com.restaurant.management.domain.RestaurantInfo;
-
 public final class CustomerDto {
     private Long createdAt;
     private Long updatedAt;
@@ -12,7 +10,6 @@ public final class CustomerDto {
     private String lastname;
     private Long phoneNumber;
     private String email;
-    private RestaurantInfo restaurantInfo;
     private AddressDto addressDto;
 
     public CustomerDto() {
@@ -26,8 +23,7 @@ public final class CustomerDto {
     }
 
     public CustomerDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastname, Long phoneNumber, String email,
-                       RestaurantInfo restaurantInfo, AddressDto addressDto) {
+                       Long id, String name, String lastname, Long phoneNumber, String email, AddressDto addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -37,7 +33,6 @@ public final class CustomerDto {
         this.lastname = lastname;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.restaurantInfo = restaurantInfo;
         this.addressDto = addressDto;
     }
 
@@ -75,10 +70,6 @@ public final class CustomerDto {
 
     public String getEmail() {
         return email;
-    }
-
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
     }
 
     public AddressDto getAddressDto() {

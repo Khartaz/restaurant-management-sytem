@@ -4,6 +4,8 @@ import com.restaurant.management.domain.AbstractLineItem;
 import com.restaurant.management.domain.RestaurantInfo;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "line_items_archive")
@@ -12,7 +14,7 @@ public class LineItemArchive extends AbstractLineItem {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ProductArchive product;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private RestaurantInfo restaurantInfo;
 
     public LineItemArchive() {
@@ -21,6 +23,13 @@ public class LineItemArchive extends AbstractLineItem {
     public LineItemArchive(Integer quantity, Double price, ProductArchive product) {
         super(quantity, price);
         this.product = product;
+    }
+
+    public LineItemArchive(Integer quantity, Double price,
+                           ProductArchive product, RestaurantInfo restaurantInfo) {
+        super(quantity, price);
+        this.product = product;
+        this.restaurantInfo = restaurantInfo;
     }
 
     public ProductArchive getProduct() {
@@ -38,4 +47,37 @@ public class LineItemArchive extends AbstractLineItem {
     public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
         this.restaurantInfo = restaurantInfo;
     }
+
+
+    public static class LineItemArchiveBuilder {
+        private Integer quantity;
+        private Double price;
+        private ProductArchive productArchive;
+        private RestaurantInfo restaurantInfo;
+
+        public LineItemArchiveBuilder setQuantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public LineItemArchiveBuilder setPrice(Double price) {
+            this.price = price;
+            return this;
+        }
+
+        public LineItemArchiveBuilder setProductArchive(ProductArchive productArchive) {
+            this.productArchive = productArchive;
+            return this;
+        }
+
+        public LineItemArchiveBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
+            this.restaurantInfo = restaurantInfo;
+            return this;
+        }
+
+        public LineItemArchive build() {
+            return new LineItemArchive(this.quantity, this.price, this.productArchive, this.restaurantInfo);
+        }
+    }
+
 }

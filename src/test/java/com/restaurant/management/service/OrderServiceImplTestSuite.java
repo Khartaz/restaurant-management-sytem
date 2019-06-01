@@ -109,7 +109,7 @@ public class OrderServiceImplTestSuite {
         assertAll(
                 () -> assertEquals(result.getOrderNumber(), ORDER_NUMBER),
                 () -> assertEquals(result.getCart().getUniqueId(), cart.getUniqueId()),
-                () -> assertEquals(result.getCart().getCustomer().getPhoneNumber(), customerArchive.getPhoneNumber()),
+                () -> assertEquals(result.getCart().getCustomerArchive().getPhoneNumber(), customerArchive.getPhoneNumber()),
                 () -> assertEquals(result.getTotalPrice().doubleValue(), 200.00)
         );
     }
@@ -173,7 +173,7 @@ public class OrderServiceImplTestSuite {
         assertAll(
                 () -> assertEquals(result.size(), orders.size()),
                 () -> assertEquals(result.get(0).getCart().getUniqueId(), cart1.getUniqueId()),
-                () -> assertEquals(result.get(1).getCart().getCustomer().getPhoneNumber(), customerArchive.getPhoneNumber())
+                () -> assertEquals(result.get(1).getCart().getCustomerArchive().getPhoneNumber(), customerArchive.getPhoneNumber())
         );
     }
 }

@@ -46,7 +46,6 @@ public class CustomerController {
     private CartMapper cartMapper;
     private OrderFacade orderFacade;
     private OrderMapper orderMapper;
-    private CartFacade cartFacade;
 
     @Autowired
     public CustomerController(CustomerFacade customerFacade,
@@ -54,15 +53,13 @@ public class CustomerController {
                               SessionCartFacade sessionCartFacade,
                               CartMapper cartMapper,
                               OrderFacade orderFacade,
-                              OrderMapper orderMapper,
-                              CartFacade cartFacade) {
+                              OrderMapper orderMapper) {
         this.customerFacade = customerFacade;
         this.customerMapper = customerMapper;
         this.sessionCartFacade = sessionCartFacade;
         this.cartMapper = cartMapper;
         this.orderFacade = orderFacade;
         this.orderMapper = orderMapper;
-        this.cartFacade = cartFacade;
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -149,45 +146,6 @@ public class CustomerController {
         Link link = linkTo(CustomerController.class).slash(id).slash("carts/session").withSelfRel();
 
         return new Resource<>(response, link);
-    }
-
-    @GetMapping(value = "/{id}/carts", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<PagedResources<CartResponse>> showCustomerCarts(@CurrentUser UserPrincipal currentUser,
-                                                                   @PathVariable Long id, Pageable pageable,
-                                                                   PagedResourcesAssembler assembler) {
-        Page<CartDto> cartsDto = cartFacade.getCustomerCarts(currentUser, id, pageable);
-
-        Page<CartResponse> response = cartMapper.mapToCartResponsePage(cartsDto);
-
-        return new ResponseEntity<>(assembler.toResource(response), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{customerId}/carts/{cartId}", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<CartResponse> showCustomerCart(@CurrentUser UserPrincipal currentUser,
-                                            @PathVariable Long customerId,
-                                            @PathVariable Long cartId) {
-        CartDto cartDto = cartFacade.getCustomerCartById(currentUser, customerId, cartId);
-
-        CartResponse cartResponse = cartMapper.mapToCartResponse(cartDto);
-
-        Link link = linkTo(CustomerController.class).slash(customerId).slash("carts").slash(cartResponse.getId()).withSelfRel();
-
-        return new Resource<>(cartResponse, link);
-    }
-
-    @PostMapping(value = "{customerId}/orders", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<OrderResponse> processSessionCartToOrder(@CurrentUser UserPrincipal currentUser,
-                                                      @PathVariable Long customerId) {
-        OrderDto orderDto = orderFacade.processOrder(currentUser, customerId);
-
-        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
-
-        Link link = linkTo(CustomerController.class).slash(customerId).slash("orders").slash(orderResponse.getOrderNumber()).withSelfRel();
-
-        return new Resource<>(orderResponse, link);
     }
 
     @GetMapping(value = "{customerId}/orders", produces = APPLICATION_JSON_VALUE)

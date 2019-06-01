@@ -1,6 +1,7 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.Cart;
+import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.security.CurrentUser;
@@ -27,18 +28,6 @@ public final class CartFacade {
         Page<Cart> carts = cartService.getAllCarts(currentUser, pageable);
 
         return cartMapper.mapToCartDtoPage(carts);
-    }
-
-    public Page<CartDto> getCustomerCarts(@CurrentUser UserPrincipal currentUser, Long id, Pageable pageable) {
-        Page<Cart> carts = cartService.getCustomerCarts(currentUser, id, pageable);
-
-        return cartMapper.mapToCartDtoPage(carts);
-    }
-
-    public CartDto getCustomerCartById(@CurrentUser UserPrincipal currentUser, Long customerId, Long cartId) {
-        Cart cart = cartService.getCustomerCartById(currentUser, customerId, cartId);
-
-        return cartMapper.mapToCartDto(cart);
     }
 
     public CartDto getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {

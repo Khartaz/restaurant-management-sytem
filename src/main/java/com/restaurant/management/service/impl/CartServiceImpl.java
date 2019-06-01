@@ -1,17 +1,13 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.AccountUser;
-import com.restaurant.management.domain.Cart;
-import com.restaurant.management.domain.RestaurantInfo;
-import com.restaurant.management.domain.SessionCart;
-import com.restaurant.management.domain.archive.CustomerArchive;
-import com.restaurant.management.domain.archive.LineItemArchive;
-import com.restaurant.management.domain.archive.ProductArchive;
+import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.archive.*;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.cart.CartNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.mapper.CartMapper;
+import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.CartRepository;
 import com.restaurant.management.repository.SessionCartRepository;
@@ -25,33 +21,33 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Column;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
 public class CartServiceImpl implements CartService {
-    private ProductArchiveRepository productArchiveRepository;
-    private CustomerArchiveRepository customerArchiveRepository;
     private SessionCartRepository sessionCartRepository;
     private AccountUserRepository accountUserRepository;
     private CartRepository cartRepository;
-    private CartMapper cartMapper;
 
-    public CartServiceImpl(ProductArchiveRepository productArchiveRepository,
-                           CustomerArchiveRepository customerArchiveRepository,
-                           SessionCartRepository sessionCartRepository,
+    private SessionCartToCartProcessor processor;
+
+    public CartServiceImpl(SessionCartRepository sessionCartRepository,
                            AccountUserRepository accountUserRepository,
                            CartRepository cartRepository,
-                           CartMapper cartMapper) {
-        this.productArchiveRepository = productArchiveRepository;
-        this.customerArchiveRepository = customerArchiveRepository;
+                           SessionCartToCartProcessor processor) {
         this.sessionCartRepository = sessionCartRepository;
         this.accountUserRepository = accountUserRepository;
-        this.cartMapper = cartMapper;
         this.cartRepository = cartRepository;
+        this.processor = processor;
     }
 
     private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
@@ -77,7 +73,7 @@ public class CartServiceImpl implements CartService {
         return new ApiResponse(true, CartMessages.CART_DELETED.getMessage());
     }
 
-    private SessionCart getSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
+    private SessionCart getRestaurantSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
         Long restaurantId = accountUser.getRestaurantInfo().getId();
@@ -86,33 +82,8 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
     }
 
-    public Cart confirmCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
-
-        SessionCart sessionCart = getSessionCartByCustomerId(currentUser, customerId);
-
-        Cart cart = cartMapper.mapToCart(sessionCart);
-
-        cart.setRestaurantInfo(restaurantInfo);
-        cart.getLineItems().forEach(v -> v.setRestaurantInfo(restaurantInfo));
-
-        CustomerArchive customerArchive = cart.getCustomer();
-
-        customerArchiveRepository.save(customerArchive);
-
-        List<ProductArchive> productArchives = cart.getLineItems().stream()
-                .map(LineItemArchive::getProduct)
-                .collect(Collectors.toList());
-
-        productArchives.forEach(v -> v.setRestaurantInfo(restaurantInfo));
-
-        productArchiveRepository.saveAll(productArchives);
-
-        cartRepository.save(cart);
-
-        deleteSessionCart(currentUser, sessionCart.getId());
-
-        return cart;
+    public Cart processSessionCartToCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
+        return processor.processSessionCartToCart(currentUser, customerId);
     }
 
     public Page<Cart> getAllCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
@@ -123,23 +94,6 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findAllByRestaurantInfoId(restaurantId, pageable);
     }
 
-    public Page<Cart> getCustomerCarts(@CurrentUser UserPrincipal currentUser, Long id, Pageable pageable) {
-        AccountUser accountUser = getUserById(currentUser);
-
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
-
-        return cartRepository.findByCustomerIdAndRestaurantInfoId(id, restaurantId,  pageable);
-    }
-
-    public Cart getCustomerCartById(@CurrentUser UserPrincipal currentUser, Long customerId, Long cartId) {
-        AccountUser accountUser = getUserById(currentUser);
-
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
-
-        return cartRepository.findByIdAndRestaurantInfoIdAndCustomerId(cartId, customerId, restaurantId)
-                .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_CART_NOT_FOUND.getMessage()));
-    }
-
     public Cart getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
         AccountUser accountUser = getUserById(currentUser);
 
@@ -148,4 +102,5 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage()));
     }
+
 }

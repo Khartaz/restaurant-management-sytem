@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 @Table(name = "session_carts")
 public class SessionCart extends AbstractCart {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Customer customer;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

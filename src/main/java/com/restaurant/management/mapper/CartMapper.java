@@ -3,10 +3,11 @@ package com.restaurant.management.mapper;
 import com.restaurant.management.domain.Cart;
 import com.restaurant.management.domain.SessionCart;
 import com.restaurant.management.domain.dto.CartDto;
+import com.restaurant.management.security.CurrentUser;
+import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public final class CartMapper {
                 cart.getId(),
                 cart.isOpen(),
                 cart.getTotalPrice(),
-                customerMapper.mapToCustomerDto(cart.getCustomer()),
+                customerMapper.mapToCustomerDto(cart.getCustomerArchive()),
                 cart.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
                         collect(Collectors.toList())

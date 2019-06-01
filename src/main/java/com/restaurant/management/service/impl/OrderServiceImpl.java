@@ -11,7 +11,6 @@ import com.restaurant.management.repository.*;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CartService;
-import com.restaurant.management.service.SessionCartService;
 import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order processOrder(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Cart cart = cartService.confirmCart(currentUser, customerId);
+        Cart cart = cartService.processSessionCartToCart(currentUser, customerId);
 
         String orderNumber = String.valueOf(countRestaurantOrders(currentUser) + 1);
 
@@ -112,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         Page<Order> orderList = orderRepository.findAllByRestaurantInfoId(restaurantId, pageable);
 
         List<Order> customerOrders = orderList.stream()
-                .filter(v -> v.getCart().getCustomer().getPhoneNumber().equals(customer.getPhoneNumber()))
+                .filter(v -> v.getCart().getCustomerArchive().getPhoneNumber().equals(customer.getPhoneNumber()))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(customerOrders);
@@ -129,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage()));
 
         return orderRepository.findByIdAndRestaurantInfoId(orderId, restaurantId)
-                .filter(v -> v.getCart().getCustomer().getPhoneNumber().equals(customer.getPhoneNumber()))
+                .filter(v -> v.getCart().getCustomerArchive().getPhoneNumber().equals(customer.getPhoneNumber()))
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
     }
 
@@ -139,24 +135,13 @@ public class OrderServiceImpl implements OrderService {
 
         Calendar currentYear = new GregorianCalendar();
         int YEAR = currentYear.get(Calendar.YEAR);
-//        int YEAR = 2020;
 
         Calendar startDate = new GregorianCalendar(YEAR,Calendar.JANUARY,1,0,0,1);
         Calendar endDate = new GregorianCalendar(YEAR,Calendar.DECEMBER,31,23,59,59);
 
-        System.out.println("YEAR");
-        System.out.println(YEAR);
-        System.out.println("START DATE");
-        System.out.println(startDate.getTime());
-        System.out.println("TIMESTAMP");
-        System.out.println(startDate.getTimeInMillis());
-        System.out.println("END DATE");
-        System.out.println(endDate.getTime());
-        System.out.println("TIMESTAMP");
-        System.out.println(endDate.getTimeInMillis());
-        System.out.println();
+        Page<Order> orders =  orderRepository.findByRestaurantInfoIdAndCreatedAtBetween(restaurantId, startDate.getTimeInMillis(), endDate.getTimeInMillis(), pageable);
 
-        return orderRepository.findByRestaurantInfoIdAndCreatedAtBetween(restaurantId, startDate.getTimeInMillis(), endDate.getTimeInMillis(), pageable);
+        return orders;
     }
 
     private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {

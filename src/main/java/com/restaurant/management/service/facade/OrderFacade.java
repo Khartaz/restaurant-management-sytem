@@ -27,7 +27,7 @@ public final class OrderFacade {
     public Page<OrderDto> getAllOrders(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Order> orders = orderService.getAllOrders(currentUser, pageable);
 
-        return orderMapper.mapToProductDtoPage(orders);
+        return orderMapper.mapToOrderDtoPage(orders);
     }
 
     public OrderDto getByOrderNumber(@CurrentUser UserPrincipal currentUser, Long orderId) {
@@ -49,7 +49,7 @@ public final class OrderFacade {
     public Page<OrderDto> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable) {
         Page<Order> orders = orderService.getCustomerOrdersById(currentUser, customerId, pageable);
 
-        return orderMapper.mapToProductDtoPage(orders);
+        return orderMapper.mapToOrderDtoPage(orders);
     }
 
     public OrderDto getOrderByCustomerIdAndOrderId(@CurrentUser UserPrincipal currentUser, Long customerId, Long orderId) {
@@ -65,6 +65,8 @@ public final class OrderFacade {
     public Page<OrderDto> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Order> orders = orderService.getAllOfCurrentYear(currentUser, pageable);
 
-        return orderMapper.mapToProductDtoPage(orders);
+        Page<OrderDto> orderDtos =  orderMapper.mapToOrderDtoPage(orders);
+
+        return orderDtos;
     }
  }

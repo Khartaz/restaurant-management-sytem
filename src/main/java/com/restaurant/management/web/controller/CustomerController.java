@@ -92,20 +92,6 @@ public class CustomerController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/name/startsWith", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser,
-                                                                                   Pageable pageable,
-                                                                                   PagedResourcesAssembler assembler,
-                                                                                   @RequestParam String name) {
-        System.out.println(name);
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomersStartsWithName(currentUser, name, pageable);
-
-        Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
-
-        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
-    }
-
     @GetMapping(value = "/name", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByName(@CurrentUser UserPrincipal currentUser,
@@ -120,12 +106,26 @@ public class CustomerController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/lastname", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByLastname(@CurrentUser UserPrincipal currentUser,
+                                                                                  Pageable pageable,
+                                                                                  PagedResourcesAssembler assembler,
+                                                                                  @RequestParam String lastname) {
+
+        Page<CustomerDto> customersDto = customerFacade.getAllCustomersByLastnameWithin(currentUser, lastname, pageable);
+
+        Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
+
+        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/phone", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByPhoneNumber(@CurrentUser UserPrincipal currentUser,
-                                                                           Pageable pageable,
-                                                                           PagedResourcesAssembler assembler,
-                                                                           @RequestParam Long phoneNumber) {
+                                                                                  Pageable pageable,
+                                                                                  PagedResourcesAssembler assembler,
+                                                                                  @RequestParam String phoneNumber) {
 
         Page<CustomerDto> customersDto = customerFacade.getAllCustomersWithPhoneNumberWithin(currentUser, phoneNumber, pageable);
 

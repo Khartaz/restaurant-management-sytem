@@ -25,10 +25,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Page<Customer> findAllByRestaurantInfoId(Pageable pageable, Long restaurantId);
 
-    Page<Customer> findAllByNameStartsWithAndRestaurantInfoId(String name, Long restaurantId, Pageable pageable);
-
     Page<Customer> findAllByNameIsContainingAndRestaurantInfoId(String name, Long restaurantId, Pageable pageable);
 
-    Page<Customer> findAllByPhoneNumberIsContainingAndRestaurantInfoId(Long phoneNumber, Long restaurantId, Pageable pageable);
+    Page<Customer> findAllByPhoneNumberIsContainingAndRestaurantInfoId(String phoneNumber, Long restaurantId, Pageable pageable);
+
+    Page<Customer> findAllByLastnameContainingAndRestaurantInfoId(String lastname, Long restaurantId, Pageable pageable);
 
 }

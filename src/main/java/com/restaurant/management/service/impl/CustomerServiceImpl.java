@@ -114,21 +114,21 @@ public class CustomerServiceImpl implements CustomerService {
         return accountUser.getRestaurantInfo();
     }
 
-    public Page<Customer> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable) {
-        Long restaurantId = getRestaurantInfo(currentUser).getId();
-
-        return customerRepository.findAllByNameStartsWithAndRestaurantInfoId(name, restaurantId, pageable);
-    }
-
     public Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
         return customerRepository.findAllByNameIsContainingAndRestaurantInfoId(name, restaurantId, pageable);
     }
 
-    public Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, Long phoneNumber, Pageable pageable) {
+    public Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, String phoneNumber, Pageable pageable) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
         return customerRepository.findAllByPhoneNumberIsContainingAndRestaurantInfoId(phoneNumber, restaurantId, pageable);
+    }
+
+    public Page<Customer> getAllByLastnameWithin(@CurrentUser UserPrincipal currentUser, String lastname, Pageable pageable) {
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
+
+        return customerRepository.findAllByLastnameContainingAndRestaurantInfoId(lastname, restaurantId, pageable);
     }
 }

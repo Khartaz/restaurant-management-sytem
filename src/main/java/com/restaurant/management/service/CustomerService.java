@@ -18,9 +18,9 @@ public interface CustomerService {
 
     Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id);
 
-    Page<Customer> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);
-
     Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);
 
-    Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, Long phoneNumber, Pageable pageable);
+    Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, String phoneNumber, Pageable pageable);
+
+    Page<Customer> getAllByLastnameWithin(@CurrentUser UserPrincipal currentUser, String lastname, Pageable pageable);
 }

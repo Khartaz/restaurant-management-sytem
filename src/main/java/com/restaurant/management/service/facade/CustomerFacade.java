@@ -41,17 +41,10 @@ public final class CustomerFacade {
         return customerService.deleteCustomerById(currentUser, id);
     }
 
-    public CustomerDto getCustomerById(@CurrentUser UserPrincipal currentUser,Long id) {
+    public CustomerDto getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
         Customer customer = customerService.getCustomerById(currentUser, id);
 
         return customerMapper.mapToCustomerDto(customer);
-    }
-
-    public Page<CustomerDto> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser,
-                                                           String name, Pageable pageable) {
-        Page<Customer> customers = customerService.getAllCustomersStartsWithName(currentUser, name, pageable);
-
-        return customerMapper.mapToCustomerDtoPage(customers);
     }
 
     public Page<CustomerDto> getAllCustomersWithNameWithin(@CurrentUser UserPrincipal currentUser,
@@ -62,8 +55,17 @@ public final class CustomerFacade {
     }
 
     public Page<CustomerDto> getAllCustomersWithPhoneNumberWithin(@CurrentUser UserPrincipal currentUser,
-                                                           Long phoneNumber, Pageable pageable) {
+                                                                  String phoneNumber, Pageable pageable) {
         Page<Customer> customers = customerService.getAllByPhoneNumberWithin(currentUser, phoneNumber, pageable);
+
+        return customerMapper.mapToCustomerDtoPage(customers);
+    }
+
+    public Page<CustomerDto> getAllCustomersByLastnameWithin(@CurrentUser UserPrincipal currentUser,
+                                                             String lastname,
+                                                             Pageable pageable) {
+
+        Page<Customer> customers = customerService.getAllByLastnameWithin(currentUser, lastname, pageable);
 
         return customerMapper.mapToCustomerDtoPage(customers);
     }

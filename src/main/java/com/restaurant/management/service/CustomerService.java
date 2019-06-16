@@ -17,4 +17,10 @@ public interface CustomerService {
     ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id);
 
     Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id);
+
+    Page<Customer> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);
+
+    Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);
+
+    Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, Long phoneNumber, Pageable pageable);
 }

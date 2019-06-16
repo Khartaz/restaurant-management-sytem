@@ -14,8 +14,7 @@ public final class UpdateAccountInfo {
     @Size(min = 4, max = 40, message = "lastname must be between 4 - 40")
     private String lastname;
 
-    @NotNull(message = "Phone number cannot be null")
-    private Long phoneNumber;
+    private String phoneNumber;
 
     public String getName() {
         return name;
@@ -25,7 +24,7 @@ public final class UpdateAccountInfo {
         return lastname;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 }

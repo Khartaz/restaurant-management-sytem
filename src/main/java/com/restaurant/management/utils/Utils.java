@@ -30,19 +30,4 @@ public class Utils {
         return new String(returnValue);
     }
 
-    public static String generateProductUniqueId(int length) {
-        return generateRandomStringWithBigLetters(length);
-    }
-
-    public static String generateCartUniqueId(int length) {
-        return generateRandomStringWithBigLetters(length);
-    }
-
-    public static String generateOrderNumber(int length) {
-        return generateRandomStringWithBigLetters(length);
-    }
-
-    public static String generateDailyOrderListUniqueId(int length) {
-        return generateRandomStringWithBigLetters(length);
-    }
 }

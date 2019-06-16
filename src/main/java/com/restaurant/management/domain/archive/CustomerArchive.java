@@ -19,13 +19,13 @@ public class CustomerArchive extends AbstractUser {
     }
 
     public CustomerArchive(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                           Long id, String name, String lastname, String email, Long phoneNumber,
+                           Long id, String name, String lastname, String email, String phoneNumber,
                            CustomerArchiveAddress customerArchiveAddress) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
         this.customerArchiveAddress = customerArchiveAddress;
     }
 
-    public CustomerArchive(String name, String lastname, String email, Long phoneNumber,
+    public CustomerArchive(String name, String lastname, String email, String phoneNumber,
                            RestaurantInfo restaurantInfo, CustomerArchiveAddress customerArchiveAddress) {
         super(name, lastname, email, phoneNumber);
         this.restaurantInfo = restaurantInfo;
@@ -52,7 +52,7 @@ public class CustomerArchive extends AbstractUser {
         private String name;
         private String lastname;
         private String email;
-        private Long phoneNumber;
+        private String phoneNumber;
         private RestaurantInfo restaurantInfo;
         private CustomerArchiveAddress customerArchiveAddress;
 
@@ -71,7 +71,7 @@ public class CustomerArchive extends AbstractUser {
             return this;
         }
 
-        public CustomerArchiveBuilder setPhoneNumber(Long phoneNumber) {
+        public CustomerArchiveBuilder setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }

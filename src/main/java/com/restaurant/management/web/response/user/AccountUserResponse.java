@@ -14,7 +14,7 @@ public final class AccountUserResponse {
     private String name;
     private String lastname;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleResponse> roles;
@@ -24,7 +24,7 @@ public final class AccountUserResponse {
 
     public AccountUserResponse(Long createdAt, Long updatedAt, String createdByUserId,
                                String updatedByUserId, Long id, String name,
-                               String lastname, String email, Long phoneNumber,
+                               String lastname, String email, String phoneNumber,
                                String emailVerificationToken, Boolean isActive,
                                Set<RoleResponse> roles) {
         this.createdAt = createdAt;
@@ -73,7 +73,7 @@ public final class AccountUserResponse {
         return email;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

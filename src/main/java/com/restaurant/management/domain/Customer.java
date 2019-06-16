@@ -15,7 +15,7 @@ public class Customer extends AbstractUser {
     public Customer() {
     }
 
-    public Customer(String name, String lastname, String email, Long phoneNumber,
+    public Customer(String name, String lastname, String email, String phoneNumber,
                     RestaurantInfo restaurantInfo, CustomerAddress customerAddress) {
         super(name, lastname, email, phoneNumber);
         this.restaurantInfo = restaurantInfo;
@@ -23,7 +23,7 @@ public class Customer extends AbstractUser {
     }
 
     public Customer(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                    Long id, String name, String lastname, String email, Long phoneNumber,
+                    Long id, String name, String lastname, String email, String phoneNumber,
                     CustomerAddress customerAddress) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
         this.customerAddress = customerAddress;
@@ -49,7 +49,7 @@ public class Customer extends AbstractUser {
         private String name;
         private String lastname;
         private String email;
-        private Long phoneNumber;
+        private String phoneNumber;
         private RestaurantInfo restaurantInfo;
         private CustomerAddress customerAddress;
 
@@ -68,7 +68,7 @@ public class Customer extends AbstractUser {
             return this;
         }
 
-        public CustomerBuilder setPhoneNumber(Long phoneNumber) {
+        public CustomerBuilder setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }

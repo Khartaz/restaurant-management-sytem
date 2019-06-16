@@ -56,7 +56,7 @@ public class CustomerControllerTestSuite {
     private static final String CUSTOMER_NAME = "Customer name";
     private static final String CUSTOMER_LASTNAME = "Customer lastname";
     private static final String CUSTOMER_EMAIL = "customer@email";
-    private static final long PHONE_NUMBER = 9289310L;
+    private static final String PHONE_NUMBER = 9289310L;
     private static final long ID = 1L;
 
     @Test

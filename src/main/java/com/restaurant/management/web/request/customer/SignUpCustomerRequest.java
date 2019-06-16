@@ -20,8 +20,7 @@ public final class SignUpCustomerRequest {
     @Email(message = "email must be valid")
     private String email;
 
-    @NotNull(message = "phoneNumber cannot be null")
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @NotNull(message = "customer address cannot be null")
     private CustomerAddressRequest customerAddressRequest;
@@ -29,7 +28,7 @@ public final class SignUpCustomerRequest {
     public SignUpCustomerRequest() {
     }
 
-    public SignUpCustomerRequest(String name, String lastname, String email, Long phoneNumber) {
+    public SignUpCustomerRequest(String name, String lastname, String email, String phoneNumber) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -48,7 +47,7 @@ public final class SignUpCustomerRequest {
         return email;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

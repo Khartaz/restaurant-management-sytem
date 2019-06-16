@@ -8,14 +8,14 @@ public final class CustomerDto {
     private Long id;
     private String name;
     private String lastname;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String email;
     private AddressDto addressDto;
 
     public CustomerDto() {
     }
 
-    public CustomerDto(String name, String lastname, Long phoneNumber, String email) {
+    public CustomerDto(String name, String lastname, String phoneNumber, String email) {
         this.name = name;
         this.lastname = lastname;
         this.phoneNumber = phoneNumber;
@@ -23,7 +23,7 @@ public final class CustomerDto {
     }
 
     public CustomerDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastname, Long phoneNumber, String email, AddressDto addressDto) {
+                       Long id, String name, String lastname, String phoneNumber, String email, AddressDto addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -64,7 +64,7 @@ public final class CustomerDto {
         return lastname;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

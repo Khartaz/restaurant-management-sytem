@@ -46,4 +46,25 @@ public final class CustomerFacade {
 
         return customerMapper.mapToCustomerDto(customer);
     }
+
+    public Page<CustomerDto> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser,
+                                                           String name, Pageable pageable) {
+        Page<Customer> customers = customerService.getAllCustomersStartsWithName(currentUser, name, pageable);
+
+        return customerMapper.mapToCustomerDtoPage(customers);
+    }
+
+    public Page<CustomerDto> getAllCustomersWithNameWithin(@CurrentUser UserPrincipal currentUser,
+                                                           String name, Pageable pageable) {
+        Page<Customer> customers = customerService.getAllByNameWithin(currentUser, name, pageable);
+
+        return customerMapper.mapToCustomerDtoPage(customers);
+    }
+
+    public Page<CustomerDto> getAllCustomersWithPhoneNumberWithin(@CurrentUser UserPrincipal currentUser,
+                                                           Long phoneNumber, Pageable pageable) {
+        Page<Customer> customers = customerService.getAllByPhoneNumberWithin(currentUser, phoneNumber, pageable);
+
+        return customerMapper.mapToCustomerDtoPage(customers);
+    }
 }

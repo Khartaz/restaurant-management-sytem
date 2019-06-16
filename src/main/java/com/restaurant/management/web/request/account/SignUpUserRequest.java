@@ -20,9 +20,8 @@ public final class SignUpUserRequest {
     @Size(min = 8, max = 100, message = "password must be between 8 - 100")
     private String password;
 
-    @NotNull(message = "phone number cannot be null")
-//    @Size(min = 4, max = 15, message = "phone number cannot be null")
-    private Long phoneNumber;
+    //    @Size(min = 4, max = 15, message = "phone number cannot be null")
+    private String phoneNumber;
 
     public SignUpUserRequest() {
     }
@@ -43,7 +42,7 @@ public final class SignUpUserRequest {
         return password;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 }

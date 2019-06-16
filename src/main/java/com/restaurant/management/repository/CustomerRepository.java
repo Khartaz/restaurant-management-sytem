@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Boolean existsByPhoneNumberAndRestaurantInfoId(Long phoneNumber, Long restaurantId);
+    Boolean existsByPhoneNumberAndRestaurantInfoId(String phoneNumber, Long restaurantId);
 
     Boolean existsByEmailAndRestaurantInfoId(String email, Long restaurantId);
 
@@ -24,4 +24,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     void deleteById(Long id);
 
     Page<Customer> findAllByRestaurantInfoId(Pageable pageable, Long restaurantId);
+
+    Page<Customer> findAllByNameStartsWithAndRestaurantInfoId(String name, Long restaurantId, Pageable pageable);
+
+    Page<Customer> findAllByNameIsContainingAndRestaurantInfoId(String name, Long restaurantId, Pageable pageable);
+
+    Page<Customer> findAllByPhoneNumberIsContainingAndRestaurantInfoId(Long phoneNumber, Long restaurantId, Pageable pageable);
+
 }

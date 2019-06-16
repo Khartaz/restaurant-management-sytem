@@ -11,13 +11,14 @@ public final class AccountUserDto {
     private String name;
     private String lastname;
     private String email;
-    private Long phoneNumber;private String emailVerificationToken;
+    private String phoneNumber;
+    private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleDto> roles;
 
     public AccountUserDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                           Long id, String name, String lastname,
-                          String email, Long phoneNumber,
+                          String email, String phoneNumber,
                           String emailVerificationToken,
                           Boolean isActive, Set<RoleDto> roles) {
         this.createdAt = createdAt;
@@ -70,7 +71,7 @@ public final class AccountUserDto {
         return email;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

@@ -42,7 +42,7 @@ public class SessionCartServiceImplTestSuite {
     private static final String UNIQUE_CART_ID = "J4L2H";
 
     private static final long CUSTOMER_ID = 1L;
-    private static final long PHONE_NUMBER = 684293190L;
+    private static final String PHONE_NUMBER = 684293190L;
     private static final String CUSTOMER_NAME = "Customer name";
     private static final String CUSTOMER_LASTNAME = "Customer lastname";
     private static final String CUSTOMER_EMAIL = "customer@email.com";
@@ -152,7 +152,7 @@ public class SessionCartServiceImplTestSuite {
         SessionCart result = sessionCartService.updateProductQuantity(CUSTOMER_ID, request);
         //THEN
         int resultQuantity = result.getSessionLineItems().get(0).getQuantity();
-        long resultPhoneNumber = result.getCustomer().getPhoneNumber();
+        String resultPhoneNumber = result.getCustomer().getPhoneNumber();
         assertAll(
                 () -> assertEquals(result.getUniqueId(), UNIQUE_CART_ID),
                 () -> assertEquals(resultPhoneNumber, PHONE_NUMBER),

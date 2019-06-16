@@ -5,7 +5,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "restaurant_address")
+@Table(name = "restaurant_addresses")
 @Audited
 public class RestaurantAddress extends AbstractAddress {
 

@@ -9,14 +9,14 @@ public final class CustomerResponse {
     private String name;
     private String lastname;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private AddressResponse addressResponse;
 
     public CustomerResponse() {
     }
 
     public CustomerResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                            Long id, String name, String lastname, String email, Long phoneNumber,
+                            Long id, String name, String lastname, String email, String phoneNumber,
                             AddressResponse addressResponse) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -62,7 +62,7 @@ public final class CustomerResponse {
         return email;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

@@ -31,9 +31,9 @@ public class AccountUser extends AbstractUser {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name="account_users_roles",
-            joinColumns = @JoinColumn( name="user_id"),
-            inverseJoinColumns = @JoinColumn( name="role_id")
+            name = "account_users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
 
@@ -41,11 +41,14 @@ public class AccountUser extends AbstractUser {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RestaurantInfo restaurantInfo;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private AccountUserAddress accountUserAddress;
+
     public AccountUser() {
     }
 
     public AccountUser(String name, String lastname, String email,
-                       Long phoneNumber,String password,
+                       String phoneNumber, String password,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles, RestaurantInfo restaurantInfo) {
         super(name, lastname, email, phoneNumber);
@@ -57,7 +60,7 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastname, String email, Long phoneNumber,
+                       Long id, String name, String lastname, String email, String phoneNumber,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
@@ -110,11 +113,19 @@ public class AccountUser extends AbstractUser {
         this.restaurantInfo = restaurantInfo;
     }
 
+    public AccountUserAddress getAccountUserAddress() {
+        return accountUserAddress;
+    }
+
+    public void setAccountUserAddress(AccountUserAddress accountUserAddress) {
+        this.accountUserAddress = accountUserAddress;
+    }
+
     public static class AccountUserBuilder {
         private String name;
         private String lastname;
         private String email;
-        private Long phoneNumber;
+        private String phoneNumber;
         private String password;
         private String emailVerificationToken;
         private Boolean isActive;
@@ -125,6 +136,7 @@ public class AccountUser extends AbstractUser {
             this.name = name;
             return this;
         }
+
         public AccountUserBuilder setLastname(String lastname) {
             this.lastname = lastname;
             return this;
@@ -135,7 +147,7 @@ public class AccountUser extends AbstractUser {
             return this;
         }
 
-        public AccountUserBuilder setPhoneNumber(Long phoneNumber) {
+        public AccountUserBuilder setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }

@@ -4,20 +4,20 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "customer_address")
+@Table(name = "customer_addresses")
 public class CustomerAddress extends AbstractAddress {
 
     public CustomerAddress() {
     }
 
     public CustomerAddress(String streetAndNumber, String postCode,
-                             String city, String country) {
+                           String city, String country) {
         super(streetAndNumber, postCode, city, country);
     }
 
     public CustomerAddress(Long createdAt, Long updatedAt,
-                             String createdByUserId, String updatedByUserId, Long id,
-                             String streetAndNumber, String postCode, String city, String country) {
+                           String createdByUserId, String updatedByUserId, Long id,
+                           String streetAndNumber, String postCode, String city, String country) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, streetAndNumber, postCode, city, country);
     }
 
@@ -47,7 +47,7 @@ public class CustomerAddress extends AbstractAddress {
             return this;
         }
 
-        public CustomerAddress build(){
+        public CustomerAddress build() {
             return new CustomerAddress(
                     this.streetAndNumber,
                     this.postCode,

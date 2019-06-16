@@ -1,6 +1,6 @@
 package com.restaurant.management.exception.customer;
 
-public enum  CustomerMessages {
+public enum CustomerMessages {
     CUSTOMER_NOT_REGISTER("Please register customer first. "),
     CUSTOMER_PHONE_EXISTS("Customer with provided phone number already exists. "),
     ID_NOT_FOUND("Customer with provided id not found. "),

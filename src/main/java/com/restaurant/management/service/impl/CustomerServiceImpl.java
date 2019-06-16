@@ -19,9 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import javax.transaction.Transactional;
 import java.util.Optional;
+
+import static com.restaurant.management.utils.Validation.validatePhoneNumber;
 
 @Service
 @Transactional
@@ -65,8 +66,10 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
-    private void validateEmailAndPhoneNumber(@CurrentUser UserPrincipal currentUser, Long phoneNumber, String email) {
+    private void validateEmailAndPhoneNumber(@CurrentUser UserPrincipal currentUser, String phoneNumber, String email) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
+
+        validatePhoneNumber(phoneNumber);
 
         if (customerRepository.existsByPhoneNumberAndRestaurantInfoId(phoneNumber, restaurantId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
@@ -109,5 +112,23 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
         return accountUser.getRestaurantInfo();
+    }
+
+    public Page<Customer> getAllCustomersStartsWithName(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable) {
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
+
+        return customerRepository.findAllByNameStartsWithAndRestaurantInfoId(name, restaurantId, pageable);
+    }
+
+    public Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable) {
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
+
+        return customerRepository.findAllByNameIsContainingAndRestaurantInfoId(name, restaurantId, pageable);
+    }
+
+    public Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, Long phoneNumber, Pageable pageable) {
+        Long restaurantId = getRestaurantInfo(currentUser).getId();
+
+        return customerRepository.findAllByPhoneNumberIsContainingAndRestaurantInfoId(phoneNumber, restaurantId, pageable);
     }
 }

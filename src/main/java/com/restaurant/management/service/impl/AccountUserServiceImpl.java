@@ -1,6 +1,8 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
+import com.restaurant.management.exception.ExceptionMessage;
+import com.restaurant.management.exception.ValidationException;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -33,7 +35,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import static com.restaurant.management.utils.Validation.validatePhoneNumber;
 
 @Service
 @Transactional
@@ -97,6 +103,8 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         checkEmailAvailability(signUpUserRequest.getEmail());
 
+        validatePhoneNumber(signUpUserRequest.getPhoneNumber());
+
         String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
@@ -124,6 +132,8 @@ public class AccountUserServiceImpl implements AccountUserService {
     public AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest) {
 
         checkEmailAvailability(signUpUserRequest.getEmail());
+
+        validatePhoneNumber(signUpUserRequest.getPhoneNumber());
 
         String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 

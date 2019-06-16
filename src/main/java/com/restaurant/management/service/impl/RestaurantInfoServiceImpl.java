@@ -31,6 +31,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collections;
 
+import static com.restaurant.management.utils.Validation.validatePhoneNumber;
+
 @Service
 @Transactional
 //@SuppressWarnings("Duplicates")
@@ -108,6 +110,9 @@ public class RestaurantInfoServiceImpl implements RestaurantInfoService {
     }
 
     private AccountUser registerRestaurantManager(SignUpUserRequest request) {
+
+        validatePhoneNumber(request.getPhoneNumber());
+
         checkEmailAvailability(request.getEmail());
 
         String token = tokenProvider.generateEmailVerificationToken(request.getEmail());

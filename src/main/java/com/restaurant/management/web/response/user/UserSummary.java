@@ -10,7 +10,7 @@ public final class UserSummary {
     private String name;
     private String lastname;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private Set<Role> roles;
 
     private RestaurantInfoResponse restaurantInfoResponse;
@@ -19,7 +19,7 @@ public final class UserSummary {
     }
 
     public UserSummary(Long id, String name,
-                       String lastname, String email, Long phoneNumber,
+                       String lastname, String email, String phoneNumber,
                        Set<Role> roles, RestaurantInfoResponse restaurantInfoResponse) {
         this.id = id;
         this.name = name;
@@ -46,7 +46,7 @@ public final class UserSummary {
         return email;
     }
 
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

@@ -68,13 +68,16 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         return dailyOrderListRepository.findAllByRestaurantInfoId(accountUser.getRestaurantInfo().getId(), pageable);
     }
 
-    public DailyOrderList openOrderList(@CurrentUser UserPrincipal currentUser) {
+    public boolean checkDailyOrderListExists(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = getUser(currentUser);
+
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        if (dailyOrderListRepository.existsByIsOpenTrueAndRestaurantInfoId(restaurantId)) {
-            throw new OrderListExistsException(OrderMessages.ORDER_LIST_EXISTS.getMessage());
-        }
+        return dailyOrderListRepository.existsByIsOpenTrueAndRestaurantInfoId(restaurantId);
+    }
+
+    public boolean openOrderList(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUser(currentUser);
 
         DailyOrderList orderList = new DailyOrderList.DailyOrderListBuilder()
                 .setDailyIncome(0.00)
@@ -86,7 +89,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
 
         dailyOrderListRepository.save(orderList);
 
-        return orderList;
+        return true;
     }
 
     public DailyOrderList getOpenedOrderList(@CurrentUser UserPrincipal currentUser) {
@@ -111,7 +114,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
             throw new OrderListExistsException(OrderMessages.ORDER_EXISTS_ON_LIST.getMessage());
         }
 
-        Set<Order> orders  = new LinkedHashSet<>(dailyOrderList.getOrders());
+        Set<Order> orders = new LinkedHashSet<>(dailyOrderList.getOrders());
         orders.add(order);
 
         double income = order.getCart().getTotalPrice() + dailyOrderList.getDailyIncome();
@@ -156,7 +159,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         dailyOrderList.setNumberOfOrders(orders.size());
         dailyOrderList.setOrders(orders);
 
-        if(dailyOrderList.getOrders().size() == 0) {
+        if (dailyOrderList.getOrders().size() == 0) {
             dailyOrderList.setDailyIncome(0.0);
         }
 
@@ -195,7 +198,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         AccountUser accountUser = getUser(currentUser);
         Long restaurantId = accountUser.getRestaurantInfo().getId();
 
-        DailyOrderList dailyOrderList =  dailyOrderListRepository.findByIsOpenIsTrueAndRestaurantInfoId(restaurantId);
+        DailyOrderList dailyOrderList = dailyOrderListRepository.findByIsOpenIsTrueAndRestaurantInfoId(restaurantId);
 
         Integer productsCount = dailyOrderList.getOrders().stream()
                 .mapToInt(v -> v.getCart()

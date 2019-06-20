@@ -25,12 +25,6 @@ public final class DailyOrderListFacade {
         this.dailyOrderListMapper = dailyOrderListMapper;
     }
 
-    public DailyOrderListDto openOrderList(@CurrentUser UserPrincipal currentUser) {
-        DailyOrderList dailyOrderList = dailyOrderListService.openOrderList(currentUser);
-
-        return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
-    }
-
     public Page<DailyOrderListDto> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<DailyOrderList> dailyOrderLists = dailyOrderListService.getAll(currentUser, pageable);
 

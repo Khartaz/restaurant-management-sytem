@@ -36,18 +36,6 @@ public class DailyOrderListController {
         this.orderListMapper = orderListMapper;
     }
 
-    @PostMapping(produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<DailyOrderListResponse> registerDailyOrderList(@CurrentUser UserPrincipal currentUser) {
-        DailyOrderListDto orderList = dailyOrderListFacade.openOrderList(currentUser);
-
-        DailyOrderListResponse response = orderListMapper.mapToDailyOrderListResponse(orderList);
-
-        Link link = linkTo(DailyOrderListController.class).slash(orderList.getId()).withSelfRel();
-
-        return new Resource<>(response, link);
-    }
-
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<DailyOrderListResponse>> showOrdersLists(@CurrentUser UserPrincipal currentUser,

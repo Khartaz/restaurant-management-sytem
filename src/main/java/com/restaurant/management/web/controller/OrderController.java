@@ -1,10 +1,14 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.dto.DailyOrderListDto;
 import com.restaurant.management.domain.dto.OrderDto;
+import com.restaurant.management.mapper.DailyOrderListMapper;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.OrderFacade;
+import com.restaurant.management.service.facade.OrderProcessor;
+import com.restaurant.management.web.response.DailyOrderListResponse;
 import com.restaurant.management.web.response.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,11 +33,18 @@ public class OrderController {
 
     private OrderFacade orderFacade;
     private OrderMapper orderMapper;
+    private OrderProcessor orderProcessor;
+    private DailyOrderListMapper dailyOrderListMapper;
 
     @Autowired
-    public OrderController(OrderFacade orderFacade, OrderMapper orderMapper) {
+    public OrderController(OrderFacade orderFacade,
+                           OrderMapper orderMapper,
+                           OrderProcessor orderProcessor,
+                           DailyOrderListMapper dailyOrderListMapper) {
         this.orderFacade = orderFacade;
         this.orderMapper = orderMapper;
+        this.orderProcessor = orderProcessor;
+        this.dailyOrderListMapper = dailyOrderListMapper;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -89,14 +100,14 @@ public class OrderController {
 
     @PostMapping(value = "/order/{customerId}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<OrderResponse> processOrder(@CurrentUser UserPrincipal currentUser,
+    Resource<DailyOrderListResponse> processOrder(@CurrentUser UserPrincipal currentUser,
                                          @PathVariable Long customerId) {
-        OrderDto orderDto = orderFacade.processOrder(currentUser, customerId);
+        DailyOrderListDto orderListDto = orderProcessor.processOrder(currentUser, customerId);
 
-        OrderResponse orderResponse = orderMapper.mapToOrderResponse(orderDto);
+        DailyOrderListResponse response =  dailyOrderListMapper.mapToDailyOrderListResponse(orderListDto);
 
-        Link link = linkTo(OrderController.class).slash(orderResponse.getId()).withSelfRel();
+        Link link = linkTo(OrderController.class).slash(response.getId()).withSelfRel();
 
-        return new Resource<>(orderResponse, link);
+        return new Resource<>(response, link);
     }
 }

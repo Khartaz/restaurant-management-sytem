@@ -139,9 +139,7 @@ public class OrderServiceImpl implements OrderService {
         Calendar startDate = new GregorianCalendar(YEAR,Calendar.JANUARY,1,0,0,1);
         Calendar endDate = new GregorianCalendar(YEAR,Calendar.DECEMBER,31,23,59,59);
 
-        Page<Order> orders =  orderRepository.findByRestaurantInfoIdAndCreatedAtBetween(restaurantId, startDate.getTimeInMillis(), endDate.getTimeInMillis(), pageable);
-
-        return orders;
+        return orderRepository.findByRestaurantInfoIdAndCreatedAtBetween(restaurantId, startDate.getTimeInMillis(), endDate.getTimeInMillis(), pageable);
     }
 
     private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {

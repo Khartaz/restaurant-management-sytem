@@ -14,7 +14,7 @@ public interface DailyOrderListService {
 
     Page<DailyOrderList> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
-    DailyOrderList openOrderList(@CurrentUser UserPrincipal currentUser);
+    boolean openOrderList(@CurrentUser UserPrincipal currentUser);
 
     DailyOrderList getOpenedOrderList(@CurrentUser UserPrincipal currentUser);
 
@@ -27,4 +27,6 @@ public interface DailyOrderListService {
     ApiResponse deleteById(@CurrentUser UserPrincipal currentUser, Long orderListId);
 
     StatisticsReportResponse countDailyOrders(@CurrentUser UserPrincipal currentUser);
+
+    boolean checkDailyOrderListExists(@CurrentUser UserPrincipal currentUser);
 }

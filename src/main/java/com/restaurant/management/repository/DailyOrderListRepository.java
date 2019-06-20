@@ -23,4 +23,6 @@ public interface DailyOrderListRepository extends JpaRepository<DailyOrderList, 
 
     Page<DailyOrderList> findAllByRestaurantInfoId(Long restaurantId, Pageable pageable);
 
+    DailyOrderList findByIsOpenIsTrueAndRestaurantInfoId(Long restaurantId);
+
 }

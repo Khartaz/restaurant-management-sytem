@@ -7,6 +7,7 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.web.response.restaurant.StatisticsReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,5 +63,9 @@ public final class DailyOrderListFacade {
         DailyOrderList dailyOrderList = dailyOrderListService.closeDailyList(currentUser);
 
         return dailyOrderListMapper.mapToDailyOrderListDto(dailyOrderList);
+    }
+
+    public StatisticsReportResponse countDailyOrders(@CurrentUser UserPrincipal currentUser) {
+        return dailyOrderListService.countDailyOrders(currentUser);
     }
 }

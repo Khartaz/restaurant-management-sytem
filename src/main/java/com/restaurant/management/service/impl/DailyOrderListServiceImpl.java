@@ -3,6 +3,7 @@ package com.restaurant.management.service.impl;
 import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.DailyOrderList;
 import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.archive.LineItemArchive;
 import com.restaurant.management.exception.order.OrderListExistsException;
 import com.restaurant.management.exception.order.OrderListNotFoundException;
 import com.restaurant.management.exception.order.OrderMessages;
@@ -16,6 +17,7 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
+import com.restaurant.management.web.response.restaurant.StatisticsReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -186,6 +189,25 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         dailyOrderListRepository.delete(orderList);
 
         return new ApiResponse(true, OrderMessages.ORDER_LIST_DELETED.getMessage());
+    }
+
+    public StatisticsReportResponse countDailyOrders(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUser(currentUser);
+        Long restaurantId = accountUser.getRestaurantInfo().getId();
+
+        DailyOrderList dailyOrderList =  dailyOrderListRepository.findByIsOpenIsTrueAndRestaurantInfoId(restaurantId);
+
+        Integer productsCount = dailyOrderList.getOrders().stream()
+                .mapToInt(v -> v.getCart()
+                        .getLineItems()
+                        .size())
+                .sum();
+
+        return new StatisticsReportResponse(
+                dailyOrderList.getNumberOfOrders(),
+                dailyOrderList.getDailyIncome(),
+                productsCount
+        );
     }
 
 }

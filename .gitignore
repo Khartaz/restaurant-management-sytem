@@ -1,6 +1,5 @@
 .gradle
 /build/
-.application.properties
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###

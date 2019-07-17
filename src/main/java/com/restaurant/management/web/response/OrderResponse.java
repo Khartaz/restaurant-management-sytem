@@ -1,7 +1,7 @@
 package com.restaurant.management.web.response;
 
-import com.restaurant.management.domain.OrderStatus;
-import com.restaurant.management.domain.OrderType;
+import com.restaurant.management.domain.ecommerce.OrderStatus;
+import com.restaurant.management.domain.ecommerce.OrderType;
 
 public final class OrderResponse {
     private Long id;

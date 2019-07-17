@@ -1,12 +1,8 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.Customer;
-import com.restaurant.management.domain.SessionCart;
+import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.domain.archive.CustomerArchive;
-import com.restaurant.management.domain.archive.CustomerArchiveAddress;
 import com.restaurant.management.domain.dto.CustomerDto;
-import com.restaurant.management.security.CurrentUser;
-import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

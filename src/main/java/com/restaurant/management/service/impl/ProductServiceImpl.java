@@ -1,6 +1,9 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.ecommerce.Ingredient;
+import com.restaurant.management.domain.ecommerce.Product;
+import com.restaurant.management.domain.ecommerce.SessionLineItem;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -11,9 +14,7 @@ import com.restaurant.management.repository.SessionLineItemRepository;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.ProductService;
-import com.restaurant.management.utils.Utils;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ApiResponse;
@@ -24,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service

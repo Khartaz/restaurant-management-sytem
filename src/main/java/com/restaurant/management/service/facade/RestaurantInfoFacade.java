@@ -1,7 +1,7 @@
 package com.restaurant.management.service.facade;
 
 
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
 import com.restaurant.management.domain.dto.RestaurantInfoDto;
 import com.restaurant.management.mapper.RestaurantInfoMapper;
 import com.restaurant.management.security.CurrentUser;

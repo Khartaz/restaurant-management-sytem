@@ -1,11 +1,11 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.Product;
+import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.archive.ProductArchive;
 import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.domain.dto.ProductHistoryDto;
 import com.restaurant.management.domain.dto.RevisionTypeDto;
-import com.restaurant.management.domain.history.ProductHistory;
+import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

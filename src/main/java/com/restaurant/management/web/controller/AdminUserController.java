@@ -2,14 +2,9 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogExecutionTime;
 import com.restaurant.management.domain.dto.AccountUserDto;
-import com.restaurant.management.domain.dto.ProductDto;
 import com.restaurant.management.mapper.AccountUserMapper;
-import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.service.facade.AccountUserFacade;
-import com.restaurant.management.service.facade.ProductFacade;
-import com.restaurant.management.web.request.account.LoginRequest;
-import com.restaurant.management.web.request.account.SignUpUserRequest;
-import com.restaurant.management.web.response.ProductResponse;
+import com.restaurant.management.web.request.user.SignUpUserRequest;
 import com.restaurant.management.web.response.user.AccountUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

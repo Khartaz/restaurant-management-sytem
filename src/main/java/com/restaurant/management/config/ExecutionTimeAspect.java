@@ -1,6 +1,6 @@
 package com.restaurant.management.config;
 
-import com.restaurant.management.web.request.account.LoginRequest;
+import com.restaurant.management.web.request.user.LoginRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;

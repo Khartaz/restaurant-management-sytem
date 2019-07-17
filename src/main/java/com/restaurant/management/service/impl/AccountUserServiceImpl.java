@@ -1,13 +1,11 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
-import com.restaurant.management.exception.ExceptionMessage;
-import com.restaurant.management.exception.ValidationException;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.repository.RestaurantInfoRepository;
+import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -15,13 +13,10 @@ import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.SimpleEmailService;
-import com.restaurant.management.web.request.account.LoginRequest;
-import com.restaurant.management.web.request.account.SignUpUserRequest;
-import com.restaurant.management.web.request.account.UpdateAccountInfo;
+import com.restaurant.management.web.request.user.*;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
-import com.restaurant.management.web.request.account.PasswordReset;
-import com.restaurant.management.web.response.user.UserSummary;
+import com.restaurant.management.web.response.user.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static com.restaurant.management.utils.Validation.validatePhoneNumber;
@@ -165,8 +158,8 @@ public class AccountUserServiceImpl implements AccountUserService {
         return accountUser;
     }
 
-    public RoleName[] getRoles() {
-       return   RoleName.values();
+    public String getRoleToString(RoleName roleName) {
+        return RoleMapper.mapRoleToString(roleName);
     }
 
     public ApiResponse deleteUserById(Long id) {
@@ -308,4 +301,15 @@ public class AccountUserServiceImpl implements AccountUserService {
         return accountUserRepository.findAllByRestaurantInfoId(restaurantId, pageable);
     }
 
+    public AccountUser updateUserDetails(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {
+        AccountUser accountUser = getUserById(currentUser.getId());
+
+        accountUser.setName(request.getUserDetails().getName());
+        accountUser.setLastname(request.getUserDetails().getLastname());
+        accountUser.setPhoneNumber(request.getUserDetails().getPhoneNumber());
+
+        accountUserRepository.save(accountUser);
+
+        return accountUser;
+    }
 }

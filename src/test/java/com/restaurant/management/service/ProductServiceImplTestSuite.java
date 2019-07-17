@@ -1,12 +1,10 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Ingredient;
-import com.restaurant.management.domain.Product;
+import com.restaurant.management.domain.ecommerce.Ingredient;
+import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.mapper.IngredientMapper;
 import com.restaurant.management.repository.ProductRepository;
-import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.impl.ProductServiceImpl;
 import com.restaurant.management.web.request.product.IngredientRequest;
 import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.request.product.RegisterProductRequest;

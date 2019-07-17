@@ -1,6 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.DailyOrderList;
+import com.restaurant.management.domain.ecommerce.DailyOrderList;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.response.ApiResponse;

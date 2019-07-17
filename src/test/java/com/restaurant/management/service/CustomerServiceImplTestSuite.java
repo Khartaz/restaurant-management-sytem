@@ -1,6 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.web.request.customer.SignUpCustomerRequest;
 import org.junit.Test;

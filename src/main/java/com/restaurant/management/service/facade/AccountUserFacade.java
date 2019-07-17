@@ -1,19 +1,16 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.AccountUser;
-import com.restaurant.management.domain.RoleName;
 import com.restaurant.management.domain.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
-import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.AccountUserService;
-import com.restaurant.management.web.request.account.LoginRequest;
-import com.restaurant.management.web.request.account.SignUpUserRequest;
-import com.restaurant.management.web.request.account.UpdateAccountInfo;
+import com.restaurant.management.web.request.user.LoginRequest;
+import com.restaurant.management.web.request.user.SignUpUserRequest;
+import com.restaurant.management.web.request.user.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
-import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -90,12 +87,6 @@ public final class AccountUserFacade {
     public boolean activateAccount(String token) {
         accountUserService.verifyEmailToken(token);
         return true;
-    }
-
-    public RoleName[] getRoles() {
-        RoleName[] roles = accountUserService.getRoles();
-
-        return roles;
     }
 
 }

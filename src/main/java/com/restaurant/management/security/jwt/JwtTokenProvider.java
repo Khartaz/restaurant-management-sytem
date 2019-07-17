@@ -39,6 +39,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String generateRegistrationToken(Long id) {
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+
+        return Jwts.builder()
+                .setSubject(id.toString())
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
+
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8))
@@ -55,7 +68,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            LOGGER.info("Invalid JWT signature: " + e.getMessage());
+            LOGGER.info("Invalid JWT Signature" + e.getMessage());
             return false;
         }
     }
@@ -69,6 +82,20 @@ public class JwtTokenProvider {
         Date todayDate = new Date();
 
         return tokenExpirationDate.before(todayDate);
+    }
+
+    public String refreshToken(String authToken) {
+            Date now = new Date();
+            Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+
+            Long userId = getUserIdFromJWT(authToken);
+
+            return Jwts.builder()
+                    .setSubject(userId.toString())
+                    .setIssuedAt(new Date())
+                    .setExpiration(expiryDate)
+                    .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes(StandardCharsets.UTF_8))
+                    .compact();
     }
 
     public String generateEmailVerificationToken(String email) {

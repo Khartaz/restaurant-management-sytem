@@ -1,7 +1,7 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.AccountUser;
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.layout.Shortcut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

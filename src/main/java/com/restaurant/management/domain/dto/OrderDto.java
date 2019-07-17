@@ -1,7 +1,7 @@
 package com.restaurant.management.domain.dto;
 
-import com.restaurant.management.domain.OrderStatus;
-import com.restaurant.management.domain.OrderType;
+import com.restaurant.management.domain.ecommerce.OrderStatus;
+import com.restaurant.management.domain.ecommerce.OrderType;
 
 public final class OrderDto {
     private Long id;

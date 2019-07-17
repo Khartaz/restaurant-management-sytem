@@ -1,7 +1,7 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Cart;
-import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.ecommerce.Cart;
+import com.restaurant.management.domain.ecommerce.Order;
 import com.restaurant.management.domain.archive.CustomerArchive;
 import com.restaurant.management.domain.archive.LineItemArchive;
 import com.restaurant.management.domain.archive.ProductArchive;

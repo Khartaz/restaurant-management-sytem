@@ -1,7 +1,7 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.CustomerAddress;
-import com.restaurant.management.domain.RestaurantAddress;
+import com.restaurant.management.domain.ecommerce.CustomerAddress;
+import com.restaurant.management.domain.ecommerce.RestaurantAddress;
 import com.restaurant.management.domain.archive.CustomerArchiveAddress;
 import com.restaurant.management.domain.dto.AddressDto;
 import com.restaurant.management.web.response.AddressResponse;

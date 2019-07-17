@@ -1,7 +1,7 @@
 package com.restaurant.management.domain.archive;
 
 import com.restaurant.management.domain.AbstractUser;
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
 
 import javax.persistence.*;
 

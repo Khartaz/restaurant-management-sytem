@@ -1,7 +1,6 @@
 package com.restaurant.management.service.facade;
 
-import com.restaurant.management.domain.Cart;
-import com.restaurant.management.domain.archive.CustomerArchive;
+import com.restaurant.management.domain.ecommerce.Cart;
 import com.restaurant.management.domain.dto.CartDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.security.CurrentUser;

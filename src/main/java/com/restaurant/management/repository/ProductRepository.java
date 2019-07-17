@@ -1,7 +1,7 @@
 package com.restaurant.management.repository;
 
-import com.restaurant.management.domain.Product;
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.Product;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

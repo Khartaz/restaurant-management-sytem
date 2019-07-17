@@ -1,9 +1,8 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.AccountUser;
-import com.restaurant.management.domain.DailyOrderList;
-import com.restaurant.management.domain.Order;
-import com.restaurant.management.domain.archive.LineItemArchive;
+import com.restaurant.management.domain.ecommerce.DailyOrderList;
+import com.restaurant.management.domain.ecommerce.Order;
 import com.restaurant.management.exception.order.OrderListExistsException;
 import com.restaurant.management.exception.order.OrderListNotFoundException;
 import com.restaurant.management.exception.order.OrderMessages;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 @Transactional

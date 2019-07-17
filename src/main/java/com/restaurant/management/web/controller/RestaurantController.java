@@ -7,8 +7,8 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.RestaurantInfoAccountUserFacade;
 import com.restaurant.management.service.facade.RestaurantInfoFacade;
 import com.restaurant.management.web.request.restaurant.RegisterRestaurantRequest;
-import com.restaurant.management.web.response.restaurant.RegisterRestaurantResponse;
 import com.restaurant.management.web.response.restaurant.RestaurantInfoResponse;
+import com.restaurant.management.web.response.user.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -39,12 +39,12 @@ public class RestaurantController {
 
     @PostMapping(value = "/register", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<RegisterRestaurantResponse> registerRestaurant(@Valid @RequestBody RegisterRestaurantRequest request) {
-        RegisterRestaurantResponse registerRestaurantResponse = restaurantInfoAccountUserFacade.registerRestaurant(request);
+    Resource<UserResponse> registerRestaurant(@Valid @RequestBody RegisterRestaurantRequest request) {
+        UserResponse registerLoginResponse = restaurantInfoAccountUserFacade.registerRestaurant(request);
 
         Link link = linkTo(RestaurantController.class).withSelfRel();
 
-        return new Resource<>(registerRestaurantResponse, link);
+        return new Resource<>(registerLoginResponse, link);
     }
 
     @GetMapping(value = "/my", produces = APPLICATION_JSON_VALUE)

@@ -1,6 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Customer;
+import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.request.customer.SignUpCustomerRequest;

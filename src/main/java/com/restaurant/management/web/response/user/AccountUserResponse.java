@@ -88,4 +88,22 @@ public final class AccountUserResponse {
     public Set<RoleResponse> getRoles() {
         return roles;
     }
+
+    @Override
+    public String toString() {
+        return "AccountUserResponse{" +
+                "createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", createdByUserId='" + createdByUserId + '\'' +
+                ", updatedByUserId='" + updatedByUserId + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", emailVerificationToken='" + emailVerificationToken + '\'' +
+                ", isActive=" + isActive +
+                ", roles=" + roles +
+                '}';
+    }
 }

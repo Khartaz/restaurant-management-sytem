@@ -1,8 +1,8 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.service.AccountUserService;
-import com.restaurant.management.web.request.account.PasswordReset;
-import com.restaurant.management.web.request.account.PasswordResetRequest;
+import com.restaurant.management.web.request.user.PasswordReset;
+import com.restaurant.management.web.request.user.PasswordResetRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,7 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.Role;
+import com.restaurant.management.domain.RoleName;
 import com.restaurant.management.domain.dto.RoleDto;
 import com.restaurant.management.web.response.RoleResponse;
 import org.springframework.stereotype.Component;
@@ -34,4 +35,17 @@ public final class RoleMapper {
                 .map(this::mapToRoleResponse)
                 .collect(Collectors.toList());
     }
+
+    public static String mapRoleToString(RoleName roleName) {
+        switch (roleName) {
+            case ROLE_MANAGER:
+                return "Manager";
+            case ROLE_ADMIN:
+                return "Admin";
+            case ROLE_EMPLOYEE:
+                return "Employee";
+        }
+        return "RoleNotExists";
+    }
+
 }

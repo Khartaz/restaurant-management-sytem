@@ -1,11 +1,9 @@
 package com.restaurant.management.domain.archive;
 
-import com.restaurant.management.domain.AbstractLineItem;
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.AbstractLineItem;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "line_items_archive")

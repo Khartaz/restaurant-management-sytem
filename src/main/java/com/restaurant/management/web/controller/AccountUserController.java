@@ -1,20 +1,24 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogLogin;
-import com.restaurant.management.domain.RoleName;
+import com.restaurant.management.domain.AccountUser;
 import com.restaurant.management.domain.dto.AccountUserDto;
+import com.restaurant.management.domain.layout.Shortcut;
 import com.restaurant.management.mapper.AccountUserMapper;
-import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.LayoutSettingsService;
+import com.restaurant.management.service.LayoutShortcutService;
 import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.service.facade.RestaurantInfoAccountUserFacade;
-import com.restaurant.management.web.request.account.LoginRequest;
-import com.restaurant.management.web.request.account.SignUpUserRequest;
-import com.restaurant.management.web.request.account.UpdateAccountInfo;
+import com.restaurant.management.service.impl.LayoutSettingsServiceImpl;
+import com.restaurant.management.web.request.user.LoginRequest;
+import com.restaurant.management.web.request.user.SignUpUserRequest;
+import com.restaurant.management.web.request.user.UpdateAccountInfo;
+import com.restaurant.management.web.request.user.UserUpdateRequest;
 import com.restaurant.management.web.response.ApiResponse;
-import com.restaurant.management.web.response.user.AccountUserResponse;
-import com.restaurant.management.web.response.user.UserSummary;
+import com.restaurant.management.web.response.JwtAuthenticationResponse;
+import com.restaurant.management.web.response.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,20 +43,35 @@ public class AccountUserController {
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
     private RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade;
+    private LayoutSettingsService layoutSettingsService;
+    private LayoutShortcutService layoutShortcutService;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
                                  AccountUserMapper accountUserMapper,
-                                 RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade) {
+                                 RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade,
+                                 LayoutSettingsServiceImpl layoutSettingsService,
+                                 LayoutShortcutService layoutShortcutService) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
         this.restaurantInfoAccountUserFacade = restaurantInfoAccountUserFacade;
+        this.layoutSettingsService = layoutSettingsService;
+        this.layoutShortcutService = layoutShortcutService;
     }
 
     @GetMapping(value = "/me")
     public @ResponseBody
     UserSummary getCurrentUserSummary(@CurrentUser UserPrincipal currentUser) {
         return restaurantInfoAccountUserFacade.getUserSummary(currentUser);
+    }
+
+    @LogLogin
+    @PostMapping(value = "/login", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponse> authenticateUser2(@Valid @RequestBody LoginRequest loginRequest) {
+        JwtAuthenticationResponse jwt = accountUserFacade.authenticateUser(loginRequest);
+        UserResponse userResponse = restaurantInfoAccountUserFacade.getUserDataFromJWT(jwt.getAccessToken());
+
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
     @LogLogin
@@ -115,14 +134,22 @@ public class AccountUserController {
         return new Resource<>(accountUserResponse, link);
     }
 
-    @GetMapping(value = "/roles", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/userData", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<RoleName[]> showRoles() {
-
-        RoleName[] roles = accountUserFacade.getRoles();
-
-        Link link = linkTo(AccountUserController.class).slash("roles").withSelfRel();
-
-        return new Resource<>(roles, link);
+    UserResponse getUserData(@CurrentUser UserPrincipal currentUser) {
+        return restaurantInfoAccountUserFacade.getUserData(currentUser);
     }
+
+    @PutMapping(value = "/userData/update", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    UserResponse updateUserData(@CurrentUser UserPrincipal currentUser, @RequestBody UserUpdateRequest userUpdateRequest) {
+        return restaurantInfoAccountUserFacade.updateUserDetails(currentUser, userUpdateRequest);
+    }
+
+    @GetMapping(value = "/test", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    String[] show(@CurrentUser UserPrincipal currentUser) {
+        return layoutShortcutService.getLayoutShortcuts(currentUser);
+    }
+
 }

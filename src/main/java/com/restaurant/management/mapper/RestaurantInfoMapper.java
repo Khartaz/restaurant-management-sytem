@@ -1,6 +1,6 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
 import com.restaurant.management.domain.dto.RestaurantInfoDto;
 import com.restaurant.management.web.response.restaurant.RestaurantInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;

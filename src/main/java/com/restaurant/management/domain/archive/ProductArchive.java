@@ -1,7 +1,7 @@
 package com.restaurant.management.domain.archive;
 
-import com.restaurant.management.domain.AbstractProduct;
-import com.restaurant.management.domain.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.AbstractProduct;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;

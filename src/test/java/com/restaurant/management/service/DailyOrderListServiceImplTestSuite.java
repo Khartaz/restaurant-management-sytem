@@ -1,8 +1,8 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Cart;
-import com.restaurant.management.domain.DailyOrderList;
-import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.ecommerce.Cart;
+import com.restaurant.management.domain.ecommerce.DailyOrderList;
+import com.restaurant.management.domain.ecommerce.Order;
 import com.restaurant.management.repository.DailyOrderListRepository;
 import com.restaurant.management.repository.OrderRepository;
 import com.restaurant.management.service.impl.DailyOrderListServiceImpl;

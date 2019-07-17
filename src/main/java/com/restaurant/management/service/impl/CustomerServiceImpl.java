@@ -1,6 +1,10 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.ecommerce.Customer;
+import com.restaurant.management.domain.ecommerce.CustomerAddress;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.SessionCart;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;

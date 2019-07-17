@@ -1,6 +1,6 @@
 package com.restaurant.management.service.facade;
 
-import com.restaurant.management.domain.Order;
+import com.restaurant.management.domain.ecommerce.Order;
 import com.restaurant.management.domain.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.security.CurrentUser;

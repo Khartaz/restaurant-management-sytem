@@ -1,18 +1,15 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
-import com.restaurant.management.domain.archive.*;
+import com.restaurant.management.domain.ecommerce.Cart;
+import com.restaurant.management.domain.ecommerce.SessionCart;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.cart.CartNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.mapper.CartMapper;
-import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.CartRepository;
 import com.restaurant.management.repository.SessionCartRepository;
-import com.restaurant.management.repository.archive.CustomerArchiveRepository;
-import com.restaurant.management.repository.archive.ProductArchiveRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CartService;
@@ -21,14 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional

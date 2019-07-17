@@ -1,5 +1,7 @@
 package com.restaurant.management.domain;
 
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
+import com.restaurant.management.domain.layout.Settings;
 import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
@@ -44,19 +46,25 @@ public class AccountUser extends AbstractUser {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private AccountUserAddress accountUserAddress;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Settings settings;
+
     public AccountUser() {
     }
 
     public AccountUser(String name, String lastname, String email,
                        String phoneNumber, String password,
                        String emailVerificationToken,
-                       Boolean isActive, Set<Role> roles, RestaurantInfo restaurantInfo) {
+                       Boolean isActive, Set<Role> roles, RestaurantInfo restaurantInfo,
+                       AccountUserAddress accountUserAddress, Settings settings) {
         super(name, lastname, email, phoneNumber);
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
         this.restaurantInfo = restaurantInfo;
+        this.accountUserAddress = accountUserAddress;
+        this.settings = settings;
     }
 
     public AccountUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
@@ -121,6 +129,14 @@ public class AccountUser extends AbstractUser {
         this.accountUserAddress = accountUserAddress;
     }
 
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
     public static class AccountUserBuilder {
         private String name;
         private String lastname;
@@ -131,6 +147,8 @@ public class AccountUser extends AbstractUser {
         private Boolean isActive;
         private Set<Role> roles = new HashSet<>();
         private RestaurantInfo restaurantInfo;
+        private AccountUserAddress accountUserAddress;
+        private Settings settings;
 
         public AccountUserBuilder setName(String name) {
             this.name = name;
@@ -177,11 +195,20 @@ public class AccountUser extends AbstractUser {
             return this;
         }
 
+        public AccountUserBuilder setUserAddress(AccountUserAddress accountUserAddress) {
+            this.accountUserAddress = accountUserAddress;
+            return this;
+        }
+
+        public AccountUserBuilder setSettings(Settings settings) {
+            this.settings = settings;
+            return this;
+        }
         public AccountUser build() {
             return new AccountUser(this.name, this.lastname, this.email,
                     this.phoneNumber, this.password,
                     this.emailVerificationToken, this.isActive, this.roles,
-                    this.restaurantInfo);
+                    this.restaurantInfo, this.accountUserAddress, this.settings);
         }
     }
 }

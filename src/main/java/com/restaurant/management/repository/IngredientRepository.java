@@ -1,6 +1,6 @@
 package com.restaurant.management.repository;
 
-import com.restaurant.management.domain.Ingredient;
+import com.restaurant.management.domain.ecommerce.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

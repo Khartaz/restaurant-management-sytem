@@ -1,15 +1,13 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.Ingredient;
+import com.restaurant.management.domain.ecommerce.Ingredient;
 import com.restaurant.management.domain.archive.IngredientArchive;
 import com.restaurant.management.domain.dto.IngredientDto;
 import com.restaurant.management.web.request.product.IngredientRequest;
 import com.restaurant.management.web.response.IngredientResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component

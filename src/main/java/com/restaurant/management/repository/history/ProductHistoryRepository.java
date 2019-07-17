@@ -1,6 +1,6 @@
 package com.restaurant.management.repository.history;
 
-import com.restaurant.management.domain.history.ProductHistory;
+import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 

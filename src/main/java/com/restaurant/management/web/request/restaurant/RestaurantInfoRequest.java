@@ -9,13 +9,20 @@ public final class RestaurantInfoRequest {
     @Size(min = 8, max = 40, message = "restaurant name must be between 8 - 60")
     private String restaurantName;
 
-    private RestaurantAddressRequest restaurantAddressRequest;
+//    private RestaurantAddressRequest restaurantAddressRequest;
+
+    public RestaurantInfoRequest() {
+    }
+
+    public RestaurantInfoRequest(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
 
     public String getRestaurantName() {
         return restaurantName;
     }
 
-    public RestaurantAddressRequest getRestaurantAddressRequest() {
-        return restaurantAddressRequest;
-    }
+//    public RestaurantAddressRequest getRestaurantAddressRequest() {
+//        return restaurantAddressRequest;
+//    }
 }

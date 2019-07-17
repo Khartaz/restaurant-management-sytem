@@ -1,29 +1,27 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.ecommerce.RestaurantAddress;
+import com.restaurant.management.domain.ecommerce.RestaurantInfo;
+import com.restaurant.management.domain.layout.Settings;
 import com.restaurant.management.exception.restaurant.RestaurantMessages;
 import com.restaurant.management.exception.restaurant.RestaurantNotFoundException;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.mapper.AccountUserMapper;
-import com.restaurant.management.mapper.RestaurantInfoMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.RestaurantInfoRepository;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.security.jwt.JwtTokenProvider;
+import com.restaurant.management.service.LayoutSettingsService;
 import com.restaurant.management.service.RestaurantInfoService;
-import com.restaurant.management.service.SimpleEmailService;
-import com.restaurant.management.web.request.account.SignUpUserRequest;
+import com.restaurant.management.web.request.user.SignUpUserRequest;
 import com.restaurant.management.web.request.restaurant.RegisterRestaurantRequest;
 import com.restaurant.management.web.request.restaurant.RestaurantInfoRequest;
 import com.restaurant.management.web.response.ApiResponse;
-import com.restaurant.management.web.response.restaurant.RegisterRestaurantResponse;
-import com.restaurant.management.web.response.restaurant.RestaurantInfoResponse;
-import com.restaurant.management.web.response.user.AccountUserResponse;
+import com.restaurant.management.web.response.restaurant.RegisterRestaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,65 +39,38 @@ public class RestaurantInfoServiceImpl implements RestaurantInfoService {
     private RestaurantInfoRepository restaurantInfoRepository;
     private AccountUserRepository accountUserRepository;
     private RoleRepository roleRepository;
-    private JwtTokenProvider tokenProvider;
     private PasswordEncoder passwordEncoder;
-    private SimpleEmailService simpleEmailService;
-    private AccountUserMapper accountUserMapper;
-    private RestaurantInfoMapper restaurantInfoMapper;
+    private LayoutSettingsService settingsService;
 
     @Autowired
     public RestaurantInfoServiceImpl(RestaurantInfoRepository restaurantInfoRepository,
                                      AccountUserRepository accountUserRepository,
                                      RoleRepository roleRepository,
-                                     JwtTokenProvider tokenProvider,
                                      PasswordEncoder passwordEncoder,
-                                     SimpleEmailService simpleEmailService,
-                                     AccountUserMapper accountUserMapper,
-                                     RestaurantInfoMapper restaurantInfoMapper) {
+                                     LayoutSettingsService settingsService) {
         this.restaurantInfoRepository = restaurantInfoRepository;
         this.accountUserRepository = accountUserRepository;
         this.roleRepository = roleRepository;
-        this.tokenProvider = tokenProvider;
         this.passwordEncoder = passwordEncoder;
-        this.simpleEmailService = simpleEmailService;
-        this.accountUserMapper = accountUserMapper;
-        this.restaurantInfoMapper = restaurantInfoMapper;
+        this.settingsService = settingsService;
+
     }
 
-    public RegisterRestaurantResponse registerRestaurant(RegisterRestaurantRequest request) {
+    public RegisterRestaurant registerRestaurant(RegisterRestaurantRequest request) {
+        Settings settings = settingsService.createDefaultLayoutSettings();
+
 
         RestaurantInfo restaurantInfo = registerRestaurantInfo(request.getRestaurantInfoRequest());
 
         AccountUser accountUser = registerRestaurantManager(request.getSignUpUserRequest());
 
         accountUser.setRestaurantInfo(restaurantInfo); // <-- Assign restaurant to user
+        accountUser.setSettings(settings);            //  <-- Assign default layout settings
 
         accountUserRepository.save(accountUser);
         restaurantInfoRepository.save(restaurantInfo);
 
-        AccountUserResponse accountUserResponse = accountUserMapper.mapToAccountUserResponse(
-                accountUserMapper.mapToAccountUserDto(accountUser)
-        );
-
-        RestaurantInfoResponse restaurantInfoResponse = restaurantInfoMapper.mapToRestaurantInfoResponse(restaurantInfo);
-
-        return new RegisterRestaurantResponse(accountUserResponse, restaurantInfoResponse);
-    }
-
-    private RestaurantInfo registerRestaurantInfo(RestaurantInfoRequest request) {
-
-        RestaurantAddress address = new RestaurantAddress.RestaurantAddressBuilder()
-                .setCity(request.getRestaurantAddressRequest().getCity())
-                .setCountry(request.getRestaurantAddressRequest().getCountry())
-                .setPostCode(request.getRestaurantAddressRequest().getPostCode())
-                .setStreetAndNumber(request.getRestaurantAddressRequest().getStreetAndNumber())
-                .build();
-
-        RestaurantInfo restaurantInfo = new RestaurantInfo();
-                restaurantInfo.setName(request.getRestaurantName());
-                restaurantInfo.setRestaurantAddress(address);
-
-        return restaurantInfo;
+        return new RegisterRestaurant(accountUser, restaurantInfo);
     }
 
     private ApiResponse checkEmailAvailability(String email) {
@@ -114,8 +85,6 @@ public class RestaurantInfoServiceImpl implements RestaurantInfoService {
         validatePhoneNumber(request.getPhoneNumber());
 
         checkEmailAvailability(request.getEmail());
-
-        String token = tokenProvider.generateEmailVerificationToken(request.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
@@ -138,6 +107,8 @@ public class RestaurantInfoServiceImpl implements RestaurantInfoService {
                 .setIsActive(Boolean.TRUE)
                 .setRoles(Collections.singleton(userRole))
                 .setEmailVerificationToken(null)
+                .setSettings(settingsService.createDefaultLayoutSettings())
+                .setUserAddress(registerUserAddress())
                 .build();
     }
 
@@ -153,5 +124,30 @@ public class RestaurantInfoServiceImpl implements RestaurantInfoService {
     private AccountUser getUserById(Long id) {
         return accountUserRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
+    }
+
+    private AccountUserAddress registerUserAddress() {
+        return new AccountUserAddress.AccountUserAddressBuilder()
+                .setCity("Update City")
+                .setCountry("Update Country")
+                .setPostCode("Update post code")
+                .setStreetAndNumber("Update street and number")
+                .build();
+    }
+
+    private RestaurantInfo registerRestaurantInfo(RestaurantInfoRequest request) {
+
+        RestaurantAddress address = new RestaurantAddress.RestaurantAddressBuilder()
+                .setCity("Update City")
+                .setCountry("Update Country")
+                .setPostCode("Update post code")
+                .setStreetAndNumber("Update street and number")
+                .build();
+
+        RestaurantInfo restaurantInfo = new RestaurantInfo();
+        restaurantInfo.setName(request.getRestaurantName());
+        restaurantInfo.setRestaurantAddress(address);
+
+        return restaurantInfo;
     }
 }

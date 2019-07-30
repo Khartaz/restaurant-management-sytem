@@ -1,6 +1,9 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.Mail;
+import com.restaurant.management.domain.ecommerce.Role;
+import com.restaurant.management.domain.ecommerce.RoleName;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -16,7 +19,6 @@ import com.restaurant.management.service.SimpleEmailService;
 import com.restaurant.management.web.request.user.*;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
-import com.restaurant.management.web.response.user.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -192,9 +194,9 @@ public class AccountUserServiceImpl implements AccountUserService {
     public AccountUser getRestaurantUserById(@CurrentUser UserPrincipal currentUser, Long id) {
         AccountUser currentUserResult = getUserById(currentUser.getId());
 
-        Long restaurantId = currentUserResult.getRestaurantInfo().getId();
+        Long companyId = currentUserResult.getCompany().getId();
 
-        return accountUserRepository.findByIdAndRestaurantInfoId(id, restaurantId)
+        return accountUserRepository.findByIdAndCompanyId(id, companyId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
@@ -296,9 +298,9 @@ public class AccountUserServiceImpl implements AccountUserService {
     public Page<AccountUser> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         AccountUser accountUser = getUserById(currentUser.getId());
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        return accountUserRepository.findAllByRestaurantInfoId(restaurantId, pageable);
+        return accountUserRepository.findAllByCompanyId(companyId, pageable);
     }
 
     public AccountUser updateUserDetails(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {

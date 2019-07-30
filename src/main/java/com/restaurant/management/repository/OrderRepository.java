@@ -14,13 +14,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Override
     Page<Order> findAll(Pageable pageable);
 
-    Page<Order> findAllByRestaurantInfoId(Long restaurantId, Pageable pageable);
+    Page<Order> findAllByCompanyId(Long companyId, Pageable pageable);
 
-    Optional<Order> findByIdAndRestaurantInfoId(Long orderId, Long restaurantId);
+    Optional<Order> findByIdAndCompanyId(Long orderId, Long companyId);
 
-    Long countAllByRestaurantInfoId(Long id);
+    Long countAllByCompanyId(Long id);
 
-    Long countAllByRestaurantInfoIdAndCreatedAtBetween(Long restaurantId, Long startDate, Long endDate);
-
-    Page<Order> findByRestaurantInfoIdAndCreatedAtBetween(Long restaurantId, Long startDate, Long endDate, Pageable pageable);
+    Page<Order> findByCompanyIdAndCreatedAtBetween(Long companyId, Long startDate, Long endDate, Pageable pageable);
 }

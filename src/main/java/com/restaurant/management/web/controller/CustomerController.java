@@ -1,8 +1,8 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.dto.CartDto;
-import com.restaurant.management.domain.dto.CustomerDto;
-import com.restaurant.management.domain.dto.OrderDto;
+import com.restaurant.management.domain.ecommerce.dto.CartDto;
+import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
+import com.restaurant.management.domain.ecommerce.dto.OrderDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.mapper.OrderMapper;

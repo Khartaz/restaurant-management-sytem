@@ -1,7 +1,6 @@
 package com.restaurant.management.domain.ecommerce;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.restaurant.management.domain.AbstractAuditing;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;

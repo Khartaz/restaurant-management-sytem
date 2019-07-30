@@ -1,6 +1,6 @@
 package com.restaurant.management.web.response;
 
-import com.restaurant.management.domain.RoleName;
+import com.restaurant.management.domain.ecommerce.RoleName;
 
 public final class RoleResponse {
 

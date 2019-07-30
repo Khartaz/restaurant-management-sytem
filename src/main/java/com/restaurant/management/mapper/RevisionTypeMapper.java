@@ -1,6 +1,6 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.dto.RevisionTypeDto;
+import com.restaurant.management.domain.ecommerce.dto.RevisionTypeDto;
 import org.hibernate.envers.RevisionType;
 import org.springframework.stereotype.Component;
 

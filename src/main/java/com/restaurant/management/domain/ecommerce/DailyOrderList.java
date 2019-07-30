@@ -1,7 +1,5 @@
 package com.restaurant.management.domain.ecommerce;
 
-import com.restaurant.management.domain.AbstractAuditing;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -27,7 +25,7 @@ public class DailyOrderList extends AbstractAuditing {
     private Set<Order> orders = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     public DailyOrderList(Long id, Double dailyIncome,
                           Integer numberOfOrders,
@@ -40,12 +38,12 @@ public class DailyOrderList extends AbstractAuditing {
     }
 
     public DailyOrderList(Double dailyIncome, Integer numberOfOrders,
-                          Boolean isOpen, Set<Order> orders, RestaurantInfo restaurantInfo) {
+                          Boolean isOpen, Set<Order> orders, Company company) {
         this.dailyIncome = dailyIncome;
         this.numberOfOrders = numberOfOrders;
         this.isOpen = isOpen;
         this.orders = orders;
-        this.restaurantInfo = restaurantInfo;
+        this.company = company;
     }
 
     public DailyOrderList() {
@@ -87,12 +85,12 @@ public class DailyOrderList extends AbstractAuditing {
         this.orders = orders;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public static class DailyOrderListBuilder {
@@ -100,7 +98,7 @@ public class DailyOrderList extends AbstractAuditing {
         private Integer numberOfOrders;
         private Boolean isOpen;
         private Set<Order> orders;
-        private RestaurantInfo restaurantInfo;
+        private Company company;
 
         public DailyOrderListBuilder setDailyIncome(Double dailyIncome) {
             this.dailyIncome = dailyIncome;
@@ -122,13 +120,13 @@ public class DailyOrderList extends AbstractAuditing {
             return this;
         }
 
-        public DailyOrderListBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
-            this.restaurantInfo = restaurantInfo;
+        public DailyOrderListBuilder setCompany(Company company) {
+            this.company = company;
             return this;
         }
 
         public DailyOrderList build() {
-            return new DailyOrderList(this.dailyIncome, this.numberOfOrders, this.isOpen, this.orders, this.restaurantInfo);
+            return new DailyOrderList(this.dailyIncome, this.numberOfOrders, this.isOpen, this.orders, this.company);
         }
     }
 }

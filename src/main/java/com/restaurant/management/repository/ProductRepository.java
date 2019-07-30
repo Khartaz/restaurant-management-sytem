@@ -1,7 +1,7 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.ecommerce.Product;
-import com.restaurant.management.domain.ecommerce.RestaurantInfo;
+import com.restaurant.management.domain.ecommerce.Company;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,19 +13,13 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Optional<Product> findByIdAndRestaurantInfoId(Long id, Long restaurantInfoId);
-
-    boolean existsByName(String name);
+    Optional<Product> findByIdAndCompanyId(Long id, Long companyId);
 
     void deleteProductById(Long id);
-
-    Optional<Product> findProductByName(String name);
 
     @Override
     Page<Product> findAll(Pageable pageable);
 
-    List<Product> findAllByName(String name, Pageable pageable);
-
-    Page<Product> findByRestaurantInfo(Pageable pageable, RestaurantInfo restaurantInfo);
+    Page<Product> findByCompany(Pageable pageable, Company company);
 
 }

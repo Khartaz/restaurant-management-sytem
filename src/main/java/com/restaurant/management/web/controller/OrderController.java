@@ -1,7 +1,7 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.dto.DailyOrderListDto;
-import com.restaurant.management.domain.dto.OrderDto;
+import com.restaurant.management.domain.ecommerce.dto.DailyOrderListDto;
+import com.restaurant.management.domain.ecommerce.dto.OrderDto;
 import com.restaurant.management.mapper.DailyOrderListMapper;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.security.CurrentUser;

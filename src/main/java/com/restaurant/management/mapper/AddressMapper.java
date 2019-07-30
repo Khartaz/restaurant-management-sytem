@@ -1,9 +1,9 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.CustomerAddress;
-import com.restaurant.management.domain.ecommerce.RestaurantAddress;
-import com.restaurant.management.domain.archive.CustomerArchiveAddress;
-import com.restaurant.management.domain.dto.AddressDto;
+import com.restaurant.management.domain.ecommerce.CompanyAddress;
+import com.restaurant.management.domain.ecommerce.archive.CustomerArchiveAddress;
+import com.restaurant.management.domain.ecommerce.dto.AddressDto;
 import com.restaurant.management.web.response.AddressResponse;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +24,8 @@ public final class AddressMapper {
         );
     }
 
-    public RestaurantAddress mapToRestaurantAddress(final AddressDto addressDto) {
-        return new RestaurantAddress(
+    public CompanyAddress mapToRestaurantAddress(final AddressDto addressDto) {
+        return new CompanyAddress(
                 addressDto.getCreatedAt(),
                 addressDto.getUpdatedAt(),
                 addressDto.getCreatedByUserId(),
@@ -52,17 +52,17 @@ public final class AddressMapper {
         );
     }
 
-    public AddressDto mapToAddressDto(final RestaurantAddress restaurantAddress) {
+    public AddressDto mapToAddressDto(final CompanyAddress companyAddress) {
         return new AddressDto(
-                restaurantAddress.getCreatedAt(),
-                restaurantAddress.getUpdatedAt(),
-                restaurantAddress.getCreatedByUserId(),
-                restaurantAddress.getUpdatedByUserId(),
-                restaurantAddress.getId(),
-                restaurantAddress.getStreetAndNumber(),
-                restaurantAddress.getPostCode(),
-                restaurantAddress.getCity(),
-                restaurantAddress.getCountry()
+                companyAddress.getCreatedAt(),
+                companyAddress.getUpdatedAt(),
+                companyAddress.getCreatedByUserId(),
+                companyAddress.getUpdatedByUserId(),
+                companyAddress.getId(),
+                companyAddress.getStreetAndNumber(),
+                companyAddress.getPostCode(),
+                companyAddress.getCity(),
+                companyAddress.getCountry()
         );
     }
 
@@ -80,17 +80,17 @@ public final class AddressMapper {
         );
     }
 
-    public AddressResponse mapToAddressResponse(final RestaurantAddress restaurantAddress) {
+    public AddressResponse mapToAddressResponse(final CompanyAddress companyAddress) {
         return new AddressResponse(
-                restaurantAddress.getCreatedAt(),
-                restaurantAddress.getUpdatedAt(),
-                restaurantAddress.getCreatedByUserId(),
-                restaurantAddress.getUpdatedByUserId(),
-                restaurantAddress.getId(),
-                restaurantAddress.getStreetAndNumber(),
-                restaurantAddress.getPostCode(),
-                restaurantAddress.getCity(),
-                restaurantAddress.getCountry()
+                companyAddress.getCreatedAt(),
+                companyAddress.getUpdatedAt(),
+                companyAddress.getCreatedByUserId(),
+                companyAddress.getUpdatedByUserId(),
+                companyAddress.getId(),
+                companyAddress.getStreetAndNumber(),
+                companyAddress.getPostCode(),
+                companyAddress.getCity(),
+                companyAddress.getCountry()
         );
     }
 

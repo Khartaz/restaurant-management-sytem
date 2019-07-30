@@ -16,7 +16,7 @@ public class SessionCart extends AbstractCart {
     private List<SessionLineItem> sessionLineItems = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     public SessionCart() {
     }
@@ -30,11 +30,11 @@ public class SessionCart extends AbstractCart {
 
     public SessionCart(Boolean isOpen, Double totalPrice,
                        Customer customer, List<SessionLineItem> sessionLineItems,
-                       RestaurantInfo restaurantInfo) {
+                       Company company) {
         super(isOpen, totalPrice);
         this.customer = customer;
         this.sessionLineItems = sessionLineItems;
-        this.restaurantInfo = restaurantInfo;
+        this.company = company;
     }
 
     public Customer getCustomer() {
@@ -53,12 +53,12 @@ public class SessionCart extends AbstractCart {
         this.sessionLineItems = sessionLineItems;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Double calculateTotalPriceOf(SessionCart sessionCart) {
@@ -75,7 +75,7 @@ public class SessionCart extends AbstractCart {
         private Double totalPrice;
         private Customer customer;
         private List<SessionLineItem> sessionLineItems;
-        private RestaurantInfo restaurantInfo;
+        private Company company;
 
         public SessionCartBuilder setIsOpen(Boolean isOpen) {
             this.isOpen = isOpen;
@@ -97,14 +97,14 @@ public class SessionCart extends AbstractCart {
             return this;
         }
 
-        public SessionCartBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
-            this.restaurantInfo = restaurantInfo;
+        public SessionCartBuilder setCompany(Company company) {
+            this.company = company;
             return this;
         }
 
         public SessionCart build() {
             return new SessionCart(this.isOpen, this.totalPrice, this.customer,
-                    this.sessionLineItems, this.restaurantInfo);
+                    this.sessionLineItems, this.company);
         }
     }
 }

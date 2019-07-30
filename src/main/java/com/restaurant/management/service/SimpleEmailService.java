@@ -1,6 +1,6 @@
 package com.restaurant.management.service;
 
-import com.restaurant.management.domain.Mail;
+import com.restaurant.management.domain.ecommerce.Mail;
 
 public interface SimpleEmailService {
 

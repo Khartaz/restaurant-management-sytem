@@ -1,16 +1,14 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogLogin;
-import com.restaurant.management.domain.AccountUser;
-import com.restaurant.management.domain.dto.AccountUserDto;
-import com.restaurant.management.domain.layout.Shortcut;
+import com.restaurant.management.domain.ecommerce.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.LayoutSettingsService;
 import com.restaurant.management.service.LayoutShortcutService;
 import com.restaurant.management.service.facade.AccountUserFacade;
-import com.restaurant.management.service.facade.RestaurantInfoAccountUserFacade;
+import com.restaurant.management.service.facade.CompanyAccountUserFacade;
 import com.restaurant.management.service.impl.LayoutSettingsServiceImpl;
 import com.restaurant.management.web.request.user.LoginRequest;
 import com.restaurant.management.web.request.user.SignUpUserRequest;
@@ -42,19 +40,19 @@ public class AccountUserController {
 
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
-    private RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade;
+    private CompanyAccountUserFacade companyAccountUserFacade;
     private LayoutSettingsService layoutSettingsService;
     private LayoutShortcutService layoutShortcutService;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
                                  AccountUserMapper accountUserMapper,
-                                 RestaurantInfoAccountUserFacade restaurantInfoAccountUserFacade,
+                                 CompanyAccountUserFacade companyAccountUserFacade,
                                  LayoutSettingsServiceImpl layoutSettingsService,
                                  LayoutShortcutService layoutShortcutService) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
-        this.restaurantInfoAccountUserFacade = restaurantInfoAccountUserFacade;
+        this.companyAccountUserFacade = companyAccountUserFacade;
         this.layoutSettingsService = layoutSettingsService;
         this.layoutShortcutService = layoutShortcutService;
     }
@@ -62,14 +60,14 @@ public class AccountUserController {
     @GetMapping(value = "/me")
     public @ResponseBody
     UserSummary getCurrentUserSummary(@CurrentUser UserPrincipal currentUser) {
-        return restaurantInfoAccountUserFacade.getUserSummary(currentUser);
+        return companyAccountUserFacade.getUserSummary(currentUser);
     }
 
     @LogLogin
     @PostMapping(value = "/login", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> authenticateUser2(@Valid @RequestBody LoginRequest loginRequest) {
         JwtAuthenticationResponse jwt = accountUserFacade.authenticateUser(loginRequest);
-        UserResponse userResponse = restaurantInfoAccountUserFacade.getUserDataFromJWT(jwt.getAccessToken());
+        UserResponse userResponse = companyAccountUserFacade.getUserDataFromJWT(jwt.getAccessToken());
 
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
@@ -137,13 +135,13 @@ public class AccountUserController {
     @GetMapping(value = "/userData", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     UserResponse getUserData(@CurrentUser UserPrincipal currentUser) {
-        return restaurantInfoAccountUserFacade.getUserData(currentUser);
+        return companyAccountUserFacade.getUserData(currentUser);
     }
 
     @PutMapping(value = "/userData/update", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     UserResponse updateUserData(@CurrentUser UserPrincipal currentUser, @RequestBody UserUpdateRequest userUpdateRequest) {
-        return restaurantInfoAccountUserFacade.updateUserDetails(currentUser, userUpdateRequest);
+        return companyAccountUserFacade.updateUserDetails(currentUser, userUpdateRequest);
     }
 
     @GetMapping(value = "/test", produces = APPLICATION_JSON_VALUE)

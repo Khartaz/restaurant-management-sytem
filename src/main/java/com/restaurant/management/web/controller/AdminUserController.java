@@ -1,7 +1,7 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogExecutionTime;
-import com.restaurant.management.domain.dto.AccountUserDto;
+import com.restaurant.management.domain.ecommerce.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.web.request.user.SignUpUserRequest;

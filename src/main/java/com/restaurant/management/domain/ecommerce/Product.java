@@ -15,7 +15,7 @@ public class Product extends AbstractProduct {
     private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     public Product() {
     }
@@ -35,10 +35,10 @@ public class Product extends AbstractProduct {
     }
 
     public Product(String name, String category,
-                   Double price, List<Ingredient> ingredients, RestaurantInfo restaurantInfo) {
+                   Double price, List<Ingredient> ingredients, Company company) {
         super(name, category, price);
         this.ingredients = ingredients;
-        this.restaurantInfo = restaurantInfo;
+        this.company = company;
     }
 
     public List<Ingredient> getIngredients() {
@@ -49,8 +49,8 @@ public class Product extends AbstractProduct {
         this.ingredients = ingredients;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
     public static class ProductBuilder {
@@ -58,7 +58,7 @@ public class Product extends AbstractProduct {
         private String category;
         private Double price;
         private List<Ingredient> ingredients;
-        private RestaurantInfo restaurantInfo;
+        private Company company;
 
         public ProductBuilder setName(String name) {
             this.name = name;
@@ -80,14 +80,14 @@ public class Product extends AbstractProduct {
             return this;
         }
 
-        public ProductBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
-            this.restaurantInfo = restaurantInfo;
+        public ProductBuilder setCompany(Company company) {
+            this.company = company;
             return this;
         }
 
         public Product build() {
             return new Product(this.name, this.category,
-                    this.price, this.ingredients, this.restaurantInfo);
+                    this.price, this.ingredients, this.company);
         }
     }
 

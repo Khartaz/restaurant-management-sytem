@@ -16,19 +16,15 @@ public interface SessionCartRepository extends JpaRepository<SessionCart, Long> 
 
     Optional<SessionCart> findByCustomer(Customer customer);
 
-    Optional<SessionCart> findSessionCartByCustomerId(Long id);
+    Optional<SessionCart> findSessionCartByCustomerIdAndCompanyId(Long customerId, Long companyId);
 
-    Optional<SessionCart> findSessionCartByCustomerIdAndRestaurantInfoId(Long customerId, Long restaurantId);
-
-    Optional<SessionCart> findByIdAndRestaurantInfoId(Long cartId, Long restaurantId);
-
-    boolean existsByCustomerAndIsOpenTrue(Customer customer);
+    Optional<SessionCart> findByIdAndCompanyId(Long cartId, Long companyId);
 
     boolean existsByCustomerIdAndIsOpenTrue(Long id);
 
     @Override
     Page<SessionCart> findAll(Pageable pageable);
 
-    Page<SessionCart> findAllByRestaurantInfoId(Long restaurantId, Pageable pageable);
+    Page<SessionCart> findAllByCompanyId(Long companyId, Pageable pageable);
 }
 

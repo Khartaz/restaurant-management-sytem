@@ -1,10 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.*;
-import com.restaurant.management.domain.ecommerce.Customer;
-import com.restaurant.management.domain.ecommerce.CustomerAddress;
-import com.restaurant.management.domain.ecommerce.RestaurantInfo;
-import com.restaurant.management.domain.ecommerce.SessionCart;
+import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
@@ -75,10 +71,10 @@ public class CustomerServiceImpl implements CustomerService {
 
         validatePhoneNumber(phoneNumber);
 
-        if (customerRepository.existsByPhoneNumberAndRestaurantInfoId(phoneNumber, restaurantId)) {
+        if (customerRepository.existsByPhoneNumberAndCompanyId(phoneNumber, restaurantId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
         }
-        if (customerRepository.existsByEmailAndRestaurantInfoId(email, restaurantId)) {
+        if (customerRepository.existsByEmailAndCompanyId(email, restaurantId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
         }
     }
@@ -86,13 +82,13 @@ public class CustomerServiceImpl implements CustomerService {
     public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        return customerRepository.findAllByRestaurantInfoId(pageable, restaurantId);
+        return customerRepository.findAllByCompanyId(pageable, restaurantId);
     }
 
     public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        Customer customer = customerRepository.findByIdAndRestaurantInfoId(customerId, restaurantId)
+        Customer customer = customerRepository.findByIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
 
         Optional<SessionCart> sessionCart = sessionCartRepository.findByCustomer(customer);
@@ -107,32 +103,32 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        return customerRepository.findByIdAndRestaurantInfoId(id, restaurantId)
+        return customerRepository.findByIdAndCompanyId(id, restaurantId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
-    private RestaurantInfo getRestaurantInfo(@CurrentUser UserPrincipal currentUser) {
+    private Company getRestaurantInfo(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        return accountUser.getRestaurantInfo();
+        return accountUser.getCompany();
     }
 
     public Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        return customerRepository.findAllByNameIsContainingAndRestaurantInfoId(name, restaurantId, pageable);
+        return customerRepository.findAllByNameIsContainingAndCompanyId(name, restaurantId, pageable);
     }
 
     public Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, String phoneNumber, Pageable pageable) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        return customerRepository.findAllByPhoneNumberIsContainingAndRestaurantInfoId(phoneNumber, restaurantId, pageable);
+        return customerRepository.findAllByPhoneNumberIsContainingAndCompanyId(phoneNumber, restaurantId, pageable);
     }
 
     public Page<Customer> getAllByLastnameWithin(@CurrentUser UserPrincipal currentUser, String lastname, Pageable pageable) {
         Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        return customerRepository.findAllByLastnameContainingAndRestaurantInfoId(lastname, restaurantId, pageable);
+        return customerRepository.findAllByLastnameContainingAndCompanyId(lastname, restaurantId, pageable);
     }
 }

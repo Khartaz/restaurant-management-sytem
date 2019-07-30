@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
 
-    Long countRestaurantOrders(@CurrentUser UserPrincipal currentUser);
+    Long countCompanyOrders(@CurrentUser UserPrincipal currentUser);
 
     Order processOrder(@CurrentUser UserPrincipal currentUser, Long customerId);
 

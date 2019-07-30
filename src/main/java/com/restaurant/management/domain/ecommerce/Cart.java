@@ -1,7 +1,7 @@
 package com.restaurant.management.domain.ecommerce;
 
-import com.restaurant.management.domain.archive.CustomerArchive;
-import com.restaurant.management.domain.archive.LineItemArchive;
+import com.restaurant.management.domain.ecommerce.archive.CustomerArchive;
+import com.restaurant.management.domain.ecommerce.archive.LineItemArchive;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Cart extends AbstractCart {
     private List<LineItemArchive> lineItems = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     public Cart() {
     }
@@ -32,11 +32,11 @@ public class Cart extends AbstractCart {
 
     public Cart(Boolean isOpen, Double totalPrice,
                 CustomerArchive customerArchive,
-                List<LineItemArchive> lineItems, RestaurantInfo restaurantInfo) {
+                List<LineItemArchive> lineItems, Company company) {
         super(isOpen, totalPrice);
         this.customerArchive = customerArchive;
         this.lineItems = lineItems;
-        this.restaurantInfo = restaurantInfo;
+        this.company = company;
     }
 
     public CustomerArchive getCustomerArchive() {
@@ -55,12 +55,12 @@ public class Cart extends AbstractCart {
         this.lineItems = lineItems;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public static class CartBuilder {
@@ -68,7 +68,7 @@ public class Cart extends AbstractCart {
         private Double totalPrice;
         private CustomerArchive customerArchive;
         private List<LineItemArchive> lineItems;
-        private RestaurantInfo restaurantInfo;
+        private Company company;
 
         public CartBuilder setIsOpen(Boolean isOpen) {
             this.isOpen = isOpen;
@@ -90,13 +90,13 @@ public class Cart extends AbstractCart {
             return this;
         }
 
-        public CartBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
-            this.restaurantInfo = restaurantInfo;
+        public CartBuilder setCompany(Company company) {
+            this.company = company;
             return this;
         }
 
         public Cart build() {
-            return new Cart(this.isOpen, this.totalPrice, this.customerArchive, this.lineItems, this.restaurantInfo);
+            return new Cart(this.isOpen, this.totalPrice, this.customerArchive, this.lineItems, this.company);
         }
     }
 }

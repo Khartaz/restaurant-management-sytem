@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.layout;
 
-import com.restaurant.management.domain.AccountUser;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 
 import javax.persistence.*;
 

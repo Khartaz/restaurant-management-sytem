@@ -1,8 +1,8 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.Role;
-import com.restaurant.management.domain.RoleName;
-import com.restaurant.management.domain.dto.RoleDto;
+import com.restaurant.management.domain.ecommerce.Role;
+import com.restaurant.management.domain.ecommerce.RoleName;
+import com.restaurant.management.domain.ecommerce.dto.RoleDto;
 import com.restaurant.management.web.response.RoleResponse;
 import org.springframework.stereotype.Component;
 

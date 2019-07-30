@@ -1,7 +1,5 @@
 package com.restaurant.management.domain.ecommerce;
 
-import com.restaurant.management.domain.AbstractAuditing;
-
 import javax.persistence.*;
 import java.util.Calendar;
 
@@ -32,7 +30,7 @@ public class Order extends AbstractAuditing {
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     public Order() {
     }
@@ -52,13 +50,13 @@ public class Order extends AbstractAuditing {
     public Order(String orderNumber,
                  OrderStatus orderStatus, Long assignedToUserId,
                  OrderType orderType, Cart cart,
-                 RestaurantInfo restaurantInfo) {
+                 Company company) {
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
         this.assignedToUserId = assignedToUserId;
         this.orderType = orderType;
         this.cart = cart;
-        this.restaurantInfo = restaurantInfo;
+        this.company = company;
     }
 
     public Long getId() {
@@ -89,12 +87,12 @@ public class Order extends AbstractAuditing {
         this.cart = cart;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Long getAssignedToUserId() {
@@ -128,7 +126,7 @@ public class Order extends AbstractAuditing {
         private Long assignedTo;
         private OrderType orderType;
         private Cart cart;
-        private RestaurantInfo restaurantInfo;
+        private Company company;
 
         public OrderBuilder setOrderNumber(String orderNumber) {
             this.orderNumber = orderNumber;
@@ -155,13 +153,13 @@ public class Order extends AbstractAuditing {
             return this;
         }
 
-        public OrderBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
-            this.restaurantInfo = restaurantInfo;
+        public OrderBuilder setCompany(Company company) {
+            this.company = company;
             return this;
         }
 
         public Order build() {
-            return new Order(this.orderNumber, this.orderStatus, this.assignedTo, this.orderType, this.cart, this.restaurantInfo);
+            return new Order(this.orderNumber, this.orderStatus, this.assignedTo, this.orderType, this.cart, this.company);
         }
     }
 

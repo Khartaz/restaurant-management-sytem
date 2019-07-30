@@ -10,7 +10,7 @@ public class SessionLineItem extends AbstractLineItem {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     public SessionLineItem() {
     }
@@ -28,11 +28,11 @@ public class SessionLineItem extends AbstractLineItem {
         this.product = product;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

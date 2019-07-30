@@ -1,8 +1,8 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.archive.LineItemArchive;
+import com.restaurant.management.domain.ecommerce.archive.LineItemArchive;
 import com.restaurant.management.domain.ecommerce.SessionLineItem;
-import com.restaurant.management.domain.dto.LineItemDto;
+import com.restaurant.management.domain.ecommerce.dto.LineItemDto;
 import com.restaurant.management.web.response.LineItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

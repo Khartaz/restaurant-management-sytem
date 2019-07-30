@@ -12,7 +12,7 @@ public final class UserDetailsResponse {
     private String photoURL;
     private String email;
     private String phoneNumber;
-//    private RestaurantInfoResponse restaurantInfoResponse;
+//    private CompanyResponse restaurantInfoResponse;
 
     public UserDetailsResponse() {
     }

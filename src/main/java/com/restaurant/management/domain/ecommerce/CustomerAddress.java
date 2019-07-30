@@ -1,7 +1,5 @@
 package com.restaurant.management.domain.ecommerce;
 
-import com.restaurant.management.domain.AbstractAddress;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 

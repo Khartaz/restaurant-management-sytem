@@ -2,7 +2,7 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.audit.query.AuditQueryResult;
 import com.restaurant.management.audit.query.AuditQueryUtils;
-import com.restaurant.management.domain.AccountUser;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.exception.user.UserMessages;
@@ -47,7 +47,7 @@ public class ProductHistoryServiceImpl implements ProductHistoryService {
         AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
 

@@ -1,6 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.AccountUser;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.DailyOrderList;
 import com.restaurant.management.domain.ecommerce.Order;
 import com.restaurant.management.exception.order.OrderListExistsException;
@@ -16,7 +16,7 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.DailyOrderListService;
 import com.restaurant.management.web.response.ApiResponse;
-import com.restaurant.management.web.response.restaurant.StatisticsReportResponse;
+import com.restaurant.management.web.response.company.StatisticsReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,31 +47,31 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
-    private Order getOrderByIdAndRestaurantId(Long orderId, Long restaurantId) {
-        return orderRepository.findByIdAndRestaurantInfoId(orderId, restaurantId)
+    private Order getOrderByIdAndCompanyId(Long orderId, Long companyId) {
+        return orderRepository.findByIdAndCompanyId(orderId, companyId)
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
     }
 
     public DailyOrderList getOrderListById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        return dailyOrderListRepository.findByIdAndRestaurantInfoId(orderListId, restaurantId)
+        return dailyOrderListRepository.findByIdAndCompanyId(orderListId, companyId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
     public Page<DailyOrderList> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         AccountUser accountUser = getUser(currentUser);
 
-        return dailyOrderListRepository.findAllByRestaurantInfoId(accountUser.getRestaurantInfo().getId(), pageable);
+        return dailyOrderListRepository.findAllByCompanyId(accountUser.getCompany().getId(), pageable);
     }
 
     public boolean checkDailyOrderListExists(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = getUser(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        return dailyOrderListRepository.existsByIsOpenTrueAndRestaurantInfoId(restaurantId);
+        return dailyOrderListRepository.existsByIsOpenTrueAndCompanyId(companyId);
     }
 
     public boolean openOrderList(@CurrentUser UserPrincipal currentUser) {
@@ -82,7 +82,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
                 .setNumberOfOrders(0)
                 .setIsOpen(Boolean.TRUE)
                 .setOrders(new LinkedHashSet<>())
-                .setRestaurantInfo(accountUser.getRestaurantInfo())
+                .setCompany(accountUser.getCompany())
                 .build();
 
         dailyOrderListRepository.save(orderList);
@@ -92,17 +92,17 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
 
     public DailyOrderList getOpenedOrderList(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        return dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndRestaurantInfoId(restaurantId)
+        return dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndCompanyId(companyId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
     public DailyOrderList addOrderToList(@CurrentUser UserPrincipal currentUser, Long orderId) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        Order order = getOrderByIdAndRestaurantId(orderId, restaurantId);
+        Order order = getOrderByIdAndCompanyId(orderId, companyId);
 
         DailyOrderList dailyOrderList = getOpenedOrderList(currentUser);
 
@@ -135,9 +135,9 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
 
     public DailyOrderList removeOrderFromList(@CurrentUser UserPrincipal currentUser, Long orderId) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        Order order = getOrderByIdAndRestaurantId(orderId, restaurantId);
+        Order order = getOrderByIdAndCompanyId(orderId, companyId);
 
         DailyOrderList dailyOrderList = getOpenedOrderList(currentUser);
 
@@ -168,9 +168,9 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
 
     public DailyOrderList closeDailyList(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndRestaurantInfoId(restaurantId)
+        DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndCompanyId(companyId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_OPEN.getMessage()));
 
         dailyOrderList.setIsOpen(Boolean.FALSE);
@@ -182,9 +182,9 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
 
     public ApiResponse deleteById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        DailyOrderList orderList = dailyOrderListRepository.findByIdAndRestaurantInfoId(orderListId, restaurantId)
+        DailyOrderList orderList = dailyOrderListRepository.findByIdAndCompanyId(orderListId, companyId)
                 .orElseThrow(() -> new OrderListExistsException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
 
         dailyOrderListRepository.delete(orderList);
@@ -194,9 +194,9 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
 
     public StatisticsReportResponse countDailyOrders(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = getUser(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long companyId = accountUser.getCompany().getId();
 
-        DailyOrderList dailyOrderList = dailyOrderListRepository.findByIsOpenIsTrueAndRestaurantInfoId(restaurantId);
+        DailyOrderList dailyOrderList = dailyOrderListRepository.findByIsOpenIsTrueAndCompanyId(companyId);
 
         Integer productsCount = dailyOrderList.getOrders().stream()
                 .mapToInt(v -> v.getCart()

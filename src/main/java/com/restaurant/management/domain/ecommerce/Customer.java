@@ -1,7 +1,5 @@
 package com.restaurant.management.domain.ecommerce;
 
-import com.restaurant.management.domain.AbstractUser;
-
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +7,7 @@ import javax.persistence.*;
 public class Customer extends AbstractUser {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RestaurantInfo restaurantInfo;
+    private Company company;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CustomerAddress customerAddress;
@@ -18,9 +16,9 @@ public class Customer extends AbstractUser {
     }
 
     public Customer(String name, String lastname, String email, String phoneNumber,
-                    RestaurantInfo restaurantInfo, CustomerAddress customerAddress) {
+                    Company company, CustomerAddress customerAddress) {
         super(name, lastname, email, phoneNumber);
-        this.restaurantInfo = restaurantInfo;
+        this.company = company;
         this.customerAddress = customerAddress;
     }
 
@@ -31,12 +29,12 @@ public class Customer extends AbstractUser {
         this.customerAddress = customerAddress;
     }
 
-    public RestaurantInfo getRestaurantInfo() {
-        return restaurantInfo;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRestaurantInfo(RestaurantInfo restaurantInfo) {
-        this.restaurantInfo = restaurantInfo;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public CustomerAddress getCustomerAddress() {
@@ -52,7 +50,7 @@ public class Customer extends AbstractUser {
         private String lastname;
         private String email;
         private String phoneNumber;
-        private RestaurantInfo restaurantInfo;
+        private Company company;
         private CustomerAddress customerAddress;
 
         public CustomerBuilder setName(String name) {
@@ -75,8 +73,8 @@ public class Customer extends AbstractUser {
             return this;
         }
 
-        public CustomerBuilder setRestaurantInfo(RestaurantInfo restaurantInfo) {
-            this.restaurantInfo = restaurantInfo;
+        public CustomerBuilder setRestaurantInfo(Company company) {
+            this.company = company;
             return this;
         }
 
@@ -87,7 +85,7 @@ public class Customer extends AbstractUser {
 
         public Customer build() {
             return new Customer(this.name, this.lastname, this.email,
-                    this.phoneNumber, this.restaurantInfo, this.customerAddress);
+                    this.phoneNumber, this.company, this.customerAddress);
         }
     }
 }

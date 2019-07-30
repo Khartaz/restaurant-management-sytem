@@ -3,7 +3,7 @@ package com.restaurant.management.web.controller;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.DailyOrderListFacade;
-import com.restaurant.management.web.response.restaurant.StatisticsReportResponse;
+import com.restaurant.management.web.response.company.StatisticsReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.dto.ProductDto;
-import com.restaurant.management.domain.dto.ProductHistoryDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;

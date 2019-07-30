@@ -1,6 +1,5 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.*;
 import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.exception.cart.CartExistsException;
 import com.restaurant.management.exception.cart.CartMessages;
@@ -58,17 +57,17 @@ public class SessionCartServiceImpl implements SessionCartService {
 
     public Optional<SessionCart> getSessionCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId);
+        return sessionCartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId);
     }
 
     public SessionCart getSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId)
+        return sessionCartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
     }
 
@@ -77,12 +76,12 @@ public class SessionCartServiceImpl implements SessionCartService {
 
         checkSessionCartStatus(customerId);
 
-        RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
+        Company company = getUserById(currentUser).getCompany();
 
         SessionCart newSessionCart = new SessionCart.SessionCartBuilder()
                 .setIsOpen(Boolean.TRUE)
                 .setCustomer(customer)
-                .setRestaurantInfo(restaurantInfo)
+                .setCompany(company)
                 .setTotalPrice(0.0)
                 .build();
 
@@ -115,7 +114,7 @@ public class SessionCartServiceImpl implements SessionCartService {
         sessionLineItem = Optional.of(new SessionLineItem());
         newSessionCart.getSessionLineItems().add(sessionLineItem.get());
 
-        sessionLineItem.get().setRestaurantInfo(getUserById(currentUser).getRestaurantInfo());
+        sessionLineItem.get().setCompany(getUserById(currentUser).getCompany());
         sessionLineItem.get().setProduct(product);
         sessionLineItem.get().setQuantity(request.getQuantity());
         sessionLineItem.get().setPrice(price);
@@ -179,17 +178,17 @@ public class SessionCartServiceImpl implements SessionCartService {
     public Page<SessionCart> getSessionCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findAllByRestaurantInfoId(restaurantId, pageable);
+        return sessionCartRepository.findAllByCompanyId(restaurantId, pageable);
     }
 
     public SessionCart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
+        return sessionCartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));
     }
 
@@ -226,7 +225,7 @@ public class SessionCartServiceImpl implements SessionCartService {
     private Customer getCustomerByIdAndRestaurantId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        return customerRepository.findByIdAndRestaurantInfoId(customerId, accountUser.getRestaurantInfo().getId())
+        return customerRepository.findByIdAndCompanyId(customerId, accountUser.getCompany().getId())
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
     }
 
@@ -238,18 +237,18 @@ public class SessionCartServiceImpl implements SessionCartService {
     }
 
     private boolean validateCustomer(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Long restaurantId = getUserById(currentUser).getRestaurantInfo().getId();
+        Long restaurantId = getUserById(currentUser).getCompany().getId();
 
-        if (!customerRepository.existsByIdAndRestaurantInfoId(customerId, restaurantId)) {
+        if (!customerRepository.existsByIdAndCompanyId(customerId, restaurantId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage());
         }
         return true;
     }
 
     private Product getProductById(@CurrentUser UserPrincipal currentUser, Long productId) {
-        Long restaurantId = getUserById(currentUser).getRestaurantInfo().getId();
+        Long restaurantId = getUserById(currentUser).getCompany().getId();
 
-        return productRepository.findByIdAndRestaurantInfoId(productId, restaurantId)
+        return productRepository.findByIdAndCompanyId(productId, restaurantId)
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
     }
 

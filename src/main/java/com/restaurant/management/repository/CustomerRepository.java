@@ -11,24 +11,24 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Boolean existsByPhoneNumberAndRestaurantInfoId(String phoneNumber, Long restaurantId);
+    Boolean existsByPhoneNumberAndCompanyId(String phoneNumber, Long companyId);
 
-    Boolean existsByEmailAndRestaurantInfoId(String email, Long restaurantId);
+    Boolean existsByEmailAndCompanyId(String email, Long companyId);
 
-    Boolean existsByIdAndRestaurantInfoId(Long id, Long restaurantId);
+    Boolean existsByIdAndCompanyId(Long id, Long companyId);
 
     Optional<Customer> findById(Long id);
 
-    Optional<Customer> findByIdAndRestaurantInfoId(Long id, Long restaurantId);
+    Optional<Customer> findByIdAndCompanyId(Long id, Long companyId);
 
     void deleteById(Long id);
 
-    Page<Customer> findAllByRestaurantInfoId(Pageable pageable, Long restaurantId);
+    Page<Customer> findAllByCompanyId(Pageable pageable, Long companyId);
 
-    Page<Customer> findAllByNameIsContainingAndRestaurantInfoId(String name, Long restaurantId, Pageable pageable);
+    Page<Customer> findAllByNameIsContainingAndCompanyId(String name, Long companyId, Pageable pageable);
 
-    Page<Customer> findAllByPhoneNumberIsContainingAndRestaurantInfoId(String phoneNumber, Long restaurantId, Pageable pageable);
+    Page<Customer> findAllByPhoneNumberIsContainingAndCompanyId(String phoneNumber, Long companyId, Pageable pageable);
 
-    Page<Customer> findAllByLastnameContainingAndRestaurantInfoId(String lastname, Long restaurantId, Pageable pageable);
+    Page<Customer> findAllByLastnameContainingAndCompanyId(String lastname, Long companyId, Pageable pageable);
 
 }

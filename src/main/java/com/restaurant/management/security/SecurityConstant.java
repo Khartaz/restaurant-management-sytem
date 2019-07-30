@@ -9,7 +9,7 @@ public final class SecurityConstant {
 //    public static final String TOKEN_PREFIX = "Bearer ";
 //    public static final String HEADER_STRING = "Authorization";
     public static final String AUTH_URL = "/api/auth/**";
-    public static final String RESTAURANT_REGISTER = "/api/restaurant/register";
+    public static final String RESTAURANT_REGISTER = "/api/company/register";
 //    public static final String CUSTOMER_URL = "/api/customers/**";
     public static final String ACCOUNT_URL = "/api/accounts/**";
 //    public static final String ADMIN_URL = "/api/admin/**";

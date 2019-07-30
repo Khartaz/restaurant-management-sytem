@@ -1,6 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.Mail;
+import com.restaurant.management.domain.ecommerce.Mail;
 import com.restaurant.management.service.MailCreatorService;
 import com.restaurant.management.service.SimpleEmailService;
 import org.slf4j.Logger;

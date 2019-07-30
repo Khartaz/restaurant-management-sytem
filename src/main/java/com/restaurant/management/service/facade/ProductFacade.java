@@ -1,8 +1,8 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.Product;
-import com.restaurant.management.domain.dto.ProductDto;
-import com.restaurant.management.domain.dto.ProductHistoryDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.security.CurrentUser;

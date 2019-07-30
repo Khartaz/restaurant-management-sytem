@@ -1,7 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.*;
-import com.restaurant.management.domain.archive.*;
+import com.restaurant.management.domain.ecommerce.archive.*;
 import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.exception.cart.CartMessages;
 import com.restaurant.management.exception.cart.CartNotFoundException;
@@ -44,17 +43,17 @@ public final class SessionCartToCartProcessor {
     }
 
     Cart processSessionCartToCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        RestaurantInfo restaurantInfo = getUserById(currentUser).getRestaurantInfo();
+        Company company = getUserById(currentUser).getCompany();
 
         SessionCart sessionCart = getRestaurantSessionCartByCustomerId(currentUser, customerId);
 
         Cart cart = mapToCart(sessionCart);
 
-        cart.setRestaurantInfo(restaurantInfo);
-        cart.getLineItems().forEach(v -> v.setRestaurantInfo(restaurantInfo));
+        cart.setCompany(company);
+        cart.getLineItems().forEach(v -> v.setRestaurantInfo(company));
 
         CustomerArchive customerArchive = cart.getCustomerArchive();
-        customerArchive.setRestaurantInfo(restaurantInfo);
+        customerArchive.setCompany(company);
 
         customerArchiveRepository.save(customerArchive);
 
@@ -62,7 +61,7 @@ public final class SessionCartToCartProcessor {
                 .map(LineItemArchive::getProduct)
                 .collect(Collectors.toList());
 
-        productArchives.forEach(v -> v.setRestaurantInfo(restaurantInfo));
+        productArchives.forEach(v -> v.setCompany(company));
 
         productArchiveRepository.saveAll(productArchives);
 
@@ -92,7 +91,7 @@ public final class SessionCartToCartProcessor {
                 .setLastname(sessionCart.getCustomer().getLastname())
                 .setEmail(sessionCart.getCustomer().getEmail())
                 .setPhoneNumber(sessionCart.getCustomer().getPhoneNumber())
-                .setRestaurantInfo(sessionCart.getCustomer().getRestaurantInfo())
+                .setCompany(sessionCart.getCustomer().getCompany())
                 .setCustomerArchiveAddress(address)
                 .build();
     }
@@ -139,9 +138,9 @@ public final class SessionCartToCartProcessor {
     private SessionCart getRestaurantSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId)
+        return sessionCartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
     }
 
@@ -157,9 +156,9 @@ public final class SessionCartToCartProcessor {
     private SessionCart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
+        return sessionCartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));
     }
 }

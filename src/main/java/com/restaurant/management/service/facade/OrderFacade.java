@@ -1,7 +1,7 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.Order;
-import com.restaurant.management.domain.dto.OrderDto;
+import com.restaurant.management.domain.ecommerce.dto.OrderDto;
 import com.restaurant.management.mapper.OrderMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -59,7 +59,7 @@ public final class OrderFacade {
     }
 
     public Long countRestaurantOrders(@CurrentUser UserPrincipal currentUser) {
-        return orderService.countRestaurantOrders(currentUser);
+        return orderService.countCompanyOrders(currentUser);
     }
 
     public Page<OrderDto> getAllOfCurrentYear(@CurrentUser UserPrincipal currentUser, Pageable pageable) {

@@ -1,6 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Ingredient;
 import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.SessionLineItem;
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
                 .setCategory(request.getCategory())
                 .setPrice(price)
                 .setIngredients(ingredients)
-                .setRestaurantInfo(accountUser.getRestaurantInfo())
+                .setCompany(accountUser.getCompany())
                 .build();
 
         productRepository.save(newProduct);
@@ -95,9 +95,9 @@ public class ProductServiceImpl implements ProductService {
 
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return productRepository.findByIdAndRestaurantInfoId(productId, restaurantId)
+        return productRepository.findByIdAndCompanyId(productId, restaurantId)
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productId));
     }
 
@@ -105,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
 
         AccountUser accountUser = getUserById(currentUser);
 
-        return productRepository.findByRestaurantInfo(pageable, accountUser.getRestaurantInfo());
+        return productRepository.findByCompany(pageable, accountUser.getCompany());
     }
 
     public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {

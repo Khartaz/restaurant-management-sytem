@@ -1,6 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.AccountUser;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.layout.Shortcut;
 import com.restaurant.management.exception.NotFoundException;
 import com.restaurant.management.repository.layout.LayoutShortcutRepository;

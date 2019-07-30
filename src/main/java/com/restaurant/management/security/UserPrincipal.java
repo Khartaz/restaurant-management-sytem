@@ -1,7 +1,7 @@
 package com.restaurant.management.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.restaurant.management.domain.AccountUser;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

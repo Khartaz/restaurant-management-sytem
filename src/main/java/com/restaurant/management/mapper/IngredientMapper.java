@@ -1,8 +1,8 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.Ingredient;
-import com.restaurant.management.domain.archive.IngredientArchive;
-import com.restaurant.management.domain.dto.IngredientDto;
+import com.restaurant.management.domain.ecommerce.archive.IngredientArchive;
+import com.restaurant.management.domain.ecommerce.dto.IngredientDto;
 import com.restaurant.management.web.request.product.IngredientRequest;
 import com.restaurant.management.web.response.IngredientResponse;
 import org.springframework.stereotype.Component;

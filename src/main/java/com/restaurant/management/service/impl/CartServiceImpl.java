@@ -1,6 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.*;
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Cart;
 import com.restaurant.management.domain.ecommerce.SessionCart;
 import com.restaurant.management.exception.cart.CartMessages;
@@ -48,9 +48,9 @@ public class CartServiceImpl implements CartService {
     private SessionCart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
+        return sessionCartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));
     }
 
@@ -66,9 +66,9 @@ public class CartServiceImpl implements CartService {
     private SessionCart getRestaurantSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return sessionCartRepository.findSessionCartByCustomerIdAndRestaurantInfoId(customerId, restaurantId)
+        return sessionCartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
     }
 
@@ -79,17 +79,17 @@ public class CartServiceImpl implements CartService {
     public Page<Cart> getAllCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return cartRepository.findAllByRestaurantInfoId(restaurantId, pageable);
+        return cartRepository.findAllByCompanyId(restaurantId, pageable);
     }
 
     public Cart getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getRestaurantInfo().getId();
+        Long restaurantId = accountUser.getCompany().getId();
 
-        return cartRepository.findByIdAndRestaurantInfoId(cartId, restaurantId)
+        return cartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage()));
     }
 

@@ -3,16 +3,11 @@ package com.restaurant.management.domain.ecommerce;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
 @Audited
 public class Product extends AbstractProduct {
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Company company;
@@ -23,30 +18,19 @@ public class Product extends AbstractProduct {
     public Product(Long createdAt, Long updatedAt,
                    String createdByUserId, String updatedByUserId,
                    Long id, String name, String category,
-                   Double price, List<Ingredient> ingredients) {
+                   Double price) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, category, price);
-        this.ingredients = ingredients;
     }
 
     public Product(Long id, String name, String category,
-                   Double price, List<Ingredient> ingredients) {
+                   Double price) {
         super(id, name, category, price);
-        this.ingredients = ingredients;
     }
 
     public Product(String name, String category,
-                   Double price, List<Ingredient> ingredients, Company company) {
+                   Double price, Company company) {
         super(name, category, price);
-        this.ingredients = ingredients;
         this.company = company;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
     }
 
     public Company getCompany() {
@@ -57,7 +41,6 @@ public class Product extends AbstractProduct {
         private String name;
         private String category;
         private Double price;
-        private List<Ingredient> ingredients;
         private Company company;
 
         public ProductBuilder setName(String name) {
@@ -75,11 +58,6 @@ public class Product extends AbstractProduct {
             return this;
         }
 
-        public ProductBuilder setIngredients(List<Ingredient> ingredients) {
-            this.ingredients = ingredients;
-            return this;
-        }
-
         public ProductBuilder setCompany(Company company) {
             this.company = company;
             return this;
@@ -87,7 +65,7 @@ public class Product extends AbstractProduct {
 
         public Product build() {
             return new Product(this.name, this.category,
-                    this.price, this.ingredients, this.company);
+                    this.price, this.company);
         }
     }
 

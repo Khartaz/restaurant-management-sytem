@@ -13,9 +13,6 @@ import java.util.List;
 @Audited
 public class ProductArchive extends AbstractProduct {
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<IngredientArchive> ingredients = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Company company;
 
@@ -25,30 +22,17 @@ public class ProductArchive extends AbstractProduct {
     public ProductArchive(Long createdAt, Long updatedAt,
                           String createdByUserId, String updatedByUserId,
                           Long id, String name, String category,
-                          Double price, List<IngredientArchive> ingredients) {
+                          Double price) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, category, price);
-        this.ingredients = ingredients;
     }
 
-    public ProductArchive(String name, String category, Double price,
-                          List<IngredientArchive> ingredients, Company company) {
+    public ProductArchive(String name, String category, Double price, Company company) {
         super(name, category, price);
-        this.ingredients = ingredients;
         this.company = company;
     }
 
-    public ProductArchive(String name, String category, Double price,
-                          List<IngredientArchive> ingredients) {
+    public ProductArchive(String name, String category, Double price) {
         super(name, category, price);
-        this.ingredients = ingredients;
-    }
-
-    public List<IngredientArchive> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<IngredientArchive> ingredients) {
-        this.ingredients = ingredients;
     }
 
     public Company getCompany() {
@@ -63,16 +47,10 @@ public class ProductArchive extends AbstractProduct {
         private String name;
         private String category;
         private Double price;
-        private List<IngredientArchive> ingredients = new ArrayList<>();
         private Company company;
 
         public ProductArchiveBuilder setName(String name) {
             this.name = name;
-            return this;
-        }
-
-        public ProductArchiveBuilder setIngredientsList(List<IngredientArchive> ingredients) {
-            this.ingredients = ingredients;
             return this;
         }
 
@@ -92,7 +70,7 @@ public class ProductArchive extends AbstractProduct {
         }
 
         public ProductArchive build() {
-            return new ProductArchive(this.name, this.category, this.price, this.ingredients, this.company);
+            return new ProductArchive(this.name, this.category, this.price, this.company);
         }
     }
 }

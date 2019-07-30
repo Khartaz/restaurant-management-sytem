@@ -1,14 +1,12 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.Ingredient;
 import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.SessionLineItem;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.mapper.IngredientMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.SessionLineItemRepository;
 import com.restaurant.management.repository.ProductRepository;
@@ -32,17 +30,14 @@ import java.util.stream.Stream;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
-    private IngredientMapper ingredientMapper;
     private SessionLineItemRepository sessionLineItemRepository;
     private AccountUserRepository accountUserRepository;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
-                              IngredientMapper ingredientMapper,
                               SessionLineItemRepository sessionLineItemRepository,
                               AccountUserRepository accountUserRepository) {
         this.productRepository = productRepository;
-        this.ingredientMapper = ingredientMapper;
         this.sessionLineItemRepository = sessionLineItemRepository;
         this.accountUserRepository = accountUserRepository;
     }
@@ -56,8 +51,6 @@ public class ProductServiceImpl implements ProductService {
 
         AccountUser accountUser = getUserById(currentUser);
 
-        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(request.getIngredients());
-
         double price = request.getPrice();
         price = Math.floor(price * 100) / 100;
 
@@ -65,7 +58,6 @@ public class ProductServiceImpl implements ProductService {
                 .setName(request.getName())
                 .setCategory(request.getCategory())
                 .setPrice(price)
-                .setIngredients(ingredients)
                 .setCompany(accountUser.getCompany())
                 .build();
 
@@ -77,13 +69,10 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser) {
         Product product = getRestaurantProductById(productRequest.getId(), currentUser);
 
-        List<Ingredient> ingredients = ingredientMapper.mapToIngredientListFromRequest(productRequest.getIngredients());
-
         Stream.of(product).forEach(p -> {
             p.setName(productRequest.getName());
             p.setPrice(productRequest.getPrice());
             p.setCategory(productRequest.getCategory());
-            p.setIngredients(ingredients);
         });
 
         productRepository.save(product);

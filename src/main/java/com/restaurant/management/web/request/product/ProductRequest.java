@@ -18,19 +18,15 @@ public final class ProductRequest {
     @NotNull(message = "price cannot be null")
     private double price;
 
-    @NotNull(message = "ingredients cannot be null")
-    private List<IngredientRequest> ingredients;
-
     public ProductRequest() {
     }
 
     public ProductRequest(Long id, String name, String category,
-                          double price, List<IngredientRequest> ingredients) {
+                          Double price) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
-        this.ingredients = ingredients;
     }
 
     public Long getId() {
@@ -49,7 +45,4 @@ public final class ProductRequest {
         return price;
     }
 
-    public List<IngredientRequest> getIngredients() {
-        return ingredients;
-    }
 }

@@ -117,16 +117,7 @@ public final class SessionCartToCartProcessor {
         return new ProductArchive(
                 product.getName(),
                 product.getCategory(),
-                product.getPrice(),
-                product.getIngredients().stream()
-                        .map(this::mapToIngredientArchive)
-                        .collect(Collectors.toList())
-        );
-    }
-
-    private IngredientArchive mapToIngredientArchive(final Ingredient ingredient) {
-        return new IngredientArchive(
-                ingredient.getName()
+                product.getPrice()
         );
     }
 

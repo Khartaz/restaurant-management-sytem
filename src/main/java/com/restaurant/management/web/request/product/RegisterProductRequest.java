@@ -13,20 +13,15 @@ public final class RegisterProductRequest {
     private String category;
 
     @NotNull(message = "price cannot be null")
-    private double price;
-
-    @NotNull(message = "ingredients cannot be null")
-    private List<IngredientRequest> ingredients;
+    private Double price;
 
     public RegisterProductRequest() {
     }
 
-    public RegisterProductRequest(String name, String category,
-                                  double price,List<IngredientRequest> ingredients) {
+    public RegisterProductRequest(String name, String category, Double price) {
         this.name = name;
         this.category = category;
         this.price = price;
-        this.ingredients = ingredients;
     }
 
     public String getName() {
@@ -41,7 +36,4 @@ public final class RegisterProductRequest {
         return price;
     }
 
-    public List<IngredientRequest> getIngredients() {
-        return ingredients;
-    }
 }

@@ -18,13 +18,10 @@ import java.util.stream.Collectors;
 @SuppressWarnings("Duplicates")
 public final class ProductMapper {
 
-    private IngredientMapper ingredientMapper;
     private RevisionTypeMapper revisionTypeMapper;
 
     @Autowired
-    public ProductMapper(IngredientMapper ingredientMapper,
-                         RevisionTypeMapper revisionTypeMapper) {
-        this.ingredientMapper = ingredientMapper;
+    public ProductMapper(RevisionTypeMapper revisionTypeMapper) {
         this.revisionTypeMapper = revisionTypeMapper;
     }
 
@@ -37,10 +34,7 @@ public final class ProductMapper {
                 productDto.getId(),
                 productDto.getName(),
                 productDto.getCategory(),
-                productDto.getPrice(),
-                productDto.getIngredients().stream()
-                        .map(v -> ingredientMapper.mapToIngredient(v))
-                        .collect(Collectors.toList())
+                productDto.getPrice()
         );
     }
 
@@ -53,10 +47,7 @@ public final class ProductMapper {
                 product.getId(),
                 product.getName(),
                 product.getCategory(),
-                product.getPrice(),
-                product.getIngredients().stream()
-                        .map(v -> ingredientMapper.mapToIngredientArchive(v))
-                        .collect(Collectors.toList())
+                product.getPrice()
         );
     }
 
@@ -69,10 +60,7 @@ public final class ProductMapper {
                 productDto.getId(),
                 productDto.getName(),
                 productDto.getCategory(),
-                productDto.getPrice(),
-                productDto.getIngredients().stream()
-                        .map(v -> ingredientMapper.mapToIngredientArchive(v))
-                        .collect(Collectors.toList())
+                productDto.getPrice()
         );
     }
 
@@ -85,10 +73,7 @@ public final class ProductMapper {
                 product.getId(),
                 product.getName(),
                 product.getCategory(),
-                product.getPrice(),
-                product.getIngredients().stream()
-                        .map(v -> ingredientMapper.mapToIngredientDto(v))
-                        .collect(Collectors.toList())
+                product.getPrice()
         );
     }
 
@@ -101,10 +86,7 @@ public final class ProductMapper {
                 productArchive.getId(),
                 productArchive.getName(),
                 productArchive.getCategory(),
-                productArchive.getPrice(),
-                productArchive.getIngredients().stream()
-                        .map(v -> ingredientMapper.mapToIngredientDto(v))
-                        .collect(Collectors.toList())
+                productArchive.getPrice()
         );
     }
 
@@ -117,10 +99,7 @@ public final class ProductMapper {
                 productDto.getId(),
                 productDto.getName(),
                 productDto.getCategory(),
-                productDto.getPrice(),
-                productDto.getIngredients().stream()
-                        .map(v -> ingredientMapper.mapToIngredientResponse(v))
-                        .collect(Collectors.toList())
+                productDto.getPrice()
         );
     }
 

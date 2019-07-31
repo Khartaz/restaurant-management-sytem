@@ -1,11 +1,11 @@
 package com.restaurant.management.service.facade;
 
-import com.restaurant.management.domain.ecommerce.Cart;
+import com.restaurant.management.domain.ecommerce.CartOrdered;
 import com.restaurant.management.domain.ecommerce.dto.CartDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.CartService;
+import com.restaurant.management.service.CartOrderedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,25 +14,25 @@ import org.springframework.stereotype.Component;
 @Component
 public final class CartFacade {
     private CartMapper cartMapper;
-    private CartService cartService;
+    private CartOrderedService cartOrderedService;
 
     @Autowired
     public CartFacade(CartMapper cartMapper,
-                      CartService cartService) {
+                      CartOrderedService cartOrderedService) {
         this.cartMapper = cartMapper;
-        this.cartService = cartService;
+        this.cartOrderedService = cartOrderedService;
     }
 
     public Page<CartDto> getAllCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        Page<Cart> carts = cartService.getAllCarts(currentUser, pageable);
+        Page<CartOrdered> carts = cartOrderedService.getAllCarts(currentUser, pageable);
 
         return cartMapper.mapToCartDtoPage(carts);
     }
 
     public CartDto getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
-        Cart cart = cartService.getCartById(currentUser, cartId);
+        CartOrdered cartOrdered = cartOrderedService.getCartById(currentUser, cartId);
 
-        return cartMapper.mapToCartDto(cart);
+        return cartMapper.mapToCartDto(cartOrdered);
     }
 
 }

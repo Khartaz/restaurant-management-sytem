@@ -1,57 +1,55 @@
 package com.restaurant.management.domain.ecommerce;
 
-import com.restaurant.management.domain.ecommerce.archive.CustomerArchive;
-import com.restaurant.management.domain.ecommerce.archive.LineItemArchive;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "carts")
 public class Cart extends AbstractCart {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private CustomerArchive customerArchive;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private Customer customer;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<LineItemArchive> lineItems = new ArrayList<>();
+    private List<LineItem> lineItems = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Company company;
 
     public Cart() {
     }
 
-    public Cart(Boolean isOpen, Double totalPrice,
-                CustomerArchive customerArchive, List<LineItemArchive> lineItems) {
-        super(isOpen, totalPrice);
-        this.customerArchive = customerArchive;
+    public Cart(Long id, Boolean isOpen, Double totalPrice,
+                Customer customer, List<LineItem> lineItems) {
+        super(id, isOpen, totalPrice);
+        this.customer = customer;
         this.lineItems = lineItems;
     }
 
     public Cart(Boolean isOpen, Double totalPrice,
-                CustomerArchive customerArchive,
-                List<LineItemArchive> lineItems, Company company) {
+                Customer customer, List<LineItem> lineItems,
+                Company company) {
         super(isOpen, totalPrice);
-        this.customerArchive = customerArchive;
+        this.customer = customer;
         this.lineItems = lineItems;
         this.company = company;
     }
 
-    public CustomerArchive getCustomerArchive() {
-        return customerArchive;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerArchive(CustomerArchive customerArchive) {
-        this.customerArchive = customerArchive;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public List<LineItemArchive> getLineItems() {
+    public List<LineItem> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<LineItemArchive> lineItems) {
+    public void setLineItems(List<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
 
@@ -63,11 +61,20 @@ public class Cart extends AbstractCart {
         this.company = company;
     }
 
+    public Double calculateTotalPriceOf(Cart cart) {
+        double price = Stream.of(cart.getLineItems())
+                .flatMapToDouble(v -> v.stream()
+                        .mapToDouble(AbstractLineItem::getPrice))
+                .sum();
+
+        return Math.floor(price * 100) / 100;
+    }
+
     public static class CartBuilder {
         private Boolean isOpen;
         private Double totalPrice;
-        private CustomerArchive customerArchive;
-        private List<LineItemArchive> lineItems;
+        private Customer customer;
+        private List<LineItem> lineItems;
         private Company company;
 
         public CartBuilder setIsOpen(Boolean isOpen) {
@@ -80,12 +87,12 @@ public class Cart extends AbstractCart {
             return this;
         }
 
-        public CartBuilder setCustomerArchive(CustomerArchive customerArchive) {
-            this.customerArchive = customerArchive;
+        public CartBuilder setCustomer(Customer customer) {
+            this.customer = customer;
             return this;
         }
 
-        public CartBuilder setLineItems(List<LineItemArchive> lineItems) {
+        public CartBuilder setLineItems(List<LineItem> lineItems) {
             this.lineItems = lineItems;
             return this;
         }
@@ -96,7 +103,8 @@ public class Cart extends AbstractCart {
         }
 
         public Cart build() {
-            return new Cart(this.isOpen, this.totalPrice, this.customerArchive, this.lineItems, this.company);
+            return new Cart(this.isOpen, this.totalPrice, this.customer,
+                    this.lineItems, this.company);
         }
     }
 }

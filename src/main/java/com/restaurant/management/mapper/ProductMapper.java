@@ -1,7 +1,7 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.Product;
-import com.restaurant.management.domain.ecommerce.archive.ProductArchive;
+import com.restaurant.management.domain.ecommerce.ProductOrdered;
 import com.restaurant.management.domain.ecommerce.dto.ProductDto;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.dto.RevisionTypeDto;
@@ -38,8 +38,8 @@ public final class ProductMapper {
         );
     }
 
-    public ProductArchive mapToProductArchive(final Product product) {
-        return new ProductArchive(
+    public ProductOrdered mapToProductOrdered(final Product product) {
+        return new ProductOrdered(
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 product.getCreatedByUserId(),
@@ -51,8 +51,8 @@ public final class ProductMapper {
         );
     }
 
-    public ProductArchive mapToProductArchive(final ProductDto productDto) {
-        return new ProductArchive(
+    public ProductOrdered mapToProductOrdered(final ProductDto productDto) {
+        return new ProductOrdered(
                 productDto.getCreatedAt(),
                 productDto.getUpdatedAt(),
                 productDto.getCreatedByUserId(),
@@ -77,16 +77,16 @@ public final class ProductMapper {
         );
     }
 
-    public ProductDto mapToProductDto(final ProductArchive productArchive) {
+    public ProductDto mapToProductDto(final ProductOrdered productOrdered) {
         return new ProductDto(
-                productArchive.getCreatedAt(),
-                productArchive.getUpdatedAt(),
-                productArchive.getCreatedByUserId(),
-                productArchive.getUpdatedByUserId(),
-                productArchive.getId(),
-                productArchive.getName(),
-                productArchive.getCategory(),
-                productArchive.getPrice()
+                productOrdered.getCreatedAt(),
+                productOrdered.getUpdatedAt(),
+                productOrdered.getCreatedByUserId(),
+                productOrdered.getUpdatedByUserId(),
+                productOrdered.getId(),
+                productOrdered.getName(),
+                productOrdered.getCategory(),
+                productOrdered.getPrice()
         );
     }
 

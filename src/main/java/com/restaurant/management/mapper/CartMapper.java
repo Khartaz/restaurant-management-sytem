@@ -1,14 +1,13 @@
 package com.restaurant.management.mapper;
 
+import com.restaurant.management.domain.ecommerce.CartOrdered;
 import com.restaurant.management.domain.ecommerce.Cart;
-import com.restaurant.management.domain.ecommerce.SessionCart;
 import com.restaurant.management.domain.ecommerce.dto.CartDto;
 import com.restaurant.management.web.response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,8 +22,8 @@ public final class CartMapper {
         this.lineItemMapper = lineItemMapper;
     }
 
-    public SessionCart mapToSessionCart(final CartDto cartDto) {
-        return new SessionCart(
+    public Cart mapToCart(final CartDto cartDto) {
+        return new Cart(
                 cartDto.getId(),
                 cartDto.isOpen(),
                 cartDto.getTotalPrice(),
@@ -35,25 +34,25 @@ public final class CartMapper {
         );
     }
 
-    public CartDto mapToCartDto(SessionCart sessionCart) {
+    public CartDto mapToCartDto(Cart cart) {
         return new CartDto(
-                sessionCart.getId(),
-                sessionCart.isOpen(),
-                sessionCart.getTotalPrice(),
-                customerMapper.mapToCustomerDto(sessionCart.getCustomer()),
-                sessionCart.getSessionLineItems().stream()
+                cart.getId(),
+                cart.isOpen(),
+                cart.getTotalPrice(),
+                customerMapper.mapToCustomerDto(cart.getCustomer()),
+                cart.getLineItems().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
                         collect(Collectors.toList())
         );
     }
 
-    public CartDto mapToCartDto(final Cart cart) {
+    public CartDto mapToCartDto(final CartOrdered cartOrdered) {
         return new CartDto(
-                cart.getId(),
-                cart.isOpen(),
-                cart.getTotalPrice(),
-                customerMapper.mapToCustomerDto(cart.getCustomerArchive()),
-                cart.getLineItems().stream()
+                cartOrdered.getId(),
+                cartOrdered.isOpen(),
+                cartOrdered.getTotalPrice(),
+                customerMapper.mapToCustomerDto(cartOrdered.getCustomerOrdered()),
+                cartOrdered.getLineItemsOrdered().stream()
                         .map(v -> lineItemMapper.mapToLineItemDto(v)).
                         collect(Collectors.toList())
         );
@@ -71,65 +70,37 @@ public final class CartMapper {
         );
     }
 
-    public Cart mapToCart(SessionCart sessionCart) {
-        return new Cart(
-                sessionCart.isOpen(),
-                sessionCart.getTotalPrice(),
-                customerMapper.mapToCustomerArchive(sessionCart.getCustomer()),
-                sessionCart.getSessionLineItems().stream()
-                        .map(v -> lineItemMapper.mapToLineItemArchive(v))
+    public CartOrdered mapToCartOrdered(Cart cart) {
+        return new CartOrdered(
+                cart.isOpen(),
+                cart.getTotalPrice(),
+                customerMapper.mapToCustomerOrdered(cart.getCustomer()),
+                cart.getLineItems().stream()
+                        .map(v -> lineItemMapper.mapToLineItemOrdered(v))
                         .collect(Collectors.toList())
         );
     }
 
-    public Cart mapToCart(CartDto cartDto) {
-        return new Cart(
+    public CartOrdered mapToCartOrdered(CartDto cartDto) {
+        return new CartOrdered(
                 cartDto.isOpen(),
                 cartDto.getTotalPrice(),
-                customerMapper.mapToCustomerArchive(cartDto.getCustomer()),
+                customerMapper.mapToCustomerOrdered(cartDto.getCustomer()),
                 cartDto.getLineItems().stream()
-                        .map(v -> lineItemMapper.mapToLineItemArchive(v))
+                        .map(v -> lineItemMapper.mapToLineItemOrdered(v))
                         .collect(Collectors.toList())
         );
     }
 
-    public List<CartDto> mapToCartDtoList(final List<Cart> carts) {
-        return carts.stream()
-                .map(this::mapToCartDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<CartDto> mapSessionCartToCartDtoList(final List<SessionCart> sessionCarts) {
-        return sessionCarts.stream()
-                .map(this::mapToCartDto)
-                .collect(Collectors.toList());
-    }
-
-    public Page<CartDto> mapToCartDtoPage(final Page<Cart> carts) {
+    public Page<CartDto> mapToCartDtoPage(final Page<CartOrdered> carts) {
         return carts.map(this::mapToCartDto);
-    }
-
-    public List<CartResponse> mapToCartResponseList(final List<CartDto> carts) {
-        return carts.stream()
-                .map(this::mapToCartResponse)
-                .collect(Collectors.toList());
     }
 
     public Page<CartResponse> mapToCartResponsePage(final Page<CartDto> carts) {
         return carts.map(this::mapToCartResponse);
     }
 
-    public List<SessionCart> mapToSessionCartList(final List<CartDto> carts) {
-        return carts.stream()
-                .map(this::mapToSessionCart)
-                .collect(Collectors.toList());
-    }
-
-    public Page<SessionCart> mapToSessionCartPage(final Page<CartDto> carts) {
-        return carts.map(this::mapToSessionCart);
-    }
-
-    public Page<CartDto> mapToCartDto(final Page<SessionCart> sessionCarts) {
+    public Page<CartDto> mapToCartDto(final Page<Cart> sessionCarts) {
         return sessionCarts.map(this::mapToCartDto);
     }
 

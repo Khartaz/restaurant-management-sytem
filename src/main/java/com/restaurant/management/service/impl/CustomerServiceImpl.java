@@ -7,7 +7,7 @@ import com.restaurant.management.exception.customer.CustomerNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.AccountUserRepository;
-import com.restaurant.management.repository.SessionCartRepository;
+import com.restaurant.management.repository.CartRepository;
 import com.restaurant.management.repository.CustomerRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -28,15 +28,15 @@ import static com.restaurant.management.utils.Validation.validatePhoneNumber;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
-    private SessionCartRepository sessionCartRepository;
+    private CartRepository cartRepository;
     private AccountUserRepository accountUserRepository;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository,
-                               SessionCartRepository sessionCartRepository,
+                               CartRepository cartRepository,
                                AccountUserRepository accountUserRepository) {
         this.customerRepository = customerRepository;
-        this.sessionCartRepository = sessionCartRepository;
+        this.cartRepository = cartRepository;
         this.accountUserRepository = accountUserRepository;
     }
 
@@ -91,9 +91,9 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findByIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
 
-        Optional<SessionCart> sessionCart = sessionCartRepository.findByCustomer(customer);
+        Optional<Cart> sessionCart = cartRepository.findByCustomer(customer);
 
-        sessionCart.ifPresent(s -> sessionCartRepository.delete(s));
+        sessionCart.ifPresent(s -> cartRepository.delete(s));
 
         customerRepository.deleteById(customer.getId());
 

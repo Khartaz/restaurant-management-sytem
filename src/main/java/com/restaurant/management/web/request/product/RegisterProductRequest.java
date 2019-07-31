@@ -2,7 +2,6 @@ package com.restaurant.management.web.request.product;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 public final class RegisterProductRequest {
 

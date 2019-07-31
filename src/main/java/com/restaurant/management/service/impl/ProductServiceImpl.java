@@ -2,13 +2,13 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Product;
-import com.restaurant.management.domain.ecommerce.SessionLineItem;
+import com.restaurant.management.domain.ecommerce.LineItem;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.AccountUserRepository;
-import com.restaurant.management.repository.SessionLineItemRepository;
+import com.restaurant.management.repository.LineItemRepository;
 import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -30,15 +30,15 @@ import java.util.stream.Stream;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
-    private SessionLineItemRepository sessionLineItemRepository;
+    private LineItemRepository lineItemRepository;
     private AccountUserRepository accountUserRepository;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
-                              SessionLineItemRepository sessionLineItemRepository,
+                              LineItemRepository lineItemRepository,
                               AccountUserRepository accountUserRepository) {
         this.productRepository = productRepository;
-        this.sessionLineItemRepository = sessionLineItemRepository;
+        this.lineItemRepository = lineItemRepository;
         this.accountUserRepository = accountUserRepository;
     }
 
@@ -101,9 +101,9 @@ public class ProductServiceImpl implements ProductService {
 
         getRestaurantProductById(productId, currentUser);
 
-        List<SessionLineItem> sessionLineItems = sessionLineItemRepository.findAllByProductId(productId);
+        List<LineItem> lineItems = lineItemRepository.findAllByProductId(productId);
 
-        sessionLineItemRepository.deleteAll(sessionLineItems);
+        lineItemRepository.deleteAll(lineItems);
 
         productRepository.deleteProductById(productId);
 

@@ -3,8 +3,8 @@ package com.restaurant.management.domain.ecommerce;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "session_line_items")
-public class SessionLineItem extends AbstractLineItem {
+@Table(name = "line_items")
+public class LineItem extends AbstractLineItem {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Product product;
@@ -12,10 +12,10 @@ public class SessionLineItem extends AbstractLineItem {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Company company;
 
-    public SessionLineItem() {
+    public LineItem() {
     }
 
-    public SessionLineItem(Long id, Integer quantity, Double price, Product product) {
+    public LineItem(Long id, Integer quantity, Double price, Product product) {
         super(id, quantity, price);
         this.product = product;
     }

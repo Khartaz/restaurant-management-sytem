@@ -1,7 +1,7 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.Customer;
-import com.restaurant.management.domain.ecommerce.archive.CustomerArchive;
+import com.restaurant.management.domain.ecommerce.CustomerOrdered;
 import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +35,8 @@ public final class CustomerMapper {
         );
     }
 
-    public CustomerArchive mapToCustomerArchive(final Customer customer) {
-        return new CustomerArchive(
+    public CustomerOrdered mapToCustomerOrdered(final Customer customer) {
+        return new CustomerOrdered(
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
                 customer.getCreatedByUserId(),
@@ -46,12 +46,12 @@ public final class CustomerMapper {
                 customer.getLastname(),
                 customer.getEmail(),
                 customer.getPhoneNumber(),
-                addressMapper.mapToCustomerArchiveAddress(customer.getCustomerAddress())
+                addressMapper.mapToCustomerOrderedAddress(customer.getCustomerAddress())
         );
     }
 
-    public CustomerArchive mapToCustomerArchive(final CustomerDto customerDto) {
-        return new CustomerArchive(
+    public CustomerOrdered mapToCustomerOrdered(final CustomerDto customerDto) {
+        return new CustomerOrdered(
                 customerDto.getCreatedAt(),
                 customerDto.getUpdatedAt(),
                 customerDto.getCreatedByUserId(),
@@ -61,7 +61,7 @@ public final class CustomerMapper {
                 customerDto.getLastname(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber(),
-                addressMapper.mapToCustomerArchiveAddress(customerDto.getAddressDto())
+                addressMapper.mapToCustomerOrderedAddress(customerDto.getAddressDto())
         );
     }
 
@@ -80,7 +80,7 @@ public final class CustomerMapper {
         );
     }
 
-    public CustomerDto mapToCustomerDto(final CustomerArchive customer) {
+    public CustomerDto mapToCustomerDto(final CustomerOrdered customer) {
         return new CustomerDto(
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
@@ -91,7 +91,7 @@ public final class CustomerMapper {
                 customer.getLastname(),
                 customer.getPhoneNumber(),
                 customer.getEmail(),
-                addressMapper.mapToAddressDto(customer.getCustomerArchiveAddress())
+                addressMapper.mapToAddressDto(customer.getCustomerOrderedAddress())
         );
     }
 

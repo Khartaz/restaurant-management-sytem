@@ -1,7 +1,7 @@
 package com.restaurant.management.mapper;
 
-import com.restaurant.management.domain.ecommerce.archive.LineItemArchive;
-import com.restaurant.management.domain.ecommerce.SessionLineItem;
+import com.restaurant.management.domain.ecommerce.LineItemOrdered;
+import com.restaurant.management.domain.ecommerce.LineItem;
 import com.restaurant.management.domain.ecommerce.dto.LineItemDto;
 import com.restaurant.management.web.response.LineItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +17,24 @@ public final class LineItemMapper {
         this.productMapper = productMapper;
     }
 
-    public LineItemArchive mapToLineItemArchive(final SessionLineItem sessionLineItem) {
-        return new LineItemArchive(
-                sessionLineItem.getQuantity(),
-                sessionLineItem.getPrice(),
-                productMapper.mapToProductArchive(sessionLineItem.getProduct())
+    public LineItemOrdered mapToLineItemOrdered(final LineItem lineItem) {
+        return new LineItemOrdered(
+                lineItem.getQuantity(),
+                lineItem.getPrice(),
+                productMapper.mapToProductOrdered(lineItem.getProduct())
         );
     }
 
-    public LineItemArchive mapToLineItemArchive(final LineItemDto lineItemDto) {
-        return new LineItemArchive(
+    public LineItemOrdered mapToLineItemOrdered(final LineItemDto lineItemDto) {
+        return new LineItemOrdered(
                 lineItemDto.getQuantity(),
                 lineItemDto.getPrice(),
-                productMapper.mapToProductArchive(lineItemDto.getProductDto())
+                productMapper.mapToProductOrdered(lineItemDto.getProductDto())
         );
     }
 
-    public SessionLineItem mapToSessionLineItem(final LineItemDto lineItemDto) {
-        return new SessionLineItem(
+    public LineItem mapToSessionLineItem(final LineItemDto lineItemDto) {
+        return new LineItem(
                 lineItemDto.getId(),
                 lineItemDto.getQuantity(),
                 lineItemDto.getPrice(),
@@ -42,21 +42,21 @@ public final class LineItemMapper {
         );
     }
 
-    public LineItemDto mapToLineItemDto(SessionLineItem sessionLineItem) {
+    public LineItemDto mapToLineItemDto(LineItem lineItem) {
         return new LineItemDto(
-                sessionLineItem.getId(),
-                sessionLineItem.getQuantity(),
-                sessionLineItem.getPrice(),
-                productMapper.mapToProductDto(sessionLineItem.getProduct())
+                lineItem.getId(),
+                lineItem.getQuantity(),
+                lineItem.getPrice(),
+                productMapper.mapToProductDto(lineItem.getProduct())
         );
     }
 
-    public LineItemDto mapToLineItemDto(final LineItemArchive lineItemArchive) {
+    public LineItemDto mapToLineItemDto(final LineItemOrdered lineItemOrdered) {
         return new LineItemDto(
-                lineItemArchive.getId(),
-                lineItemArchive.getQuantity(),
-                lineItemArchive.getPrice(),
-                productMapper.mapToProductDto(lineItemArchive.getProduct())
+                lineItemOrdered.getId(),
+                lineItemOrdered.getQuantity(),
+                lineItemOrdered.getPrice(),
+                productMapper.mapToProductDto(lineItemOrdered.getProductOrdered())
         );
     }
 

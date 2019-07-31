@@ -27,7 +27,7 @@ public class Order extends AbstractAuditing {
     private OrderType orderType;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Cart cart;
+    private CartOrdered cartOrdered;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Company company;
@@ -38,24 +38,24 @@ public class Order extends AbstractAuditing {
     public Order(
             Long id, String orderNumber,
             OrderStatus orderStatus, Long assignedToUserId,
-            OrderType orderType, Cart cart) {
+            OrderType orderType, CartOrdered cartOrdered) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
         this.assignedToUserId = assignedToUserId;
         this.orderType = orderType;
-        this.cart = cart;
+        this.cartOrdered = cartOrdered;
     }
 
     public Order(String orderNumber,
                  OrderStatus orderStatus, Long assignedToUserId,
-                 OrderType orderType, Cart cart,
+                 OrderType orderType, CartOrdered cartOrdered,
                  Company company) {
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
         this.assignedToUserId = assignedToUserId;
         this.orderType = orderType;
-        this.cart = cart;
+        this.cartOrdered = cartOrdered;
         this.company = company;
     }
 
@@ -79,12 +79,12 @@ public class Order extends AbstractAuditing {
         this.orderStatus = orderStatus;
     }
 
-    public Cart getCart() {
-        return cart;
+    public CartOrdered getCartOrdered() {
+        return cartOrdered;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCartOrdered(CartOrdered cartOrdered) {
+        this.cartOrdered = cartOrdered;
     }
 
     public Company getCompany() {
@@ -125,7 +125,7 @@ public class Order extends AbstractAuditing {
         private OrderStatus orderStatus;
         private Long assignedTo;
         private OrderType orderType;
-        private Cart cart;
+        private CartOrdered cartOrdered;
         private Company company;
 
         public OrderBuilder setOrderNumber(String orderNumber) {
@@ -148,8 +148,8 @@ public class Order extends AbstractAuditing {
             return this;
         }
 
-        public OrderBuilder setCart(Cart cart) {
-            this.cart = cart;
+        public OrderBuilder setCartOrdered(CartOrdered cartOrdered) {
+            this.cartOrdered = cartOrdered;
             return this;
         }
 
@@ -159,7 +159,7 @@ public class Order extends AbstractAuditing {
         }
 
         public Order build() {
-            return new Order(this.orderNumber, this.orderStatus, this.assignedTo, this.orderType, this.cart, this.company);
+            return new Order(this.orderNumber, this.orderStatus, this.assignedTo, this.orderType, this.cartOrdered, this.company);
         }
     }
 

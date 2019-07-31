@@ -1,16 +1,15 @@
 package com.restaurant.management.repository;
 
-import com.restaurant.management.domain.ecommerce.SessionLineItem;
+import com.restaurant.management.domain.ecommerce.LineItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SessionLineItemRepository extends JpaRepository<SessionLineItem, Long> {
+public interface LineItemRepository extends JpaRepository<LineItem, Long> {
 
     void deleteById(Long id);
 
-    List<SessionLineItem> findAllByProductId(Long id);
-
+    List<LineItem> findAllByProductId(Long id);
 }

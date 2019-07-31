@@ -10,7 +10,7 @@ import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.*;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.CartService;
+import com.restaurant.management.service.CartOrderedService;
 import com.restaurant.management.service.OrderService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +31,17 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private CustomerRepository customerRepository;
     private AccountUserRepository accountUserRepository;
-    private CartService cartService;
+    private CartOrderedService cartOrderedService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             CustomerRepository customerRepository,
                             AccountUserRepository accountUserRepository,
-                            CartService cartService) {
+                            CartOrderedService cartOrderedService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.accountUserRepository = accountUserRepository;
-        this.cartService = cartService;
+        this.cartOrderedService = cartOrderedService;
     }
 
     public Long countCompanyOrders(@CurrentUser UserPrincipal currentUser) {
@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order processOrder(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Cart cart = cartService.processSessionCartToCart(currentUser, customerId);
+        CartOrdered cartOrdered = cartOrderedService.processCartToCartOrdered(currentUser, customerId);
 
         String orderNumber = String.valueOf(countCompanyOrders(currentUser) + 1);
 
@@ -62,8 +62,8 @@ public class OrderServiceImpl implements OrderService {
                 .setOrderNumber(Order.createOrderNumber(orderNumber))
                 .setAssignedTo(currentUser.getId())
                 .setOrderType(OrderType.DELIVERY)
-                .setCart(cart)
-                .setCompany(cart.getCompany())
+                .setCartOrdered(cartOrdered)
+                .setCompany(cartOrdered.getCompany())
                 .build();
 
         orderRepository.save(order);
@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         Page<Order> orderList = orderRepository.findAllByCompanyId(restaurantId, pageable);
 
         List<Order> customerOrders = orderList.stream()
-                .filter(v -> v.getCart().getCustomerArchive().getPhoneNumber().equals(customer.getPhoneNumber()))
+                .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhoneNumber().equals(customer.getPhoneNumber()))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(customerOrders);
@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage()));
 
         return orderRepository.findByIdAndCompanyId(orderId, restaurantId)
-                .filter(v -> v.getCart().getCustomerArchive().getPhoneNumber().equals(customer.getPhoneNumber()))
+                .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhoneNumber().equals(customer.getPhoneNumber()))
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
     }
 

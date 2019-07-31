@@ -115,7 +115,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         Set<Order> orders = new LinkedHashSet<>(dailyOrderList.getOrders());
         orders.add(order);
 
-        double income = order.getCart().getTotalPrice() + dailyOrderList.getDailyIncome();
+        double income = order.getCartOrdered().getTotalPrice() + dailyOrderList.getDailyIncome();
         income = Math.floor(income * 100) / 100;
 
         dailyOrderList.setDailyIncome(income);
@@ -150,7 +150,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         Set<Order> orders = new LinkedHashSet<>(dailyOrderList.getOrders());
         orders.remove(order);
 
-        double income = dailyOrderList.getDailyIncome() - order.getCart().getTotalPrice();
+        double income = dailyOrderList.getDailyIncome() - order.getCartOrdered().getTotalPrice();
         income = Math.floor(income * 100) / 100;
 
         dailyOrderList.setDailyIncome(income);
@@ -199,8 +199,8 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
         DailyOrderList dailyOrderList = dailyOrderListRepository.findByIsOpenIsTrueAndCompanyId(companyId);
 
         Integer productsCount = dailyOrderList.getOrders().stream()
-                .mapToInt(v -> v.getCart()
-                        .getLineItems()
+                .mapToInt(v -> v.getCartOrdered()
+                        .getLineItemsOrdered()
                         .size())
                 .sum();
 

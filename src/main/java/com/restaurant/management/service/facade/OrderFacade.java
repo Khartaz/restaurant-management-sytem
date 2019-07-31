@@ -40,12 +40,6 @@ public final class OrderFacade {
         return orderService.deleteOrder(currentUser, orderId);
     }
 
-    public OrderDto processOrder(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Order order = orderService.processOrder(currentUser, customerId);
-
-        return orderMapper.mapToOrderDto(order);
-    }
-
     public Page<OrderDto> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable) {
         Page<Order> orders = orderService.getCustomerOrdersById(currentUser, customerId, pageable);
 

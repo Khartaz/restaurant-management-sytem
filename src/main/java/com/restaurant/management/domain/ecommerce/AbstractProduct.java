@@ -46,6 +46,16 @@ public abstract class AbstractProduct extends AbstractAuditing {
         this.price = price;
     }
 
+    public AbstractProduct(Long createdAt, Long updatedAt, String createdByUserId,
+                           String updatedByUserId, Long id, String name, Double price,
+                           String description) {
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
+
     public AbstractProduct(Long id, String name,
                            String category, Double price) {
         this.id = id;

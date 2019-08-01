@@ -7,35 +7,42 @@ public final class ProductDto {
     private String updatedByUserId;
     private Long id;
     private String name;
-    private String category;
     private Double price;
+    private String description;
+    private ProductShippingDetailsDTO productShippingDetailsDTO;
+    private ProductInventoryDTO productInventoryDTO;
 
     public ProductDto() {
     }
 
     public ProductDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                      Long id, String name,
-                      String category, Double price) {
+                      Long id, String name, Double price, String description,
+                      ProductShippingDetailsDTO productShippingDetailsDTO,
+                      ProductInventoryDTO productInventoryDTO) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.category = category;
         this.price = price;
+        this.description = description;
+        this.productShippingDetailsDTO = productShippingDetailsDTO;
+        this.productInventoryDTO = productInventoryDTO;
     }
 
-    public ProductDto(String name, String category) {
+    public ProductDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                      Long id, String name, Double price, String description,
+                      ProductShippingDetailsDTO productShippingDetailsDTO) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
+        this.id = id;
         this.name = name;
-        this.category = category;
         this.price = price;
-    }
-
-    public ProductDto(String name, String category, Double price) {
-        this.name = name;
-        this.category = category;
-        this.price = price;
+        this.description = description;
+        this.productShippingDetailsDTO = productShippingDetailsDTO;
     }
 
     public Long getCreatedAt() {
@@ -62,12 +69,19 @@ public final class ProductDto {
         return name;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
     public Double getPrice() {
         return price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public ProductShippingDetailsDTO getProductShippingDetailsDTO() {
+        return productShippingDetailsDTO;
+    }
+
+    public ProductInventoryDTO getProductInventoryDTO() {
+        return productInventoryDTO;
+    }
 }

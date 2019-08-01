@@ -10,6 +10,9 @@ import javax.persistence.Table;
 @Audited
 public class ProductOrderedShippingDetails extends AbstractProductShippingDetails {
 
+    public ProductOrderedShippingDetails() {
+    }
+
     public ProductOrderedShippingDetails(Double width, Double height,
                                          Double depth, Double weight,
                                          Double extraShippingFee) {
@@ -17,8 +20,8 @@ public class ProductOrderedShippingDetails extends AbstractProductShippingDetail
     }
 
     public ProductOrderedShippingDetails(Long createdAt, Long updatedAt, String createdByUserId,
-                                         String updatedByUserId, Double width, Double height,
+                                         String updatedByUserId, Long id,  Double width, Double height,
                                          Double depth, Double weight, Double extraShippingFee) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId, width, height, depth, weight, extraShippingFee);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, width, height, depth, weight, extraShippingFee);
     }
 }

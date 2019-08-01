@@ -19,10 +19,16 @@ import java.util.stream.Collectors;
 public final class ProductMapper {
 
     private RevisionTypeMapper revisionTypeMapper;
+    private ProductInventoryMapper productInventoryMapper;
+    private ProductShippingDetailsMapper productShippingDetailsMapper;
 
     @Autowired
-    public ProductMapper(RevisionTypeMapper revisionTypeMapper) {
+    public ProductMapper(RevisionTypeMapper revisionTypeMapper,
+                         ProductInventoryMapper productInventoryMapper,
+                         ProductShippingDetailsMapper productShippingDetailsMapper) {
         this.revisionTypeMapper = revisionTypeMapper;
+        this.productInventoryMapper = productInventoryMapper;
+        this.productShippingDetailsMapper = productShippingDetailsMapper;
     }
 
     public Product mapToProduct(final ProductDto productDto) {
@@ -33,8 +39,10 @@ public final class ProductMapper {
                 productDto.getUpdatedByUserId(),
                 productDto.getId(),
                 productDto.getName(),
-                productDto.getCategory(),
-                productDto.getPrice()
+                productDto.getPrice(),
+                productDto.getDescription(),
+                productShippingDetailsMapper.mapToProductShippingDetails(productDto.getProductShippingDetailsDTO()),
+                productInventoryMapper.mapToProductInventory(productDto.getProductInventoryDTO())
         );
     }
 
@@ -46,8 +54,9 @@ public final class ProductMapper {
                 product.getUpdatedByUserId(),
                 product.getId(),
                 product.getName(),
-                product.getCategory(),
-                product.getPrice()
+                product.getPrice(),
+                product.getDescription(),
+                productShippingDetailsMapper.mapToProductOrderedShippingDetails(product.getProductShippingDetails())
         );
     }
 
@@ -59,8 +68,9 @@ public final class ProductMapper {
                 productDto.getUpdatedByUserId(),
                 productDto.getId(),
                 productDto.getName(),
-                productDto.getCategory(),
-                productDto.getPrice()
+                productDto.getPrice(),
+                productDto.getDescription(),
+                productShippingDetailsMapper.mapToProductOrderedShippingDetails(productDto.getProductShippingDetailsDTO())
         );
     }
 
@@ -72,8 +82,10 @@ public final class ProductMapper {
                 product.getUpdatedByUserId(),
                 product.getId(),
                 product.getName(),
-                product.getCategory(),
-                product.getPrice()
+                product.getPrice(),
+                product.getDescription(),
+                productShippingDetailsMapper.mapToProductShippingDetailsDTO(product.getProductShippingDetails()),
+                productInventoryMapper.mapToProductInventoryDTO(product.getProductInventory())
         );
     }
 
@@ -85,8 +97,9 @@ public final class ProductMapper {
                 productOrdered.getUpdatedByUserId(),
                 productOrdered.getId(),
                 productOrdered.getName(),
-                productOrdered.getCategory(),
-                productOrdered.getPrice()
+                productOrdered.getPrice(),
+                productOrdered.getDescription(),
+                productShippingDetailsMapper.mapToProductShippingDetailsDTO(productOrdered.getProductOrderedShippingDetails())
         );
     }
 
@@ -98,7 +111,6 @@ public final class ProductMapper {
                 productDto.getUpdatedByUserId(),
                 productDto.getId(),
                 productDto.getName(),
-                productDto.getCategory(),
                 productDto.getPrice()
         );
     }

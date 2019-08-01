@@ -42,8 +42,10 @@ public abstract class AbstractProductShippingDetails extends AbstractAuditing {
     }
 
     public AbstractProductShippingDetails(Long createdAt, Long updatedAt, String createdByUserId,
-                                          String updatedByUserId, Double width, Double height, Double depth, Double weight, Double extraShippingFee) {
+                                          String updatedByUserId, Long id, Double width, Double height,
+                                          Double depth, Double weight, Double extraShippingFee) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId);
+        this.id = id;
         this.width = width;
         this.height = height;
         this.depth = depth;

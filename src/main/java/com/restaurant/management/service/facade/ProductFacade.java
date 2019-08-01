@@ -34,17 +34,17 @@ public final class ProductFacade {
         this.productHistoryService = productHistoryService;
     }
 
-    public ProductDto registerProduct(@CurrentUser UserPrincipal currentUser, RegisterProductRequest request) {
+    public ProductDto registerProduct(@CurrentUser UserPrincipal currentUser, ProductRequest request) {
         Product product = productService.registerProduct(currentUser, request);
 
         return productMapper.mapToProductDto(product);
     }
 
-    public ProductDto updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
-        Product product = productService.updateProduct(request, currentUser);
-
-        return productMapper.mapToProductDto(product);
-    }
+//    public ProductDto updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
+//        Product product = productService.updateProduct(request, currentUser);
+//
+//        return productMapper.mapToProductDto(product);
+//    }
 
     public ProductDto getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
         Product product = productService.getRestaurantProductById(id, currentUser);

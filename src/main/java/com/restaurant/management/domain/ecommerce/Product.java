@@ -13,7 +13,7 @@ public class Product extends AbstractProduct {
     private Company company;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private ProductShippingDetails productShipping;
+    private ProductShippingDetails productShippingDetails;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ProductInventory productInventory;
@@ -26,6 +26,15 @@ public class Product extends AbstractProduct {
                    Long id, String name, String category,
                    Double price) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, category, price);
+    }
+
+    public Product(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                   Long id, String name, Double price, String description,
+                   ProductShippingDetails productShippingDetails,
+                   ProductInventory productInventory) {
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name,  price, description);
+        this.productShippingDetails = productShippingDetails;
+        this.productInventory = productInventory;
     }
 
     public Product(Long id, String name, String category,
@@ -47,12 +56,12 @@ public class Product extends AbstractProduct {
         return company;
     }
 
-    public ProductShippingDetails getProductShipping() {
-        return productShipping;
+    public ProductShippingDetails getProductShippingDetails() {
+        return productShippingDetails;
     }
 
-    public void setProductShipping(ProductShippingDetails productShipping) {
-        this.productShipping = productShipping;
+    public void setProductShippingDetails(ProductShippingDetails productShippingDetails) {
+        this.productShippingDetails = productShippingDetails;
     }
 
     public ProductInventory getProductInventory() {

@@ -1,5 +1,6 @@
 package com.restaurant.management.web.controller;
 
+import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.dto.ProductDto;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.mapper.ProductMapper;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.sortByQualityValue;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,29 +50,41 @@ public class ProductController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductResponse> registerProduct(@CurrentUser UserPrincipal currentUser,
-                                              @Valid @RequestBody RegisterProductRequest request) {
+    Resource<ProductDto> registerProduct2(@CurrentUser UserPrincipal currentUser,
+                                              @Valid @RequestBody ProductRequest request) {
+
         ProductDto productDto = productFacade.registerProduct(currentUser, request);
 
-        ProductResponse response = productMapper.mapToProductResponse(productDto);
+        Link link = linkTo(ProductController.class).withSelfRel();
 
-        Link link = linkTo(ProductController.class).slash(response.getId()).withSelfRel();
-
-        return new Resource<>(response, link);
+        return new Resource<>(productDto, link);
     }
 
-    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest request,
-                                            @CurrentUser UserPrincipal currentUser) {
+//    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+//    public @ResponseBody
+//    Resource<ProductResponse> registerProduct(@CurrentUser UserPrincipal currentUser,
+//                                               @Valid @RequestBody RegisterProductRequest request) {
+//        ProductDto productDto = productFacade.registerProduct(currentUser, request);
+//
+//        ProductResponse response = productMapper.mapToProductResponse(productDto);
+//
+//        Link link = linkTo(ProductController.class).slash(response.getId()).withSelfRel();
+//
+//        return new Resource<>(response, link);
+//    }
 
-        ProductDto productDto = productFacade.updateProduct(request, currentUser);
-
-        ProductResponse response = productMapper.mapToProductResponse(productDto);
-
-        Link link = linkTo(ProductController.class).slash(request.getId()).withSelfRel();
-        return new Resource<>(response, link);
-    }
+//    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+//    public @ResponseBody
+//    Resource<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest request,
+//                                            @CurrentUser UserPrincipal currentUser) {
+//
+//        ProductDto productDto = productFacade.updateProduct(request, currentUser);
+//
+//        ProductResponse response = productMapper.mapToProductResponse(productDto);
+//
+//        Link link = linkTo(ProductController.class).slash(request.getId()).withSelfRel();
+//        return new Resource<>(response, link);
+//    }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody

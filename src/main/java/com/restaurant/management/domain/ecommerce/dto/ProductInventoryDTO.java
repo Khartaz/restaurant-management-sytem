@@ -1,34 +1,28 @@
-package com.restaurant.management.web.response;
+package com.restaurant.management.domain.ecommerce.dto;
 
-public final class ProductResponse {
-
+public class ProductInventoryDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
-    private String name;
-    private Double price;
+    private String sku;
+    private Double quantity;
 
-    public ProductResponse() {
+    public ProductInventoryDTO() {
+
     }
 
-    public ProductResponse(Long createdAt, Long updatedAt,
-                           String createdByUserId, String updatedByUserId, Long id,
-                           String name, Double price) {
+    public ProductInventoryDTO(Long createdAt, Long updatedAt,
+                               String createdByUserId, String updatedByUserId,
+                               Long id, String sku, Double quantity) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
         this.updatedByUserId = updatedByUserId;
         this.id = id;
-        this.name = name;
-        this.price = price;
-    }
-
-    public ProductResponse(Long id, String name, Double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
+        this.sku = sku;
+        this.quantity = quantity;
     }
 
     public Long getCreatedAt() {
@@ -51,12 +45,11 @@ public final class ProductResponse {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getSku() {
+        return sku;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getQuantity() {
+        return quantity;
     }
-
 }

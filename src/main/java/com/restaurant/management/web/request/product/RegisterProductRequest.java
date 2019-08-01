@@ -5,13 +5,13 @@ import javax.validation.constraints.NotNull;
 
 public final class RegisterProductRequest {
 
-    @NotBlank(message = "name cannot be blank")
+//    @NotBlank(message = "name cannot be blank")
     private String name;
 
-    @NotBlank(message = "category cannot be blank")
+//    @NotBlank(message = "category cannot be blank")
     private String category;
 
-    @NotNull(message = "price cannot be null")
+//    @NotNull(message = "price cannot be null")
     private Double price;
 
     public RegisterProductRequest() {

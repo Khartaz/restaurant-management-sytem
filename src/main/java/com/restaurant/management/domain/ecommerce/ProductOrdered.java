@@ -20,9 +20,10 @@ public class ProductOrdered extends AbstractProduct {
 
     public ProductOrdered(Long createdAt, Long updatedAt,
                           String createdByUserId, String updatedByUserId,
-                          Long id, String name, String category,
-                          Double price) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, category, price);
+                          Long id, String name, Double price, String description,
+                          ProductOrderedShippingDetails productOrderedShippingDetails) {
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, price, description);
+        this.productOrderedShippingDetails = productOrderedShippingDetails;
     }
 
     public ProductOrdered(String name, String category, Double price, Company company) {

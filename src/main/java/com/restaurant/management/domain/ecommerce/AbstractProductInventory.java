@@ -29,8 +29,9 @@ public abstract class AbstractProductInventory extends AbstractAuditing{
     }
 
     public AbstractProductInventory(Long createdAt, Long updatedAt, String createdByUserId,
-                                    String updatedByUserId, String sku, Double quantity) {
+                                    String updatedByUserId, Long id, String sku, Double quantity) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId);
+        this.id = id;
         this.sku = sku;
         this.quantity = quantity;
     }

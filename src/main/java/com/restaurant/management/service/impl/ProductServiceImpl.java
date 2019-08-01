@@ -1,8 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.Product;
-import com.restaurant.management.domain.ecommerce.LineItem;
+import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -14,7 +12,6 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ProductService;
 import com.restaurant.management.web.request.product.ProductRequest;
-import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,38 +44,69 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
-    public Product registerProduct(@CurrentUser UserPrincipal currentUser, RegisterProductRequest request) {
+    public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductRequest request) {
 
         AccountUser accountUser = getUserById(currentUser);
 
-        double price = request.getPrice();
-        price = Math.floor(price * 100) / 100;
-
-        Product newProduct = new Product.ProductBuilder()
-                .setName(request.getName())
-                .setCategory(request.getCategory())
-                .setPrice(price)
-                .setCompany(accountUser.getCompany())
-                .build();
-
-        productRepository.save(newProduct);
-
-        return newProduct;
-    }
-
-    public Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser) {
-        Product product = getRestaurantProductById(productRequest.getId(), currentUser);
-
-        Stream.of(product).forEach(p -> {
-            p.setName(productRequest.getName());
-            p.setPrice(productRequest.getPrice());
-            p.setCategory(productRequest.getCategory());
+        ProductInventory productInventory = new ProductInventory();
+        Stream.of(productInventory)
+                .forEach(pi -> {
+                    pi.setQuantity(request.getQuantity());
+                    pi.setSku(request.getSku());
         });
+
+        ProductShippingDetails productShippingDetails = new ProductShippingDetails();
+        Stream.of(productShippingDetails)
+                .forEach(psd -> {
+                    psd.setWidth(request.getWidth());
+                    psd.setHeight(request.getHeight());
+                    psd.setDepth(request.getDepth());
+                    psd.setWeight(request.getWeight());
+                    psd.setExtraShippingFee(request.getExtraShippingFee());
+                });
+
+        Product product = new Product();
+        Stream.of(product)
+                .forEach(p -> {
+                    p.setName(request.getName());
+//      CHECK IT LATER    p.setPrice((Math.floor(request.getPriceTaxIncl() * 100) / 100));
+                    p.setPrice(request.getPriceTaxIncl());
+                    p.setDescription(request.getDescription());
+                    p.setDeleted(Boolean.FALSE);
+                    p.setProductInventory(productInventory);
+                    p.setProductShippingDetails(productShippingDetails);
+                    p.setCompany(accountUser.getCompany());
+                });
 
         productRepository.save(product);
 
         return product;
+//
+//        Product newProduct = new Product.ProductBuilder()
+//                .setName(request.getName())
+//                .setCategory(request.getCategory())
+//                .setPrice(price)
+//                .setCompany(accountUser.getCompany())
+//                .build();
+
+//        productRepository.save(newProduct);
+
+//        return null;
     }
+
+//    public Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser) {
+//        Product product = getRestaurantProductById(productRequest.getId(), currentUser);
+//
+//        Stream.of(product).forEach(p -> {
+//            p.setName(productRequest.getName());
+//            p.setPrice(productRequest.getPrice());
+//            p.setCategory(productRequest.getCategory());
+//        });
+//
+//        productRepository.save(product);
+//
+//        return product;
+//    }
 
     public Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser) {
 

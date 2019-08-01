@@ -23,6 +23,15 @@ public abstract class AbstractProduct extends AbstractAuditing {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "tag")
+    private String tag;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     public AbstractProduct() {
     }
 
@@ -79,4 +88,27 @@ public abstract class AbstractProduct extends AbstractAuditing {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
 }

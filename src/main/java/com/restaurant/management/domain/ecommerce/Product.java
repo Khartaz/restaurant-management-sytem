@@ -12,6 +12,12 @@ public class Product extends AbstractProduct {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Company company;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private ProductShippingDetails productShipping;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private ProductInventory productInventory;
+
     public Product() {
     }
 
@@ -33,8 +39,28 @@ public class Product extends AbstractProduct {
         this.company = company;
     }
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     public Company getCompany() {
         return company;
+    }
+
+    public ProductShippingDetails getProductShipping() {
+        return productShipping;
+    }
+
+    public void setProductShipping(ProductShippingDetails productShipping) {
+        this.productShipping = productShipping;
+    }
+
+    public ProductInventory getProductInventory() {
+        return productInventory;
+    }
+
+    public void setProductInventory(ProductInventory productInventory) {
+        this.productInventory = productInventory;
     }
 
     public static class ProductBuilder {

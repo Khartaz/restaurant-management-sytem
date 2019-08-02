@@ -81,32 +81,29 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
 
         return product;
-//
-//        Product newProduct = new Product.ProductBuilder()
-//                .setName(request.getName())
-//                .setCategory(request.getCategory())
-//                .setPrice(price)
-//                .setCompany(accountUser.getCompany())
-//                .build();
-
-//        productRepository.save(newProduct);
-
-//        return null;
     }
 
-//    public Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser) {
-//        Product product = getRestaurantProductById(productRequest.getId(), currentUser);
-//
-//        Stream.of(product).forEach(p -> {
-//            p.setName(productRequest.getName());
-//            p.setPrice(productRequest.getPrice());
-//            p.setCategory(productRequest.getCategory());
-//        });
-//
-//        productRepository.save(product);
-//
-//        return product;
-//    }
+    public Product updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
+        Product product = getRestaurantProductById(request.getId(), currentUser);
+
+        Stream.of(product)
+                .forEach(p -> {
+                    p.setName(request.getName());
+                    p.setPrice(request.getPriceTaxIncl());
+                    p.setDescription(request.getDescription());
+                    p.getProductInventory().setSku(request.getSku());
+                    p.getProductInventory().setQuantity(request.getQuantity());
+                    p.getProductShippingDetails().setWidth(request.getWidth());
+                    p.getProductShippingDetails().setHeight(request.getHeight());
+                    p.getProductShippingDetails().setDepth(request.getDepth());
+                    p.getProductShippingDetails().setWeight(request.getWeight());
+                    p.getProductShippingDetails().setExtraShippingFee(request.getExtraShippingFee());
+                });
+
+        productRepository.save(product);
+
+        return product;
+    }
 
     public Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser) {
 
@@ -122,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 
         AccountUser accountUser = getUserById(currentUser);
 
-        return productRepository.findByCompany(pageable, accountUser.getCompany());
+        return productRepository.findAllByCompanyAndIsDeletedIsFalse(pageable, accountUser.getCompany());
     }
 
     public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {

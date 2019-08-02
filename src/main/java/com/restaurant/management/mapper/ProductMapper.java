@@ -6,6 +6,7 @@ import com.restaurant.management.domain.ecommerce.dto.ProductDto;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.dto.RevisionTypeDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
+import com.restaurant.management.web.request.product.ProductRequest;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -89,6 +90,26 @@ public final class ProductMapper {
         );
     }
 
+    public ProductRequest mapToProductRequest(final Product product) {
+        return new ProductRequest(
+                product.getCreatedAt(),
+                product.getUpdatedAt(),
+                product.getCreatedByUserId(),
+                product.getUpdatedByUserId(),
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getDescription(),
+                product.getProductInventory().getSku(),
+                product.getProductInventory().getQuantity(),
+                product.getProductShippingDetails().getWidth(),
+                product.getProductShippingDetails().getHeight(),
+                product.getProductShippingDetails().getDepth(),
+                product.getProductShippingDetails().getWeight(),
+                product.getProductShippingDetails().getExtraShippingFee()
+        );
+    }
+
     public ProductDto mapToProductDto(final ProductOrdered productOrdered) {
         return new ProductDto(
                 productOrdered.getCreatedAt(),
@@ -129,8 +150,8 @@ public final class ProductMapper {
                 .collect(Collectors.toList());
     }
 
-    public Page<ProductHistoryDto> mapToProductHistoryPage(final Page<ProductHistory> productHistory) {
-        return productHistory.map(this::mapToProductHistoryDto);
+    public Page<ProductRequest> mapToProductRequestPage(final Page<Product> products) {
+        return products.map(this::mapToProductRequest);
     }
 
     public List<ProductDto> mapToProductDtoList(final List<Product> products) {
@@ -142,12 +163,6 @@ public final class ProductMapper {
 
     public Page<ProductDto> mapToProductDtoPage(final Page<Product> products) {
         return products.map(this::mapToProductDto);
-    }
-
-    public List<ProductResponse> mapToProductResponseList(final List<ProductDto> products) {
-        return products.stream()
-                .map(this::mapToProductResponse)
-                .collect(Collectors.toList());
     }
 
     public Page<ProductResponse> mapToProductResponsePage(final Page<ProductDto> productDtos) {

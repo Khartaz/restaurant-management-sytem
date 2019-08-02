@@ -40,11 +40,11 @@ public final class ProductFacade {
         return productMapper.mapToProductDto(product);
     }
 
-//    public ProductDto updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
-//        Product product = productService.updateProduct(request, currentUser);
-//
-//        return productMapper.mapToProductDto(product);
-//    }
+    public ProductRequest updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
+        Product product = productService.updateProduct(request, currentUser);
+
+        return productMapper.mapToProductRequest(product);
+    }
 
     public ProductDto getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
         Product product = productService.getRestaurantProductById(id, currentUser);
@@ -63,10 +63,10 @@ public final class ProductFacade {
         return productMapper.mapToProductHistoryDtoList(productHistory);
     }
 
-    public Page<ProductDto> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
+    public Page<ProductRequest> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
         Page<Product> products = productService.getAllByRestaurant(pageable, currentUser);
 
-        return productMapper.mapToProductDtoPage(products);
+        return productMapper.mapToProductRequestPage(products);
     }
 
 }

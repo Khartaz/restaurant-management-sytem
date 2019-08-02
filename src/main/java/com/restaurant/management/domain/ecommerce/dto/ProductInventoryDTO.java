@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public class ProductInventoryDTO {
+public final class ProductInventoryDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;

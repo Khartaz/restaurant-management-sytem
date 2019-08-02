@@ -20,6 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Override
     Page<Product> findAll(Pageable pageable);
 
-    Page<Product> findByCompany(Pageable pageable, Company company);
+    Page<Product> findAllByCompanyAndIsDeletedIsFalse(Pageable pageable, Company company);
 
 }

@@ -1,6 +1,10 @@
 package com.restaurant.management.web.request.product;
 
 public final class ProductRequest {
+    private Long createdAt;
+    private Long updatedAt;
+    private String createdByUserId;
+    private String updatedByUserId;
     private Long id;
     private String name;
     private Double priceTaxIncl;
@@ -31,6 +35,43 @@ public final class ProductRequest {
         this.depth = depth;
         this.weight = weight;
         this.extraShippingFee = extraShippingFee;
+    }
+
+    public ProductRequest(Long createdAt, Long updatedAt, String createdByUserId,
+                          String updatedByUserId, Long id, String name, Double priceTaxIncl,
+                          String description, String sku, Double quantity, Double width,
+                          Double height, Double depth, Double weight, Double extraShippingFee) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdByUserId = createdByUserId;
+        this.updatedByUserId = updatedByUserId;
+        this.id = id;
+        this.name = name;
+        this.priceTaxIncl = priceTaxIncl;
+        this.description = description;
+        this.sku = sku;
+        this.quantity = quantity;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.weight = weight;
+        this.extraShippingFee = extraShippingFee;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public Long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public String getCreatedByUserId() {
+        return createdByUserId;
+    }
+
+    public String getUpdatedByUserId() {
+        return updatedByUserId;
     }
 
     public Long getId() {

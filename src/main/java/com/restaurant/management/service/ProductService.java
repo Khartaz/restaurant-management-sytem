@@ -13,7 +13,7 @@ public interface ProductService {
 
     Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductRequest request);
 
-//    Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser);
+    Product updateProduct(ProductRequest productRequest, @CurrentUser UserPrincipal currentUser);
 
     Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser);
 

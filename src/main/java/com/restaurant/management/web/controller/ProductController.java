@@ -1,6 +1,5 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.dto.ProductDto;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.mapper.ProductMapper;
@@ -8,7 +7,6 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.ProductFacade;
 import com.restaurant.management.web.request.product.ProductRequest;
-import com.restaurant.management.web.request.product.RegisterProductRequest;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +28,6 @@ import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.sortByQualityValue;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -50,7 +47,7 @@ public class ProductController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductDto> registerProduct2(@CurrentUser UserPrincipal currentUser,
+    Resource<ProductDto> registerProduct(@CurrentUser UserPrincipal currentUser,
                                               @Valid @RequestBody ProductRequest request) {
 
         ProductDto productDto = productFacade.registerProduct(currentUser, request);
@@ -73,29 +70,27 @@ public class ProductController {
 //        return new Resource<>(response, link);
 //    }
 
-//    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-//    public @ResponseBody
-//    Resource<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest request,
-//                                            @CurrentUser UserPrincipal currentUser) {
-//
-//        ProductDto productDto = productFacade.updateProduct(request, currentUser);
-//
-//        ProductResponse response = productMapper.mapToProductResponse(productDto);
-//
-//        Link link = linkTo(ProductController.class).slash(request.getId()).withSelfRel();
-//        return new Resource<>(response, link);
-//    }
+    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<ProductRequest> updateProduct(@Valid @RequestBody ProductRequest request,
+                                            @CurrentUser UserPrincipal currentUser) {
+
+        ProductRequest productRequest = productFacade.updateProduct(request, currentUser);
+
+        Link link = linkTo(ProductController.class).slash(request.getId()).withSelfRel();
+        return new Resource<>(productRequest, link);
+    }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<ProductResponse>> getAllByRestaurant(Pageable pageable,
+    ResponseEntity<PagedResources<ProductRequest>> getAllByRestaurant(Pageable pageable,
                                                                        @CurrentUser UserPrincipal currentUser,
                                                                        PagedResourcesAssembler assembler) {
-        Page<ProductDto> dtoPage = productFacade.getAllByRestaurant(pageable, currentUser);
+        Page<ProductRequest> dtoPage = productFacade.getAllByRestaurant(pageable, currentUser);
 
-        Page<ProductResponse> responsePage = productMapper.mapToProductResponsePage(dtoPage);
+//        Page<ProductResponse> responsePage = productMapper.mapToProductResponsePage(dtoPage);
 
-        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
+        return new ResponseEntity<>(assembler.toResource(dtoPage), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

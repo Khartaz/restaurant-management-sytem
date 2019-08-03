@@ -19,6 +19,9 @@ public abstract class AbstractLineItem extends AbstractAuditing {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     public AbstractLineItem() {
     }
 
@@ -51,5 +54,13 @@ public abstract class AbstractLineItem extends AbstractAuditing {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

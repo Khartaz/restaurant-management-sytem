@@ -11,15 +11,20 @@ import com.restaurant.management.repository.ProductRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ProductService;
-import com.restaurant.management.web.request.product.ProductRequest;
+import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.web.response.ApiResponse;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -44,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
-    public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductRequest request) {
+    public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductFormDTO request) {
 
         AccountUser accountUser = getUserById(currentUser);
 
@@ -83,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    public Product updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
+    public Product updateProduct(ProductFormDTO request, @CurrentUser UserPrincipal currentUser) {
         Product product = getRestaurantProductById(request.getId(), currentUser);
 
         Stream.of(product)
@@ -124,13 +129,30 @@ public class ProductServiceImpl implements ProductService {
 
     public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {
 
-        getRestaurantProductById(productId, currentUser);
+        Product product = getRestaurantProductById(productId, currentUser);
 
         List<LineItem> lineItems = lineItemRepository.findAllByProductId(productId);
 
-        lineItemRepository.deleteAll(lineItems);
+        lineItems.iterator().forEachRemaining(lineItem -> {
+            lineItem.setDeleted(Boolean.TRUE);
+            lineItemRepository.save(lineItem);
+        });
 
-        productRepository.deleteProductById(productId);
+        product.setDeleted(Boolean.TRUE);
+        productRepository.save(product);
+
+        return new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage());
+    }
+
+    public ApiResponse deleteAllByIds(Long[] productsIds, @CurrentUser UserPrincipal currentUser) {
+        List<Long> ids = new ArrayList<>(Arrays.asList(productsIds));
+
+        List<Product> products = productRepository.findAllByIdIn(ids);
+        Stream.of(products)
+                .forEach(p -> {
+                    p.iterator().forEachRemaining(v -> v.setDeleted(Boolean.TRUE));
+                    p.iterator().forEachRemaining(v -> productRepository.save(v));
+                });
 
         return new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage());
     }

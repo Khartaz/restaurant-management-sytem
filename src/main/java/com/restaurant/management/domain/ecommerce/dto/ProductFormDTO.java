@@ -1,6 +1,6 @@
-package com.restaurant.management.web.request.product;
+package com.restaurant.management.domain.ecommerce.dto;
 
-public final class ProductRequest {
+public final class ProductFormDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
@@ -17,10 +17,10 @@ public final class ProductRequest {
     private Double weight;
     private Double extraShippingFee;
 
-    public ProductRequest() {
+    public ProductFormDTO() {
     }
 
-    public ProductRequest(Long id, String name, Double priceTaxIncl,
+    public ProductFormDTO(Long id, String name, Double priceTaxIncl,
                           String description, String sku, Double quantity,
                           Double width, Double height, Double depth,
                           Double weight, Double extraShippingFee) {
@@ -37,7 +37,7 @@ public final class ProductRequest {
         this.extraShippingFee = extraShippingFee;
     }
 
-    public ProductRequest(Long createdAt, Long updatedAt, String createdByUserId,
+    public ProductFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
                           String updatedByUserId, Long id, String name, Double priceTaxIncl,
                           String description, String sku, Double quantity, Double width,
                           Double height, Double depth, Double weight, Double extraShippingFee) {

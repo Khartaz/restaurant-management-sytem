@@ -6,7 +6,7 @@ import com.restaurant.management.domain.ecommerce.dto.ProductDto;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.dto.RevisionTypeDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
-import com.restaurant.management.web.request.product.ProductRequest;
+import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -90,8 +90,8 @@ public final class ProductMapper {
         );
     }
 
-    public ProductRequest mapToProductRequest(final Product product) {
-        return new ProductRequest(
+    public ProductFormDTO mapToProductRequest(final Product product) {
+        return new ProductFormDTO(
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 product.getCreatedByUserId(),
@@ -150,7 +150,7 @@ public final class ProductMapper {
                 .collect(Collectors.toList());
     }
 
-    public Page<ProductRequest> mapToProductRequestPage(final Page<Product> products) {
+    public Page<ProductFormDTO> mapToProductRequestPage(final Page<Product> products) {
         return products.map(this::mapToProductRequest);
     }
 

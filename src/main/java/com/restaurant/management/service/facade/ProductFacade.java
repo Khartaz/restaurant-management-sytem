@@ -9,8 +9,7 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ProductHistoryService;
 import com.restaurant.management.service.ProductService;
-import com.restaurant.management.web.request.product.ProductRequest;
-import com.restaurant.management.web.request.product.RegisterProductRequest;
+import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,13 +33,13 @@ public final class ProductFacade {
         this.productHistoryService = productHistoryService;
     }
 
-    public ProductDto registerProduct(@CurrentUser UserPrincipal currentUser, ProductRequest request) {
+    public ProductDto registerProduct(@CurrentUser UserPrincipal currentUser, ProductFormDTO request) {
         Product product = productService.registerProduct(currentUser, request);
 
         return productMapper.mapToProductDto(product);
     }
 
-    public ProductRequest updateProduct(ProductRequest request, @CurrentUser UserPrincipal currentUser) {
+    public ProductFormDTO updateProduct(ProductFormDTO request, @CurrentUser UserPrincipal currentUser) {
         Product product = productService.updateProduct(request, currentUser);
 
         return productMapper.mapToProductRequest(product);
@@ -57,13 +56,17 @@ public final class ProductFacade {
         return productService.deleteById(id, currentUser);
     }
 
+    public ApiResponse deleteAllByIds(Long[] productsIds, @CurrentUser UserPrincipal currentUser) {
+        return productService.deleteAllByIds(productsIds, currentUser);
+    }
+
     public List<ProductHistoryDto> getProductHistory(Long productId, @CurrentUser UserPrincipal currentUser) {
         List<ProductHistory> productHistory = productHistoryService.productRevisions(productId, currentUser);
 
         return productMapper.mapToProductHistoryDtoList(productHistory);
     }
 
-    public Page<ProductRequest> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
+    public Page<ProductFormDTO> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
         Page<Product> products = productService.getAllByRestaurant(pageable, currentUser);
 
         return productMapper.mapToProductRequestPage(products);

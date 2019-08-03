@@ -72,7 +72,6 @@ public class ProductController {
     ResponseEntity<PagedResources<ProductFormDTO>> getAllByRestaurant(Pageable pageable,
                                                                       @CurrentUser UserPrincipal currentUser,
                                                                       PagedResourcesAssembler assembler) {
-
         Page<ProductFormDTO> dtoPage = productFacade.getAllByRestaurant(pageable, currentUser);
 
         if (!dtoPage.hasContent()) {
@@ -85,16 +84,14 @@ public class ProductController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductResponse> showRestaurantProductById(@PathVariable Long id,
+    Resource<ProductFormDTO> showRestaurantProductById(@PathVariable Long id,
                                                         @CurrentUser UserPrincipal currentUser) {
 
-        ProductDto productDto = productFacade.getRestaurantProductById(id, currentUser);
+        ProductFormDTO productFormDTO = productFacade.getRestaurantProductById(id, currentUser);
 
-        ProductResponse response = productMapper.mapToProductResponse(productDto);
+        Link link = linkTo(ProductController.class).slash(productFormDTO.getId()).withSelfRel();
 
-        Link link = linkTo(ProductController.class).slash(response.getId()).withSelfRel();
-
-        return new Resource<>(response, link);
+        return new Resource<>(productFormDTO, link);
     }
 
     //    @RolesAllowed({"ROLE_ADMIN"})
@@ -108,9 +105,7 @@ public class ProductController {
     public ResponseEntity<?> deleteAllById(@PathVariable Long[] productsIds,
                                            @CurrentUser UserPrincipal currentUser) {
 
-        productFacade.deleteAllByIds(productsIds, currentUser);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(productFacade.deleteAllByIds(productsIds, currentUser));
     }
 
     @GetMapping(value = "/history/{productId}", produces = APPLICATION_JSON_VALUE)

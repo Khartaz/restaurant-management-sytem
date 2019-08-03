@@ -90,7 +90,7 @@ public final class ProductMapper {
         );
     }
 
-    public ProductFormDTO mapToProductRequest(final Product product) {
+    public ProductFormDTO mapToProductFormDTO(final Product product) {
         return new ProductFormDTO(
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
@@ -151,7 +151,7 @@ public final class ProductMapper {
     }
 
     public Page<ProductFormDTO> mapToProductRequestPage(final Page<Product> products) {
-        return products.map(this::mapToProductRequest);
+        return products.map(this::mapToProductFormDTO);
     }
 
     public List<ProductDto> mapToProductDtoList(final List<Product> products) {

@@ -42,13 +42,13 @@ public final class ProductFacade {
     public ProductFormDTO updateProduct(ProductFormDTO request, @CurrentUser UserPrincipal currentUser) {
         Product product = productService.updateProduct(request, currentUser);
 
-        return productMapper.mapToProductRequest(product);
+        return productMapper.mapToProductFormDTO(product);
     }
 
-    public ProductDto getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
+    public ProductFormDTO getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
         Product product = productService.getRestaurantProductById(id, currentUser);
 
-        return productMapper.mapToProductDto(product);
+        return productMapper.mapToProductFormDTO(product);
     }
 
     public ApiResponse deleteById(Long id, @CurrentUser UserPrincipal currentUser) {

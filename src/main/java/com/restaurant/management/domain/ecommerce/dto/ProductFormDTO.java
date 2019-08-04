@@ -20,23 +20,6 @@ public final class ProductFormDTO {
     public ProductFormDTO() {
     }
 
-    public ProductFormDTO(Long id, String name, Double priceTaxIncl,
-                          String description, String sku, Double quantity,
-                          Double width, Double height, Double depth,
-                          Double weight, Double extraShippingFee) {
-        this.id = id;
-        this.name = name;
-        this.priceTaxIncl = priceTaxIncl;
-        this.description = description;
-        this.sku = sku;
-        this.quantity = quantity;
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
-        this.weight = weight;
-        this.extraShippingFee = extraShippingFee;
-    }
-
     public ProductFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
                           String updatedByUserId, Long id, String name, Double priceTaxIncl,
                           String description, String sku, Double quantity, Double width,

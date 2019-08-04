@@ -3,13 +3,11 @@ package com.restaurant.management.mapper;
 import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.domain.ecommerce.CustomerOrdered;
 import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
+import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public final class CustomerMapper {
@@ -95,6 +93,24 @@ public final class CustomerMapper {
         );
     }
 
+    public CustomerFormDTO mapToCustomerFormDTO(final Customer customer) {
+        return new CustomerFormDTO(
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
+                customer.getCreatedByUserId(),
+                customer.getUpdatedByUserId(),
+                customer.getId(),
+                customer.getName(),
+                customer.getLastname(),
+                customer.getPhoneNumber(),
+                customer.getEmail(),
+                customer.getCustomerAddress().getStreetAndNumber(),
+                customer.getCustomerAddress().getPostCode(),
+                customer.getCustomerAddress().getCity(),
+                customer.getCustomerAddress().getCountry()
+        );
+    }
+
     public CustomerResponse mapToCustomerResponse(final CustomerDto customerDto) {
         return new CustomerResponse(
                 customerDto.getCreatedAt(),
@@ -110,29 +126,15 @@ public final class CustomerMapper {
         );
     }
 
-    public List<CustomerDto> mapToCustomerDtoList(final List<Customer> customers) {
-        return customers.stream()
-                .map(this::mapToCustomerDto)
-                .collect(Collectors.toList());
-    }
-
     public Page<CustomerDto> mapToCustomerDtoPage(final Page<Customer> customers) {
         return customers.map(this::mapToCustomerDto);
-    }
-
-    public List<CustomerResponse> mapToCustomerResponseList(final List<CustomerDto> customers) {
-        return customers.stream()
-                .map(this::mapToCustomerResponse)
-                .collect(Collectors.toList());
     }
 
     public Page<CustomerResponse> mapToCustomerResponsePage(final Page<CustomerDto> customers) {
         return customers.map(this::mapToCustomerResponse);
     }
 
-    public List<Customer> mapToCustomerList(final List<CustomerDto> customers) {
-        return customers.stream()
-                .map(this::mapToCustomer)
-                .collect(Collectors.toList());
+    public Page<CustomerFormDTO> mapToCustomerFormDTOPage(final Page<Customer> customers) {
+        return customers.map(this::mapToCustomerFormDTO);
     }
 }

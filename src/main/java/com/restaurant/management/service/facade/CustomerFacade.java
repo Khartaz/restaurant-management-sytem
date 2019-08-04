@@ -2,6 +2,7 @@ package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
+import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
 import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -31,10 +32,10 @@ public final class CustomerFacade {
         return customerMapper.mapToCustomerDto(customer);
     }
 
-    public Page<CustomerDto> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    public Page<CustomerFormDTO> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Customer> customers = customerService.getAllCustomers(currentUser, pageable);
 
-        return customerMapper.mapToCustomerDtoPage(customers);
+        return customerMapper.mapToCustomerFormDTOPage(customers);
     }
 
     public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {

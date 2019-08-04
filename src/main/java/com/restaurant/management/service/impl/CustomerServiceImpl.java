@@ -80,9 +80,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        Long restaurantId = getRestaurantInfo(currentUser).getId();
 
-        return customerRepository.findAllByCompanyId(pageable, restaurantId);
+        Long companyId = getRestaurantInfo(currentUser).getId();
+
+        return customerRepository.findAllByCompanyIdAndIsDeletedIsFalse(pageable, companyId);
     }
 
     public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {

@@ -23,7 +23,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     void deleteById(Long id);
 
-    Page<Customer> findAllByCompanyId(Pageable pageable, Long companyId);
+    Page<Customer> findAllByCompanyIdAndIsDeletedIsFalse(Pageable pageable, Long companyId);
 
     Page<Customer> findAllByNameIsContainingAndCompanyId(String name, Long companyId, Pageable pageable);
 

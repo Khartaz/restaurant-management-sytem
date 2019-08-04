@@ -150,28 +150,8 @@ public final class ProductMapper {
                 .collect(Collectors.toList());
     }
 
-    public Page<ProductFormDTO> mapToProductRequestPage(final Page<Product> products) {
+    public Page<ProductFormDTO> mapToProductFormDTOPage(final Page<Product> products) {
         return products.map(this::mapToProductFormDTO);
     }
 
-    public List<ProductDto> mapToProductDtoList(final List<Product> products) {
-        return products.stream()
-                .map(this::mapToProductDto)
-                .collect(Collectors.toList());
-    }
-
-
-    public Page<ProductDto> mapToProductDtoPage(final Page<Product> products) {
-        return products.map(this::mapToProductDto);
-    }
-
-    public Page<ProductResponse> mapToProductResponsePage(final Page<ProductDto> productDtos) {
-        return productDtos.map(this::mapToProductResponse);
-    }
-
-    public List<Product> mapToProductList(final List<ProductDto> products) {
-        return products.stream()
-                .map(this::mapToProduct)
-                .collect(Collectors.toList());
-    }
 }

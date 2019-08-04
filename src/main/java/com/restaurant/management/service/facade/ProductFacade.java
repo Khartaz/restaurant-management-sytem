@@ -69,7 +69,7 @@ public final class ProductFacade {
     public Page<ProductFormDTO> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
         Page<Product> products = productService.getAllByRestaurant(pageable, currentUser);
 
-        return productMapper.mapToProductRequestPage(products);
+        return productMapper.mapToProductFormDTOPage(products);
     }
 
 }

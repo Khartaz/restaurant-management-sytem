@@ -2,6 +2,7 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.ecommerce.dto.CartDto;
 import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
+import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
 import com.restaurant.management.domain.ecommerce.dto.OrderDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.mapper.CustomerMapper;
@@ -82,14 +83,17 @@ public class CustomerController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersPageable(@CurrentUser UserPrincipal currentUser,
-                                                                             Pageable pageable,
-                                                                             PagedResourcesAssembler assembler) {
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomers(currentUser, pageable);
+    ResponseEntity<PagedResources<CustomerFormDTO>> getAllCustomersPageable(@CurrentUser UserPrincipal currentUser,
+                                                                            Pageable pageable,
+                                                                            PagedResourcesAssembler assembler) {
+        Page<CustomerFormDTO> customerFormDTO = customerFacade.getAllCustomers(currentUser, pageable);
 
-        Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
+        if (!customerFormDTO.hasContent()) {
+            PagedResources pagedResources = assembler.toEmptyResource(customerFormDTO, CustomerFormDTO.class);
+            return new ResponseEntity<PagedResources<CustomerFormDTO>>(pagedResources, HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
+        return new ResponseEntity<>(assembler.toResource(customerFormDTO), HttpStatus.OK);
     }
 
     @GetMapping(value = "/name", produces = APPLICATION_JSON_VALUE)

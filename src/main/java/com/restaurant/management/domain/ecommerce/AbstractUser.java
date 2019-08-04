@@ -35,6 +35,9 @@ public abstract class AbstractUser extends AbstractAuditing {
     @Size(max = 25)
     private String phoneNumber;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     public AbstractUser() {
     }
 
@@ -89,5 +92,13 @@ public abstract class AbstractUser extends AbstractAuditing {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

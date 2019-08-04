@@ -51,6 +51,7 @@ public class ProductController {
         return new Resource<>(productDto, link);
     }
 
+    @RolesAllowed({"ROLE_MANAGER"})
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<ProductFormDTO> updateProduct(@Valid @RequestBody ProductFormDTO request,
@@ -89,14 +90,14 @@ public class ProductController {
         return new Resource<>(productFormDTO, link);
     }
 
-    @RolesAllowed({"ROLE_ADMIN"})
+    @RolesAllowed({"ROLE_MANAGER"})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id,
                                         @CurrentUser UserPrincipal currentUser) {
         return ResponseEntity.ok().body(productFacade.deleteById(id, currentUser));
     }
 
-    @RolesAllowed({"ROLE_ADMIN"})
+    @RolesAllowed({"ROLE_MANAGER"})
     @DeleteMapping(value = "/delete/{productsIds}")
     public ResponseEntity<?> deleteAllById(@PathVariable Long[] productsIds,
                                            @CurrentUser UserPrincipal currentUser) {

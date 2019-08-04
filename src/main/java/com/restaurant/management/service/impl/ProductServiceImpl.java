@@ -3,8 +3,10 @@ package com.restaurant.management.service.impl;
 import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
+import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.repository.LineItemRepository;
 import com.restaurant.management.repository.ProductRepository;
@@ -18,14 +20,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.restaurant.management.mapper.RoleMapper.roleToString;
 
 @Service
 @Transactional

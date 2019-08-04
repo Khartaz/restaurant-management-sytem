@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.restaurant.management.mapper.RoleMapper.roleToString;
+
 @Component
 @SuppressWarnings("Duplicates")
 public final class CompanyAccountUserFacade {
@@ -124,12 +126,6 @@ public final class CompanyAccountUserFacade {
         );
 
         return new UserResponse(userDetailsResponse, accountUser.getSettings(), shortcuts);
-    }
-
-    private String roleToString(AccountUser accountUser) {
-        return accountUser.getRoles().stream()
-                .map(r -> RoleMapper.mapRoleToString(r.getName()))
-                .collect(Collectors.joining());
     }
 
     public UserResponse getUserDataFromJWT(String token) {

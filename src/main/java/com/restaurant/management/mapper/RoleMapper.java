@@ -1,12 +1,12 @@
 package com.restaurant.management.mapper;
 
+import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Role;
 import com.restaurant.management.domain.ecommerce.RoleName;
 import com.restaurant.management.domain.ecommerce.dto.RoleDto;
 import com.restaurant.management.web.response.RoleResponse;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,18 +24,6 @@ public final class RoleMapper {
         return new RoleResponse(roleDto.getName());
     }
 
-    public List<RoleDto> mapToRoleDtoList(final List<Role> roles) {
-        return roles.stream()
-                .map(this::mapToRoleDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<RoleResponse> mapToRoleResponseList(final List<RoleDto> roles) {
-        return roles.stream()
-                .map(this::mapToRoleResponse)
-                .collect(Collectors.toList());
-    }
-
     public static String mapRoleToString(RoleName roleName) {
         switch (roleName) {
             case ROLE_MANAGER:
@@ -44,8 +32,18 @@ public final class RoleMapper {
                 return "Admin";
             case ROLE_EMPLOYEE:
                 return "Employee";
+            case ROLE_USER:
+                return "User";
         }
         return "RoleNotExists";
     }
+
+
+    public static String roleToString(AccountUser accountUser) {
+        return accountUser.getRoles().stream()
+                .map(r -> RoleMapper.mapRoleToString(r.getName()))
+                .collect(Collectors.joining());
+    }
+
 
 }

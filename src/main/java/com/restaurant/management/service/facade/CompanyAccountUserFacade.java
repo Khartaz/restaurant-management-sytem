@@ -54,9 +54,9 @@ public final class CompanyAccountUserFacade {
     public UserResponse registerCompany(RegisterCompanyRequest request) {
         String photoURL = "assets/images/avatars/profile.jpg";
 
-        RegisterCompany registerCompany = companyService.registerCompany(request);
+        RegisterCompany registeredCompany = companyService.registerCompany(request);
 
-        AccountUser user = registerCompany.getAccountUser();
+        AccountUser user = registeredCompany.getAccountUser();
 
         shortcutService.assignDefaultShortcut(user.getId());
 
@@ -64,7 +64,8 @@ public final class CompanyAccountUserFacade {
 
         String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(user.getId());
 
-        AccountUser accountUser = registerCompany.getAccountUser();
+        AccountUser accountUser = registeredCompany.getAccountUser();
+
         UserDetailsResponse userDetails = new UserDetailsResponse(
                 accountUser.getCreatedAt(),
                 accountUser.getUpdatedAt(),
@@ -83,23 +84,23 @@ public final class CompanyAccountUserFacade {
     }
 
     //TO DELETE IN FUTURE ?
-    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserService.getUserById(currentUser.getId());
-
-        Company company = accountUser.getCompany();
-
-        CompanyResponse companyResponse = companyMapper.mapToCompanyResponse(company);
-
-        return new UserSummary(
-                accountUser.getId(),
-                accountUser.getName(),
-                accountUser.getLastname(),
-                accountUser.getEmail(),
-                accountUser.getPhoneNumber(),
-                accountUser.getRoles(),
-                companyResponse
-        );
-    }
+//    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
+//        AccountUser accountUser = accountUserService.getUserById(currentUser.getId());
+//
+//        Company company = accountUser.getCompany();
+//
+//        CompanyResponse companyResponse = companyMapper.mapToCompanyResponse(company);
+//
+//        return new UserSummary(
+//                accountUser.getId(),
+//                accountUser.getName(),
+//                accountUser.getLastname(),
+//                accountUser.getEmail(),
+//                accountUser.getPhoneNumber(),
+//                accountUser.getRoles(),
+//                companyResponse
+//        );
+//    }
 
     public UserResponse getUserData(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = accountUserService.getUserById(currentUser.getId());

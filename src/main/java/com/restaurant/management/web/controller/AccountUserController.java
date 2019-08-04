@@ -57,16 +57,18 @@ public class AccountUserController {
         this.layoutShortcutService = layoutShortcutService;
     }
 
-    @GetMapping(value = "/me")
-    public @ResponseBody
-    UserSummary getCurrentUserSummary(@CurrentUser UserPrincipal currentUser) {
-        return companyAccountUserFacade.getUserSummary(currentUser);
-    }
+//    @GetMapping(value = "/me")
+//    public @ResponseBody
+//    UserSummary getCurrentUserSummary(@CurrentUser UserPrincipal currentUser) {
+//        return companyAccountUserFacade.getUserSummary(currentUser);
+//    }
 
     @LogLogin
     @PostMapping(value = "/login", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> authenticateUser2(@Valid @RequestBody LoginRequest loginRequest) {
+
         JwtAuthenticationResponse jwt = accountUserFacade.authenticateUser(loginRequest);
+
         UserResponse userResponse = companyAccountUserFacade.getUserDataFromJWT(jwt.getAccessToken());
 
         return new ResponseEntity<>(userResponse, HttpStatus.OK);

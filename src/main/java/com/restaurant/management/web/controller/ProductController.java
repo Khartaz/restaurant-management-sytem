@@ -2,12 +2,10 @@ package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.ecommerce.dto.ProductDto;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
-import com.restaurant.management.mapper.ProductMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.ProductFacade;
 import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
-import com.restaurant.management.web.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -31,17 +30,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/products")
-@Transactional
 public class ProductController {
 
     private ProductFacade productFacade;
-    private ProductMapper productMapper;
 
     @Autowired
-    public ProductController(ProductFacade productFacade,
-                             ProductMapper productMapper) {
+    public ProductController(ProductFacade productFacade) {
         this.productFacade = productFacade;
-        this.productMapper = productMapper;
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -94,13 +89,14 @@ public class ProductController {
         return new Resource<>(productFormDTO, link);
     }
 
-    //    @RolesAllowed({"ROLE_ADMIN"})
+    @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id,
                                         @CurrentUser UserPrincipal currentUser) {
         return ResponseEntity.ok().body(productFacade.deleteById(id, currentUser));
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
     @DeleteMapping(value = "/delete/{productsIds}")
     public ResponseEntity<?> deleteAllById(@PathVariable Long[] productsIds,
                                            @CurrentUser UserPrincipal currentUser) {

@@ -59,6 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    RestAccessDeniedHandler accessDeniedHandler() {
+        return new RestAccessDeniedHandler();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -71,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .sessionManagement()
@@ -87,19 +93,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         SecurityConstant.RESTAURANT_REGISTER,
                         "/api/accounts/userData",
                         "/api/accounts/test")
-//                        SecurityConstant.ADMIN_URL,
-//                        SecurityConstant.CUSTOMER_URL,
-//                        SecurityConstant.PRODUCT_URL,
-//                        SecurityConstant.ORDER_URL,
-//                        SecurityConstant.CART_URL)
-//                .permitAll()
-//                .antMatchers(HttpMethod.POST)
-//                .permitAll()
-//                .antMatchers(HttpMethod.PUT)
-//                .permitAll()
-//                .antMatchers(HttpMethod.GET)
-//                .permitAll()
-//                .antMatchers(HttpMethod.DELETE)
                 .permitAll()
                 .anyRequest()
                 .authenticated();
@@ -107,5 +100,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
 }

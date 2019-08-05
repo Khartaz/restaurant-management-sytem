@@ -26,7 +26,7 @@ public final class CustomerFacade {
         this.customerService = customerService;
     }
 
-    public CustomerDto createCustomer(@CurrentUser UserPrincipal currentUser, SignUpCustomerRequest request) {
+    public CustomerDto registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
         Customer customer = customerService.registerCustomer(currentUser, request);
 
         return customerMapper.mapToCustomerDto(customer);
@@ -42,10 +42,10 @@ public final class CustomerFacade {
         return customerService.deleteCustomerById(currentUser, id);
     }
 
-    public CustomerDto getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
+    public CustomerFormDTO getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
         Customer customer = customerService.getCustomerById(currentUser, id);
 
-        return customerMapper.mapToCustomerDto(customer);
+        return customerMapper.mapToCustomerFormDTO(customer);
     }
 
     public Page<CustomerDto> getAllCustomersWithNameWithin(@CurrentUser UserPrincipal currentUser,
@@ -55,18 +55,18 @@ public final class CustomerFacade {
         return customerMapper.mapToCustomerDtoPage(customers);
     }
 
-    public Page<CustomerDto> getAllCustomersWithPhoneNumberWithin(@CurrentUser UserPrincipal currentUser,
-                                                                  String phoneNumber, Pageable pageable) {
-        Page<Customer> customers = customerService.getAllByPhoneNumberWithin(currentUser, phoneNumber, pageable);
+    public Page<CustomerDto> getAllCustomersWithPhoneWithin(@CurrentUser UserPrincipal currentUser,
+                                                            String phone, Pageable pageable) {
+        Page<Customer> customers = customerService.getAllByPhoneWithin(currentUser, phone, pageable);
 
         return customerMapper.mapToCustomerDtoPage(customers);
     }
 
-    public Page<CustomerDto> getAllCustomersByLastnameWithin(@CurrentUser UserPrincipal currentUser,
-                                                             String lastname,
+    public Page<CustomerDto> getAllCustomersByLastNameWithin(@CurrentUser UserPrincipal currentUser,
+                                                             String lastName,
                                                              Pageable pageable) {
 
-        Page<Customer> customers = customerService.getAllByLastnameWithin(currentUser, lastname, pageable);
+        Page<Customer> customers = customerService.getAllByLastNameWithin(currentUser, lastName, pageable);
 
         return customerMapper.mapToCustomerDtoPage(customers);
     }

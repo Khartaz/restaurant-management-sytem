@@ -1,6 +1,7 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.ecommerce.Customer;
+import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.request.customer.SignUpCustomerRequest;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomerService {
 
-    Customer registerCustomer(@CurrentUser UserPrincipal currentUser, SignUpCustomerRequest request);
+    Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request);
 
     Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
@@ -20,7 +21,7 @@ public interface CustomerService {
 
     Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);
 
-    Page<Customer> getAllByPhoneNumberWithin(@CurrentUser UserPrincipal currentUser, String phoneNumber, Pageable pageable);
+    Page<Customer> getAllByPhoneWithin(@CurrentUser UserPrincipal currentUser, String phone, Pageable pageable);
 
-    Page<Customer> getAllByLastnameWithin(@CurrentUser UserPrincipal currentUser, String lastname, Pageable pageable);
+    Page<Customer> getAllByLastNameWithin(@CurrentUser UserPrincipal currentUser, String lastName, Pageable pageable);
 }

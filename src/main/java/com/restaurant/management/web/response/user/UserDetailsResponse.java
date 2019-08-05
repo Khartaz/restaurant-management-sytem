@@ -8,18 +8,18 @@ public final class UserDetailsResponse {
     private Long id;
     private String role;
     private String name;
-    private String lastname;
+    private String lastName;
     private String photoURL;
     private String email;
-    private String phoneNumber;
+    private String phone;
 
     public UserDetailsResponse() {
     }
 
     public UserDetailsResponse(Long createdAt, Long updatedAt, String createdByUserId,
                                String updatedByUserId, Long id, String role,
-                               String name, String lastname, String photoURL,
-                               String email, String phoneNumber) {
+                               String name, String lastName, String photoURL,
+                               String email, String phone) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -27,10 +27,10 @@ public final class UserDetailsResponse {
         this.id = id;
         this.role = role;
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.photoURL = photoURL;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public Long getCreatedAt() {
@@ -61,8 +61,8 @@ public final class UserDetailsResponse {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getPhotoURL() {
@@ -73,8 +73,8 @@ public final class UserDetailsResponse {
         return email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
 }

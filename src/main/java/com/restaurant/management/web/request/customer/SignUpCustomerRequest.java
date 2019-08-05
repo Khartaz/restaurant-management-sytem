@@ -11,16 +11,16 @@ public final class SignUpCustomerRequest {
     @Size(min = 4, max = 40, message = "name must be between 4 - 40")
     private String name;
 
-    @NotBlank(message = "lastname cannot be blank")
-    @Size(min = 4, max = 40, message = "lastname must be between 4 - 40")
-    private String lastname;
+    @NotBlank(message = "lastName cannot be blank")
+    @Size(min = 4, max = 40, message = "lastName must be between 4 - 40")
+    private String lastName;
 
     @NotBlank(message = "email cannot be blank")
     @Size(max = 40, message = "email max size is 40")
     @Email(message = "email must be valid")
     private String email;
 
-    private String phoneNumber;
+    private String phone;
 
     @NotNull(message = "customer address cannot be null")
     private CustomerAddressRequest customerAddressRequest;
@@ -28,27 +28,27 @@ public final class SignUpCustomerRequest {
     public SignUpCustomerRequest() {
     }
 
-    public SignUpCustomerRequest(String name, String lastname, String email, String phoneNumber) {
+    public SignUpCustomerRequest(String name, String lastName, String email, String phone) {
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
     public CustomerAddressRequest getCustomerAddressRequest() {

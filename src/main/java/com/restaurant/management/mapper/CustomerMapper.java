@@ -26,9 +26,9 @@ public final class CustomerMapper {
                 customerDto.getUpdatedByUserId(),
                 customerDto.getId(),
                 customerDto.getName(),
-                customerDto.getLastname(),
+                customerDto.getLastName(),
                 customerDto.getEmail(),
-                customerDto.getPhoneNumber(),
+                customerDto.getPhone(),
                 addressMapper.mapToCustomerAddress(customerDto.getAddressDto())
         );
     }
@@ -41,9 +41,9 @@ public final class CustomerMapper {
                 customer.getUpdatedByUserId(),
                 customer.getId(),
                 customer.getName(),
-                customer.getLastname(),
+                customer.getLastName(),
                 customer.getEmail(),
-                customer.getPhoneNumber(),
+                customer.getPhone(),
                 addressMapper.mapToCustomerOrderedAddress(customer.getCustomerAddress())
         );
     }
@@ -56,9 +56,9 @@ public final class CustomerMapper {
                 customerDto.getUpdatedByUserId(),
                 customerDto.getId(),
                 customerDto.getName(),
-                customerDto.getLastname(),
+                customerDto.getLastName(),
                 customerDto.getEmail(),
-                customerDto.getPhoneNumber(),
+                customerDto.getPhone(),
                 addressMapper.mapToCustomerOrderedAddress(customerDto.getAddressDto())
         );
     }
@@ -71,8 +71,8 @@ public final class CustomerMapper {
                 customer.getUpdatedByUserId(),
                 customer.getId(),
                 customer.getName(),
-                customer.getLastname(),
-                customer.getPhoneNumber(),
+                customer.getLastName(),
+                customer.getPhone(),
                 customer.getEmail(),
                 addressMapper.mapToAddressDto(customer.getCustomerAddress())
         );
@@ -86,8 +86,8 @@ public final class CustomerMapper {
                 customer.getUpdatedByUserId(),
                 customer.getId(),
                 customer.getName(),
-                customer.getLastname(),
-                customer.getPhoneNumber(),
+                customer.getLastName(),
+                customer.getPhone(),
                 customer.getEmail(),
                 addressMapper.mapToAddressDto(customer.getCustomerOrderedAddress())
         );
@@ -101,8 +101,8 @@ public final class CustomerMapper {
                 customer.getUpdatedByUserId(),
                 customer.getId(),
                 customer.getName(),
-                customer.getLastname(),
-                customer.getPhoneNumber(),
+                customer.getLastName(),
+                customer.getPhone(),
                 customer.getEmail(),
                 customer.getCustomerAddress().getStreetAndNumber(),
                 customer.getCustomerAddress().getPostCode(),
@@ -119,9 +119,9 @@ public final class CustomerMapper {
                 customerDto.getUpdatedByUserId(),
                 customerDto.getId(),
                 customerDto.getName(),
-                customerDto.getLastname(),
+                customerDto.getLastName(),
                 customerDto.getEmail(),
-                customerDto.getPhoneNumber(),
+                customerDto.getPhone(),
                 addressMapper.mapToAddressResponse(customerDto.getAddressDto())
         );
     }

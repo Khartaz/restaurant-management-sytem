@@ -7,16 +7,16 @@ public final class CustomerResponse {
     private String updatedByUserId;
     private Long id;
     private String name;
-    private String lastname;
+    private String lastName;
     private String email;
-    private String phoneNumber;
+    private String phone;
     private AddressResponse addressResponse;
 
     public CustomerResponse() {
     }
 
     public CustomerResponse(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                            Long id, String name, String lastname, String email, String phoneNumber,
+                            Long id, String name, String lastName, String email, String phone,
                             AddressResponse addressResponse) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -24,9 +24,9 @@ public final class CustomerResponse {
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
         this.addressResponse = addressResponse;
     }
 
@@ -54,16 +54,16 @@ public final class CustomerResponse {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
     public AddressResponse getAddressResponse() {

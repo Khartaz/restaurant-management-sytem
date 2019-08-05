@@ -9,21 +9,21 @@ public final class UpdateAccountInfo {
     @Size(min = 4, max = 40, message = "name must be between 4 - 40")
     private String name;
 
-    @NotBlank(message = "lastname cannot be blank")
-    @Size(min = 4, max = 40, message = "lastname must be between 4 - 40")
-    private String lastname;
+    @NotBlank(message = "lastName cannot be blank")
+    @Size(min = 4, max = 40, message = "lastName must be between 4 - 40")
+    private String lastName;
 
-    private String phoneNumber;
+    private String phone;
 
     public String getName() {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 }

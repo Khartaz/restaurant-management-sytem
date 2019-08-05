@@ -22,8 +22,8 @@ public abstract class AbstractUser extends AbstractAuditing {
 
     @NotBlank
     @Size(max = 40)
-    @Column(name = "lastname")
-    private String lastname;
+    @Column(name = "lastName")
+    private String lastName;
 
     @NotBlank
     @Size(max = 40)
@@ -31,9 +31,9 @@ public abstract class AbstractUser extends AbstractAuditing {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone")
     @Size(max = 25)
-    private String phoneNumber;
+    private String phone;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
@@ -42,20 +42,20 @@ public abstract class AbstractUser extends AbstractAuditing {
     }
 
     public AbstractUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                        Long id, String name, String lastname, String email, String phoneNumber) {
+                        Long id, String name, String lastName, String email, String phone) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId);
         this.id = id;
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
-    public AbstractUser(String name, String lastname, String email, String phoneNumber) {
+    public AbstractUser(String name, String lastName, String email, String phone) {
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public Long getId() {
@@ -70,12 +70,12 @@ public abstract class AbstractUser extends AbstractAuditing {
         this.name = name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -86,12 +86,12 @@ public abstract class AbstractUser extends AbstractAuditing {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Boolean getDeleted() {

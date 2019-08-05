@@ -9,7 +9,7 @@ public final class SignUpUserRequest {
 
     @NotBlank
     @Size(min = 4, max = 40, message = "last name must be between 4 - 40")
-    private String lastname;
+    private String lastName;
 
     @NotBlank(message = "email cannot be blank")
     @Size(max = 40, message = "email max size is 40")
@@ -21,26 +21,26 @@ public final class SignUpUserRequest {
     private String password;
 
     //    @Size(min = 4, max = 15, message = "phone number cannot be null")
-    private String phoneNumber;
+    private String phone;
 
     public SignUpUserRequest() {
     }
 
-    public SignUpUserRequest(String name, String lastname,  String email,
-                             String password, String phoneNumber) {
+    public SignUpUserRequest(String name, String lastName, String email,
+                             String password, String phone) {
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
@@ -51,7 +51,7 @@ public final class SignUpUserRequest {
         return password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 }

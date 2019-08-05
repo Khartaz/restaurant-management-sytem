@@ -1,10 +1,8 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.layout.Shortcut;
 import com.restaurant.management.mapper.CompanyMapper;
-import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
@@ -15,15 +13,12 @@ import com.restaurant.management.service.CompanyService;
 import com.restaurant.management.web.request.company.RegisterCompanyRequest;
 import com.restaurant.management.web.request.user.UserUpdateRequest;
 import com.restaurant.management.web.response.company.RegisterCompany;
-import com.restaurant.management.web.response.company.CompanyResponse;
 import com.restaurant.management.web.response.user.UserDetailsResponse;
 import com.restaurant.management.web.response.user.UserResponse;
-import com.restaurant.management.web.response.user.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.restaurant.management.mapper.RoleMapper.roleToString;
 
@@ -76,10 +71,10 @@ public final class CompanyAccountUserFacade {
                 accountUser.getId(),
                 roleToString(accountUser),
                 accountUser.getName(),
-                accountUser.getLastname(),
+                accountUser.getLastName(),
                 photoURL,
                 accountUser.getEmail(),
-                accountUser.getPhoneNumber()
+                accountUser.getPhone()
         );
 
         return new UserResponse(userDetails, accountUser.getSettings(), shortcuts, token);
@@ -119,10 +114,10 @@ public final class CompanyAccountUserFacade {
                 accountUser.getId(),
                 roleToString(accountUser),
                 accountUser.getName(),
-                accountUser.getLastname(),
+                accountUser.getLastName(),
                 photoURL,
                 accountUser.getEmail(),
-                accountUser.getPhoneNumber()
+                accountUser.getPhone()
         );
 
         return new UserResponse(userDetailsResponse, accountUser.getSettings(), shortcuts);
@@ -145,10 +140,10 @@ public final class CompanyAccountUserFacade {
                 accountUser.getId(),
                 roleToString(accountUser),
                 accountUser.getName(),
-                accountUser.getLastname(),
+                accountUser.getLastName(),
                 photoURL,
                 accountUser.getEmail(),
-                accountUser.getPhoneNumber()
+                accountUser.getPhone()
         );
 
         return new UserResponse(userDetailsResponse, accountUser.getSettings(), shortcuts, token);

@@ -51,12 +51,12 @@ public class AccountUser extends AbstractUser {
     public AccountUser() {
     }
 
-    public AccountUser(String name, String lastname, String email,
-                       String phoneNumber, String password,
+    public AccountUser(String name, String lastName, String email,
+                       String phone, String password,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles, Company company,
                        AccountUserAddress accountUserAddress, Settings settings) {
-        super(name, lastname, email, phoneNumber);
+        super(name, lastName, email, phone);
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
@@ -67,10 +67,10 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastname, String email, String phoneNumber,
+                       Long id, String name, String lastName, String email, String phone,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastName, email, phone);
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -138,9 +138,9 @@ public class AccountUser extends AbstractUser {
 
     public static class AccountUserBuilder {
         private String name;
-        private String lastname;
+        private String lastName;
         private String email;
-        private String phoneNumber;
+        private String phone;
         private String password;
         private String emailVerificationToken;
         private Boolean isActive;
@@ -154,8 +154,8 @@ public class AccountUser extends AbstractUser {
             return this;
         }
 
-        public AccountUserBuilder setLastname(String lastname) {
-            this.lastname = lastname;
+        public AccountUserBuilder setLastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -164,8 +164,8 @@ public class AccountUser extends AbstractUser {
             return this;
         }
 
-        public AccountUserBuilder setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public AccountUserBuilder setPhone(String phone) {
+            this.phone = phone;
             return this;
         }
 
@@ -204,8 +204,8 @@ public class AccountUser extends AbstractUser {
             return this;
         }
         public AccountUser build() {
-            return new AccountUser(this.name, this.lastname, this.email,
-                    this.phoneNumber, this.password,
+            return new AccountUser(this.name, this.lastName, this.email,
+                    this.phone, this.password,
                     this.emailVerificationToken, this.isActive, this.roles,
                     this.company, this.accountUserAddress, this.settings);
         }

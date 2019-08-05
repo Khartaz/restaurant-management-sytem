@@ -16,15 +16,15 @@ public class CustomerOrdered extends AbstractUser {
     }
 
     public CustomerOrdered(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                           Long id, String name, String lastname, String email, String phoneNumber,
+                           Long id, String name, String lastName, String email, String phone,
                            CustomerOrderedAddress customerOrderedAddress) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastName, email, phone);
         this.customerOrderedAddress = customerOrderedAddress;
     }
 
-    public CustomerOrdered(String name, String lastname, String email, String phoneNumber,
+    public CustomerOrdered(String name, String lastName, String email, String phone,
                            Company company, CustomerOrderedAddress customerOrderedAddress) {
-        super(name, lastname, email, phoneNumber);
+        super(name, lastName, email, phone);
         this.company = company;
         this.customerOrderedAddress = customerOrderedAddress;
     }
@@ -47,9 +47,9 @@ public class CustomerOrdered extends AbstractUser {
 
     public static class CustomerOrderedBuilder {
         private String name;
-        private String lastname;
+        private String lastName;
         private String email;
-        private String phoneNumber;
+        private String phone;
         private Company company;
         private CustomerOrderedAddress customerOrderedAddress;
 
@@ -58,8 +58,8 @@ public class CustomerOrdered extends AbstractUser {
             return this;
         }
 
-        public CustomerOrderedBuilder setLastname(String lastname) {
-            this.lastname = lastname;
+        public CustomerOrderedBuilder setLastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -68,8 +68,8 @@ public class CustomerOrdered extends AbstractUser {
             return this;
         }
 
-        public CustomerOrderedBuilder setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public CustomerOrderedBuilder setPhone(String phone) {
+            this.phone = phone;
             return this;
         }
 
@@ -84,7 +84,7 @@ public class CustomerOrdered extends AbstractUser {
         }
 
         public CustomerOrdered build() {
-            return new CustomerOrdered(this.name, this.lastname, this.email, this.phoneNumber, this.company, this.customerOrderedAddress);
+            return new CustomerOrdered(this.name, this.lastName, this.email, this.phone, this.company, this.customerOrderedAddress);
         }
     }
 }

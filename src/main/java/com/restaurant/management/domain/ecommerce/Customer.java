@@ -15,17 +15,17 @@ public class Customer extends AbstractUser {
     public Customer() {
     }
 
-    public Customer(String name, String lastname, String email, String phoneNumber,
+    public Customer(String name, String lastName, String email, String phone,
                     Company company, CustomerAddress customerAddress) {
-        super(name, lastname, email, phoneNumber);
+        super(name, lastName, email, phone);
         this.company = company;
         this.customerAddress = customerAddress;
     }
 
     public Customer(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                    Long id, String name, String lastname, String email, String phoneNumber,
+                    Long id, String name, String lastName, String email, String phone,
                     CustomerAddress customerAddress) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastname, email, phoneNumber);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastName, email, phone);
         this.customerAddress = customerAddress;
     }
 
@@ -47,9 +47,9 @@ public class Customer extends AbstractUser {
 
     public static class CustomerBuilder {
         private String name;
-        private String lastname;
+        private String lastName;
         private String email;
-        private String phoneNumber;
+        private String phone;
         private Company company;
         private CustomerAddress customerAddress;
 
@@ -58,8 +58,8 @@ public class Customer extends AbstractUser {
             return this;
         }
 
-        public CustomerBuilder setLastname(String lastname) {
-            this.lastname = lastname;
+        public CustomerBuilder setLastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -68,8 +68,8 @@ public class Customer extends AbstractUser {
             return this;
         }
 
-        public CustomerBuilder setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public CustomerBuilder setPhone(String phone) {
+            this.phone = phone;
             return this;
         }
 
@@ -84,8 +84,8 @@ public class Customer extends AbstractUser {
         }
 
         public Customer build() {
-            return new Customer(this.name, this.lastname, this.email,
-                    this.phoneNumber, this.company, this.customerAddress);
+            return new Customer(this.name, this.lastName, this.email,
+                    this.phone, this.company, this.customerAddress);
         }
     }
 }

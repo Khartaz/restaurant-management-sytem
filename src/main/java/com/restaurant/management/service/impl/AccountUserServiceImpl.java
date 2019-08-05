@@ -98,7 +98,7 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         checkEmailAvailability(signUpUserRequest.getEmail());
 
-        validatePhoneNumber(signUpUserRequest.getPhoneNumber());
+        validatePhoneNumber(signUpUserRequest.getPhone());
 
         String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
@@ -107,9 +107,9 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         AccountUser newAdminUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
-                .setLastname(signUpUserRequest.getLastname())
+                .setLastName(signUpUserRequest.getLastName())
                 .setEmail(signUpUserRequest.getEmail())
-                .setPhoneNumber(signUpUserRequest.getPhoneNumber())
+                .setPhone(signUpUserRequest.getPhone())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.FALSE)
                 .setRoles(Collections.singleton(userRole))
@@ -128,7 +128,7 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         checkEmailAvailability(signUpUserRequest.getEmail());
 
-        validatePhoneNumber(signUpUserRequest.getPhoneNumber());
+        validatePhoneNumber(signUpUserRequest.getPhone());
 
         String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
 
@@ -143,9 +143,9 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         AccountUser accountUser = new AccountUser.AccountUserBuilder()
                 .setName(signUpUserRequest.getName())
-                .setLastname(signUpUserRequest.getLastname())
+                .setLastName(signUpUserRequest.getLastName())
                 .setEmail(signUpUserRequest.getEmail())
-                .setPhoneNumber(signUpUserRequest.getPhoneNumber())
+                .setPhone(signUpUserRequest.getPhone())
                 .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
                 .setIsActive(Boolean.TRUE)
                 .setRoles(Collections.singleton(userRole))
@@ -178,8 +178,8 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         Stream.of(accountUser).forEach(acc -> {
             acc.setName(request.getName());
-            acc.setLastname(request.getLastname());
-            acc.setPhoneNumber(request.getPhoneNumber());
+            acc.setLastName(request.getLastName());
+            acc.setPhone(request.getPhone());
             accountUserRepository.save(acc);
         });
 
@@ -307,8 +307,8 @@ public class AccountUserServiceImpl implements AccountUserService {
         AccountUser accountUser = getUserById(currentUser.getId());
 
         accountUser.setName(request.getUserDetails().getName());
-        accountUser.setLastname(request.getUserDetails().getLastname());
-        accountUser.setPhoneNumber(request.getUserDetails().getPhoneNumber());
+        accountUser.setLastName(request.getUserDetails().getLastName());
+        accountUser.setPhone(request.getUserDetails().getPhone());
 
         accountUserRepository.save(accountUser);
 

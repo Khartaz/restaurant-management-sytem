@@ -7,8 +7,8 @@ public class CustomerFormDTO {
     private String updatedByUserId;
     private Long id;
     private String name;
-    private String lastname;
-    private String phoneNumber;
+    private String lastName;
+    private String phone;
     private String email;
     private String streetAndNumber;
     private String postCode;
@@ -20,7 +20,7 @@ public class CustomerFormDTO {
 
     public CustomerFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
                            String updatedByUserId, Long id, String name,
-                           String lastname, String phoneNumber, String email,
+                           String lastName, String phone, String email,
                            String streetAndNumber, String postCode, String city, String country) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -28,8 +28,8 @@ public class CustomerFormDTO {
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.lastname = lastname;
-        this.phoneNumber = phoneNumber;
+        this.lastName = lastName;
+        this.phone = phone;
         this.email = email;
         this.streetAndNumber = streetAndNumber;
         this.postCode = postCode;
@@ -61,12 +61,12 @@ public class CustomerFormDTO {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
     public String getEmail() {

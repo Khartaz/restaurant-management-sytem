@@ -1,5 +1,6 @@
 package com.restaurant.management.repository;
 
+import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Boolean existsByPhoneNumberAndCompanyId(String phoneNumber, Long companyId);
+    Boolean existsByPhoneAndCompanyIdAndIsDeletedIsFalse(String phone, Long companyId);
 
-    Boolean existsByEmailAndCompanyId(String email, Long companyId);
+    Boolean existsByEmailAndCompanyIdAndIsDeletedIsFalse(String email, Long companyId);
 
     Boolean existsByIdAndCompanyId(Long id, Long companyId);
 
@@ -23,12 +24,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     void deleteById(Long id);
 
-    Page<Customer> findAllByCompanyIdAndIsDeletedIsFalse(Pageable pageable, Long companyId);
+    Page<Customer> findAllByCompanyAndIsDeletedIsFalse(Pageable pageable, Company company);
 
     Page<Customer> findAllByNameIsContainingAndCompanyId(String name, Long companyId, Pageable pageable);
 
-    Page<Customer> findAllByPhoneNumberIsContainingAndCompanyId(String phoneNumber, Long companyId, Pageable pageable);
+    Page<Customer> findAllByPhoneIsContainingAndCompanyId(String phone, Long companyId, Pageable pageable);
 
-    Page<Customer> findAllByLastnameContainingAndCompanyId(String lastname, Long companyId, Pageable pageable);
+    Page<Customer> findAllByLastNameContainingAndCompanyId(String lastName, Long companyId, Pageable pageable);
 
 }

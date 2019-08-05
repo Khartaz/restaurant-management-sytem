@@ -80,7 +80,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private AccountUser registerCompanyManager(SignUpUserRequest request) {
 
-        validatePhoneNumber(request.getPhoneNumber());
+        validatePhoneNumber(request.getPhone());
 
         checkEmailAvailability(request.getEmail());
 
@@ -98,9 +98,9 @@ public class CompanyServiceImpl implements CompanyService {
 
         return new AccountUser.AccountUserBuilder()
                 .setName(request.getName())
-                .setLastname(request.getLastname())
+                .setLastName(request.getLastName())
                 .setEmail(request.getEmail())
-                .setPhoneNumber(request.getPhoneNumber())
+                .setPhone(request.getPhone())
                 .setPassword(passwordEncoder.encode(request.getPassword()))
                 .setIsActive(Boolean.TRUE)
                 .setRoles(Collections.singleton(userRole))

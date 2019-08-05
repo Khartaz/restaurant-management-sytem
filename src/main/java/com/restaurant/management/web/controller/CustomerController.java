@@ -12,7 +12,6 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.SessionCartFacade;
 import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.service.facade.OrderFacade;
-import com.restaurant.management.web.request.customer.SignUpCustomerRequest;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
 import com.restaurant.management.web.response.CartResponse;
@@ -64,15 +63,13 @@ public class CustomerController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CustomerResponse> registerCustomer(@CurrentUser UserPrincipal currentUser,
-                                                @Valid @RequestBody SignUpCustomerRequest signUpCustomerRequest) {
-        CustomerDto customerDto = customerFacade.createCustomer(currentUser, signUpCustomerRequest);
+    Resource<CustomerDto> registerCustomer(@CurrentUser UserPrincipal currentUser,
+                                           @Valid @RequestBody CustomerFormDTO customerFormDTO) {
+        CustomerDto customerDto = customerFacade.registerCustomer(currentUser, customerFormDTO);
 
-        CustomerResponse response = customerMapper.mapToCustomerResponse(customerDto);
+        Link link = linkTo(CustomerController.class).slash(customerDto.getId()).withSelfRel();
 
-        Link link = linkTo(CustomerController.class).slash(response.getId()).withSelfRel();
-
-        return new Resource<>(response, link);
+        return new Resource<>(customerDto, link);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -110,14 +107,14 @@ public class CustomerController {
         return new ResponseEntity<>(assembler.toResource(responsePage), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/lastname", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/lastName", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByLastname(@CurrentUser UserPrincipal currentUser,
-                                                                                  Pageable pageable,
-                                                                                  PagedResourcesAssembler assembler,
-                                                                                  @RequestParam String lastname) {
+    ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByLastName(@CurrentUser UserPrincipal currentUser,
+                                                                               Pageable pageable,
+                                                                               PagedResourcesAssembler assembler,
+                                                                               @RequestParam String lastName) {
 
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomersByLastnameWithin(currentUser, lastname, pageable);
+        Page<CustomerDto> customersDto = customerFacade.getAllCustomersByLastNameWithin(currentUser, lastName, pageable);
 
         Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
 
@@ -129,9 +126,9 @@ public class CustomerController {
     ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByPhoneNumber(@CurrentUser UserPrincipal currentUser,
                                                                                   Pageable pageable,
                                                                                   PagedResourcesAssembler assembler,
-                                                                                  @RequestParam String phoneNumber) {
+                                                                                  @RequestParam String phone) {
 
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomersWithPhoneNumberWithin(currentUser, phoneNumber, pageable);
+        Page<CustomerDto> customersDto = customerFacade.getAllCustomersWithPhoneWithin(currentUser, phone, pageable);
 
         Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
 
@@ -140,14 +137,12 @@ public class CustomerController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CustomerResponse> showCustomer(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
-        CustomerDto customerDto = customerFacade.getCustomerById(currentUser, id);
+    Resource<CustomerFormDTO> showCustomer(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
+        CustomerFormDTO customerFormDTO = customerFacade.getCustomerById(currentUser, id);
 
-        CustomerResponse response = customerMapper.mapToCustomerResponse(customerDto);
+        Link link = linkTo(CustomerController.class).slash(customerFormDTO.getId()).withSelfRel();
 
-        Link link = linkTo(CustomerController.class).slash(response.getId()).withSelfRel();
-
-        return new Resource<>(response, link);
+        return new Resource<>(customerFormDTO, link);
     }
 
     @PutMapping(value = "/{id}/carts/session/product",

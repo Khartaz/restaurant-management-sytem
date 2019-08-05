@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
 
 public class Validation {
 
-    public static boolean validatePhoneNumber(String phoneNumber) {
+    public static boolean validatePhoneNumber(String phone) {
         String regex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
 
         Pattern pattern = Pattern.compile(regex);
 
-        Matcher matcher = pattern.matcher(phoneNumber);
+        Matcher matcher = pattern.matcher(phone);
 
         if (!matcher.matches()) {
             throw new ValidationException(ExceptionMessage.INVALID_PHONE_NUMBER.getMessage());

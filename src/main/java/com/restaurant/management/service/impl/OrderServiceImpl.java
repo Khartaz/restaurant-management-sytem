@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         Page<Order> orderList = orderRepository.findAllByCompanyId(restaurantId, pageable);
 
         List<Order> customerOrders = orderList.stream()
-                .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhoneNumber().equals(customer.getPhoneNumber()))
+                .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhone().equals(customer.getPhone()))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(customerOrders);
@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage()));
 
         return orderRepository.findByIdAndCompanyId(orderId, restaurantId)
-                .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhoneNumber().equals(customer.getPhoneNumber()))
+                .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhone().equals(customer.getPhone()))
                 .orElseThrow(() -> new OrderNotFoundException(OrderMessages.ORDER_ID_NOT_FOUND.getMessage()));
     }
 

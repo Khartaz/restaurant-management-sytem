@@ -87,9 +87,9 @@ public final class CartToCartOrderedProcessor {
 
         return new CustomerOrdered.CustomerOrderedBuilder()
                 .setName(cart.getCustomer().getName())
-                .setLastname(cart.getCustomer().getLastname())
+                .setLastName(cart.getCustomer().getLastName())
                 .setEmail(cart.getCustomer().getEmail())
-                .setPhoneNumber(cart.getCustomer().getPhoneNumber())
+                .setPhone(cart.getCustomer().getPhone())
                 .setCompany(cart.getCustomer().getCompany())
                 .setCustomerOrderedAddress(address)
                 .build();

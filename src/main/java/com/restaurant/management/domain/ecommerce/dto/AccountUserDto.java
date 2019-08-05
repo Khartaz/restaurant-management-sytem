@@ -9,16 +9,16 @@ public final class AccountUserDto {
     private String updatedByUserId;
     private Long id;
     private String name;
-    private String lastname;
+    private String lastName;
     private String email;
-    private String phoneNumber;
+    private String phone;
     private String emailVerificationToken;
     private Boolean isActive;
     private Set<RoleDto> roles;
 
     public AccountUserDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                          Long id, String name, String lastname,
-                          String email, String phoneNumber,
+                          Long id, String name, String lastName,
+                          String email, String phone,
                           String emailVerificationToken,
                           Boolean isActive, Set<RoleDto> roles) {
         this.createdAt = createdAt;
@@ -27,9 +27,9 @@ public final class AccountUserDto {
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -63,16 +63,16 @@ public final class AccountUserDto {
         return name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
     public String getEmailVerificationToken() {

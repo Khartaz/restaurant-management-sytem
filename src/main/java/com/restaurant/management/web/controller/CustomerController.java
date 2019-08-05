@@ -84,10 +84,10 @@ public class CustomerController {
         return new Resource<>(customerFormDTO, link);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/{customerId}")
     public ResponseEntity<?> deleteCustomerById(@CurrentUser UserPrincipal currentUser,
-                                                @PathVariable Long id) {
-        return ResponseEntity.ok().body(customerFacade.deleteCustomerById(currentUser, id));
+                                                @PathVariable Long customerId) {
+        return ResponseEntity.ok().body(customerFacade.deleteCustomerById(currentUser, customerId));
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

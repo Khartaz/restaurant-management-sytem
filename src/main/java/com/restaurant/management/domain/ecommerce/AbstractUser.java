@@ -94,7 +94,7 @@ public abstract class AbstractUser extends AbstractAuditing {
         this.phone = phone;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 

@@ -19,6 +19,9 @@ public abstract class AbstractCart extends AbstractAuditing {
     @Column(name = "total_price")
     private Double totalPrice;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     public AbstractCart() {
     }
 
@@ -51,5 +54,13 @@ public abstract class AbstractCart extends AbstractAuditing {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

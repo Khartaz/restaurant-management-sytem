@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -113,24 +114,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Long restaurantId = getCompany(currentUser).getId();
+        Customer customer = getCustomerById(currentUser, customerId);
 
-        Customer customer = customerRepository.findByIdAndCompanyId(customerId, restaurantId)
-                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
+        List<Cart> carts = cartRepository.findAllByCustomer(customer);
 
-        Optional<Cart> sessionCart = cartRepository.findByCustomer(customer);
+        carts.iterator().forEachRemaining(cart -> {
+            cart.setDeleted(Boolean.TRUE);
+            cartRepository.save(cart);
+        });
 
-        sessionCart.ifPresent(s -> cartRepository.delete(s));
-
-        customerRepository.deleteById(customer.getId());
+        customer.setDeleted(Boolean.TRUE);
+        customerRepository.save(customer);
 
         return new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage());
     }
 
     public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        Long restaurantId = getCompany(currentUser).getId();
+        Long companyId = getCompany(currentUser).getId();
 
-        return customerRepository.findByIdAndCompanyId(customerId, restaurantId)
+        return customerRepository.findByIdAndCompanyId(customerId, companyId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
     }
 

@@ -20,7 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findById(Long id);
 
-    Optional<Customer> findByIdAndCompanyId(Long id, Long companyId);
+    Optional<Customer> findByIdAndCompanyId(Long customerId, Long companyId);
 
     void deleteById(Long id);
 

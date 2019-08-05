@@ -59,7 +59,7 @@ public class CartServiceImpl implements CartService {
         AccountUser accountUser = getUserById(currentUser);
         Long restaurantId = accountUser.getCompany().getId();
 
-        return cartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId);
+        return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId);
     }
 
     public Cart getCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
 
         Long restaurantId = accountUser.getCompany().getId();
 
-        return cartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId)
+        return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
     }
 
@@ -253,7 +253,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private Cart getOpenSessionCartByCustomerId(Long customerId) {
-        return cartRepository.findSessionCartByCustomerIdAndIsOpenTrue(customerId)
+        return cartRepository.findCartByCustomerIdAndIsOpenTrue(customerId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_NOT_REGISTER.getMessage()));
     }
 }

@@ -68,7 +68,7 @@ public class CartOrderedServiceImpl implements CartOrderedService {
 
         Long restaurantId = accountUser.getCompany().getId();
 
-        return cartRepository.findSessionCartByCustomerIdAndCompanyId(customerId, restaurantId)
+        return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
     }
 

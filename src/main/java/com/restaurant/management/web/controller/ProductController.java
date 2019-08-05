@@ -58,7 +58,7 @@ public class ProductController {
 
         ProductFormDTO productFormDTO = productFacade.updateProduct(request, currentUser);
 
-        Link link = linkTo(ProductController.class).slash(request.getId()).withSelfRel();
+        Link link = linkTo(ProductController.class).slash(productFormDTO.getId()).withSelfRel();
         return new Resource<>(productFormDTO, link);
     }
 

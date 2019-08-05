@@ -72,6 +72,18 @@ public class CustomerController {
         return new Resource<>(customerDto, link);
     }
 
+    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<CustomerFormDTO> updateCustomer(@CurrentUser UserPrincipal currentUser,
+                                             @Valid @RequestBody CustomerFormDTO request) {
+
+        CustomerFormDTO customerFormDTO = customerFacade.updateCustomer(currentUser, request);
+
+        Link link = linkTo(CustomerController.class).slash(customerFormDTO.getId()).withSelfRel();
+
+        return new Resource<>(customerFormDTO, link);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteCustomerById(@CurrentUser UserPrincipal currentUser,
                                                 @PathVariable Long id) {

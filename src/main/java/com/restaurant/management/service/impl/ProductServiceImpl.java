@@ -137,7 +137,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {
-
         Product product = getRestaurantProductById(productId, currentUser);
 
         List<LineItem> lineItems = lineItemRepository.findAllByProductId(productId);

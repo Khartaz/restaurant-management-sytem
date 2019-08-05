@@ -32,6 +32,12 @@ public final class CustomerFacade {
         return customerMapper.mapToCustomerDto(customer);
     }
 
+    public CustomerFormDTO updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+        Customer customer = customerService.updateCustomer(currentUser, request);
+
+        return customerMapper.mapToCustomerFormDTO(customer);
+    }
+
     public Page<CustomerFormDTO> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Customer> customers = customerService.getAllCustomers(currentUser, pageable);
 

@@ -13,6 +13,8 @@ public interface CustomerService {
 
     Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request);
 
+    Customer updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request);
+
     Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
     ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id);

@@ -72,6 +72,26 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
+    public Customer updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+        Customer customer = getCustomerById(currentUser, request.getId());
+
+        Stream.of(customer)
+                .forEach(c -> {
+                    c.setName(request.getName());
+                    c.setLastName(request.getLastName());
+                    c.setEmail(request.getEmail());
+                    c.setPhone(request.getPhone());
+                    c.getCustomerAddress().setCountry(request.getCountry());
+                    c.getCustomerAddress().setCity(request.getCity());
+                    c.getCustomerAddress().setPostCode(request.getPostCode());
+                    c.getCustomerAddress().setStreetAndNumber(request.getStreetAndNumber());
+
+                    customerRepository.save(c);
+                });
+
+        return customer;
+    }
+
     private void validateEmailAndPhoneNumber(@CurrentUser UserPrincipal currentUser, String phone, String email) {
         Long restaurantId = getCompany(currentUser).getId();
 
@@ -107,11 +127,11 @@ public class CustomerServiceImpl implements CustomerService {
         return new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage());
     }
 
-    public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
+    public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {
         Long restaurantId = getCompany(currentUser).getId();
 
-        return customerRepository.findByIdAndCompanyId(id, restaurantId)
-                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + id));
+        return customerRepository.findByIdAndCompanyId(customerId, restaurantId)
+                .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
     }
 
     private Company getCompany(@CurrentUser UserPrincipal currentUser) {

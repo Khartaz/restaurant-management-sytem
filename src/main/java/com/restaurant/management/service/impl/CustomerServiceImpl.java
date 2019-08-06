@@ -14,12 +14,15 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.response.ApiResponse;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -127,6 +130,19 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customer);
 
         return new ApiResponse(true, CustomerMessages.CUSTOMER_DELETED.getMessage());
+    }
+
+    public ApiResponse deleteAllByIds(@CurrentUser UserPrincipal currentUser, Long[] customerIds) {
+        List<Long> ids = new ArrayList<>(Arrays.asList(customerIds));
+
+        List<Customer> customers = customerRepository.findAllByIdIn(ids);
+        Stream.of(customers)
+                .forEach(c -> {
+                    c.iterator().forEachRemaining(v -> v.setDeleted(Boolean.TRUE));
+                    c.iterator().forEachRemaining(v -> customerRepository.save(v));
+                });
+
+        return new ApiResponse(true, CustomerMessages.CUSTOMERS_DELETED.getMessage());
     }
 
     public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {

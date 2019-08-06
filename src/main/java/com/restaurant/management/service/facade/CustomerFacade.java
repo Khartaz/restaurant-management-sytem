@@ -48,6 +48,10 @@ public final class CustomerFacade {
         return customerService.deleteCustomerById(currentUser, id);
     }
 
+    public ApiResponse deleteAllByIds(@CurrentUser UserPrincipal currentUser, Long[] customerIds) {
+        return customerService.deleteAllByIds(currentUser,customerIds);
+    }
+
     public CustomerFormDTO getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
         Customer customer = customerService.getCustomerById(currentUser, id);
 

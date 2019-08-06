@@ -90,6 +90,13 @@ public class CustomerController {
         return ResponseEntity.ok().body(customerFacade.deleteCustomerById(currentUser, customerId));
     }
 
+    @DeleteMapping(value = "/delete/{customerIds}")
+    public ResponseEntity<?> deleteAllById(@CurrentUser UserPrincipal currentUser,
+                                           @PathVariable Long[] customerIds) {
+
+        return ResponseEntity.ok().body(customerFacade.deleteAllByIds(currentUser, customerIds));
+    }
+
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<CustomerFormDTO>> getAllCustomersPageable(@CurrentUser UserPrincipal currentUser,

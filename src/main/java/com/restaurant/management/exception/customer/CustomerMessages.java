@@ -5,6 +5,7 @@ public enum CustomerMessages {
     CUSTOMER_PHONE_EXISTS("Customer with provided phone number already exists. "),
     ID_NOT_FOUND("Customer with provided id not found. "),
     CUSTOMER_DELETED("Customer deleted"),
+    CUSTOMERS_DELETED("Customers deleted"),
     CUSTOMER_EMAIL_EXISTS("Customer with provided email already exists. ");
 
     private String errorMessage;

@@ -19,6 +19,8 @@ public interface CustomerService {
 
     ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id);
 
+    ApiResponse deleteAllByIds(@CurrentUser UserPrincipal currentUser, Long[] customerIds);
+
     Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id);
 
     Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);

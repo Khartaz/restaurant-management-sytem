@@ -162,6 +162,6 @@ public class ProductServiceImpl implements ProductService {
                     p.iterator().forEachRemaining(v -> productRepository.save(v));
                 });
 
-        return new ApiResponse(true, ProductMessages.PRODUCT_DELETED.getMessage());
+        return new ApiResponse(true, ProductMessages.PRODUCTS_DELETED.getMessage());
     }
 }

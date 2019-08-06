@@ -58,6 +58,10 @@ public final class CustomerFacade {
         return customerMapper.mapToCustomerFormDTO(customer);
     }
 
+    public ApiResponse checkCustomerPhoneAvailability(@CurrentUser UserPrincipal currentUser, String phone) {
+        return customerService.checkCustomerPhoneAvailability(currentUser, phone);
+    }
+
     public Page<CustomerDto> getAllCustomersWithNameWithin(@CurrentUser UserPrincipal currentUser,
                                                            String name, Pageable pageable) {
         Page<Customer> customers = customerService.getAllByNameWithin(currentUser, name, pageable);

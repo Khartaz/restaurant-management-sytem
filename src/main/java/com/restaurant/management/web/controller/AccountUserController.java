@@ -41,27 +41,18 @@ public class AccountUserController {
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
     private CompanyAccountUserFacade companyAccountUserFacade;
-    private LayoutSettingsService layoutSettingsService;
     private LayoutShortcutService layoutShortcutService;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
                                  AccountUserMapper accountUserMapper,
                                  CompanyAccountUserFacade companyAccountUserFacade,
-                                 LayoutSettingsServiceImpl layoutSettingsService,
                                  LayoutShortcutService layoutShortcutService) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
         this.companyAccountUserFacade = companyAccountUserFacade;
-        this.layoutSettingsService = layoutSettingsService;
         this.layoutShortcutService = layoutShortcutService;
     }
-
-//    @GetMapping(value = "/me")
-//    public @ResponseBody
-//    UserSummary getCurrentUserSummary(@CurrentUser UserPrincipal currentUser) {
-//        return companyAccountUserFacade.getUserSummary(currentUser);
-//    }
 
     @LogLogin
     @PostMapping(value = "/login", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)

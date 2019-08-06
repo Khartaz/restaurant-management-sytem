@@ -9,7 +9,9 @@ import java.util.regex.Pattern;
 public class Validation {
 
     public static boolean validatePhoneNumber(String phone) {
-        String regex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
+//        String regex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
+
+        String regex = "/^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$/im";
 
         Pattern pattern = Pattern.compile(regex);
 

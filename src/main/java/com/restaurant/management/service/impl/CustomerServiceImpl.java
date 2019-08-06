@@ -96,15 +96,25 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
+    public ApiResponse checkCustomerPhoneAvailability(@CurrentUser UserPrincipal currentUser, String phone) {
+        Long companyId = getCompany(currentUser).getId();
+
+        if(customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, companyId)) {
+            return new ApiResponse(false, CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
+        } else {
+            return new ApiResponse(true, CustomerMessages.PHONE_AVAILABLE.getMessage());
+        }
+    }
+
     private void validateEmailAndPhoneNumber(@CurrentUser UserPrincipal currentUser, String phone, String email) {
-        Long restaurantId = getCompany(currentUser).getId();
+        Long companyId = getCompany(currentUser).getId();
 
-        validatePhoneNumber(phone);
+//        validatePhoneNumber(phone);
 
-        if (customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, restaurantId)) {
+        if (customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, companyId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
         }
-        if (customerRepository.existsByEmailAndCompanyIdAndIsDeletedIsFalse(email, restaurantId)) {
+        if (customerRepository.existsByEmailAndCompanyIdAndIsDeletedIsFalse(email, companyId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
         }
     }

@@ -23,6 +23,8 @@ public interface CustomerService {
 
     Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long id);
 
+    ApiResponse checkCustomerPhoneAvailability(@CurrentUser UserPrincipal currentUser, String phone);
+
     Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable);
 
     Page<Customer> getAllByPhoneWithin(@CurrentUser UserPrincipal currentUser, String phone, Pageable pageable);

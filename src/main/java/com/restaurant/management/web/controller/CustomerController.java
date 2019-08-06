@@ -14,6 +14,7 @@ import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.service.facade.OrderFacade;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
+import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
 import com.restaurant.management.web.response.OrderResponse;
@@ -110,6 +111,12 @@ public class CustomerController {
         }
 
         return new ResponseEntity<>(assembler.toResource(customerFormDTO), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/checkPhoneAvailability", produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody ApiResponse checkCustomerPhoneAvailability(@CurrentUser UserPrincipal currentUser,
+                                                                                    @RequestParam String phone) {
+        return customerFacade.checkCustomerPhoneAvailability(currentUser, phone);
     }
 
     @GetMapping(value = "/name", produces = APPLICATION_JSON_VALUE)

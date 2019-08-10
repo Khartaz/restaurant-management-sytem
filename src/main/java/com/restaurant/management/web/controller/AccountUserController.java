@@ -5,11 +5,8 @@ import com.restaurant.management.domain.ecommerce.dto.AccountUserDto;
 import com.restaurant.management.mapper.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.LayoutSettingsService;
-import com.restaurant.management.service.LayoutShortcutService;
 import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.service.facade.CompanyAccountUserFacade;
-import com.restaurant.management.service.impl.LayoutSettingsServiceImpl;
 import com.restaurant.management.web.request.user.LoginRequest;
 import com.restaurant.management.web.request.user.SignUpUserRequest;
 import com.restaurant.management.web.request.user.UpdateAccountInfo;
@@ -41,17 +38,14 @@ public class AccountUserController {
     private AccountUserFacade accountUserFacade;
     private AccountUserMapper accountUserMapper;
     private CompanyAccountUserFacade companyAccountUserFacade;
-    private LayoutShortcutService layoutShortcutService;
 
     @Autowired
     public AccountUserController(AccountUserFacade accountUserFacade,
                                  AccountUserMapper accountUserMapper,
-                                 CompanyAccountUserFacade companyAccountUserFacade,
-                                 LayoutShortcutService layoutShortcutService) {
+                                 CompanyAccountUserFacade companyAccountUserFacade) {
         this.accountUserFacade = accountUserFacade;
         this.accountUserMapper = accountUserMapper;
         this.companyAccountUserFacade = companyAccountUserFacade;
-        this.layoutShortcutService = layoutShortcutService;
     }
 
     @LogLogin
@@ -135,12 +129,6 @@ public class AccountUserController {
     public @ResponseBody
     UserResponse updateUserData(@CurrentUser UserPrincipal currentUser, @RequestBody UserUpdateRequest userUpdateRequest) {
         return companyAccountUserFacade.updateUserDetails(currentUser, userUpdateRequest);
-    }
-
-    @GetMapping(value = "/test", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    String[] show(@CurrentUser UserPrincipal currentUser) {
-        return layoutShortcutService.getLayoutShortcuts(currentUser);
     }
 
 }

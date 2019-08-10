@@ -8,6 +8,7 @@ public enum UserMessages {
     UNAUTHENTICATED("Unauthenticated"),
     ROLE_NOT_SET("Role not set."),
     ACCOUNT_DELETED("Account deleted"),
+    ACCOUNTS_DELETED("Accounts deleted"),
     PASSWORDS_EQUALS("Password and confirmed password must be this same"),
     USER_NOT_FOUND("UserResponse not found with email : "),
     ID_NOT_FOUND("UserResponse not found with id: "),

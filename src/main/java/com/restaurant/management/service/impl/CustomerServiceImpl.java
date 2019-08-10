@@ -47,8 +47,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     public Customer registerCustomer(@CurrentUser UserPrincipal currentUser,
                                      CustomerFormDTO request) {
-
-        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
+        // FOR LATER
+//        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
 
         CustomerAddress address = new CustomerAddress();
         Stream.of(address)

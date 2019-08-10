@@ -15,18 +15,15 @@ public abstract class AbstractUser extends AbstractAuditing {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank
-    @Size(max = 40)
+    @Size(max = 80)
     @Column(name = "name")
     private String name;
 
-    @NotBlank
-    @Size(max = 40)
+    @Size(max = 80)
     @Column(name = "lastName")
     private String lastName;
 
-    @NotBlank
-    @Size(max = 40)
+    @Size(max = 80)
     @Email
     @Column(name = "email")
     private String email;

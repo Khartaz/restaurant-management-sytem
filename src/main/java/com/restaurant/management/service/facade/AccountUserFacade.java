@@ -57,7 +57,7 @@ public final class AccountUserFacade {
     }
 
     public Page<AccountUserDto> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        Page<AccountUser> accountUsers = accountUserService.getRestaurantUsers(currentUser, pageable);
+        Page<AccountUser> accountUsers = accountUserService.getCompanyUsers(currentUser, pageable);
 
         return accountUserMapper.mapToAccountUserDtoPage(accountUsers);
     }
@@ -69,7 +69,7 @@ public final class AccountUserFacade {
     }
 
     public AccountUserDto getRestaurantUserById(@CurrentUser UserPrincipal currentUser,  Long id) {
-        AccountUser accountUser = accountUserService.getRestaurantUserById(currentUser, id);
+        AccountUser accountUser = accountUserService.getCompanyUserById(currentUser, id);
 
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }

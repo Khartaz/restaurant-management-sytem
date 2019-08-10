@@ -112,6 +112,10 @@ public class AccountUser extends AbstractUser {
         return roles;
     }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public Company getCompany() {
         return company;
     }

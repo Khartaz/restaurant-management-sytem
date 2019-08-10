@@ -72,7 +72,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private ApiResponse checkEmailAvailability(String email) {
-        if(accountUserRepository.existsByEmail(email)) {
+        if(accountUserRepository.existsByEmailAndIsDeletedIsFalse(email)) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
         }
         return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());

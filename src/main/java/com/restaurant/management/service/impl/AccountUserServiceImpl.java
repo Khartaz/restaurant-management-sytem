@@ -1,9 +1,6 @@
 package com.restaurant.management.service.impl;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.Mail;
-import com.restaurant.management.domain.ecommerce.Role;
-import com.restaurant.management.domain.ecommerce.RoleName;
+import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -65,6 +62,13 @@ public class AccountUserServiceImpl implements AccountUserService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + email));
     }
 
+    public Company getCompany(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+
+        return accountUser.getCompany();
+    }
+
     private boolean checkAccountActivationStatus(Boolean status) {
         if (!status) {
             throw new UserAuthenticationException(UserMessages.ACCOUNT_DISABLED.getMessage());
@@ -88,7 +92,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public ApiResponse checkEmailAvailability(String email) {
-        if(accountUserRepository.existsByEmail(email)) {
+        if(accountUserRepository.existsByEmailAndIsDeletedIsFalse(email)) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
         }
         return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
@@ -191,7 +195,7 @@ public class AccountUserServiceImpl implements AccountUserService {
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
-    public AccountUser getRestaurantUserById(@CurrentUser UserPrincipal currentUser, Long id) {
+    public AccountUser getCompanyUserById(@CurrentUser UserPrincipal currentUser, Long id) {
         AccountUser currentUserResult = getUserById(currentUser.getId());
 
         Long companyId = currentUserResult.getCompany().getId();
@@ -295,7 +299,7 @@ public class AccountUserServiceImpl implements AccountUserService {
         return accountUserRepository.findAll(pageable);
     }
 
-    public Page<AccountUser> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    public Page<AccountUser> getCompanyUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         AccountUser accountUser = getUserById(currentUser.getId());
 
         Long companyId = accountUser.getCompany().getId();

@@ -1,11 +1,13 @@
 package com.restaurant.management.repository;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.Company;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,9 +17,13 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
 
     Optional<AccountUser> findById(Long id);
 
+    Page<AccountUser> findAllByCompanyAndIsDeletedIsFalse(Company company, Pageable pageable);
+
     void deleteById(Long id);
 
-    Boolean existsByEmail(String email);
+    Boolean existsByEmailAndIsDeletedIsFalse(String email);
+
+    List<AccountUser> findAllByIdIn(List<Long> personnelIds);
 
     Optional<AccountUser> findUserByEmailVerificationToken(String token);
 

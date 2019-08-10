@@ -2,6 +2,7 @@ package com.restaurant.management.service;
 
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.RoleName;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountUserService extends UserDetailsService {
+
+    Company getCompany(@CurrentUser UserPrincipal currentUser);
 
     @Override
     UserDetails loadUserByUsername(String usernameOrEmail);
@@ -32,7 +35,7 @@ public interface AccountUserService extends UserDetailsService {
 
     AccountUser getUserById(Long id);
 
-    AccountUser getRestaurantUserById(@CurrentUser UserPrincipal currentUser, Long id);
+    AccountUser getCompanyUserById(@CurrentUser UserPrincipal currentUser, Long id);
 
     JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest);
 
@@ -46,7 +49,7 @@ public interface AccountUserService extends UserDetailsService {
 
     Page<AccountUser> getAllAccountUsers(Pageable pageable);
 
-    Page<AccountUser> getRestaurantUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable);
+    Page<AccountUser> getCompanyUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
     String getRoleToString(RoleName roleName);
 

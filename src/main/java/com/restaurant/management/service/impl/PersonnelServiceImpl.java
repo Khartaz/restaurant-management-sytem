@@ -13,20 +13,18 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.LayoutSettingsService;
-import com.restaurant.management.service.LayoutShortcutService;
 import com.restaurant.management.service.PersonnelService;
 import com.restaurant.management.web.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -124,10 +122,22 @@ public class PersonnelServiceImpl implements PersonnelService {
     }
 
     public Page<AccountUser> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-
         Company company = accountUserService.getCompany(currentUser);
 
-        return accountUserRepository.findAllByCompanyAndIsDeletedIsFalse(company, pageable);
+        Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
+                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
+
+        AccountUser manager = accountUserRepository.findByRolesAndCompanyAndIsDeletedIsFalse(Collections.singleton(userRole), company)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage()));
+
+        Page<AccountUser> accountUsers = accountUserRepository.findAllByCompanyAndIsDeletedIsFalse(company, pageable);
+
+        List<AccountUser> content = accountUsers.getContent()
+                .stream()
+                .filter(au -> !au.getId().equals(manager.getId()))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(content);
     }
 
     public ApiResponse deletePersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
@@ -158,6 +168,5 @@ public class PersonnelServiceImpl implements PersonnelService {
         return accountUserRepository.findByIdAndCompanyId(personId, companyId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage()));
     }
-
 
 }

@@ -43,7 +43,7 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findById(currentUser.getId())
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 

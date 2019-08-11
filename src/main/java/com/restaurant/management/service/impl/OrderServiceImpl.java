@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Page<Order> getCustomerOrdersById(@CurrentUser UserPrincipal currentUser, Long customerId, Pageable pageable) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
         Long restaurantId = accountUser.getCompany().getId();
@@ -116,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
 
     public Order getOrderByCustomerIdAndOrderId(@CurrentUser UserPrincipal currentUser,
                                                 Long customerId, Long orderId) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
         Long restaurantId = accountUser.getCompany().getId();
@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findById(currentUser.getId())
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 }

@@ -58,12 +58,12 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     private AccountUser getByEmail(String email) {
-        return accountUserRepository.findByEmail(email)
+        return accountUserRepository.findByEmailAndIsDeletedIsFalse(email)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + email));
     }
 
     public Company getCompany(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
         return accountUser.getCompany();
@@ -191,7 +191,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public AccountUser getUserById(Long id) {
-        return accountUserRepository.findById(id)
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(id)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 

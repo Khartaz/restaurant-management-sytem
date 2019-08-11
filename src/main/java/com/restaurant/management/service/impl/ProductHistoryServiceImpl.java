@@ -44,7 +44,7 @@ public class ProductHistoryServiceImpl implements ProductHistoryService {
     public List<ProductHistory> productRevisions(Long productId,
                                                  @CurrentUser UserPrincipal currentUser) {
 
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
         Long restaurantId = accountUser.getCompany().getId();

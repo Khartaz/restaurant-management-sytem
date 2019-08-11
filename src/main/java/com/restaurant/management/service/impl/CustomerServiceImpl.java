@@ -14,7 +14,6 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CustomerService;
 import com.restaurant.management.web.response.ApiResponse;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +23,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
-
-import static com.restaurant.management.utils.Validation.validatePhoneNumber;
 
 @Service
 @Transactional
@@ -163,7 +159,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private Company getCompany(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findById(currentUser.getId())
+        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
         return accountUser.getCompany();

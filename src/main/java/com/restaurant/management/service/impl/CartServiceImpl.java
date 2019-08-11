@@ -218,7 +218,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findById(currentUser.getId())
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 

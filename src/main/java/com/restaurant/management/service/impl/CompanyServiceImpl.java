@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import static com.restaurant.management.utils.Validation.validatePhoneNumber;
 
@@ -55,15 +56,12 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     public RegisterCompany registerCompany(RegisterCompanyRequest request) {
-        Settings settings = settingsService.createDefaultLayoutSettings();
-
 
         Company company = registerCompany(request.getCompanyRequest());
 
         AccountUser accountUser = registerCompanyManager(request.getSignUpUserRequest());
 
         accountUser.setCompany(company); // <-- Assign company to user
-        accountUser.setSettings(settings);            //  <-- Assign default layout settings
 
         accountUserRepository.save(accountUser);
         companyRepository.save(company);
@@ -80,7 +78,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private AccountUser registerCompanyManager(SignUpUserRequest request) {
 
-        validatePhoneNumber(request.getPhone());
+//        validatePhoneNumber(request.getPhone());
 
         checkEmailAvailability(request.getEmail());
 
@@ -96,18 +94,23 @@ public class CompanyServiceImpl implements CompanyService {
 //        simpleEmailService.sendEmailVerification(
 //                new Mail(request.getEmail(), request.getName()), token);
 
-        return new AccountUser.AccountUserBuilder()
-                .setName(request.getName())
-                .setLastName(request.getLastName())
-                .setEmail(request.getEmail())
-                .setPhone(request.getPhone())
-                .setPassword(passwordEncoder.encode(request.getPassword()))
-                .setIsActive(Boolean.TRUE)
-                .setRoles(Collections.singleton(userRole))
-                .setEmailVerificationToken(null)
-                .setSettings(settingsService.createDefaultLayoutSettings())
-                .setUserAddress(registerUserAddress())
-                .build();
+        AccountUser accountUser = new AccountUser();
+        Stream.of(accountUser)
+                .forEach(user -> {
+                    user.setName(request.getName());
+                    user.setLastName(request.getLastName());
+                    user.setEmail(request.getEmail());
+                    user.setPhone(request.getPhone());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
+                    user.setActive(Boolean.TRUE);
+                    user.setDeleted(Boolean.FALSE);
+                    user.setRoles(Collections.singleton(userRole));
+                    user.setEmailVerificationToken(null);
+                    user.setSettings(settingsService.createDefaultLayoutSettings());
+                    user.setAccountUserAddress(registerUserAddress());
+                });
+
+        return accountUser;
     }
 
     public Company getCompanyById(@CurrentUser UserPrincipal currentUser) {
@@ -120,7 +123,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private AccountUser getUserById(Long id) {
-        return accountUserRepository.findById(id)
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(id)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 

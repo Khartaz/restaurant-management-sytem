@@ -115,7 +115,7 @@ public class PersonnelServiceImpl implements PersonnelService {
                     p.getAccountUserAddress().setStreetAndNumber(request.getStreetAndNumber());
                     p.getAccountUserAddress().setPostCode(request.getPostCode());
                     p.getAccountUserAddress().setCity(request.getCity());
-                    p.getAccountUserAddress().setCity(request.getCountry());
+                    p.getAccountUserAddress().setCountry(request.getCountry());
 
                     accountUserRepository.save(p);
                 });

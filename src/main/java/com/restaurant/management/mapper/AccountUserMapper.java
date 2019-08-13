@@ -21,26 +21,6 @@ public final class AccountUserMapper {
         this.roleMapper = roleMapper;
     }
 
-    public AccountUser mapToAccountUser(final AccountUserDto accountUserDto) {
-        return new AccountUser(
-                accountUserDto.getCreatedAt(),
-                accountUserDto.getUpdatedAt(),
-                accountUserDto.getCreatedByUserId(),
-                accountUserDto.getUpdatedByUserId(),
-                accountUserDto.getId(),
-                accountUserDto.getName(),
-                accountUserDto.getLastName(),
-                accountUserDto.getEmail(),
-                accountUserDto.getPhone(),
-                "temp job title",
-                accountUserDto.getEmailVerificationToken(),
-                accountUserDto.isActive(),
-                accountUserDto.getRoles().stream()
-                        .map(v -> roleMapper.mapToRole(v))
-                        .collect(Collectors.toSet())
-        );
-    }
-
     public AccountUserDto mapToAccountUserDto(final AccountUser accountUser) {
         return new AccountUserDto(
                 accountUser.getCreatedAt(),
@@ -77,12 +57,6 @@ public final class AccountUserMapper {
                         .map(r -> roleMapper.mapToRoleResponse(r))
                         .collect(Collectors.toSet())
         );
-    }
-
-    public List<AccountUser> mapToAccountUserList(final List<AccountUserDto> accountUsersDto) {
-        return accountUsersDto.stream()
-                .map(this::mapToAccountUser)
-                .collect(Collectors.toList());
     }
 
     public List<AccountUserDto> mapToAccountUserListDto(final List<AccountUser> accountUsers) {

@@ -22,9 +22,9 @@ public class CustomerOrdered extends AbstractUser {
         this.customerOrderedAddress = customerOrderedAddress;
     }
 
-    public CustomerOrdered(String name, String lastName, String email, String phone,
+    public CustomerOrdered(String name, String lastName, String email, String phone, String jobTitle,
                            Company company, CustomerOrderedAddress customerOrderedAddress) {
-        super(name, lastName, email, phone);
+        super(name, lastName, email, phone, jobTitle);
         this.company = company;
         this.customerOrderedAddress = customerOrderedAddress;
     }
@@ -43,48 +43,5 @@ public class CustomerOrdered extends AbstractUser {
 
     public void setCustomerOrderedAddress(CustomerOrderedAddress customerOrderedAddress) {
         this.customerOrderedAddress = customerOrderedAddress;
-    }
-
-    public static class CustomerOrderedBuilder {
-        private String name;
-        private String lastName;
-        private String email;
-        private String phone;
-        private Company company;
-        private CustomerOrderedAddress customerOrderedAddress;
-
-        public CustomerOrderedBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public CustomerOrderedBuilder setLastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public CustomerOrderedBuilder setEmail(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public CustomerOrderedBuilder setPhone(String phone) {
-            this.phone = phone;
-            return this;
-        }
-
-        public CustomerOrderedBuilder setCompany(Company company) {
-            this.company = company;
-            return this;
-        }
-
-        public CustomerOrderedBuilder setCustomerOrderedAddress(CustomerOrderedAddress customerOrderedAddress) {
-            this.customerOrderedAddress = customerOrderedAddress;
-            return this;
-        }
-
-        public CustomerOrdered build() {
-            return new CustomerOrdered(this.name, this.lastName, this.email, this.phone, this.company, this.customerOrderedAddress);
-        }
     }
 }

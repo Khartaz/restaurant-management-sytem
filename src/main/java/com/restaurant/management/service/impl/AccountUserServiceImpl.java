@@ -6,7 +6,6 @@ import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.mapper.RoleMapper;
-import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
@@ -28,10 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.stream.Stream;
-
-import static com.restaurant.management.utils.Validation.validatePhoneNumber;
 
 @Service
 @Transactional
@@ -40,18 +36,16 @@ public class AccountUserServiceImpl implements AccountUserService {
 
     private AuthenticationManager authenticationManager;
     private AccountUserRepository accountUserRepository;
-    private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
     private SimpleEmailService simpleEmailService;
 
     @Autowired
     public AccountUserServiceImpl(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
-                                  RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                                  JwtTokenProvider tokenProvider,  SimpleEmailService simpleEmailService) {
+                                  PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider,
+                                  SimpleEmailService simpleEmailService) {
         this.authenticationManager = authenticationManager;
         this.accountUserRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.simpleEmailService = simpleEmailService;
@@ -98,72 +92,6 @@ public class AccountUserServiceImpl implements AccountUserService {
         return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
     }
 
-    public AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest) {
-
-        checkEmailAvailability(signUpUserRequest.getEmail());
-
-        validatePhoneNumber(signUpUserRequest.getPhone());
-
-        String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
-
-        Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
-
-        AccountUser newAdminUser = new AccountUser.AccountUserBuilder()
-                .setName(signUpUserRequest.getName())
-                .setLastName(signUpUserRequest.getLastName())
-                .setEmail(signUpUserRequest.getEmail())
-                .setPhone(signUpUserRequest.getPhone())
-                .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
-                .setIsActive(Boolean.FALSE)
-                .setRoles(Collections.singleton(userRole))
-                .setEmailVerificationToken(token)
-                .build();
-
-        accountUserRepository.save(newAdminUser);
-
-        simpleEmailService.sendEmailVerification(
-                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
-
-        return newAdminUser;
-    }
-
-    public AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest) {
-
-        checkEmailAvailability(signUpUserRequest.getEmail());
-
-        validatePhoneNumber(signUpUserRequest.getPhone());
-
-        String token = tokenProvider.generateEmailVerificationToken(signUpUserRequest.getEmail());
-
-        Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
-                .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
-
-        /**
-         *  Temporary changed Active to TRUE and EmailVerificationToken to NULL
-         *  Disabled email sending
-         *  Change it back to production version
-         */
-
-        AccountUser accountUser = new AccountUser.AccountUserBuilder()
-                .setName(signUpUserRequest.getName())
-                .setLastName(signUpUserRequest.getLastName())
-                .setEmail(signUpUserRequest.getEmail())
-                .setPhone(signUpUserRequest.getPhone())
-                .setPassword(passwordEncoder.encode(signUpUserRequest.getPassword()))
-                .setIsActive(Boolean.TRUE)
-                .setRoles(Collections.singleton(userRole))
-                .setEmailVerificationToken(null)
-                .build();
-
-        accountUserRepository.save(accountUser);
-
-        simpleEmailService.sendEmailVerification(
-                new Mail(signUpUserRequest.getEmail(), signUpUserRequest.getName()), token);
-
-        return accountUser;
-    }
-
     public String getRoleToString(RoleName roleName) {
         return RoleMapper.mapRoleToString(roleName);
     }
@@ -186,7 +114,6 @@ public class AccountUserServiceImpl implements AccountUserService {
             acc.setPhone(request.getPhone());
             accountUserRepository.save(acc);
         });
-
         return accountUser;
     }
 

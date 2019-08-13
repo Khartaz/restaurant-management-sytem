@@ -85,6 +85,7 @@ public class PersonnelServiceImpl implements PersonnelService {
                     p.setLastName(request.getLastName());
                     p.setEmail(request.getEmail());
                     p.setPhone(request.getPhone());
+                    p.setJobTitle(request.getJobTitle());
                     p.setCompany(company);
                     p.setSettings(settings);
                     p.setDeleted(Boolean.FALSE);
@@ -109,6 +110,7 @@ public class PersonnelServiceImpl implements PersonnelService {
                     p.setLastName(request.getLastName());
                     p.setEmail(request.getEmail());
                     p.setPhone(request.getPhone());
+                    p.setJobTitle(request.getJobTitle());
                     p.setActive(request.getActive());
                     p.getAccountUserAddress().setStreetAndNumber(request.getStreetAndNumber());
                     p.getAccountUserAddress().setPostCode(request.getPostCode());

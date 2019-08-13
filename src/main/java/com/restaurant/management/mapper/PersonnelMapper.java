@@ -21,6 +21,7 @@ public final class PersonnelMapper {
                 accountUser.getLastName(),
                 accountUser.getEmail(),
                 accountUser.getPhone(),
+                accountUser.getJobTitle(),
                 roleToString(accountUser),
                 accountUser.getAccountUserAddress().getStreetAndNumber(),
                 accountUser.getAccountUserAddress().getPostCode(),

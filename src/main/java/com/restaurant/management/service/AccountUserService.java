@@ -25,9 +25,9 @@ public interface AccountUserService extends UserDetailsService {
 
     ApiResponse checkEmailAvailability(String email);
 
-    AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest);
+//    AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest);
 
-    AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest);
+//    AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest);
 
     ApiResponse deleteUserById(Long id);
 

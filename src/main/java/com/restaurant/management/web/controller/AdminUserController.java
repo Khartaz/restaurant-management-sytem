@@ -39,17 +39,6 @@ public class AdminUserController {
         this.accountUserMapper = accountUserMapper;
     }
 
-    @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<AccountUserResponse> registerAdminUser(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-        AccountUserDto accountUserDto = accountUserFacade.registerAdminAccount(signUpUserRequest);
-
-        AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
-
-        Link link = linkTo(AdminUserController.class).slash(userResponse.getId()).withSelfRel();
-        return new Resource<>(userResponse, link);
-    }
-
     @LogExecutionTime
     @GetMapping(value = "/all-accounts", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody

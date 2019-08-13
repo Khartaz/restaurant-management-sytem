@@ -64,17 +64,7 @@ public class AccountUserController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(accountUserFacade.authenticateUser(loginRequest));
     }
-
-    @PostMapping(value = "/signup", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Resource<AccountUserResponse> registerManagerAccount(@Valid @RequestBody SignUpUserRequest signUpUserRequest) {
-        AccountUserDto accountUserDto = accountUserFacade.registerManagerAccount(signUpUserRequest);
-
-        AccountUserResponse userResponse = accountUserMapper.mapToAccountUserResponse(accountUserDto);
-
-        Link link = linkTo(AccountUserController.class).slash(userResponse.getId()).withSelfRel();
-        return new Resource<>(userResponse, link);
-    }
+    
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody

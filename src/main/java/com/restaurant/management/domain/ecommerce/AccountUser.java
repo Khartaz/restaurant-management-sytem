@@ -21,9 +21,6 @@ public class AccountUser extends AbstractUser {
     @Column(name = "password_reset_token")
     private String passwordResetToken;
 
-    @Column(name = "encrypted_password")
-    private String encryptedPassword;
-
     @Column(name = "email_verification_token")
     private String emailVerificationToken;
 
@@ -52,11 +49,11 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(String name, String lastName, String email,
-                       String phone, String password,
+                       String phone, String jobTitle, String password,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles, Company company,
                        AccountUserAddress accountUserAddress, Settings settings) {
-        super(name, lastName, email, phone);
+        super(name, lastName, email, phone, jobTitle);
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
@@ -67,10 +64,10 @@ public class AccountUser extends AbstractUser {
     }
 
     public AccountUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastName, String email, String phone,
+                       Long id, String name, String lastName, String email, String phone, String jobTitle,
                        String emailVerificationToken,
                        Boolean isActive, Set<Role> roles) {
-        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastName, email, phone);
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastName, email, phone, jobTitle);
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
@@ -140,78 +137,78 @@ public class AccountUser extends AbstractUser {
         this.settings = settings;
     }
 
-    public static class AccountUserBuilder {
-        private String name;
-        private String lastName;
-        private String email;
-        private String phone;
-        private String password;
-        private String emailVerificationToken;
-        private Boolean isActive;
-        private Set<Role> roles = new HashSet<>();
-        private Company company;
-        private AccountUserAddress accountUserAddress;
-        private Settings settings;
-
-        public AccountUserBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public AccountUserBuilder setLastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public AccountUserBuilder setEmail(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public AccountUserBuilder setPhone(String phone) {
-            this.phone = phone;
-            return this;
-        }
-
-        public AccountUserBuilder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public AccountUserBuilder setEmailVerificationToken(String emailVerificationToken) {
-            this.emailVerificationToken = emailVerificationToken;
-            return this;
-        }
-
-        public AccountUserBuilder setIsActive(Boolean isActive) {
-            this.isActive = isActive;
-            return this;
-        }
-
-        public AccountUserBuilder setRoles(Set<Role> roles) {
-            this.roles = roles;
-            return this;
-        }
-
-        public AccountUserBuilder setCompany(Company company) {
-            this.company = company;
-            return this;
-        }
-
-        public AccountUserBuilder setUserAddress(AccountUserAddress accountUserAddress) {
-            this.accountUserAddress = accountUserAddress;
-            return this;
-        }
-
-        public AccountUserBuilder setSettings(Settings settings) {
-            this.settings = settings;
-            return this;
-        }
-        public AccountUser build() {
-            return new AccountUser(this.name, this.lastName, this.email,
-                    this.phone, this.password,
-                    this.emailVerificationToken, this.isActive, this.roles,
-                    this.company, this.accountUserAddress, this.settings);
-        }
-    }
+//    public static class AccountUserBuilder {
+//        private String name;
+//        private String lastName;
+//        private String email;
+//        private String phone;
+//        private String password;
+//        private String emailVerificationToken;
+//        private Boolean isActive;
+//        private Set<Role> roles = new HashSet<>();
+//        private Company company;
+//        private AccountUserAddress accountUserAddress;
+//        private Settings settings;
+//
+//        public AccountUserBuilder setName(String name) {
+//            this.name = name;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setLastName(String lastName) {
+//            this.lastName = lastName;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setEmail(String email) {
+//            this.email = email;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setPhone(String phone) {
+//            this.phone = phone;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setPassword(String password) {
+//            this.password = password;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setEmailVerificationToken(String emailVerificationToken) {
+//            this.emailVerificationToken = emailVerificationToken;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setIsActive(Boolean isActive) {
+//            this.isActive = isActive;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setRoles(Set<Role> roles) {
+//            this.roles = roles;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setCompany(Company company) {
+//            this.company = company;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setUserAddress(AccountUserAddress accountUserAddress) {
+//            this.accountUserAddress = accountUserAddress;
+//            return this;
+//        }
+//
+//        public AccountUserBuilder setSettings(Settings settings) {
+//            this.settings = settings;
+//            return this;
+//        }
+//        public AccountUser build() {
+//            return new AccountUser(this.name, this.lastName, this.email,
+//                    this.phone, this.password,
+//                    this.emailVerificationToken, this.isActive, this.roles,
+//                    this.company, this.accountUserAddress, this.settings);
+//        }
+//    }
 }

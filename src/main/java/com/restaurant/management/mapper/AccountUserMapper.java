@@ -32,6 +32,7 @@ public final class AccountUserMapper {
                 accountUserDto.getLastName(),
                 accountUserDto.getEmail(),
                 accountUserDto.getPhone(),
+                "temp job title",
                 accountUserDto.getEmailVerificationToken(),
                 accountUserDto.isActive(),
                 accountUserDto.getRoles().stream()

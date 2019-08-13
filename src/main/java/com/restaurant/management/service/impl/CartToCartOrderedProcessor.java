@@ -85,14 +85,14 @@ public final class CartToCartOrderedProcessor {
     private CustomerOrdered mapToCustomerOrdered(Cart cart) {
         CustomerOrderedAddress address = mapToCustomerOrderedAddress(cart);
 
-        return new CustomerOrdered.CustomerOrderedBuilder()
-                .setName(cart.getCustomer().getName())
-                .setLastName(cart.getCustomer().getLastName())
-                .setEmail(cart.getCustomer().getEmail())
-                .setPhone(cart.getCustomer().getPhone())
-                .setCompany(cart.getCustomer().getCompany())
-                .setCustomerOrderedAddress(address)
-                .build();
+        return new CustomerOrdered(
+                cart.getCustomer().getName(),
+                cart.getCustomer().getLastName(),
+                cart.getCustomer().getEmail(),
+                cart.getCustomer().getPhone(),
+                "Temporary job title",
+                cart.getCustomer().getCompany(),
+                address);
     }
 
     private CustomerOrderedAddress mapToCustomerOrderedAddress(Cart cart) {

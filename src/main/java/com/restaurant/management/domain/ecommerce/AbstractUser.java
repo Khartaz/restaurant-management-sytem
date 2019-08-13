@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
@@ -17,6 +17,7 @@ public abstract class AbstractUser extends AbstractAuditing {
 
     @Size(max = 80)
     @Column(name = "name")
+    @NotNull
     private String name;
 
     @Size(max = 80)
@@ -32,10 +33,24 @@ public abstract class AbstractUser extends AbstractAuditing {
     @Size(max = 25)
     private String phone;
 
+    @Column(name = "jobTitle")
+    private String jobTitle;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
     public AbstractUser() {
+    }
+
+    public AbstractUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                        Long id, String name, String lastName, String email, String phone, String jobTitle) {
+        super(createdAt, updatedAt, createdByUserId, updatedByUserId);
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.jobTitle = jobTitle;
     }
 
     public AbstractUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
@@ -46,6 +61,14 @@ public abstract class AbstractUser extends AbstractAuditing {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+    }
+
+    public AbstractUser(String name, String lastName, String email, String phone, String jobTitle) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.jobTitle = jobTitle;
     }
 
     public AbstractUser(String name, String lastName, String email, String phone) {
@@ -97,5 +120,13 @@ public abstract class AbstractUser extends AbstractAuditing {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 }

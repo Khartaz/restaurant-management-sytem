@@ -29,6 +29,7 @@ public final class CustomerMapper {
                 customerDto.getLastName(),
                 customerDto.getEmail(),
                 customerDto.getPhone(),
+                "temp job title",
                 addressMapper.mapToCustomerAddress(customerDto.getAddressDto())
         );
     }

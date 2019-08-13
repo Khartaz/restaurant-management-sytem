@@ -33,11 +33,6 @@ public final class AccountUserFacade {
         return accountUserService.authenticateUser(loginRequest);
     }
 
-    public AccountUserDto registerManagerAccount(SignUpUserRequest request) {
-        AccountUser accountUser = accountUserService.registerManagerAccount(request);
-
-        return accountUserMapper.mapToAccountUserDto(accountUser);
-    }
 
     public AccountUserDto updateAccountInfo(@CurrentUser UserPrincipal currentUser,
                                             UpdateAccountInfo request) {
@@ -74,11 +69,6 @@ public final class AccountUserFacade {
         return accountUserMapper.mapToAccountUserDto(accountUser);
     }
 
-    public AccountUserDto registerAdminAccount(SignUpUserRequest request) {
-        AccountUser accountUser = accountUserService.registerAdminAccount(request);
-
-        return accountUserMapper.mapToAccountUserDto(accountUser);
-    }
 
     public ApiResponse checkEmailAvailability(String email) {
         return accountUserService.checkEmailAvailability(email);

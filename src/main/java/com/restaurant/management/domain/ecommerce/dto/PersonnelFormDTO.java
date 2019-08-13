@@ -10,6 +10,7 @@ public class PersonnelFormDTO {
     private String lastName;
     private String email;
     private String phone;
+    private String jobTitle;
     private String role;
     private String streetAndNumber;
     private String postCode;
@@ -22,7 +23,7 @@ public class PersonnelFormDTO {
 
     public PersonnelFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
                             String updatedByUserId, Long id, String name, String lastName,
-                            String email, String phone, String role,
+                            String email, String phone, String jobTitle, String role,
                             String streetAndNumber, String postCode,
                             String city, String country, Boolean isActive) {
         this.createdAt = createdAt;
@@ -34,6 +35,7 @@ public class PersonnelFormDTO {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.jobTitle = jobTitle;
         this.role = role;
         this.streetAndNumber = streetAndNumber;
         this.postCode = postCode;
@@ -76,6 +78,10 @@ public class PersonnelFormDTO {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
     }
 
     public String getRole() {

@@ -55,7 +55,7 @@ public class PersonnelServiceImpl implements PersonnelService {
     }
 
     public AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
-        accountUserService.checkEmailAvailability(request.getEmail());
+        accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
 
         Company company = accountUserService.getCompany(currentUser);
 
@@ -102,6 +102,8 @@ public class PersonnelServiceImpl implements PersonnelService {
     }
 
     public AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+        accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
+
         AccountUser person = accountUserService.getCompanyUserById(currentUser, request.getId());
 
         Stream.of(person)

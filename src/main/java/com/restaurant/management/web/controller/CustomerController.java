@@ -113,12 +113,6 @@ public class CustomerController {
         return new ResponseEntity<>(assembler.toResource(customerFormDTO), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/checkPhoneAvailability", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody ApiResponse checkCustomerPhoneAvailability(@CurrentUser UserPrincipal currentUser,
-                                                                                    @RequestParam String phone) {
-        return customerFacade.checkCustomerPhoneAvailability(currentUser, phone);
-    }
-
     @GetMapping(value = "/name", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<PagedResources<CustomerResponse>> getAllCustomersByName(@CurrentUser UserPrincipal currentUser,

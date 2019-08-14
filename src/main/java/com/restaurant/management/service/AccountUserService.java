@@ -23,7 +23,9 @@ public interface AccountUserService extends UserDetailsService {
 
     UserDetails loadUserByUserId(Long id);
 
-    ApiResponse checkEmailAvailability(String email);
+    ApiResponse checkPublicEmailAvailability(String email);
+
+    ApiResponse checkEmailAvailabilityInCompany(@CurrentUser UserPrincipal currentUser, String email);
 
 //    AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest);
 

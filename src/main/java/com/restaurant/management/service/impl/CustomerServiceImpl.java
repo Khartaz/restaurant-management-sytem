@@ -41,10 +41,8 @@ public class CustomerServiceImpl implements CustomerService {
         this.accountUserRepository = accountUserRepository;
     }
 
-    public Customer registerCustomer(@CurrentUser UserPrincipal currentUser,
-                                     CustomerFormDTO request) {
-        // FOR LATER
-//        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
+    public Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
 
         CustomerAddress address = new CustomerAddress();
         Stream.of(address)
@@ -65,14 +63,16 @@ public class CustomerServiceImpl implements CustomerService {
                    c.setCompany(getCompany(currentUser));
                    c.setCustomerAddress(address);
                    c.setDeleted(Boolean.FALSE);
-                });
 
-        customerRepository.save(customer);
+                    customerRepository.save(c);
+                });
 
         return customer;
     }
 
     public Customer updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
+
         Customer customer = getCustomerById(currentUser, request.getId());
 
         Stream.of(customer)
@@ -91,21 +91,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customer;
     }
-
-    public ApiResponse checkCustomerPhoneAvailability(@CurrentUser UserPrincipal currentUser, String phone) {
-        Long companyId = getCompany(currentUser).getId();
-
-        if(customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, companyId)) {
-            return new ApiResponse(false, CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
-        } else {
-            return new ApiResponse(true, CustomerMessages.PHONE_AVAILABLE.getMessage());
-        }
-    }
-
     private void validateEmailAndPhoneNumber(@CurrentUser UserPrincipal currentUser, String phone, String email) {
         Long companyId = getCompany(currentUser).getId();
-
-//        validatePhoneNumber(phone);
 
         if (customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, companyId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());

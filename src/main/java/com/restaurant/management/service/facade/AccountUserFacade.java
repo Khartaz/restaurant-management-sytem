@@ -7,7 +7,6 @@ import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.web.request.user.LoginRequest;
-import com.restaurant.management.web.request.user.SignUpUserRequest;
 import com.restaurant.management.web.request.user.UpdateAccountInfo;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
@@ -71,7 +70,7 @@ public final class AccountUserFacade {
 
 
     public ApiResponse checkEmailAvailability(String email) {
-        return accountUserService.checkEmailAvailability(email);
+        return accountUserService.checkPublicEmailAvailability(email);
     }
 
     public boolean activateAccount(String token) {

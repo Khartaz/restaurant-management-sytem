@@ -84,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
             checkCustomerEmailAvailabilityInCompany(currentUser, request.getEmail());
         }
 
-        if (!request.getPhone().isEmpty()) {
+        if (!request.getPhone().isEmpty() && !customer.getPhone().equals(request.getPhone())) {
             validatePhoneNumberFormat(request.getPhone());
             checkCustomerPhoneAvailabilityInCompany(currentUser, request.getPhone());
         }
@@ -120,7 +120,6 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, companyId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
         }
-
     }
 
     public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {

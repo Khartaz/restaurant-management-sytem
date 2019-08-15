@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+
 @Component
 public final class CustomerMapper {
     private AddressMapper addressMapper;
@@ -95,9 +97,12 @@ public final class CustomerMapper {
     }
 
     public CustomerFormDTO mapToCustomerFormDTO(final Customer customer) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         return new CustomerFormDTO(
-                customer.getCreatedAt(),
-                customer.getUpdatedAt(),
+                formatter.format(customer.getCreatedAt()),
+                formatter.format(customer.getUpdatedAt()),
                 customer.getCreatedByUserId(),
                 customer.getUpdatedByUserId(),
                 customer.getId(),

@@ -1,8 +1,8 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
 public final class ProductFormDTO {
-    private Long createdAt;
-    private Long updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
@@ -20,7 +20,7 @@ public final class ProductFormDTO {
     public ProductFormDTO() {
     }
 
-    public ProductFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
+    public ProductFormDTO(String createdAt, String updatedAt, String createdByUserId,
                           String updatedByUserId, Long id, String name, Double priceTaxIncl,
                           String description, String sku, Double quantity, Double width,
                           Double height, Double depth, Double weight, Double extraShippingFee) {
@@ -41,11 +41,11 @@ public final class ProductFormDTO {
         this.extraShippingFee = extraShippingFee;
     }
 
-    public Long getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public Long getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 

@@ -1,8 +1,8 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
 public class PersonnelFormDTO {
-    private Long createdAt;
-    private Long updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
@@ -21,7 +21,7 @@ public class PersonnelFormDTO {
     public PersonnelFormDTO() {
     }
 
-    public PersonnelFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
+    public PersonnelFormDTO(String createdAt, String updatedAt, String createdByUserId,
                             String updatedByUserId, Long id, String name, String lastName,
                             String email, String phone, String jobTitle, String role,
                             String streetAndNumber, String postCode,
@@ -44,11 +44,11 @@ public class PersonnelFormDTO {
         this.isActive = isActive;
     }
 
-    public Long getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public Long getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 

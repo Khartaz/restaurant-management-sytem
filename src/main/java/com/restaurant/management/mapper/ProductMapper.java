@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,9 +92,12 @@ public final class ProductMapper {
     }
 
     public ProductFormDTO mapToProductFormDTO(final Product product) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         return new ProductFormDTO(
-                product.getCreatedAt(),
-                product.getUpdatedAt(),
+                formatter.format(product.getCreatedAt()),
+                formatter.format(product.getUpdatedAt()),
                 product.getCreatedByUserId(),
                 product.getUpdatedByUserId(),
                 product.getId(),

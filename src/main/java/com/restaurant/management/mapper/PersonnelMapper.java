@@ -5,15 +5,20 @@ import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+
 import static com.restaurant.management.mapper.RoleMapper.roleToString;
 
 @Component
 public final class PersonnelMapper {
 
     public PersonnelFormDTO mapToPersonnelFormDTO(final AccountUser accountUser) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         return new PersonnelFormDTO(
-                accountUser.getCreatedAt(),
-                accountUser.getUpdatedAt(),
+                formatter.format(accountUser.getCreatedAt()),
+                formatter.format(accountUser.getUpdatedAt()),
                 accountUser.getCreatedByUserId(),
                 accountUser.getUpdatedByUserId(),
                 accountUser.getId(),

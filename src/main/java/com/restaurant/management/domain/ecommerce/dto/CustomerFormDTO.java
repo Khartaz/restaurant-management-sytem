@@ -1,8 +1,8 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
 public class CustomerFormDTO {
-    private Long createdAt;
-    private Long updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
@@ -18,7 +18,7 @@ public class CustomerFormDTO {
     public CustomerFormDTO() {
     }
 
-    public CustomerFormDTO(Long createdAt, Long updatedAt, String createdByUserId,
+    public CustomerFormDTO(String createdAt, String updatedAt, String createdByUserId,
                            String updatedByUserId, Long id, String name,
                            String lastName, String phone, String email,
                            String streetAndNumber, String postCode, String city, String country) {
@@ -37,11 +37,11 @@ public class CustomerFormDTO {
         this.country = country;
     }
 
-    public Long getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public Long getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 

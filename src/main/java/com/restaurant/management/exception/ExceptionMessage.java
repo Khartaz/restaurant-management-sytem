@@ -1,11 +1,7 @@
 package com.restaurant.management.exception;
 
 public enum  ExceptionMessage {
-    INVALID_PHONE_NUMBER("Incorrect phone number. " +
-            "Example:" +
-            " +1 1234567890123 or " +
-            " +12 123456789 or " +
-            " +123 123456 ");
+    INVALID_PHONE_NUMBER("Incorrect phone number format. ");
 
     private String message;
 

@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.restaurant.management.utils.Validation.validatePhoneNumberFormat;
+
 @Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
@@ -42,7 +44,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
-        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
+        checkCustomerEmailAvailabilityInCompany(currentUser, request.getEmail());
+
+        if (!request.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(request.getPhone());
+            checkCustomerPhoneAvailabilityInCompany(currentUser, request.getPhone());
+        }
 
         CustomerAddress address = new CustomerAddress();
         Stream.of(address)
@@ -71,9 +78,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
-        validateEmailAndPhoneNumber(currentUser, request.getPhone(), request.getEmail());
-
         Customer customer = getCustomerById(currentUser, request.getId());
+
+        if (!customer.getEmail().equals(request.getEmail())) {
+            checkCustomerEmailAvailabilityInCompany(currentUser, request.getEmail());
+        }
+
+        if (!request.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(request.getPhone());
+            checkCustomerPhoneAvailabilityInCompany(currentUser, request.getPhone());
+        }
 
         Stream.of(customer)
                 .forEach(c -> {
@@ -91,15 +105,22 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customer;
     }
-    private void validateEmailAndPhoneNumber(@CurrentUser UserPrincipal currentUser, String phone, String email) {
+
+    private void checkCustomerEmailAvailabilityInCompany(@CurrentUser UserPrincipal currentUser, String email) {
+        Long companyId = getCompany(currentUser).getId();
+
+        if (customerRepository.existsByEmailAndCompanyIdAndIsDeletedIsFalse(email, companyId)) {
+            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
+        }
+    }
+
+    private void checkCustomerPhoneAvailabilityInCompany(@CurrentUser UserPrincipal currentUser, String phone) {
         Long companyId = getCompany(currentUser).getId();
 
         if (customerRepository.existsByPhoneAndCompanyIdAndIsDeletedIsFalse(phone, companyId)) {
             throw new CustomerExistsException(CustomerMessages.CUSTOMER_PHONE_EXISTS.getMessage());
         }
-        if (customerRepository.existsByEmailAndCompanyIdAndIsDeletedIsFalse(email, companyId)) {
-            throw new CustomerExistsException(CustomerMessages.CUSTOMER_EMAIL_EXISTS.getMessage());
-        }
+
     }
 
     public Page<Customer> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {

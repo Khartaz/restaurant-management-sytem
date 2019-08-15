@@ -3,24 +3,17 @@ package com.restaurant.management.utils;
 import com.restaurant.management.exception.ExceptionMessage;
 import com.restaurant.management.exception.ValidationException;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validation {
 
-    public static boolean validatePhoneNumber(String phone) {
-//        String regex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
+    public static boolean validatePhoneNumberFormat(String phone) {
+        Pattern pattern = Pattern.compile("^[+]?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4,6}$");
+        boolean result = pattern.matcher(phone).matches();
 
-        String regex = "/^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$/im";
-
-        Pattern pattern = Pattern.compile(regex);
-
-        Matcher matcher = pattern.matcher(phone);
-
-        if (!matcher.matches()) {
+        if (!result) {
             throw new ValidationException(ExceptionMessage.INVALID_PHONE_NUMBER.getMessage());
         }
-
-        return matcher.matches();
+        return true;
     }
 }

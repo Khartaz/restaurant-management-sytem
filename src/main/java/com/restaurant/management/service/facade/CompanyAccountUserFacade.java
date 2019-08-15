@@ -80,25 +80,6 @@ public final class CompanyAccountUserFacade {
         return new UserResponse(userDetails, accountUser.getSettings(), shortcuts, token);
     }
 
-    //TO DELETE IN FUTURE ?
-//    public UserSummary getUserSummary(@CurrentUser UserPrincipal currentUser) {
-//        AccountUser accountUser = accountUserService.getUserById(currentUser.getId());
-//
-//        Company company = accountUser.getCompany();
-//
-//        CompanyResponse companyResponse = companyMapper.mapToCompanyResponse(company);
-//
-//        return new UserSummary(
-//                accountUser.getId(),
-//                accountUser.getName(),
-//                accountUser.getLastname(),
-//                accountUser.getEmail(),
-//                accountUser.getPhoneNumber(),
-//                accountUser.getRoles(),
-//                companyResponse
-//        );
-//    }
-
     public UserResponse getUserData(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = accountUserService.getUserById(currentUser.getId());
 

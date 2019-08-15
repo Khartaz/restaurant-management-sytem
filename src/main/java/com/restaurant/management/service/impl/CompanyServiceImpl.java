@@ -1,7 +1,6 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
-import com.restaurant.management.domain.layout.Settings;
 import com.restaurant.management.exception.company.CompanyMessages;
 import com.restaurant.management.exception.company.CompanyNotFoundException;
 import com.restaurant.management.exception.user.UserAuthenticationException;
@@ -28,7 +27,7 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static com.restaurant.management.utils.Validation.validatePhoneNumber;
+import static com.restaurant.management.utils.Validation.validatePhoneNumberFormat;
 
 @Service
 @Transactional
@@ -77,8 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private AccountUser registerCompanyManager(SignUpUserRequest request) {
-
-//        validatePhoneNumber(request.getPhone());
+        validatePhoneNumberFormat(request.getPhone());
 
         checkEmailAvailability(request.getEmail());
 

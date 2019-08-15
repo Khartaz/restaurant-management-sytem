@@ -3,7 +3,6 @@ package com.restaurant.management.exception.customer;
 public enum CustomerMessages {
     CUSTOMER_NOT_REGISTER("Customer is not register. "),
     CUSTOMER_PHONE_EXISTS("Customer with provided phone number already exists. "),
-    PHONE_AVAILABLE("Customer phone available"),
     ID_NOT_FOUND("Customer with provided id not found. "),
     CUSTOMER_DELETED("Customer deleted"),
     CUSTOMERS_DELETED("Customers deleted"),

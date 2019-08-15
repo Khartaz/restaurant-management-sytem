@@ -27,6 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.restaurant.management.utils.Validation.validatePhoneNumberFormat;
+
 @Service
 @Transactional
 public class PersonnelServiceImpl implements PersonnelService {
@@ -56,6 +58,10 @@ public class PersonnelServiceImpl implements PersonnelService {
 
     public AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
         accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
+
+        if (!request.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(request.getPhone());
+        }
 
         Company company = accountUserService.getCompany(currentUser);
 
@@ -102,9 +108,15 @@ public class PersonnelServiceImpl implements PersonnelService {
     }
 
     public AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
-        accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
-
         AccountUser person = accountUserService.getCompanyUserById(currentUser, request.getId());
+
+        if (!person.getEmail().equals(request.getEmail())) {
+            accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
+        }
+
+        if (!request.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(request.getPhone());
+        }
 
         Stream.of(person)
                 .forEach(p -> {

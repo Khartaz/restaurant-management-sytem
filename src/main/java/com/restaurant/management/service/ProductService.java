@@ -14,9 +14,9 @@ public interface ProductService {
 
     Product updateProduct(ProductFormDTO productFormDTO, @CurrentUser UserPrincipal currentUser);
 
-    Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser);
+    Product getProductById(Long productId, @CurrentUser UserPrincipal currentUser);
 
-    Page<Product> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser);
+    Page<Product> getAllByCompany(Pageable pageable, @CurrentUser UserPrincipal currentUser);
 
     ApiResponse deleteById(Long id, @CurrentUser UserPrincipal currentUser);
 

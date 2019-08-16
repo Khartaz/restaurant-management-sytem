@@ -1,6 +1,7 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
+import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -41,14 +42,17 @@ public class ProductServiceImpl implements ProductService {
         this.accountUserRepository = accountUserRepository;
     }
 
-    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
+    private ApiResponse checkProductNameAvailabilityInCompany(String name, Long companyId) {
+        if (productRepository.existsByNameAndCompanyIdAndIsDeletedIsFalse(name, companyId)) {
+            throw new ProductExsitsException(ProductMessages.PRODUCT_NAME_EXISTS.getMessage());
+        }
+        return new ApiResponse(true, ProductMessages.PRODUCT_NAME_AVAILABLE.getMessage());
     }
 
     public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductFormDTO request) {
-
         AccountUser accountUser = getUserById(currentUser);
+
+        checkProductNameAvailabilityInCompany(request.getName(), accountUser.getCompany().getId());
 
         ProductInventory productInventory = new ProductInventory();
         Stream.of(productInventory)
@@ -71,7 +75,6 @@ public class ProductServiceImpl implements ProductService {
         Stream.of(product)
                 .forEach(p -> {
                     p.setName(request.getName());
-//      CHECK IT LATER    p.setPrice((Math.floor(request.getPriceTaxIncl() * 100) / 100));
                     p.setPrice(request.getPriceTaxIncl());
                     p.setDescription(request.getDescription());
                     p.setDeleted(Boolean.FALSE);
@@ -86,7 +89,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product updateProduct(ProductFormDTO request, @CurrentUser UserPrincipal currentUser) {
-        Product product = getRestaurantProductById(request.getId(), currentUser);
+        Long companyId = getUserById(currentUser).getCompany().getId();
+        Product product = getProductById(request.getId(), currentUser);
+
+        if (!product.getName().equals(request.getName())) {
+            checkProductNameAvailabilityInCompany(request.getName(), companyId);
+        }
 
         Stream.of(product)
                 .forEach(p -> {
@@ -107,17 +115,17 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    public Product getRestaurantProductById(Long productId, @CurrentUser UserPrincipal currentUser) {
+    public Product getProductById(Long productId, @CurrentUser UserPrincipal currentUser) {
 
         AccountUser accountUser = getUserById(currentUser);
 
         Long restaurantId = accountUser.getCompany().getId();
 
-        return productRepository.findByIdAndCompanyId(productId, restaurantId)
+        return productRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(productId, restaurantId)
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productId));
     }
 
-    public Page<Product> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
+    public Page<Product> getAllByCompany(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
 
         AccountUser accountUser = getUserById(currentUser);
 
@@ -125,7 +133,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {
-        Product product = getRestaurantProductById(productId, currentUser);
+        Product product = getProductById(productId, currentUser);
 
         List<LineItem> lineItems = lineItemRepository.findAllByProductId(productId);
 
@@ -151,5 +159,10 @@ public class ProductServiceImpl implements ProductService {
                 });
 
         return new ApiResponse(true, ProductMessages.PRODUCTS_DELETED.getMessage());
+    }
+
+    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 }

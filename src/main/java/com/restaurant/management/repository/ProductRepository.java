@@ -13,12 +13,11 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Optional<Product> findByIdAndCompanyId(Long id, Long companyId);
+    Optional<Product> findByIdAndCompanyIdAndIsDeletedIsFalse(Long id, Long companyId);
 
     List<Product> findAllByIdIn(List<Long> id);
 
-    @Override
-    Page<Product> findAll(Pageable pageable);
+    Boolean existsByNameAndCompanyIdAndIsDeletedIsFalse(String name, Long companyId);
 
     Page<Product> findAllByCompanyAndIsDeletedIsFalse(Pageable pageable, Company company);
 

@@ -102,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
 
         Long restaurantId = accountUser.getCompany().getId();
 
-        Customer customer = customerRepository.findByIdAndCompanyId(customerId, restaurantId)
+        Customer customer = customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, restaurantId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage()));
 
         Page<Order> orderList = orderRepository.findAllByCompanyId(restaurantId, pageable);
@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
 
         Long restaurantId = accountUser.getCompany().getId();
 
-        Customer customer = customerRepository.findByIdAndCompanyId(customerId, restaurantId)
+        Customer customer = customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, restaurantId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage()));
 
         return orderRepository.findByIdAndCompanyId(orderId, restaurantId)

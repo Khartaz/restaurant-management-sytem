@@ -23,7 +23,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<Customer> findAllByIdIn(List<Long> customersIds);
 
-    Optional<Customer> findByIdAndCompanyId(Long customerId, Long companyId);
+    Optional<Customer> findByIdAndCompanyIdAndIsDeletedIsFalse(Long customerId, Long companyId);
 
     void deleteById(Long id);
 

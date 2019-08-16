@@ -105,7 +105,7 @@ public class CartServiceImpl implements CartService {
                 .findFirst();
 
         if (sessionLineItem.isPresent()) {
-            throw new ProductExsitsException(ProductMessages.PROCUCT_ALREADY_IN_CART.getMessage());
+            throw new ProductExsitsException(ProductMessages.PRODUCT_ALREADY_IN_CART.getMessage());
         }
 
         double price = product.getPrice() * request.getQuantity();
@@ -225,7 +225,7 @@ public class CartServiceImpl implements CartService {
     private Customer getCustomerByIdAndRestaurantId(@CurrentUser UserPrincipal currentUser, Long customerId) {
         AccountUser accountUser = getUserById(currentUser);
 
-        return customerRepository.findByIdAndCompanyId(customerId, accountUser.getCompany().getId())
+        return customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, accountUser.getCompany().getId())
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
     }
 
@@ -248,7 +248,7 @@ public class CartServiceImpl implements CartService {
     private Product getProductById(@CurrentUser UserPrincipal currentUser, Long productId) {
         Long restaurantId = getUserById(currentUser).getCompany().getId();
 
-        return productRepository.findByIdAndCompanyId(productId, restaurantId)
+        return productRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(productId, restaurantId)
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage()));
     }
 

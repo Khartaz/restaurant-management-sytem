@@ -46,7 +46,7 @@ public final class ProductFacade {
     }
 
     public ProductFormDTO getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
-        Product product = productService.getRestaurantProductById(id, currentUser);
+        Product product = productService.getProductById(id, currentUser);
 
         return productMapper.mapToProductFormDTO(product);
     }
@@ -67,7 +67,7 @@ public final class ProductFacade {
     }
 
     public Page<ProductFormDTO> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
-        Page<Product> products = productService.getAllByRestaurant(pageable, currentUser);
+        Page<Product> products = productService.getAllByCompany(pageable, currentUser);
 
         return productMapper.mapToProductFormDTOPage(products);
     }

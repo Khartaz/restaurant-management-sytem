@@ -161,7 +161,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getCustomerById(@CurrentUser UserPrincipal currentUser, Long customerId) {
         Long companyId = getCompany(currentUser).getId();
 
-        return customerRepository.findByIdAndCompanyId(customerId, companyId)
+        return customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, companyId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage() + customerId));
     }
 

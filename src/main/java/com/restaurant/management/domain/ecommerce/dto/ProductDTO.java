@@ -1,22 +1,22 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public final class ProductDto {
+public final class ProductDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
     private String name;
-    private Double price;
+    private Double priceTaxIncl;
     private String description;
     private ProductShippingDetailsDTO productShippingDetailsDTO;
     private ProductInventoryDTO productInventoryDTO;
 
-    public ProductDto() {
+    public ProductDTO() {
     }
 
-    public ProductDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                      Long id, String name, Double price, String description,
+    public ProductDTO(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                      Long id, String name, Double priceTaxIncl, String description,
                       ProductShippingDetailsDTO productShippingDetailsDTO,
                       ProductInventoryDTO productInventoryDTO) {
         this.createdAt = createdAt;
@@ -25,14 +25,14 @@ public final class ProductDto {
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.priceTaxIncl = priceTaxIncl;
         this.description = description;
         this.productShippingDetailsDTO = productShippingDetailsDTO;
         this.productInventoryDTO = productInventoryDTO;
     }
 
-    public ProductDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                      Long id, String name, Double price, String description,
+    public ProductDTO(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                      Long id, String name, Double priceTaxIncl, String description,
                       ProductShippingDetailsDTO productShippingDetailsDTO) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -40,7 +40,7 @@ public final class ProductDto {
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.priceTaxIncl = priceTaxIncl;
         this.description = description;
         this.productShippingDetailsDTO = productShippingDetailsDTO;
     }
@@ -69,8 +69,8 @@ public final class ProductDto {
         return name;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getPriceTaxIncl() {
+        return priceTaxIncl;
     }
 
     public String getDescription() {

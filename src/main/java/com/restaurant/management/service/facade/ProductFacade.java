@@ -1,7 +1,7 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.Product;
-import com.restaurant.management.domain.ecommerce.dto.ProductDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.mapper.ProductMapper;
@@ -33,22 +33,22 @@ public final class ProductFacade {
         this.productHistoryService = productHistoryService;
     }
 
-    public ProductDto registerProduct(@CurrentUser UserPrincipal currentUser, ProductFormDTO request) {
+    public ProductDTO registerProduct(@CurrentUser UserPrincipal currentUser, ProductDTO request) {
         Product product = productService.registerProduct(currentUser, request);
 
         return productMapper.mapToProductDto(product);
     }
 
-    public ProductFormDTO updateProduct(ProductFormDTO request, @CurrentUser UserPrincipal currentUser) {
+    public ProductDTO updateProduct(@CurrentUser UserPrincipal currentUser, ProductDTO request) {
         Product product = productService.updateProduct(request, currentUser);
 
-        return productMapper.mapToProductFormDTO(product);
+        return productMapper.mapToProductDto(product);
     }
 
-    public ProductFormDTO getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
+    public ProductDTO getRestaurantProductById(Long id, @CurrentUser UserPrincipal currentUser) {
         Product product = productService.getProductById(id, currentUser);
 
-        return productMapper.mapToProductFormDTO(product);
+        return productMapper.mapToProductDto(product);
     }
 
     public ApiResponse deleteById(Long id, @CurrentUser UserPrincipal currentUser) {
@@ -66,10 +66,10 @@ public final class ProductFacade {
         return productMapper.mapToProductHistoryDtoList(productHistory);
     }
 
-    public Page<ProductFormDTO> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
+    public Page<ProductDTO> getAllByRestaurant(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
         Page<Product> products = productService.getAllByCompany(pageable, currentUser);
 
-        return productMapper.mapToProductFormDTOPage(products);
+        return productMapper.mapToProductDTOPage(products);
     }
 
 }

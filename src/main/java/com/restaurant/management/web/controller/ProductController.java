@@ -1,11 +1,10 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.ecommerce.dto.ProductDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.ProductFacade;
-import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,10 +39,10 @@ public class ProductController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductDto> registerProduct(@CurrentUser UserPrincipal currentUser,
-                                         @Valid @RequestBody ProductFormDTO request) {
+    Resource<ProductDTO> registerProduct(@CurrentUser UserPrincipal currentUser,
+                                         @Valid @RequestBody ProductDTO request) {
 
-        ProductDto productDto = productFacade.registerProduct(currentUser, request);
+        ProductDTO productDto = productFacade.registerProduct(currentUser, request);
 
         Link link = linkTo(ProductController.class).withSelfRel();
 
@@ -53,36 +52,36 @@ public class ProductController {
     @RolesAllowed({"ROLE_MANAGER"})
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductFormDTO> updateProduct(@Valid @RequestBody ProductFormDTO request,
-                                           @CurrentUser UserPrincipal currentUser) {
+    Resource<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO request,
+                                       @CurrentUser UserPrincipal currentUser) {
 
-        ProductFormDTO productFormDTO = productFacade.updateProduct(request, currentUser);
+        ProductDTO productDto = productFacade.updateProduct(currentUser, request);
 
-        Link link = linkTo(ProductController.class).slash(productFormDTO.getId()).withSelfRel();
-        return new Resource<>(productFormDTO, link);
+        Link link = linkTo(ProductController.class).slash(productDto.getId()).withSelfRel();
+        return new Resource<>(productDto, link);
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<ProductFormDTO>> getAllByRestaurant(Pageable pageable,
+    ResponseEntity<PagedResources<ProductDTO>> getAllByRestaurant(Pageable pageable,
                                                                       @CurrentUser UserPrincipal currentUser,
                                                                       PagedResourcesAssembler assembler) {
-        Page<ProductFormDTO> dtoPage = productFacade.getAllByRestaurant(pageable, currentUser);
+        Page<ProductDTO> productDTOPage = productFacade.getAllByRestaurant(pageable, currentUser);
 
-        if (!dtoPage.hasContent()) {
-            PagedResources pagedResources = assembler.toEmptyResource(dtoPage, ProductFormDTO.class);
-            return new ResponseEntity<PagedResources<ProductFormDTO>>(pagedResources, HttpStatus.OK);
+        if (!productDTOPage.hasContent()) {
+            PagedResources pagedResources = assembler.toEmptyResource(productDTOPage, ProductDTO.class);
+            return new ResponseEntity<PagedResources<ProductDTO>>(pagedResources, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(assembler.toResource(dtoPage), HttpStatus.OK);
+        return new ResponseEntity<>(assembler.toResource(productDTOPage), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductFormDTO> showRestaurantProductById(@PathVariable Long id,
+    Resource<ProductDTO> showRestaurantProductById(@PathVariable Long id,
                                                         @CurrentUser UserPrincipal currentUser) {
 
-        ProductFormDTO productFormDTO = productFacade.getRestaurantProductById(id, currentUser);
+        ProductDTO productFormDTO = productFacade.getRestaurantProductById(id, currentUser);
 
         Link link = linkTo(ProductController.class).slash(productFormDTO.getId()).withSelfRel();
 

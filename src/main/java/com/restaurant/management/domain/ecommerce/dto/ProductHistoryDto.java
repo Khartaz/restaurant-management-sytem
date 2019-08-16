@@ -2,20 +2,20 @@ package com.restaurant.management.domain.ecommerce.dto;
 
 public final class ProductHistoryDto {
 
-    private ProductDto productDto;
+    private ProductDTO productDto;
     private Long revision;
     private RevisionTypeDto revisionTypeDto;
 
     public ProductHistoryDto() {
     }
 
-    public ProductHistoryDto(ProductDto productDto, Long revision, RevisionTypeDto revisionTypeDto) {
+    public ProductHistoryDto(ProductDTO productDto, Long revision, RevisionTypeDto revisionTypeDto) {
         this.productDto = productDto;
         this.revision = revision;
         this.revisionTypeDto = revisionTypeDto;
     }
 
-    public ProductDto getProductDto() {
+    public ProductDTO getProductDto() {
         return productDto;
     }
 

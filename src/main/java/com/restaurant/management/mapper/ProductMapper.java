@@ -2,7 +2,7 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.ProductOrdered;
-import com.restaurant.management.domain.ecommerce.dto.ProductDto;
+import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.dto.RevisionTypeDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
@@ -33,7 +33,7 @@ public final class ProductMapper {
         this.productShippingDetailsMapper = productShippingDetailsMapper;
     }
 
-    public Product mapToProduct(final ProductDto productDto) {
+    public Product mapToProduct(final ProductDTO productDto) {
         return new Product(
                 productDto.getCreatedAt(),
                 productDto.getUpdatedAt(),
@@ -41,7 +41,7 @@ public final class ProductMapper {
                 productDto.getUpdatedByUserId(),
                 productDto.getId(),
                 productDto.getName(),
-                productDto.getPrice(),
+                productDto.getPriceTaxIncl(),
                 productDto.getDescription(),
                 productShippingDetailsMapper.mapToProductShippingDetails(productDto.getProductShippingDetailsDTO()),
                 productInventoryMapper.mapToProductInventory(productDto.getProductInventoryDTO())
@@ -62,7 +62,7 @@ public final class ProductMapper {
         );
     }
 
-    public ProductOrdered mapToProductOrdered(final ProductDto productDto) {
+    public ProductOrdered mapToProductOrdered(final ProductDTO productDto) {
         return new ProductOrdered(
                 productDto.getCreatedAt(),
                 productDto.getUpdatedAt(),
@@ -70,14 +70,14 @@ public final class ProductMapper {
                 productDto.getUpdatedByUserId(),
                 productDto.getId(),
                 productDto.getName(),
-                productDto.getPrice(),
+                productDto.getPriceTaxIncl(),
                 productDto.getDescription(),
                 productShippingDetailsMapper.mapToProductOrderedShippingDetails(productDto.getProductShippingDetailsDTO())
         );
     }
 
-    public ProductDto mapToProductDto(final Product product) {
-        return new ProductDto(
+    public ProductDTO mapToProductDto(final Product product) {
+        return new ProductDTO(
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 product.getCreatedByUserId(),
@@ -114,8 +114,8 @@ public final class ProductMapper {
         );
     }
 
-    public ProductDto mapToProductDto(final ProductOrdered productOrdered) {
-        return new ProductDto(
+    public ProductDTO mapToProductDto(final ProductOrdered productOrdered) {
+        return new ProductDTO(
                 productOrdered.getCreatedAt(),
                 productOrdered.getUpdatedAt(),
                 productOrdered.getCreatedByUserId(),
@@ -128,7 +128,7 @@ public final class ProductMapper {
         );
     }
 
-    public ProductResponse mapToProductResponse(final ProductDto productDto) {
+    public ProductResponse mapToProductResponse(final ProductDTO productDto) {
         return new ProductResponse(
                 productDto.getCreatedAt(),
                 productDto.getUpdatedAt(),
@@ -136,12 +136,12 @@ public final class ProductMapper {
                 productDto.getUpdatedByUserId(),
                 productDto.getId(),
                 productDto.getName(),
-                productDto.getPrice()
+                productDto.getPriceTaxIncl()
         );
     }
 
     public ProductHistoryDto mapToProductHistoryDto(ProductHistory productHistory) {
-        ProductDto productDto = mapToProductDto(productHistory.getProduct());
+        ProductDTO productDto = mapToProductDto(productHistory.getProduct());
         Long revision = productHistory.getRevisionType().getRepresentation().longValue();
         RevisionTypeDto revisionTypeDto = revisionTypeMapper.mapToRevisionTypeDto(productHistory.getRevisionType());
 
@@ -156,6 +156,10 @@ public final class ProductMapper {
 
     public Page<ProductFormDTO> mapToProductFormDTOPage(final Page<Product> products) {
         return products.map(this::mapToProductFormDTO);
+    }
+
+    public Page<ProductDTO> mapToProductDTOPage(final Page<Product> products) {
+        return products.map(this::mapToProductDto);
     }
 
 }

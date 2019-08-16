@@ -1,8 +1,7 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.ecommerce.dto.CartDto;
-import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
-import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.CustomerDTO;
 import com.restaurant.management.domain.ecommerce.dto.OrderDto;
 import com.restaurant.management.mapper.CartMapper;
 import com.restaurant.management.mapper.CustomerMapper;
@@ -14,7 +13,6 @@ import com.restaurant.management.service.facade.CustomerFacade;
 import com.restaurant.management.service.facade.OrderFacade;
 import com.restaurant.management.web.request.cart.RemoveProductRequest;
 import com.restaurant.management.web.request.cart.UpdateCartRequest;
-import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.CartResponse;
 import com.restaurant.management.web.response.CustomerResponse;
 import com.restaurant.management.web.response.OrderResponse;
@@ -64,9 +62,9 @@ public class CustomerController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CustomerDto> registerCustomer(@CurrentUser UserPrincipal currentUser,
-                                           @Valid @RequestBody CustomerFormDTO customerFormDTO) {
-        CustomerDto customerDto = customerFacade.registerCustomer(currentUser, customerFormDTO);
+    Resource<CustomerDTO> registerCustomer(@CurrentUser UserPrincipal currentUser,
+                                           @Valid @RequestBody CustomerDTO request) {
+        CustomerDTO customerDto = customerFacade.registerCustomer(currentUser, request);
 
         Link link = linkTo(CustomerController.class).slash(customerDto.getId()).withSelfRel();
 
@@ -75,14 +73,14 @@ public class CustomerController {
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CustomerFormDTO> updateCustomer(@CurrentUser UserPrincipal currentUser,
-                                             @Valid @RequestBody CustomerFormDTO request) {
+    Resource<CustomerDTO> updateCustomer(@CurrentUser UserPrincipal currentUser,
+                                             @Valid @RequestBody CustomerDTO request) {
 
-        CustomerFormDTO customerFormDTO = customerFacade.updateCustomer(currentUser, request);
+        CustomerDTO customerDTO = customerFacade.updateCustomer(currentUser, request);
 
-        Link link = linkTo(CustomerController.class).slash(customerFormDTO.getId()).withSelfRel();
+        Link link = linkTo(CustomerController.class).slash(customerDTO.getId()).withSelfRel();
 
-        return new Resource<>(customerFormDTO, link);
+        return new Resource<>(customerDTO, link);
     }
 
     @DeleteMapping(value = "/{customerId}")
@@ -100,14 +98,14 @@ public class CustomerController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<CustomerFormDTO>> getAllCustomersPageable(@CurrentUser UserPrincipal currentUser,
+    ResponseEntity<PagedResources<CustomerDTO>> getAllCustomersPageable(@CurrentUser UserPrincipal currentUser,
                                                                             Pageable pageable,
                                                                             PagedResourcesAssembler assembler) {
-        Page<CustomerFormDTO> customerFormDTO = customerFacade.getAllCustomers(currentUser, pageable);
+        Page<CustomerDTO> customerFormDTO = customerFacade.getAllCustomers(currentUser, pageable);
 
         if (!customerFormDTO.hasContent()) {
-            PagedResources pagedResources = assembler.toEmptyResource(customerFormDTO, CustomerFormDTO.class);
-            return new ResponseEntity<PagedResources<CustomerFormDTO>>(pagedResources, HttpStatus.OK);
+            PagedResources pagedResources = assembler.toEmptyResource(customerFormDTO, CustomerDTO.class);
+            return new ResponseEntity<PagedResources<CustomerDTO>>(pagedResources, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(assembler.toResource(customerFormDTO), HttpStatus.OK);
@@ -120,7 +118,7 @@ public class CustomerController {
                                                                            PagedResourcesAssembler assembler,
                                                                            @RequestParam String name) {
 
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomersWithNameWithin(currentUser, name, pageable);
+        Page<CustomerDTO> customersDto = customerFacade.getAllCustomersWithNameWithin(currentUser, name, pageable);
 
         Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
 
@@ -134,7 +132,7 @@ public class CustomerController {
                                                                                PagedResourcesAssembler assembler,
                                                                                @RequestParam String lastName) {
 
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomersByLastNameWithin(currentUser, lastName, pageable);
+        Page<CustomerDTO> customersDto = customerFacade.getAllCustomersByLastNameWithin(currentUser, lastName, pageable);
 
         Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
 
@@ -148,7 +146,7 @@ public class CustomerController {
                                                                                   PagedResourcesAssembler assembler,
                                                                                   @RequestParam String phone) {
 
-        Page<CustomerDto> customersDto = customerFacade.getAllCustomersWithPhoneWithin(currentUser, phone, pageable);
+        Page<CustomerDTO> customersDto = customerFacade.getAllCustomersWithPhoneWithin(currentUser, phone, pageable);
 
         Page<CustomerResponse> responsePage = customerMapper.mapToCustomerResponsePage(customersDto);
 
@@ -157,8 +155,8 @@ public class CustomerController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CustomerFormDTO> showCustomer(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
-        CustomerFormDTO customerFormDTO = customerFacade.getCustomerById(currentUser, id);
+    Resource<CustomerDTO> showCustomer(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
+        CustomerDTO customerFormDTO = customerFacade.getCustomerById(currentUser, id);
 
         Link link = linkTo(CustomerController.class).slash(customerFormDTO.getId()).withSelfRel();
 

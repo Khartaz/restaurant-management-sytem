@@ -1,8 +1,7 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.Customer;
-import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
-import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.CustomerDTO;
 import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -25,22 +24,22 @@ public final class CustomerFacade {
         this.customerService = customerService;
     }
 
-    public CustomerDto registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+    public CustomerDTO registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerDTO request) {
         Customer customer = customerService.registerCustomer(currentUser, request);
 
         return customerMapper.mapToCustomerDto(customer);
     }
 
-    public CustomerFormDTO updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+    public CustomerDTO updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerDTO request) {
         Customer customer = customerService.updateCustomer(currentUser, request);
 
-        return customerMapper.mapToCustomerFormDTO(customer);
+        return customerMapper.mapToCustomerDto(customer);
     }
 
-    public Page<CustomerFormDTO> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    public Page<CustomerDTO> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Customer> customers = customerService.getAllCustomers(currentUser, pageable);
 
-        return customerMapper.mapToCustomerFormDTOPage(customers);
+        return customerMapper.mapToCustomerDtoPage(customers);
     }
 
     public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
@@ -51,27 +50,27 @@ public final class CustomerFacade {
         return customerService.deleteAllByIds(currentUser,customerIds);
     }
 
-    public CustomerFormDTO getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
+    public CustomerDTO getCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {
         Customer customer = customerService.getCustomerById(currentUser, id);
 
-        return customerMapper.mapToCustomerFormDTO(customer);
+        return customerMapper.mapToCustomerDto(customer);
     }
 
-    public Page<CustomerDto> getAllCustomersWithNameWithin(@CurrentUser UserPrincipal currentUser,
+    public Page<CustomerDTO> getAllCustomersWithNameWithin(@CurrentUser UserPrincipal currentUser,
                                                            String name, Pageable pageable) {
         Page<Customer> customers = customerService.getAllByNameWithin(currentUser, name, pageable);
 
         return customerMapper.mapToCustomerDtoPage(customers);
     }
 
-    public Page<CustomerDto> getAllCustomersWithPhoneWithin(@CurrentUser UserPrincipal currentUser,
+    public Page<CustomerDTO> getAllCustomersWithPhoneWithin(@CurrentUser UserPrincipal currentUser,
                                                             String phone, Pageable pageable) {
         Page<Customer> customers = customerService.getAllByPhoneWithin(currentUser, phone, pageable);
 
         return customerMapper.mapToCustomerDtoPage(customers);
     }
 
-    public Page<CustomerDto> getAllCustomersByLastNameWithin(@CurrentUser UserPrincipal currentUser,
+    public Page<CustomerDTO> getAllCustomersByLastNameWithin(@CurrentUser UserPrincipal currentUser,
                                                              String lastName,
                                                              Pageable pageable) {
 

@@ -6,7 +6,7 @@ public final class CartDto {
     private Long id;
     private Boolean isOpen;
     private Double totalPrice;
-    private CustomerDto customer;
+    private CustomerDTO customer;
     private List<LineItemDto> lineItems;
 
     public CartDto() {
@@ -15,7 +15,7 @@ public final class CartDto {
     public CartDto(Long id,
                    Boolean isOpen,
                    Double totalPrice,
-                   CustomerDto customer,
+                   CustomerDTO customer,
                    List<LineItemDto> lineItems) {
         this.id = id;
         this.isOpen = isOpen;
@@ -25,13 +25,13 @@ public final class CartDto {
     }
 
     public CartDto(Boolean isOpen,
-                   CustomerDto customer) {
+                   CustomerDTO customer) {
         this.isOpen = isOpen;
         this.customer = customer;
     }
 
     public CartDto(Boolean isOpen,
-                   CustomerDto customer,
+                   CustomerDTO customer,
                    List<LineItemDto> lineItems) {
         this.isOpen = isOpen;
         this.customer = customer;
@@ -47,7 +47,7 @@ public final class CartDto {
         return isOpen;
     }
 
-    public CustomerDto getCustomer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 

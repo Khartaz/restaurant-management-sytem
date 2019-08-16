@@ -2,8 +2,7 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.domain.ecommerce.CustomerOrdered;
-import com.restaurant.management.domain.ecommerce.dto.CustomerDto;
-import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.CustomerDTO;
 import com.restaurant.management.web.response.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,7 @@ public final class CustomerMapper {
         this.addressMapper = addressMapper;
     }
 
-    public Customer mapToCustomer(final CustomerDto customerDto) {
+    public Customer mapToCustomer(final CustomerDTO customerDto) {
         return new Customer(
                 customerDto.getCreatedAt(),
                 customerDto.getUpdatedAt(),
@@ -51,7 +50,7 @@ public final class CustomerMapper {
         );
     }
 
-    public CustomerOrdered mapToCustomerOrdered(final CustomerDto customerDto) {
+    public CustomerOrdered mapToCustomerOrdered(final CustomerDTO customerDto) {
         return new CustomerOrdered(
                 customerDto.getCreatedAt(),
                 customerDto.getUpdatedAt(),
@@ -66,8 +65,8 @@ public final class CustomerMapper {
         );
     }
 
-    public CustomerDto mapToCustomerDto(final Customer customer) {
-        return new CustomerDto(
+    public CustomerDTO mapToCustomerDto(final Customer customer) {
+        return new CustomerDTO(
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
                 customer.getCreatedByUserId(),
@@ -81,8 +80,11 @@ public final class CustomerMapper {
         );
     }
 
-    public CustomerDto mapToCustomerDto(final CustomerOrdered customer) {
-        return new CustomerDto(
+    public CustomerDTO mapToCustomerDto(final CustomerOrdered customer) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        return new CustomerDTO(
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
                 customer.getCreatedByUserId(),
@@ -96,28 +98,7 @@ public final class CustomerMapper {
         );
     }
 
-    public CustomerFormDTO mapToCustomerFormDTO(final Customer customer) {
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        return new CustomerFormDTO(
-                formatter.format(customer.getCreatedAt()),
-                formatter.format(customer.getUpdatedAt()),
-                customer.getCreatedByUserId(),
-                customer.getUpdatedByUserId(),
-                customer.getId(),
-                customer.getName(),
-                customer.getLastName(),
-                customer.getPhone(),
-                customer.getEmail(),
-                customer.getCustomerAddress().getStreetAndNumber(),
-                customer.getCustomerAddress().getPostCode(),
-                customer.getCustomerAddress().getCity(),
-                customer.getCustomerAddress().getCountry()
-        );
-    }
-
-    public CustomerResponse mapToCustomerResponse(final CustomerDto customerDto) {
+    public CustomerResponse mapToCustomerResponse(final CustomerDTO customerDto) {
         return new CustomerResponse(
                 customerDto.getCreatedAt(),
                 customerDto.getUpdatedAt(),
@@ -132,15 +113,12 @@ public final class CustomerMapper {
         );
     }
 
-    public Page<CustomerDto> mapToCustomerDtoPage(final Page<Customer> customers) {
+    public Page<CustomerDTO> mapToCustomerDtoPage(final Page<Customer> customers) {
         return customers.map(this::mapToCustomerDto);
     }
 
-    public Page<CustomerResponse> mapToCustomerResponsePage(final Page<CustomerDto> customers) {
+    public Page<CustomerResponse> mapToCustomerResponsePage(final Page<CustomerDTO> customers) {
         return customers.map(this::mapToCustomerResponse);
     }
 
-    public Page<CustomerFormDTO> mapToCustomerFormDTOPage(final Page<Customer> customers) {
-        return customers.map(this::mapToCustomerFormDTO);
-    }
 }

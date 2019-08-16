@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public final class CustomerDto {
+public final class CustomerDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
@@ -12,17 +12,17 @@ public final class CustomerDto {
     private String email;
     private AddressDto addressDto;
 
-    public CustomerDto() {
+    public CustomerDTO() {
     }
 
-    public CustomerDto(String name, String lastName, String phone, String email) {
+    public CustomerDTO(String name, String lastName, String phone, String email) {
         this.name = name;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
     }
 
-    public CustomerDto(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+    public CustomerDTO(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
                        Long id, String name, String lastName, String phone, String email, AddressDto addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -1,7 +1,7 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
-import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.CustomerDTO;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
         this.accountUserRepository = accountUserRepository;
     }
 
-    public Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+    public Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerDTO request) {
         checkCustomerEmailAvailabilityInCompany(currentUser, request.getEmail());
 
         if (!request.getPhone().isEmpty()) {
@@ -54,10 +54,10 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerAddress address = new CustomerAddress();
         Stream.of(address)
                 .forEach(a -> {
-                    a.setStreetAndNumber(request.getStreetAndNumber());
-                    a.setPostCode(request.getPostCode());
-                    a.setCity(request.getCity());
-                    a.setCountry(request.getCountry());
+                    a.setStreetAndNumber(request.getAddressDto().getStreetAndNumber());
+                    a.setPostCode(request.getAddressDto().getPostCode());
+                    a.setCity(request.getAddressDto().getCity());
+                    a.setCountry(request.getAddressDto().getCountry());
                 });
 
         Customer customer = new Customer();
@@ -77,7 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
-    public Customer updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
+    public Customer updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerDTO request) {
         Customer customer = getCustomerById(currentUser, request.getId());
 
         if (!customer.getEmail().equals(request.getEmail())) {
@@ -95,10 +95,10 @@ public class CustomerServiceImpl implements CustomerService {
                     c.setLastName(request.getLastName());
                     c.setEmail(request.getEmail());
                     c.setPhone(request.getPhone());
-                    c.getCustomerAddress().setCountry(request.getCountry());
-                    c.getCustomerAddress().setCity(request.getCity());
-                    c.getCustomerAddress().setPostCode(request.getPostCode());
-                    c.getCustomerAddress().setStreetAndNumber(request.getStreetAndNumber());
+                    c.getCustomerAddress().setCountry(request.getAddressDto().getCountry());
+                    c.getCustomerAddress().setCity(request.getAddressDto().getCity());
+                    c.getCustomerAddress().setPostCode(request.getAddressDto().getPostCode());
+                    c.getCustomerAddress().setStreetAndNumber(request.getAddressDto().getStreetAndNumber());
 
                     customerRepository.save(c);
                 });

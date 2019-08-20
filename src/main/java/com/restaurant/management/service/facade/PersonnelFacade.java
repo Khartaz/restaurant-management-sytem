@@ -1,7 +1,7 @@
 package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.mapper.PersonnelMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -29,24 +29,24 @@ public class PersonnelFacade {
         this.shortcutService = shortcutService;
     }
 
-    public PersonnelFormDTO registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+    public PersonnelDTO registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request) {
         AccountUser accountUser = personnelService.registerPerson(currentUser, request);
 
         shortcutService.assignDefaultShortcut(accountUser.getId());
 
-        return personnelMapper.mapToPersonnelFormDTO(accountUser);
+        return personnelMapper.mapToPersonnelDTO(accountUser);
     }
 
-    public PersonnelFormDTO updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+    public PersonnelDTO updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request) {
         AccountUser accountUser = personnelService.updatePerson(currentUser, request);
 
-        return personnelMapper.mapToPersonnelFormDTO(accountUser);
+        return personnelMapper.mapToPersonnelDTO(accountUser);
     }
 
-    public Page<PersonnelFormDTO> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    public Page<PersonnelDTO> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<AccountUser> personnel = personnelService.getAllPersonnel(currentUser, pageable);
 
-        return personnelMapper.mapToPersonnelFormDTO(personnel);
+        return personnelMapper.mapToPersonnelDTO(personnel);
     }
 
     public ApiResponse deletePersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
@@ -57,9 +57,9 @@ public class PersonnelFacade {
         return personnelService.deleteAllByIds(currentUser, personnelIds);
     }
 
-    public PersonnelFormDTO getPersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
+    public PersonnelDTO getPersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
         AccountUser person = personnelService.getPersonById(currentUser, personId);
 
-        return personnelMapper.mapToPersonnelFormDTO(person);
+        return personnelMapper.mapToPersonnelDTO(person);
     }
 }

@@ -1,6 +1,6 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.PersonnelFacade;
@@ -34,47 +34,47 @@ public class PersonnelController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<PersonnelFormDTO> registerPerson(@CurrentUser UserPrincipal currentUser,
-                                              @Valid @RequestBody PersonnelFormDTO request) {
-        PersonnelFormDTO personnelFormDTO = personnelFacade.registerPerson(currentUser, request);
+    Resource<PersonnelDTO> registerPerson(@CurrentUser UserPrincipal currentUser,
+                                          @Valid @RequestBody PersonnelDTO request) {
+        PersonnelDTO personnelDTO = personnelFacade.registerPerson(currentUser, request);
 
-        Link link = linkTo(PersonnelController.class).slash(personnelFormDTO.getId()).withSelfRel();
+        Link link = linkTo(PersonnelController.class).slash(personnelDTO.getId()).withSelfRel();
 
-        return new Resource<>(personnelFormDTO, link);
+        return new Resource<>(personnelDTO, link);
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<PersonnelFormDTO> updatePerson(@CurrentUser UserPrincipal currentUser,
-                                            @Valid @RequestBody PersonnelFormDTO request) {
+    Resource<PersonnelDTO> updatePerson(@CurrentUser UserPrincipal currentUser,
+                                        @Valid @RequestBody PersonnelDTO request) {
 
-        PersonnelFormDTO personnelFormDTO = personnelFacade.updatePerson(currentUser, request);
+        PersonnelDTO personnelDTO = personnelFacade.updatePerson(currentUser, request);
 
-        Link link = linkTo(PersonnelController.class).slash(personnelFormDTO.getId()).withSelfRel();
+        Link link = linkTo(PersonnelController.class).slash(personnelDTO.getId()).withSelfRel();
 
-        return new Resource<>(personnelFormDTO, link);
+        return new Resource<>(personnelDTO, link);
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<PersonnelFormDTO> getPerson(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
-        PersonnelFormDTO personnelFormDTO = personnelFacade.getPersonById(currentUser, id);
+    Resource<PersonnelDTO> getPerson(@CurrentUser UserPrincipal currentUser, @PathVariable Long id) {
+        PersonnelDTO personnelDTO = personnelFacade.getPersonById(currentUser, id);
 
-        Link link = linkTo(PersonnelController.class).slash(personnelFormDTO.getId()).withSelfRel();
+        Link link = linkTo(PersonnelController.class).slash(personnelDTO.getId()).withSelfRel();
 
-        return new Resource<>(personnelFormDTO, link);
+        return new Resource<>(personnelDTO, link);
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<PersonnelFormDTO>> getAllPersonnelPageable(@CurrentUser UserPrincipal currentUser,
-                                                                             Pageable pageable,
-                                                                             PagedResourcesAssembler assembler) {
-        Page<PersonnelFormDTO> personnelFormDTO = personnelFacade.getAllPersonnel(currentUser, pageable);
+    ResponseEntity<PagedResources<PersonnelDTO>> getAllPersonnelPageable(@CurrentUser UserPrincipal currentUser,
+                                                                         Pageable pageable,
+                                                                         PagedResourcesAssembler assembler) {
+        Page<PersonnelDTO> personnelFormDTO = personnelFacade.getAllPersonnel(currentUser, pageable);
 
         if (!personnelFormDTO.hasContent()) {
-            PagedResources pagedResources = assembler.toEmptyResource(personnelFormDTO, PersonnelFormDTO.class);
-            return new ResponseEntity<PagedResources<PersonnelFormDTO>>(pagedResources, HttpStatus.OK);
+            PagedResources pagedResources = assembler.toEmptyResource(personnelFormDTO, PersonnelDTO.class);
+            return new ResponseEntity<PagedResources<PersonnelDTO>>(pagedResources, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(assembler.toResource(personnelFormDTO), HttpStatus.OK);

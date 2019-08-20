@@ -10,7 +10,7 @@ public final class CustomerDTO {
     private String lastName;
     private String phone;
     private String email;
-    private AddressDto addressDto;
+    private AddressDTO addressDto;
 
     public CustomerDTO() {
     }
@@ -23,7 +23,7 @@ public final class CustomerDTO {
     }
 
     public CustomerDTO(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastName, String phone, String email, AddressDto addressDto) {
+                       Long id, String name, String lastName, String phone, String email, AddressDTO addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -72,7 +72,7 @@ public final class CustomerDTO {
         return email;
     }
 
-    public AddressDto getAddressDto() {
+    public AddressDTO getAddressDto() {
         return addressDto;
     }
 }

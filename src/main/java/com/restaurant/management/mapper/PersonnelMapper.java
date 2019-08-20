@@ -1,7 +1,9 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
+import com.restaurant.management.domain.ecommerce.AccountUserAddress;
+import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +14,18 @@ import static com.restaurant.management.mapper.RoleMapper.roleToString;
 @Component
 public final class PersonnelMapper {
 
-    public PersonnelFormDTO mapToPersonnelFormDTO(final AccountUser accountUser) {
+    private AddressMapper addressMapper;
+
+    @Autowired
+    public PersonnelMapper(AddressMapper addressMapper) {
+        this.addressMapper = addressMapper;
+    }
+
+    public PersonnelDTO mapToPersonnelDTO(final AccountUser accountUser) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return new PersonnelFormDTO(
+        return new PersonnelDTO(
                 formatter.format(accountUser.getCreatedAt()),
                 formatter.format(accountUser.getUpdatedAt()),
                 accountUser.getCreatedByUserId(),
@@ -28,15 +37,12 @@ public final class PersonnelMapper {
                 accountUser.getPhone(),
                 accountUser.getJobTitle(),
                 roleToString(accountUser),
-                accountUser.getAccountUserAddress().getStreetAndNumber(),
-                accountUser.getAccountUserAddress().getPostCode(),
-                accountUser.getAccountUserAddress().getCity(),
-                accountUser.getAccountUserAddress().getCountry(),
-                accountUser.isActive()
+                accountUser.isActive(),
+                addressMapper.mapToAddressDTO(accountUser.getAccountUserAddress())
         );
     }
 
-    public Page<PersonnelFormDTO> mapToPersonnelFormDTO(final Page<AccountUser> personnel) {
-        return personnel.map(this::mapToPersonnelFormDTO);
+    public Page<PersonnelDTO> mapToPersonnelDTO(final Page<AccountUser> personnel) {
+        return personnel.map(this::mapToPersonnelDTO);
     }
 }

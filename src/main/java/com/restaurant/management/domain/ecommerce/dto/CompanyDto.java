@@ -7,14 +7,14 @@ public final class CompanyDto {
     private String updatedByUserId;
     private Long id;
     private String name;
-    private AddressDto addressDto;
+    private AddressDTO addressDto;
 
     public CompanyDto() {
     }
 
     public CompanyDto(Long createdAt, Long updatedAt, String createdByUserId,
                       String updatedByUserId, Long id, String name,
-                      AddressDto addressDto) {
+                      AddressDTO addressDto) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -48,7 +48,7 @@ public final class CompanyDto {
         return name;
     }
 
-    public AddressDto getAddressDto() {
+    public AddressDTO getAddressDto() {
         return addressDto;
     }
 }

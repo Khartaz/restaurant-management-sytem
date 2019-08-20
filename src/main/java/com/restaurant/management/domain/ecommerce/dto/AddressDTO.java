@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public final class AddressDto {
+public final class AddressDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
@@ -11,10 +11,10 @@ public final class AddressDto {
     private String city;
     private String country;
 
-    public AddressDto() {
+    public AddressDTO() {
     }
 
-    public AddressDto(Long createdAt, Long updatedAt,
+    public AddressDTO(Long createdAt, Long updatedAt,
                       String createdByUserId, String updatedByUserId,
                       Long id, String streetAndNumber, String postCode,
                       String city, String country) {

@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public class PersonnelFormDTO {
+public final class PersonnelDTO {
     private String createdAt;
     private String updatedAt;
     private String createdByUserId;
@@ -12,20 +12,16 @@ public class PersonnelFormDTO {
     private String phone;
     private String jobTitle;
     private String role;
-    private String streetAndNumber;
-    private String postCode;
-    private String city;
-    private String country;
     private Boolean isActive;
+    private AddressDTO address;
 
-    public PersonnelFormDTO() {
+    public PersonnelDTO() {
     }
 
-    public PersonnelFormDTO(String createdAt, String updatedAt, String createdByUserId,
-                            String updatedByUserId, Long id, String name, String lastName,
-                            String email, String phone, String jobTitle, String role,
-                            String streetAndNumber, String postCode,
-                            String city, String country, Boolean isActive) {
+    public PersonnelDTO(String createdAt, String updatedAt, String createdByUserId,
+                        String updatedByUserId, Long id, String name, String lastName,
+                        String email, String phone, String jobTitle,
+                        String role, Boolean isActive, AddressDTO address) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
@@ -37,11 +33,8 @@ public class PersonnelFormDTO {
         this.phone = phone;
         this.jobTitle = jobTitle;
         this.role = role;
-        this.streetAndNumber = streetAndNumber;
-        this.postCode = postCode;
-        this.city = city;
-        this.country = country;
         this.isActive = isActive;
+        this.address = address;
     }
 
     public String getCreatedAt() {
@@ -88,23 +81,11 @@ public class PersonnelFormDTO {
         return role;
     }
 
-    public String getStreetAndNumber() {
-        return streetAndNumber;
-    }
-
-    public String getPostCode() {
-        return postCode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
     public Boolean getActive() {
         return isActive;
+    }
+
+    public AddressDTO getAddress() {
+        return address;
     }
 }

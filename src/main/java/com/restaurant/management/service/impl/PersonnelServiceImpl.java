@@ -1,7 +1,7 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
-import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.domain.layout.Settings;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -56,7 +56,7 @@ public class PersonnelServiceImpl implements PersonnelService {
         this.settingsService = settingsService;
     }
 
-    public AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+    public AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request) {
         accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
 
         if (!request.getPhone().isEmpty()) {
@@ -73,10 +73,10 @@ public class PersonnelServiceImpl implements PersonnelService {
         AccountUserAddress accountUserAddress = new AccountUserAddress();
         Stream.of(accountUserAddress)
                 .forEach(a -> {
-                    a.setStreetAndNumber(request.getStreetAndNumber());
-                    a.setPostCode(request.getPostCode());
-                    a.setCity(request.getCity());
-                    a.setCountry(request.getCountry());
+                    a.setStreetAndNumber(request.getAddress().getStreetAndNumber());
+                    a.setPostCode(request.getAddress().getPostCode());
+                    a.setCity(request.getAddress().getCity());
+                    a.setCountry(request.getAddress().getCountry());
                 });
 
         String token = tokenProvider.generateEmailVerificationToken(request.getEmail());
@@ -107,7 +107,7 @@ public class PersonnelServiceImpl implements PersonnelService {
         return person;
     }
 
-    public AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+    public AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request) {
         AccountUser person = accountUserService.getCompanyUserById(currentUser, request.getId());
 
         if (!person.getEmail().equals(request.getEmail())) {
@@ -126,10 +126,10 @@ public class PersonnelServiceImpl implements PersonnelService {
                     p.setPhone(request.getPhone());
                     p.setJobTitle(request.getJobTitle());
                     p.setActive(request.getActive());
-                    p.getAccountUserAddress().setStreetAndNumber(request.getStreetAndNumber());
-                    p.getAccountUserAddress().setPostCode(request.getPostCode());
-                    p.getAccountUserAddress().setCity(request.getCity());
-                    p.getAccountUserAddress().setCountry(request.getCountry());
+                    p.getAccountUserAddress().setStreetAndNumber(request.getAddress().getStreetAndNumber());
+                    p.getAccountUserAddress().setPostCode(request.getAddress().getPostCode());
+                    p.getAccountUserAddress().setCity(request.getAddress().getCity());
+                    p.getAccountUserAddress().setCountry(request.getAddress().getCountry());
 
                     accountUserRepository.save(p);
                 });

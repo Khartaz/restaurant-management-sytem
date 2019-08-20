@@ -1,7 +1,7 @@
 package com.restaurant.management.service;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
+import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.response.ApiResponse;
@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface PersonnelService {
 
-    AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request);
+    AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request);
 
-    AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request);
+    AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request);
 
     Page<AccountUser> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 

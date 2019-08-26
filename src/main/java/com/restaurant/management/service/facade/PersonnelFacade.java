@@ -2,6 +2,7 @@ package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
+import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import com.restaurant.management.mapper.PersonnelMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -29,24 +30,24 @@ public class PersonnelFacade {
         this.shortcutService = shortcutService;
     }
 
-    public PersonnelDTO registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request) {
+    public PersonnelFormDTO registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
         AccountUser accountUser = personnelService.registerPerson(currentUser, request);
 
         shortcutService.assignDefaultShortcut(accountUser.getId());
 
-        return personnelMapper.mapToPersonnelDTO(accountUser);
+        return personnelMapper.mapToPersonnelFormDTO(accountUser);
     }
 
-    public PersonnelDTO updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelDTO request) {
+    public PersonnelFormDTO updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
         AccountUser accountUser = personnelService.updatePerson(currentUser, request);
 
-        return personnelMapper.mapToPersonnelDTO(accountUser);
+        return personnelMapper.mapToPersonnelFormDTO(accountUser);
     }
 
-    public Page<PersonnelDTO> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    public Page<PersonnelFormDTO> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<AccountUser> personnel = personnelService.getAllPersonnel(currentUser, pageable);
 
-        return personnelMapper.mapToPersonnelDTO(personnel);
+        return personnelMapper.mapToPersonnelFormDTOPage(personnel);
     }
 
     public ApiResponse deletePersonById(@CurrentUser UserPrincipal currentUser, Long personId) {

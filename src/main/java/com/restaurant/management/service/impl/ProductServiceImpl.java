@@ -2,6 +2,7 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
+import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.exception.product.ProductExsitsException;
 import com.restaurant.management.exception.product.ProductMessages;
 import com.restaurant.management.exception.product.ProductNotFoundException;
@@ -49,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         return new ApiResponse(true, ProductMessages.PRODUCT_NAME_AVAILABLE.getMessage());
     }
 
-    public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductDTO request) {
+    public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductFormDTO request) {
         AccountUser accountUser = getUserById(currentUser);
 
         checkProductNameAvailabilityInCompany(request.getName(), accountUser.getCompany().getId());
@@ -57,18 +58,18 @@ public class ProductServiceImpl implements ProductService {
         ProductInventory productInventory = new ProductInventory();
         Stream.of(productInventory)
                 .forEach(pi -> {
-                    pi.setQuantity(request.getProductInventoryDTO().getQuantity());
-                    pi.setSku(request.getProductInventoryDTO().getSku());
+                    pi.setQuantity(request.getQuantity());
+                    pi.setSku(request.getSku());
         });
 
         ProductShippingDetails productShippingDetails = new ProductShippingDetails();
         Stream.of(productShippingDetails)
                 .forEach(psd -> {
-                    psd.setWidth(request.getProductShippingDetailsDTO().getWidth());
-                    psd.setHeight(request.getProductShippingDetailsDTO().getHeight());
-                    psd.setDepth(request.getProductShippingDetailsDTO().getDepth());
-                    psd.setWeight(request.getProductShippingDetailsDTO().getWeight());
-                    psd.setExtraShippingFee(request.getProductShippingDetailsDTO().getExtraShippingFee());
+                    psd.setWidth(request.getWidth());
+                    psd.setHeight(request.getHeight());
+                    psd.setDepth(request.getDepth());
+                    psd.setWeight(request.getWeight());
+                    psd.setExtraShippingFee(request.getExtraShippingFee());
                 });
 
         Product product = new Product();
@@ -88,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    public Product updateProduct(ProductDTO request, @CurrentUser UserPrincipal currentUser) {
+    public Product updateProduct(ProductFormDTO request, @CurrentUser UserPrincipal currentUser) {
         Long companyId = getUserById(currentUser).getCompany().getId();
         Product product = getProductById(request.getId(), currentUser);
 
@@ -101,13 +102,13 @@ public class ProductServiceImpl implements ProductService {
                     p.setName(request.getName());
                     p.setPrice(request.getPriceTaxIncl());
                     p.setDescription(request.getDescription());
-                    p.getProductInventory().setSku(request.getProductInventoryDTO().getSku());
-                    p.getProductInventory().setQuantity(request.getProductInventoryDTO().getQuantity());
-                    p.getProductShippingDetails().setWidth(request.getProductShippingDetailsDTO().getWidth());
-                    p.getProductShippingDetails().setHeight(request.getProductShippingDetailsDTO().getHeight());
-                    p.getProductShippingDetails().setDepth(request.getProductShippingDetailsDTO().getDepth());
-                    p.getProductShippingDetails().setWeight(request.getProductShippingDetailsDTO().getWeight());
-                    p.getProductShippingDetails().setExtraShippingFee(request.getProductShippingDetailsDTO().getExtraShippingFee());
+                    p.getProductInventory().setSku(request.getSku());
+                    p.getProductInventory().setQuantity(request.getQuantity());
+                    p.getProductShippingDetails().setWidth(request.getWidth());
+                    p.getProductShippingDetails().setHeight(request.getHeight());
+                    p.getProductShippingDetails().setDepth(request.getDepth());
+                    p.getProductShippingDetails().setWeight(request.getWeight());
+                    p.getProductShippingDetails().setExtraShippingFee(request.getExtraShippingFee());
                 });
 
         productRepository.save(product);

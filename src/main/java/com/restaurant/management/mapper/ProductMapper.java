@@ -3,6 +3,7 @@ package com.restaurant.management.mapper;
 import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.ProductOrdered;
 import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
+import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.dto.RevisionTypeDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
@@ -92,6 +93,24 @@ public final class ProductMapper {
         );
     }
 
+    public ProductFormDTO mapToProductFormDTO(final Product product) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return new ProductFormDTO(
+                formatter.format(product.getCreatedAt()),
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getDescription(),
+                product.getProductInventory().getSku(),
+                product.getProductInventory().getQuantity(),
+                product.getProductShippingDetails().getWidth(),
+                product.getProductShippingDetails().getHeight(),
+                product.getProductShippingDetails().getDepth(),
+                product.getProductShippingDetails().getWeight(),
+                product.getProductShippingDetails().getExtraShippingFee()
+        );
+    }
+
     public ProductDTO mapToProductDto(final ProductOrdered productOrdered) {
         return new ProductDTO(
                 productOrdered.getCreatedAt(),
@@ -134,6 +153,10 @@ public final class ProductMapper {
 
     public Page<ProductDTO> mapToProductDTOPage(final Page<Product> products) {
         return products.map(this::mapToProductDto);
+    }
+
+    public Page<ProductFormDTO> mapToProductFormDTOPage(final Page<Product> products) {
+        return products.map(this::mapToProductFormDTO);
     }
 
 }

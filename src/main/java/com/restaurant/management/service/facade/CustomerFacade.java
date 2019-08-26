@@ -2,6 +2,7 @@ package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.Customer;
 import com.restaurant.management.domain.ecommerce.dto.CustomerDTO;
+import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
 import com.restaurant.management.mapper.CustomerMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -24,22 +25,22 @@ public final class CustomerFacade {
         this.customerService = customerService;
     }
 
-    public CustomerDTO registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerDTO request) {
+    public CustomerFormDTO registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
         Customer customer = customerService.registerCustomer(currentUser, request);
 
-        return customerMapper.mapToCustomerDto(customer);
+        return customerMapper.mapToCustomerFormDTO(customer);
     }
 
-    public CustomerDTO updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerDTO request) {
+    public CustomerFormDTO updateCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
         Customer customer = customerService.updateCustomer(currentUser, request);
 
-        return customerMapper.mapToCustomerDto(customer);
+        return customerMapper.mapToCustomerFormDTO(customer);
     }
 
-    public Page<CustomerDTO> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+    public Page<CustomerFormDTO> getAllCustomers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         Page<Customer> customers = customerService.getAllCustomers(currentUser, pageable);
 
-        return customerMapper.mapToCustomerDtoPage(customers);
+        return customerMapper.mapToCustomerFormDTOPage(customers);
     }
 
     public ApiResponse deleteCustomerById(@CurrentUser UserPrincipal currentUser, Long id) {

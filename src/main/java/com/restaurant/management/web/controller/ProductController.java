@@ -1,6 +1,7 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
+import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -39,10 +40,10 @@ public class ProductController {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductDTO> registerProduct(@CurrentUser UserPrincipal currentUser,
-                                         @Valid @RequestBody ProductDTO request) {
+    Resource<ProductFormDTO> registerProduct(@CurrentUser UserPrincipal currentUser,
+                                             @Valid @RequestBody ProductFormDTO request) {
 
-        ProductDTO productDto = productFacade.registerProduct(currentUser, request);
+        ProductFormDTO productDto = productFacade.registerProduct(currentUser, request);
 
         Link link = linkTo(ProductController.class).withSelfRel();
 
@@ -52,10 +53,10 @@ public class ProductController {
     @RolesAllowed({"ROLE_MANAGER"})
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO request,
+    Resource<ProductFormDTO> updateProduct(@Valid @RequestBody ProductFormDTO request,
                                        @CurrentUser UserPrincipal currentUser) {
 
-        ProductDTO productDto = productFacade.updateProduct(currentUser, request);
+        ProductFormDTO productDto = productFacade.updateProduct(currentUser, request);
 
         Link link = linkTo(ProductController.class).slash(productDto.getId()).withSelfRel();
         return new Resource<>(productDto, link);
@@ -63,14 +64,14 @@ public class ProductController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<PagedResources<ProductDTO>> getAllByRestaurant(Pageable pageable,
+    ResponseEntity<PagedResources<ProductFormDTO>> getAllByRestaurant(Pageable pageable,
                                                                       @CurrentUser UserPrincipal currentUser,
                                                                       PagedResourcesAssembler assembler) {
-        Page<ProductDTO> productDTOPage = productFacade.getAllByRestaurant(pageable, currentUser);
+        Page<ProductFormDTO> productDTOPage = productFacade.getAllByRestaurant(pageable, currentUser);
 
         if (!productDTOPage.hasContent()) {
-            PagedResources pagedResources = assembler.toEmptyResource(productDTOPage, ProductDTO.class);
-            return new ResponseEntity<PagedResources<ProductDTO>>(pagedResources, HttpStatus.OK);
+            PagedResources pagedResources = assembler.toEmptyResource(productDTOPage, ProductFormDTO.class);
+            return new ResponseEntity<PagedResources<ProductFormDTO>>(pagedResources, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(assembler.toResource(productDTOPage), HttpStatus.OK);

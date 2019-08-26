@@ -56,13 +56,13 @@ public final class CartToCartOrderedProcessor {
 
         customerOrderedRepository.save(customerOrdered);
 
-        List<ProductOrdered> productOrdereds = cartOrdered.getLineItemsOrdered().stream()
+        List<ProductOrdered> productOrdered = cartOrdered.getLineItemsOrdered().stream()
                 .map(LineItemOrdered::getProductOrdered)
                 .collect(Collectors.toList());
 
-        productOrdereds.forEach(v -> v.setCompany(company));
+        productOrdered.forEach(v -> v.setCompany(company));
 
-        productOrderedRepository.saveAll(productOrdereds);
+        productOrderedRepository.saveAll(productOrdered);
 
         cartOrderedRepository.save(cartOrdered);
 

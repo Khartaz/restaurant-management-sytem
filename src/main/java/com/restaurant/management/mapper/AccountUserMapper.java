@@ -1,30 +1,33 @@
 package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
-import com.restaurant.management.domain.ecommerce.dto.AccountUserDto;
-import com.restaurant.management.web.response.user.AccountUserResponse;
+import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.restaurant.management.mapper.RoleMapper.roleToString;
 
 @Component
 @SuppressWarnings("Duplicates")
 public final class AccountUserMapper {
 
-    private RoleMapper roleMapper;
+    private CompanyMapper companyMapper;
 
     @Autowired
-    public void setRoleMapper(RoleMapper roleMapper) {
-        this.roleMapper = roleMapper;
+    public AccountUserMapper(CompanyMapper companyMapper) {
+        this.companyMapper = companyMapper;
     }
 
-    public AccountUserDto mapToAccountUserDto(final AccountUser accountUser) {
-        return new AccountUserDto(
-                accountUser.getCreatedAt(),
-                accountUser.getUpdatedAt(),
+    public AccountUserDTO mapToAccountUserDto(final AccountUser accountUser) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return new AccountUserDTO(
+                formatter.format(accountUser.getCreatedAt()),
+                formatter.format(accountUser.getUpdatedAt()),
                 accountUser.getCreatedByUserId(),
                 accountUser.getUpdatedByUserId(),
                 accountUser.getId(),
@@ -32,52 +35,24 @@ public final class AccountUserMapper {
                 accountUser.getLastName(),
                 accountUser.getEmail(),
                 accountUser.getPhone(),
-                accountUser.getEmailVerificationToken(),
+                accountUser.getJobTitle(),
                 accountUser.isActive(),
-                accountUser.getRoles().stream()
-                        .map(v -> roleMapper.mapToRoleDto(v))
-                        .collect(Collectors.toSet())
+                roleToString(accountUser),
+                accountUser.getAccountUserAddress().getStreetAndNumber(),
+                accountUser.getAccountUserAddress().getPostCode(),
+                accountUser.getAccountUserAddress().getCity(),
+                accountUser.getAccountUserAddress().getCountry(),
+                companyMapper.mapToCompanyDto(accountUser.getCompany())
         );
     }
 
-    public AccountUserResponse mapToAccountUserResponse(final AccountUserDto accountUserDto) {
-        return new AccountUserResponse(
-                accountUserDto.getCreatedAt(),
-                accountUserDto.getUpdatedAt(),
-                accountUserDto.getCreatedByUserId(),
-                accountUserDto.getUpdatedByUserId(),
-                accountUserDto.getId(),
-                accountUserDto.getName(),
-                accountUserDto.getLastName(),
-                accountUserDto.getEmail(),
-                accountUserDto.getPhone(),
-                accountUserDto.getEmailVerificationToken(),
-                accountUserDto.isActive(),
-                accountUserDto.getRoles().stream()
-                        .map(r -> roleMapper.mapToRoleResponse(r))
-                        .collect(Collectors.toSet())
-        );
-    }
-
-    public List<AccountUserDto> mapToAccountUserListDto(final List<AccountUser> accountUsers) {
+    public List<AccountUserDTO> mapToAccountUserListDto(final List<AccountUser> accountUsers) {
         return accountUsers.stream()
                 .map(this::mapToAccountUserDto)
                 .collect(Collectors.toList());
     }
 
-    public Page<AccountUserDto> mapToAccountUserDtoPage(final Page<AccountUser> accountUsers) {
+    public Page<AccountUserDTO> mapToAccountUserDtoPage(final Page<AccountUser> accountUsers) {
         return accountUsers.map(this::mapToAccountUserDto);
     }
-
-
-    public List<AccountUserResponse> mapToAccountUserListResponse(final List<AccountUserDto> accountUsersDto) {
-        return accountUsersDto.stream()
-                .map(this::mapToAccountUserResponse)
-                .collect(Collectors.toList());
-    }
-
-    public Page<AccountUserResponse> mapToAccountUserResponsePage(final Page<AccountUserDto> accountUsers) {
-        return accountUsers.map(this::mapToAccountUserResponse);
-    }
-
 }

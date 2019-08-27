@@ -1,6 +1,6 @@
 package com.restaurant.management.web.controller;
 
-import com.restaurant.management.domain.ecommerce.dto.CompanyDto;
+import com.restaurant.management.domain.ecommerce.dto.CompanyDTO;
 import com.restaurant.management.mapper.CompanyMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -50,7 +50,7 @@ public class CompanyController {
     @GetMapping(value = "/my", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CompanyResponse> getCompany(@CurrentUser UserPrincipal currentUser) {
-        CompanyDto companyDto = companyFacade.getCompany(currentUser);
+        CompanyDTO companyDto = companyFacade.getCompany(currentUser);
 
         CompanyResponse response = companyMapper.mapToCompanyResponse(companyDto);
 

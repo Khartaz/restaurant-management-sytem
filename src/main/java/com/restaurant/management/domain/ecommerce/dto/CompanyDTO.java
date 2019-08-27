@@ -1,27 +1,27 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public final class CompanyDto {
+public final class CompanyDTO {
     private Long createdAt;
     private Long updatedAt;
     private String createdByUserId;
     private String updatedByUserId;
     private Long id;
     private String name;
-    private AddressDTO addressDto;
+    private AddressDTO address;
 
-    public CompanyDto() {
+    public CompanyDTO() {
     }
 
-    public CompanyDto(Long createdAt, Long updatedAt, String createdByUserId,
+    public CompanyDTO(Long createdAt, Long updatedAt, String createdByUserId,
                       String updatedByUserId, Long id, String name,
-                      AddressDTO addressDto) {
+                      AddressDTO address) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
-        this.addressDto = addressDto;
+        this.address = address;
     }
 
     public Long getCreatedAt() {
@@ -48,7 +48,7 @@ public final class CompanyDto {
         return name;
     }
 
-    public AddressDTO getAddressDto() {
-        return addressDto;
+    public AddressDTO getAddress() {
+        return address;
     }
 }

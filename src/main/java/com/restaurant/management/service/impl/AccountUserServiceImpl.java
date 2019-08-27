@@ -16,8 +16,6 @@ import com.restaurant.management.web.request.user.*;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -94,36 +92,8 @@ public class AccountUserServiceImpl implements AccountUserService {
         return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
     }
 
-    public ApiResponse checkPublicEmailAvailability(String email) {
-        if(accountUserRepository.existsByEmailAndIsDeletedIsFalse(email)) {
-            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
-        }
-        return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
-    }
-
     public String getRoleToString(RoleName roleName) {
         return RoleMapper.mapRoleToString(roleName);
-    }
-
-    public ApiResponse deleteUserById(Long id) {
-        AccountUser accountUser = getUserById(id);
-
-        accountUserRepository.deleteById(accountUser.getId());
-
-        return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getMessage());
-    }
-
-    public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, UpdateAccountInfo request) {
-
-        AccountUser accountUser = getUserById(currentUser.getId());
-
-        Stream.of(accountUser).forEach(acc -> {
-            acc.setName(request.getName());
-            acc.setLastName(request.getLastName());
-            acc.setPhone(request.getPhone());
-            accountUserRepository.save(acc);
-        });
-        return accountUser;
     }
 
     public AccountUser getUserById(Long id) {
@@ -229,18 +199,6 @@ public class AccountUserServiceImpl implements AccountUserService {
             returnValue = true;
         }
         return returnValue;
-    }
-
-    public Page<AccountUser> getAllAccountUsers(Pageable pageable) {
-        return accountUserRepository.findAll(pageable);
-    }
-
-    public Page<AccountUser> getCompanyUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        AccountUser accountUser = getUserById(currentUser.getId());
-
-        Long companyId = accountUser.getCompany().getId();
-
-        return accountUserRepository.findAllByCompanyId(companyId, pageable);
     }
 
     public AccountUser updateUserDetails(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {

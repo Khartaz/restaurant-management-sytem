@@ -1,6 +1,5 @@
 package com.restaurant.management.service;
 
-
 import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.RoleName;
@@ -9,8 +8,6 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.web.request.user.*;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -23,17 +20,7 @@ public interface AccountUserService extends UserDetailsService {
 
     UserDetails loadUserByUserId(Long id);
 
-    ApiResponse checkPublicEmailAvailability(String email);
-
     ApiResponse checkEmailAvailabilityInCompany(@CurrentUser UserPrincipal currentUser, String email);
-
-//    AccountUser registerAdminAccount(SignUpUserRequest signUpUserRequest);
-
-//    AccountUser registerManagerAccount(SignUpUserRequest signUpUserRequest);
-
-    ApiResponse deleteUserById(Long id);
-
-    AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, UpdateAccountInfo request);
 
     AccountUser getUserById(Long id);
 
@@ -48,10 +35,6 @@ public interface AccountUserService extends UserDetailsService {
     boolean verifyEmailToken(String token);
 
     boolean resetPassword(String token, PasswordReset passwordReset);
-
-    Page<AccountUser> getAllAccountUsers(Pageable pageable);
-
-    Page<AccountUser> getCompanyUsers(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
     String getRoleToString(RoleName roleName);
 

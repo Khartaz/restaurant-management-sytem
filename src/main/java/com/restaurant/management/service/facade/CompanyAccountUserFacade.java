@@ -2,7 +2,6 @@ package com.restaurant.management.service.facade;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.layout.Shortcut;
-import com.restaurant.management.mapper.CompanyMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
@@ -28,7 +27,6 @@ public final class CompanyAccountUserFacade {
 
     private CompanyService companyService;
     private AccountUserService accountUserService;
-    private CompanyMapper companyMapper;
     private JwtTokenProvider jwtTokenProvider;
     private LayoutSettingsService layoutSettingsService;
     private LayoutShortcutService shortcutService;
@@ -36,13 +34,11 @@ public final class CompanyAccountUserFacade {
     @Autowired
     public CompanyAccountUserFacade(CompanyService companyService,
                                     AccountUserService accountUserService,
-                                    CompanyMapper companyMapper,
                                     JwtTokenProvider jwtTokenProvider,
                                     LayoutSettingsService layoutSettingsService,
                                     LayoutShortcutService shortcutService) {
         this.companyService = companyService;
         this.accountUserService = accountUserService;
-        this.companyMapper = companyMapper;
         this.jwtTokenProvider = jwtTokenProvider;
         this.layoutSettingsService = layoutSettingsService;
         this.shortcutService = shortcutService;

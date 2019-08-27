@@ -1,6 +1,7 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
+import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
 import com.restaurant.management.exception.user.UserAuthenticationException;
 import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Stream;
+
+import static com.restaurant.management.utils.Validation.validatePhoneNumberFormat;
 
 @Service
 @Transactional
@@ -207,6 +210,35 @@ public class AccountUserServiceImpl implements AccountUserService {
         accountUser.setName(request.getUserDetails().getName());
         accountUser.setLastName(request.getUserDetails().getLastName());
         accountUser.setPhone(request.getUserDetails().getPhone());
+
+        accountUserRepository.save(accountUser);
+
+        return accountUser;
+    }
+
+    public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, AccountUserDTO accountUserDTO) {
+        AccountUser accountUser = getUserById(currentUser.getId());
+
+        if (!accountUser.getEmail().equals(accountUserDTO.getEmail())) {
+            checkEmailAvailabilityInCompany(currentUser, accountUserDTO.getEmail());
+        }
+
+        if (!accountUserDTO.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(accountUserDTO.getPhone());
+        }
+
+        Stream.of(accountUser)
+                .forEach(acc -> {
+                    acc.setName(accountUserDTO.getName());
+                    acc.setLastName(accountUserDTO.getLastName());
+                    acc.setEmail(accountUserDTO.getEmail());
+                    acc.setPhone(accountUserDTO.getPhone());
+                    acc.setJobTitle(accountUserDTO.getJobTitle());
+                    acc.getAccountUserAddress().setStreetAndNumber(accountUserDTO.getStreetAndNumber());
+                    acc.getAccountUserAddress().setPostCode(accountUserDTO.getPostCode());
+                    acc.getAccountUserAddress().setCity(accountUserDTO.getCity());
+                    acc.getAccountUserAddress().setCountry(accountUserDTO.getCountry());
+                });
 
         accountUserRepository.save(accountUser);
 

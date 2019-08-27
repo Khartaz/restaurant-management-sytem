@@ -23,7 +23,7 @@ public final class AccountUserMapper {
         this.companyMapper = companyMapper;
     }
 
-    public AccountUserDTO mapToAccountUserDto(final AccountUser accountUser) {
+    public AccountUserDTO mapToAccountUserDTO(final AccountUser accountUser) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return new AccountUserDTO(
                 formatter.format(accountUser.getCreatedAt()),
@@ -48,11 +48,11 @@ public final class AccountUserMapper {
 
     public List<AccountUserDTO> mapToAccountUserListDto(final List<AccountUser> accountUsers) {
         return accountUsers.stream()
-                .map(this::mapToAccountUserDto)
+                .map(this::mapToAccountUserDTO)
                 .collect(Collectors.toList());
     }
 
     public Page<AccountUserDTO> mapToAccountUserDtoPage(final Page<AccountUser> accountUsers) {
-        return accountUsers.map(this::mapToAccountUserDto);
+        return accountUsers.map(this::mapToAccountUserDTO);
     }
 }

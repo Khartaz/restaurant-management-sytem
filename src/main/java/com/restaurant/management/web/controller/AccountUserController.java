@@ -1,6 +1,7 @@
 package com.restaurant.management.web.controller;
 
 import com.restaurant.management.config.LogLogin;
+import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.AccountUserFacade;
@@ -10,6 +11,8 @@ import com.restaurant.management.web.request.user.UserUpdateRequest;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.response.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +58,18 @@ public class AccountUserController {
     public @ResponseBody
     UserResponse updateUserData(@CurrentUser UserPrincipal currentUser, @RequestBody UserUpdateRequest userUpdateRequest) {
         return companyAccountUserFacade.updateUserDetails(currentUser, userUpdateRequest);
+    }
+
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<AccountUserDTO> updateAccountInfo(@CurrentUser UserPrincipal currentUser,
+                                               @Valid @RequestBody AccountUserDTO accountUserDTO) {
+
+        AccountUserDTO accountUser = accountUserFacade.updateAccountInfo(currentUser, accountUserDTO);
+
+        Link link = linkTo(AccountUserController.class).slash(accountUser.getId()).withSelfRel();
+
+        return new Resource<>(accountUser, link);
     }
 
 }

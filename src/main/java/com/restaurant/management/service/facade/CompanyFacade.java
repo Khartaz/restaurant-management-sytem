@@ -2,7 +2,7 @@ package com.restaurant.management.service.facade;
 
 
 import com.restaurant.management.domain.ecommerce.Company;
-import com.restaurant.management.domain.ecommerce.dto.CompanyDTO;
+import com.restaurant.management.domain.ecommerce.dto.CompanyFormDTO;
 import com.restaurant.management.mapper.CompanyMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -22,9 +22,15 @@ public final class CompanyFacade {
         this.companyMapper = companyMapper;
     }
 
-    public CompanyDTO getCompany(@CurrentUser UserPrincipal currentUser) {
+    public CompanyFormDTO getCompany(@CurrentUser UserPrincipal currentUser) {
         Company company = companyService.getCompanyById(currentUser);
 
-        return companyMapper.mapToCompanyDto(company);
+        return companyMapper.mapToCompanyFormDTO(company);
+    }
+
+    public CompanyFormDTO updateCompany(@CurrentUser UserPrincipal currentUser, CompanyFormDTO companyFormDTO) {
+        Company company = companyService.updateCompanyInfo(currentUser, companyFormDTO);
+
+        return companyMapper.mapToCompanyFormDTO(company);
     }
 }

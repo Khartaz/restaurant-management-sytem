@@ -2,7 +2,7 @@ package com.restaurant.management.mapper;
 
 import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.dto.CompanyDTO;
-import com.restaurant.management.web.response.company.CompanyResponse;
+import com.restaurant.management.domain.ecommerce.dto.CompanyFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,19 +24,21 @@ public final class CompanyMapper {
                 company.getUpdatedByUserId(),
                 company.getId(),
                 company.getName(),
+                company.getPhone(),
                 addressMapper.mapToAddressDto(company.getCompanyAddress())
         );
     }
 
-    public CompanyResponse mapToCompanyResponse(final CompanyDTO companyDto) {
-        return new CompanyResponse(
-                companyDto.getCreatedAt(),
-                companyDto.getUpdatedAt(),
-                companyDto.getCreatedByUserId(),
-                companyDto.getUpdatedByUserId(),
-                companyDto.getId(),
-                companyDto.getName(),
-                addressMapper.mapToAddressResponse(companyDto.getAddress())
+    public CompanyFormDTO mapToCompanyFormDTO(final Company company) {
+        return new CompanyFormDTO(
+                company.getCreatedAt(),
+                company.getId(),
+                company.getName(),
+                company.getPhone(),
+                company.getCompanyAddress().getStreetAndNumber(),
+                company.getCompanyAddress().getPostCode(),
+                company.getCompanyAddress().getCity(),
+                company.getCompanyAddress().getCountry()
         );
     }
 }

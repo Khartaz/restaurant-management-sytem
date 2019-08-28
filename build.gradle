@@ -62,7 +62,6 @@ dependencies {
     
     //HIBERNATE
     compile('org.hibernate:hibernate-envers:5.4.0.Final')
-//    compile('org.hibernate:hibernate-core:5.4.0.Final')
 
 
     //Swagger

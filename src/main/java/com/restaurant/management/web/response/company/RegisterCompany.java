@@ -4,9 +4,7 @@ import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Company;
 
 public final class RegisterCompany {
-
     private AccountUser accountUser;
-
     private Company company;
 
     public RegisterCompany(AccountUser accountUser, Company company) {

@@ -7,13 +7,14 @@ public final class CompanyDTO {
     private String updatedByUserId;
     private Long id;
     private String name;
+    private String phone;
     private AddressDTO address;
 
     public CompanyDTO() {
     }
 
     public CompanyDTO(Long createdAt, Long updatedAt, String createdByUserId,
-                      String updatedByUserId, Long id, String name,
+                      String updatedByUserId, Long id, String name, String phone,
                       AddressDTO address) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -21,6 +22,7 @@ public final class CompanyDTO {
         this.updatedByUserId = updatedByUserId;
         this.id = id;
         this.name = name;
+        this.phone = phone;
         this.address = address;
     }
 
@@ -46,6 +48,10 @@ public final class CompanyDTO {
 
     public String getName() {
         return name;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public AddressDTO getAddress() {

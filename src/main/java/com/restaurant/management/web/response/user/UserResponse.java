@@ -11,15 +11,6 @@ public final class UserResponse {
     public UserResponse() {
     }
 
-    public UserResponse(UserDetailsResponse userDetails, Settings settings) {
-        this.userDetails = userDetails;
-        this.settings = settings;
-    }
-
-    public UserResponse(UserDetailsResponse userDetails) {
-        this.userDetails = userDetails;
-    }
-
     public UserResponse(UserDetailsResponse userDetails, Settings settings,
                         String[] shortcuts) {
         this.userDetails = userDetails;

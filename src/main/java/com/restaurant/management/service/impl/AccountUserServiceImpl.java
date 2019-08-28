@@ -86,6 +86,13 @@ public class AccountUserServiceImpl implements AccountUserService {
         return UserPrincipal.create(accountUser);
     }
 
+    public ApiResponse checkEmailAvailability(String email) {
+        if(accountUserRepository.existsByEmailAndIsDeletedIsFalse(email)) {
+            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
+        }
+        return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
+    }
+
     public ApiResponse checkEmailAvailabilityInCompany(@CurrentUser UserPrincipal currentUser, String email) {
         Long companyId = getCompany(currentUser).getId();
 

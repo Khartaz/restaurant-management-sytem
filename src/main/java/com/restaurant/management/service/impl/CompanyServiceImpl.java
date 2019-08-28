@@ -1,10 +1,10 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
+import com.restaurant.management.domain.ecommerce.dto.CompanyFormDTO;
 import com.restaurant.management.exception.company.CompanyMessages;
 import com.restaurant.management.exception.company.CompanyNotFoundException;
 import com.restaurant.management.exception.user.UserAuthenticationException;
-import com.restaurant.management.exception.user.UserExistsException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
 import com.restaurant.management.repository.AccountUserRepository;
@@ -12,12 +12,12 @@ import com.restaurant.management.repository.CompanyRepository;
 import com.restaurant.management.repository.RoleRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
+import com.restaurant.management.service.AccountUserService;
 import com.restaurant.management.service.LayoutSettingsService;
 import com.restaurant.management.service.CompanyService;
 import com.restaurant.management.web.request.user.SignUpUserRequest;
 import com.restaurant.management.web.request.company.RegisterCompanyRequest;
 import com.restaurant.management.web.request.company.CompanyRequest;
-import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.company.RegisterCompany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +31,6 @@ import static com.restaurant.management.utils.Validation.validatePhoneNumberForm
 
 @Service
 @Transactional
-//@SuppressWarnings("Duplicates")
 public class CompanyServiceImpl implements CompanyService {
 
     private CompanyRepository companyRepository;
@@ -39,18 +38,21 @@ public class CompanyServiceImpl implements CompanyService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private LayoutSettingsService settingsService;
+    private AccountUserService accountUserService;
 
     @Autowired
     public CompanyServiceImpl(CompanyRepository companyRepository,
                               AccountUserRepository accountUserRepository,
                               RoleRepository roleRepository,
                               PasswordEncoder passwordEncoder,
-                              LayoutSettingsService settingsService) {
+                              LayoutSettingsService settingsService,
+                              AccountUserService accountUserService) {
         this.companyRepository = companyRepository;
         this.accountUserRepository = accountUserRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.settingsService = settingsService;
+        this.accountUserService = accountUserService;
 
     }
 
@@ -68,17 +70,27 @@ public class CompanyServiceImpl implements CompanyService {
         return new RegisterCompany(accountUser, company);
     }
 
-    private ApiResponse checkEmailAvailability(String email) {
-        if(accountUserRepository.existsByEmailAndIsDeletedIsFalse(email)) {
-            throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
-        }
-        return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
+    public Company updateCompanyInfo(@CurrentUser UserPrincipal currentUser, CompanyFormDTO request) {
+        Company company = getCompanyById(currentUser);
+
+        Stream.of(company)
+                .forEach(c -> {
+                    c.setName(request.getName());
+                    c.setPhone(request.getPhone());
+                    c.getCompanyAddress().setStreetAndNumber(request.getStreetAndNumber());
+                    c.getCompanyAddress().setPostCode(request.getPostCode());
+                    c.getCompanyAddress().setCity(request.getCity());
+                    c.getCompanyAddress().setCountry(request.getCountry());
+                });
+
+        return company;
     }
+
 
     private AccountUser registerCompanyManager(SignUpUserRequest request) {
         validatePhoneNumberFormat(request.getPhone());
 
-        checkEmailAvailability(request.getEmail());
+        accountUserService.checkEmailAvailability(request.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));

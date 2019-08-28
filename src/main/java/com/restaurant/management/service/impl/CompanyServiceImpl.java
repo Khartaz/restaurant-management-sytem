@@ -83,6 +83,8 @@ public class CompanyServiceImpl implements CompanyService {
                     c.getCompanyAddress().setCountry(request.getCountry());
                 });
 
+        companyRepository.save(company);
+
         return company;
     }
 

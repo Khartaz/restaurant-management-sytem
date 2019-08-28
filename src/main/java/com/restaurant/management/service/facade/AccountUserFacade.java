@@ -33,4 +33,10 @@ public final class AccountUserFacade {
 
         return accountUserMapper.mapToAccountUserDTO(accountUser);
     }
+
+    public AccountUserDTO getAccountInfo(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = accountUserService.getCompanyUserById(currentUser, currentUser.getId());
+
+        return accountUserMapper.mapToAccountUserDTO(accountUser);
+    }
 }

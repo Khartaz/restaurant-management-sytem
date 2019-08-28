@@ -72,4 +72,14 @@ public class AccountUserController {
         return new Resource<>(accountUser, link);
     }
 
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Resource<AccountUserDTO> getAccountInfo(@CurrentUser UserPrincipal currentUser) {
+        AccountUserDTO accountUserDTO = accountUserFacade.getAccountInfo(currentUser);
+
+        Link link = linkTo(AccountUserController.class).slash(accountUserDTO.getId()).withSelfRel();
+
+        return new Resource<>(accountUserDTO, link);
+    }
+
 }

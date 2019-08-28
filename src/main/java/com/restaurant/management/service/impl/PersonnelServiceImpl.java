@@ -1,7 +1,6 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
-import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import com.restaurant.management.domain.layout.Settings;
 import com.restaurant.management.exception.user.UserAuthenticationException;
@@ -182,7 +181,7 @@ public class PersonnelServiceImpl implements PersonnelService {
     public AccountUser getPersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
         Long companyId = accountUserService.getCompany(currentUser).getId();
 
-        return accountUserRepository.findByIdAndCompanyId(personId, companyId)
+        return accountUserRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(personId, companyId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage()));
     }
 

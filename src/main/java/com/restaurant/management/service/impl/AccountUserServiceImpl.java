@@ -109,7 +109,7 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         Long companyId = currentUserResult.getCompany().getId();
 
-        return accountUserRepository.findByIdAndCompanyId(id, companyId)
+        return accountUserRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(id, companyId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
@@ -217,7 +217,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, AccountUserDTO accountUserDTO) {
-        AccountUser accountUser = getUserById(currentUser.getId());
+        AccountUser accountUser = getCompanyUserById(currentUser, currentUser.getId());
 
         if (!accountUser.getEmail().equals(accountUserDTO.getEmail())) {
             checkEmailAvailabilityInCompany(currentUser, accountUserDTO.getEmail());
@@ -244,4 +244,5 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         return accountUser;
     }
+
 }

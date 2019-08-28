@@ -3,7 +3,6 @@ package com.restaurant.management.repository;
 import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.Role;
-import com.restaurant.management.security.CurrentUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,8 +38,6 @@ public interface AccountUserRepository extends JpaRepository<AccountUser, Long> 
     @Override
     Page<AccountUser> findAll(Pageable pageable);
 
-    Optional<AccountUser> findByIdAndCompanyId(Long id, Long companyId);
-
-    Page<AccountUser> findAllByCompanyId(Long companyId, Pageable pageable);
+    Optional<AccountUser> findByIdAndCompanyIdAndIsDeletedIsFalse(Long id, Long companyId);
 
 }

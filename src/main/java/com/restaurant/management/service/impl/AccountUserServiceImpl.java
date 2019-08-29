@@ -2,10 +2,7 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
-import com.restaurant.management.exception.user.UserAuthenticationException;
-import com.restaurant.management.exception.user.UserExistsException;
-import com.restaurant.management.exception.user.UserMessages;
-import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.exception.user.*;
 import com.restaurant.management.mapper.RoleMapper;
 import com.restaurant.management.repository.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -192,15 +189,15 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         if (!passwordEncoder.matches(request.getPassword(), accountUser.getPassword())) {
 
-            throw new UserAuthenticationException(UserMessages.ACCESS_DENIED.getMessage());
+            throw new UserBadRequestException(UserMessages.ACCESS_DENIED.getMessage());
 
         } else if (passwordEncoder.matches(request.getNewPassword(), accountUser.getPassword())) {
 
-            throw new UserAuthenticationException(UserMessages.DIFFERENT_PASSWORD.getMessage());
+            throw new UserBadRequestException(UserMessages.DIFFERENT_PASSWORD.getMessage());
 
         } else if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
 
-            throw new UserAuthenticationException(UserMessages.PASSWORDS_EQUALS.getMessage());
+            throw new UserBadRequestException(UserMessages.PASSWORDS_EQUALS.getMessage());
         }
 
         String encodedPassword = passwordEncoder.encode(request.getNewPassword());

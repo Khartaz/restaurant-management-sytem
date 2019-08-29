@@ -1,5 +1,6 @@
 package com.restaurant.management.exception;
 
+import com.restaurant.management.exception.user.UserMessages;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,14 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(), ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ValidationException.class)
     public final ResponseEntity<ExceptionResponse> handleValidationException(ValidationException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
@@ -63,7 +72,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDeniedException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
-                new Date(), "Access Denied", request.getDescription(false));
+                new Date(), UserMessages.ACCESS_DENIED.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }

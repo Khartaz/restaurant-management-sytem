@@ -54,7 +54,8 @@ public class CompanyController {
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<CompanyFormDTO> updateCompanyInfo(@CurrentUser UserPrincipal userPrincipal, CompanyFormDTO request) {
+    Resource<CompanyFormDTO> updateCompanyInfo(@CurrentUser UserPrincipal userPrincipal,
+                                               @RequestBody CompanyFormDTO request) {
         CompanyFormDTO companyFormDTO = companyFacade.updateCompany(userPrincipal, request);
 
         Link link = linkTo(CompanyController.class).slash(companyFormDTO.getId()).withSelfRel();

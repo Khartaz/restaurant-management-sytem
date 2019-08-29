@@ -43,4 +43,6 @@ public interface AccountUserService extends UserDetailsService {
 
     String getRoleToString(RoleName roleName);
 
+    ApiResponse newPasswordRequest(@CurrentUser UserPrincipal userPrincipal, NewPasswordRequest request);
+
 }

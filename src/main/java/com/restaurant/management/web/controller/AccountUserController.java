@@ -7,7 +7,9 @@ import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.facade.AccountUserFacade;
 import com.restaurant.management.service.facade.CompanyAccountUserFacade;
 import com.restaurant.management.web.request.user.LoginRequest;
+import com.restaurant.management.web.request.user.NewPasswordRequest;
 import com.restaurant.management.web.request.user.UserUpdateRequest;
+import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
 import com.restaurant.management.web.response.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,12 @@ public class AccountUserController {
         Link link = linkTo(AccountUserController.class).slash(accountUserDTO.getId()).withSelfRel();
 
         return new Resource<>(accountUserDTO, link);
+    }
+
+    @PutMapping(value = "/reset-password", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ApiResponse newPasswordRequest(@CurrentUser UserPrincipal userPrincipal, @RequestBody NewPasswordRequest request) {
+        return accountUserFacade.newPasswordRequest(userPrincipal, request);
     }
 
 }

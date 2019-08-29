@@ -16,11 +16,13 @@ import com.restaurant.management.service.SimpleEmailService;
 import com.restaurant.management.web.request.user.*;
 import com.restaurant.management.web.response.ApiResponse;
 import com.restaurant.management.web.response.JwtAuthenticationResponse;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -183,6 +185,30 @@ public class AccountUserServiceImpl implements AccountUserService {
             returnValue = true;
         }
         return returnValue;
+    }
+
+    public ApiResponse newPasswordRequest(@CurrentUser UserPrincipal userPrincipal, NewPasswordRequest request) {
+        AccountUser accountUser = getUserById(userPrincipal.getId());
+
+        if (!passwordEncoder.matches(request.getPassword(), accountUser.getPassword())) {
+
+            throw new UserAuthenticationException(UserMessages.ACCESS_DENIED.getMessage());
+
+        } else if (passwordEncoder.matches(request.getNewPassword(), accountUser.getPassword())) {
+
+            throw new UserAuthenticationException(UserMessages.DIFFERENT_PASSWORD.getMessage());
+
+        } else if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+
+            throw new UserAuthenticationException(UserMessages.PASSWORDS_EQUALS.getMessage());
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+
+        accountUser.setPassword(encodedPassword);
+        accountUserRepository.save(accountUser);
+
+        return new ApiResponse(true, UserMessages.PASSWORD_CHANGED.getMessage());
     }
 
     public boolean resetPassword(String token, PasswordReset passwordReset) {

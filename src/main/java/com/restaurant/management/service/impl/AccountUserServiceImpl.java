@@ -211,18 +211,6 @@ public class AccountUserServiceImpl implements AccountUserService {
         return returnValue;
     }
 
-    public AccountUser updateUserDetails(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {
-        AccountUser accountUser = getUserById(currentUser.getId());
-
-        accountUser.setName(request.getUserDetails().getName());
-        accountUser.setLastName(request.getUserDetails().getLastName());
-        accountUser.setPhone(request.getUserDetails().getPhone());
-
-        accountUserRepository.save(accountUser);
-
-        return accountUser;
-    }
-
     public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, AccountUserDTO accountUserDTO) {
         AccountUser accountUser = getCompanyUserById(currentUser, currentUser.getId());
 

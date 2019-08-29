@@ -43,6 +43,4 @@ public interface AccountUserService extends UserDetailsService {
 
     String getRoleToString(RoleName roleName);
 
-    AccountUser updateUserDetails(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request);
-
 }

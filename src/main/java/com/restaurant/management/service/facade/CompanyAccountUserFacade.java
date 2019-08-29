@@ -126,10 +126,8 @@ public final class CompanyAccountUserFacade {
         return new UserResponse(userDetailsResponse, accountUser.getSettings(), shortcuts, token);
     }
 
-    public UserResponse updateUserDetails(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {
+    public UserResponse updateAccountSettings(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {
         layoutSettingsService.updateSettings(currentUser, request.getSettings());
-
-        accountUserService.updateUserDetails(currentUser, request);
 
         List<Shortcut> shortcuts = request.getShortcuts();
 

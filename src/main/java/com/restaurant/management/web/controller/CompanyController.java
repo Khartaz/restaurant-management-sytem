@@ -12,6 +12,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -52,6 +53,7 @@ public class CompanyController {
         return new Resource<>(companyDto, link);
     }
 
+    @RolesAllowed({"ROLE_MANAGER"})
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<CompanyFormDTO> updateCompanyInfo(@CurrentUser UserPrincipal userPrincipal,

@@ -73,6 +73,10 @@ public class CompanyServiceImpl implements CompanyService {
     public Company updateCompanyInfo(@CurrentUser UserPrincipal currentUser, CompanyFormDTO request) {
         Company company = getCompanyById(currentUser);
 
+        if (!request.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(request.getPhone());
+        }
+
         Stream.of(company)
                 .forEach(c -> {
                     c.setName(request.getName());
@@ -113,6 +117,7 @@ public class CompanyServiceImpl implements CompanyService {
                     user.setLastName(request.getLastName());
                     user.setEmail(request.getEmail());
                     user.setPhone(request.getPhone());
+                    user.setJobTitle("Manager");
                     user.setPassword(passwordEncoder.encode(request.getPassword()));
                     user.setActive(Boolean.TRUE);
                     user.setDeleted(Boolean.FALSE);
@@ -141,20 +146,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     private AccountUserAddress registerUserAddress() {
         return new AccountUserAddress.AccountUserAddressBuilder()
-                .setCity("Update City")
-                .setCountry("Update Country")
-                .setPostCode("Update post code")
-                .setStreetAndNumber("Update street and number")
+                .setCity("Update")
+                .setCountry("Update")
+                .setPostCode("Update")
+                .setStreetAndNumber("Update")
                 .build();
     }
 
     private Company registerCompany(CompanyRequest request) {
 
         CompanyAddress address = new CompanyAddress.CompanyAddressBuilder()
-                .setCity("Update City")
-                .setCountry("Update Country")
-                .setPostCode("Update post code")
-                .setStreetAndNumber("Update street and number")
+                .setCity("Update")
+                .setCountry("Update")
+                .setPostCode("Update")
+                .setStreetAndNumber("Update")
                 .build();
 
         Company company = new Company();

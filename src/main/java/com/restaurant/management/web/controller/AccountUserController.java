@@ -56,8 +56,8 @@ public class AccountUserController {
 
     @PutMapping(value = "/userData", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    UserResponse updateUserData(@CurrentUser UserPrincipal currentUser, @RequestBody UserUpdateRequest userUpdateRequest) {
-        return companyAccountUserFacade.updateUserDetails(currentUser, userUpdateRequest);
+    UserResponse updateAccountSettings(@CurrentUser UserPrincipal currentUser, @RequestBody UserUpdateRequest userUpdateRequest) {
+        return companyAccountUserFacade.updateAccountSettings(currentUser, userUpdateRequest);
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

@@ -33,7 +33,7 @@ public class CompanyController {
         this.companyFacade = companyFacade;
     }
 
-    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Resource<UserResponse> registerCompany(@Valid @RequestBody RegisterCompanyRequest request) {
         UserResponse registerLoginResponse = companyAccountUserFacade.registerCompany(request);

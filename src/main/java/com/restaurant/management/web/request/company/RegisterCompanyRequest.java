@@ -4,13 +4,17 @@ import com.restaurant.management.web.request.user.SignUpUserRequest;
 
 public final class RegisterCompanyRequest {
 
-//    @NotNull(message = "user info cannot be null")
     private SignUpUserRequest signUpUserRequest;
 
-//    @NotNull(message = "company info cannot be null")
     private CompanyRequest companyRequest;
 
     public RegisterCompanyRequest() {
+    }
+
+    public RegisterCompanyRequest(SignUpUserRequest signUpUserRequest,
+                                  CompanyRequest companyRequest) {
+        this.signUpUserRequest = signUpUserRequest;
+        this.companyRequest = companyRequest;
     }
 
     public SignUpUserRequest getSignUpUserRequest() {

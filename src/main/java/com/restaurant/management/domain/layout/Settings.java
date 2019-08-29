@@ -13,6 +13,9 @@ public class Settings {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "photo_url")
+    private String photoURL;
+
     @Column(name = "custom_scrollbars")
     private Boolean customScrollbars = Boolean.TRUE;
 
@@ -31,7 +34,8 @@ public class Settings {
         this.theme = theme;
     }
 
-    public Settings(Boolean customScrollbars, Layout layout, Theme theme) {
+    public Settings(String photoURL, Boolean customScrollbars, Layout layout, Theme theme) {
+        this.photoURL = photoURL;
         this.customScrollbars = customScrollbars;
         this.layout = layout;
         this.theme = theme;
@@ -39,6 +43,14 @@ public class Settings {
 
     public Long getId() {
         return id;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 
     public Layout getLayout() {

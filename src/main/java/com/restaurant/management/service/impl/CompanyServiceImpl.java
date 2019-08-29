@@ -92,6 +92,28 @@ public class CompanyServiceImpl implements CompanyService {
         return company;
     }
 
+    public Company getCompanyById(@CurrentUser UserPrincipal currentUser) {
+        AccountUser accountUser = getUserById(currentUser.getId());
+
+        Long restaurantId = accountUser.getCompany().getId();
+
+        return companyRepository.findById(restaurantId)
+                .orElseThrow(() -> new CompanyNotFoundException(CompanyMessages.RESTAURANT_NOT_FOUND.getMessage()));
+    }
+
+    private AccountUser getUserById(Long id) {
+        return accountUserRepository.findByIdAndIsDeletedIsFalse(id)
+                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
+    }
+
+    private Company registerCompany(CompanyRequest request) {
+
+        Company company = new Company();
+        company.setName(request.getCompanyName());
+        company.setCompanyAddress(new CompanyAddress());
+
+        return company;
+    }
 
     private AccountUser registerCompanyManager(SignUpUserRequest request) {
         validatePhoneNumberFormat(request.getPhone());
@@ -124,48 +146,9 @@ public class CompanyServiceImpl implements CompanyService {
                     user.setRoles(Collections.singleton(userRole));
                     user.setEmailVerificationToken(null);
                     user.setSettings(settingsService.createDefaultLayoutSettings());
-                    user.setAccountUserAddress(registerUserAddress());
+                    user.setAccountUserAddress(new AccountUserAddress());
                 });
 
         return accountUser;
-    }
-
-    public Company getCompanyById(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUserById(currentUser.getId());
-
-        Long restaurantId = accountUser.getCompany().getId();
-
-        return companyRepository.findById(restaurantId)
-                .orElseThrow(() -> new CompanyNotFoundException(CompanyMessages.RESTAURANT_NOT_FOUND.getMessage()));
-    }
-
-    private AccountUser getUserById(Long id) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(id)
-                .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
-    }
-
-    private AccountUserAddress registerUserAddress() {
-        return new AccountUserAddress.AccountUserAddressBuilder()
-                .setCity("Update")
-                .setCountry("Update")
-                .setPostCode("Update")
-                .setStreetAndNumber("Update")
-                .build();
-    }
-
-    private Company registerCompany(CompanyRequest request) {
-
-        CompanyAddress address = new CompanyAddress.CompanyAddressBuilder()
-                .setCity("Update")
-                .setCountry("Update")
-                .setPostCode("Update")
-                .setStreetAndNumber("Update")
-                .build();
-
-        Company company = new Company();
-        company.setName(request.getCompanyName());
-        company.setCompanyAddress(address);
-
-        return company;
     }
 }

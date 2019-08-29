@@ -38,6 +38,8 @@ public class LayoutSettingsServiceImpl implements LayoutSettingsService {
 
     public Settings createDefaultLayoutSettings() {
         return new Settings(
+                "assets/images/avatars/profile.jpg",
+
                 Boolean.TRUE,
 
                 new Layout(

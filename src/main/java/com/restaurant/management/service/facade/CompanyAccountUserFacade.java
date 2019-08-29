@@ -45,7 +45,6 @@ public final class CompanyAccountUserFacade {
     }
 
     public UserResponse registerCompany(RegisterCompanyRequest request) {
-        String photoURL = "assets/images/avatars/profile.jpg";
 
         RegisterCompany registeredCompany = companyService.registerCompany(request);
 
@@ -68,7 +67,7 @@ public final class CompanyAccountUserFacade {
                 roleToString(accountUser),
                 accountUser.getName(),
                 accountUser.getLastName(),
-                photoURL,
+                accountUser.getSettings().getPhotoURL(),
                 accountUser.getEmail(),
                 accountUser.getPhone()
         );
@@ -78,8 +77,6 @@ public final class CompanyAccountUserFacade {
 
     public UserResponse getUserData(@CurrentUser UserPrincipal currentUser) {
         AccountUser accountUser = accountUserService.getUserById(currentUser.getId());
-
-        String photoURL = "assets/images/avatars/profile.jpg";
 
         String[] shortcuts = shortcutService.getLayoutShortcuts(currentUser);
 
@@ -92,7 +89,7 @@ public final class CompanyAccountUserFacade {
                 roleToString(accountUser),
                 accountUser.getName(),
                 accountUser.getLastName(),
-                photoURL,
+                accountUser.getSettings().getPhotoURL(),
                 accountUser.getEmail(),
                 accountUser.getPhone()
         );
@@ -105,8 +102,6 @@ public final class CompanyAccountUserFacade {
 
         AccountUser accountUser = accountUserService.getUserById(id);
 
-        String photoURL = "assets/images/avatars/profile.jpg";
-
         String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(accountUser.getId());
 
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse(
@@ -118,7 +113,7 @@ public final class CompanyAccountUserFacade {
                 roleToString(accountUser),
                 accountUser.getName(),
                 accountUser.getLastName(),
-                photoURL,
+                accountUser.getSettings().getPhotoURL(),
                 accountUser.getEmail(),
                 accountUser.getPhone()
         );

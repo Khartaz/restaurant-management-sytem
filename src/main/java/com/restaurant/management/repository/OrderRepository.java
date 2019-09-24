@@ -1,5 +1,6 @@
 package com.restaurant.management.repository;
 
+import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Override
     Page<Order> findAll(Pageable pageable);
 
-    Page<Order> findAllByCompanyId(Long companyId, Pageable pageable);
+    Page<Order> findAllByCompany(Company company, Pageable pageable);
 
     Optional<Order> findByIdAndCompanyId(Long orderId, Long companyId);
 

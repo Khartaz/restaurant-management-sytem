@@ -74,9 +74,9 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> getAllOrders(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
         AccountUser accountUser = getUser(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Company company = accountUser.getCompany();
 
-        return orderRepository.findAllByCompanyId(restaurantId, pageable);
+        return orderRepository.findAllByCompany(company, pageable);
     }
 
     public Order getByOrderId(@CurrentUser UserPrincipal currentUser, Long orderId) {
@@ -100,12 +100,12 @@ public class OrderServiceImpl implements OrderService {
         AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Company company= accountUser.getCompany();
 
-        Customer customer = customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, restaurantId)
+        Customer customer = customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, company.getId())
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.ID_NOT_FOUND.getMessage()));
 
-        Page<Order> orderList = orderRepository.findAllByCompanyId(restaurantId, pageable);
+        Page<Order> orderList = orderRepository.findAllByCompany(company, pageable);
 
         List<Order> customerOrders = orderList.stream()
                 .filter(v -> v.getCartOrdered().getCustomerOrdered().getPhone().equals(customer.getPhone()))

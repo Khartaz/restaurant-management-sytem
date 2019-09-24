@@ -27,12 +27,12 @@ public class AccountUser extends AbstractUser {
     @Column(name = "isActive")
     private Boolean isActive;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "account_users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "account_users_roles",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id")
+//    )
     private Set<Role> roles = new HashSet<>();
 
     @NotAudited

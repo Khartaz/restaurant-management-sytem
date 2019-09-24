@@ -1,4 +1,4 @@
-package com.restaurant.management.repository.history;
+package com.restaurant.management.repository.ecommerce.history;
 
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.security.CurrentUser;

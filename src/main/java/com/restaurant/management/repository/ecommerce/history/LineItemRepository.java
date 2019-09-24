@@ -1,4 +1,4 @@
-package com.restaurant.management.repository;
+package com.restaurant.management.repository.ecommerce.history;
 
 import com.restaurant.management.domain.ecommerce.LineItem;
 import org.springframework.data.jpa.repository.JpaRepository;

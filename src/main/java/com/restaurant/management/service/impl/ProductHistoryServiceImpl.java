@@ -7,7 +7,7 @@ import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.repository.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.history.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ProductHistoryService;

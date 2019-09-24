@@ -1,16 +1,15 @@
 package com.restaurant.management.service.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
-import com.restaurant.management.domain.ecommerce.dto.CustomerDTO;
 import com.restaurant.management.domain.ecommerce.dto.CustomerFormDTO;
 import com.restaurant.management.exception.customer.CustomerExistsException;
 import com.restaurant.management.exception.customer.CustomerMessages;
 import com.restaurant.management.exception.customer.CustomerNotFoundException;
 import com.restaurant.management.exception.user.UserMessages;
 import com.restaurant.management.exception.user.UserNotFoundException;
-import com.restaurant.management.repository.AccountUserRepository;
-import com.restaurant.management.repository.CartRepository;
-import com.restaurant.management.repository.CustomerRepository;
+import com.restaurant.management.repository.ecommerce.history.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.history.CartRepository;
+import com.restaurant.management.repository.ecommerce.history.CustomerRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.CustomerService;

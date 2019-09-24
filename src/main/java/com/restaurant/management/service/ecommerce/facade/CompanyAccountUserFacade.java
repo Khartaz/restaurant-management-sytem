@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.restaurant.management.mapper.RoleMapper.roleToString;
+import static com.restaurant.management.mapper.ecommerce.RoleMapper.roleToString;
 
 @Component
 @SuppressWarnings("Duplicates")

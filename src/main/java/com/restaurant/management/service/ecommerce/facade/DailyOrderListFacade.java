@@ -2,7 +2,7 @@ package com.restaurant.management.service.ecommerce.facade;
 
 import com.restaurant.management.domain.ecommerce.DailyOrderList;
 import com.restaurant.management.domain.ecommerce.dto.DailyOrderListDto;
-import com.restaurant.management.mapper.DailyOrderListMapper;
+import com.restaurant.management.mapper.ecommerce.DailyOrderListMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ecommerce.DailyOrderListService;

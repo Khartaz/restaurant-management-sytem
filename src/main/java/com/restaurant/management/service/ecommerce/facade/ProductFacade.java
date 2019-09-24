@@ -5,7 +5,7 @@ import com.restaurant.management.domain.ecommerce.dto.ProductDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductFormDTO;
 import com.restaurant.management.domain.ecommerce.dto.ProductHistoryDto;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
-import com.restaurant.management.mapper.ProductMapper;
+import com.restaurant.management.mapper.ecommerce.ProductMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ecommerce.ProductHistoryService;

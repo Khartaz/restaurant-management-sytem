@@ -3,7 +3,7 @@ package com.restaurant.management.service.ecommerce.facade;
 
 import com.restaurant.management.domain.ecommerce.Company;
 import com.restaurant.management.domain.ecommerce.dto.CompanyFormDTO;
-import com.restaurant.management.mapper.CompanyMapper;
+import com.restaurant.management.mapper.ecommerce.CompanyMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ecommerce.CompanyService;

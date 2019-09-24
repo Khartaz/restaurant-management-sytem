@@ -2,7 +2,7 @@ package com.restaurant.management.service.ecommerce.facade;
 
 import com.restaurant.management.domain.ecommerce.Cart;
 import com.restaurant.management.domain.ecommerce.dto.CartDto;
-import com.restaurant.management.mapper.CartMapper;
+import com.restaurant.management.mapper.ecommerce.CartMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ecommerce.CartService;

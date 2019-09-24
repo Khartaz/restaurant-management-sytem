@@ -2,11 +2,11 @@ package com.restaurant.management.service.ecommerce.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.domain.ecommerce.dto.CompanyFormDTO;
-import com.restaurant.management.exception.company.CompanyMessages;
-import com.restaurant.management.exception.company.CompanyNotFoundException;
-import com.restaurant.management.exception.user.UserAuthenticationException;
-import com.restaurant.management.exception.user.UserMessages;
-import com.restaurant.management.exception.user.UserNotFoundException;
+import com.restaurant.management.exception.ecommerce.company.CompanyMessages;
+import com.restaurant.management.exception.ecommerce.company.CompanyNotFoundException;
+import com.restaurant.management.exception.ecommerce.user.UserAuthenticationException;
+import com.restaurant.management.exception.ecommerce.user.UserMessages;
+import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
 import com.restaurant.management.repository.ecommerce.AccountUserRepository;
 import com.restaurant.management.repository.ecommerce.CompanyRepository;
 import com.restaurant.management.repository.ecommerce.RoleRepository;

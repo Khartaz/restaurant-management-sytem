@@ -2,7 +2,7 @@ package com.restaurant.management.service.ecommerce.facade;
 
 import com.restaurant.management.domain.ecommerce.AccountUser;
 import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
-import com.restaurant.management.mapper.AccountUserMapper;
+import com.restaurant.management.mapper.ecommerce.AccountUserMapper;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ecommerce.AccountUserService;

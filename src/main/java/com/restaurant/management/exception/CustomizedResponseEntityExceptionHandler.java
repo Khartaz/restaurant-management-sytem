@@ -1,6 +1,6 @@
 package com.restaurant.management.exception;
 
-import com.restaurant.management.exception.user.UserMessages;
+import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

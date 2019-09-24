@@ -18,6 +18,11 @@ public class Label {
     public Label() {
     }
 
+    public Label(String name, String className) {
+        this.name = name;
+        this.className = className;
+    }
+
     public Long getId() {
         return id;
     }

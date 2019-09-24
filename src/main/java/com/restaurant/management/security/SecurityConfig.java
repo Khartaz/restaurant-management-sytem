@@ -92,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         SecurityConstant.RESTAURANT_REGISTER,
                         "/api/accounts/userData",
                         "/api/accounts/test",
-                        "/api/board/**")
+                        "/api/boards/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

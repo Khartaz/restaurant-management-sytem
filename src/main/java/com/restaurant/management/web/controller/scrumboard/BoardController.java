@@ -1,6 +1,9 @@
-package com.restaurant.management.web.controller;
+package com.restaurant.management.web.controller.scrumboard;
 
+import com.restaurant.management.domain.scrumboard.Board;
 import com.restaurant.management.domain.scrumboard.dto.*;
+import com.restaurant.management.service.scrumboard.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +16,26 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/board")
+@RequestMapping("/api/boards")
 public class BoardController {
+    private BoardService boardService;
 
+    @Autowired
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public BoardDTO test() {
+    public BoardDTO createNewEmptyBoard() {
+        Board board = boardService.createEmptyBoard();
 
 
-        SettingsDTO settingsDTO = new SettingsDTO(1L, "color", true, true);
+        SettingsDTO settingsDTO = new SettingsDTO(
+                board.getBoardSettings().getId(),
+                board.getBoardSettings().getColor(),
+                board.getBoardSettings().getSubscribed(),
+                board.getBoardSettings().getCardCoverImages()
+        );
 
         String cardsIds1 = "1L, 2L, 3L";
         String cardsIds2 = "1L, 2L, 3L";
@@ -61,9 +75,9 @@ public class BoardController {
         );
 
         BoardDTO boardDTO = new BoardDTO(
-                1L,
-                "Board Name",
-                "board-uri",
+                board.getId(),
+                board.getName(),
+                board.getUri(),
                 settingsDTO,
                 Arrays.asList(boardListDTO1, boardListDTO2),
                 Collections.singletonList(cardDTO),

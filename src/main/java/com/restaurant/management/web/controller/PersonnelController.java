@@ -4,7 +4,7 @@ import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.facade.PersonnelFacade;
+import com.restaurant.management.service.ecommerce.facade.PersonnelFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

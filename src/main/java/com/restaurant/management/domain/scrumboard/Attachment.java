@@ -22,7 +22,14 @@ public class Attachment {
     private String type;
 
     public Attachment() {
+    }
 
+    public Attachment(Long id, String name, String src, String time, String type) {
+        this.id = id;
+        this.name = name;
+        this.src = src;
+        this.time = time;
+        this.type = type;
     }
 
     public Long getId() {

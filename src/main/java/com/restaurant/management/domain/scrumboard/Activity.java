@@ -24,6 +24,14 @@ public class Activity {
     public Activity() {
     }
 
+    public Activity(Long id, String type, String memberId, String message, String time) {
+        this.id = id;
+        this.type = type;
+        this.memberId = memberId;
+        this.message = message;
+        this.time = time;
+    }
+
     public Long getId() {
         return id;
     }

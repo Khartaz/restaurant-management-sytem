@@ -3,7 +3,9 @@ package com.restaurant.management.service.scrumboard.impl;
 import com.restaurant.management.domain.scrumboard.Board;
 import com.restaurant.management.domain.scrumboard.BoardSettings;
 import com.restaurant.management.domain.scrumboard.Label;
+import com.restaurant.management.repository.scrumboard.BoardRepository;
 import com.restaurant.management.service.scrumboard.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,6 +13,12 @@ import java.util.Arrays;
 
 @Service
 public class BoardServiceImpl implements BoardService {
+    private BoardRepository boardRepository;
+
+    @Autowired
+    public BoardServiceImpl(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
 
     public Board createEmptyBoard() {
         Board board = new Board();
@@ -27,6 +35,8 @@ public class BoardServiceImpl implements BoardService {
         board.setCards(new ArrayList<>());
         board.setMembers(new ArrayList<>());
         board.setLabels(Arrays.asList(sampleLabel1, sampleLabel2, sampleLabel3, sampleLabel4));
+
+        boardRepository.save(board);
 
         return board;
     }

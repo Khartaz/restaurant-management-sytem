@@ -19,6 +19,12 @@ public class CheckList {
     public CheckList() {
     }
 
+    public CheckList(Long id, String name, List<CheckItem> checkItems) {
+        this.id = id;
+        this.name = name;
+        this.checkItems = checkItems;
+    }
+
     public Long getId() {
         return id;
     }

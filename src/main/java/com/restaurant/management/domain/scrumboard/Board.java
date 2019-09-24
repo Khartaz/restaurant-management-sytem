@@ -34,6 +34,19 @@ public class Board {
     public Board() {
     }
 
+    public Board(Long id, String name, String uri, BoardSettings boardSettings,
+                 List<BoardList> lists, List<Card> cards,
+                 List<Member> members, List<Label> labels) {
+        this.id = id;
+        this.name = name;
+        this.uri = uri;
+        this.boardSettings = boardSettings;
+        this.lists = lists;
+        this.cards = cards;
+        this.members = members;
+        this.labels = labels;
+    }
+
     public Long getId() {
         return id;
     }

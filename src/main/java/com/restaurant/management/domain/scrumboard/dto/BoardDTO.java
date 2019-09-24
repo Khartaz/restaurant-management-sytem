@@ -6,7 +6,7 @@ public class BoardDTO {
     private Long id;
     private String name;
     private String uri;
-    private SettingsDTO settings;
+    private BoardSettingsDTO settings;
     private List<BoardListDTO> lists;
     private List<CardDTO> cards;
     private List<MemberDTO> members;
@@ -16,7 +16,7 @@ public class BoardDTO {
     }
 
     public BoardDTO(Long id, String name, String uri,
-                    SettingsDTO settings, List<BoardListDTO> lists,
+                    BoardSettingsDTO settings, List<BoardListDTO> lists,
                     List<CardDTO> cards, List<MemberDTO> members,
                     List<LabelDTO> labels) {
         this.id = id;
@@ -53,11 +53,11 @@ public class BoardDTO {
         this.uri = uri;
     }
 
-    public SettingsDTO getSettings() {
+    public BoardSettingsDTO getSettings() {
         return settings;
     }
 
-    public void setSettings(SettingsDTO settings) {
+    public void setSettings(BoardSettingsDTO settings) {
         this.settings = settings;
     }
 

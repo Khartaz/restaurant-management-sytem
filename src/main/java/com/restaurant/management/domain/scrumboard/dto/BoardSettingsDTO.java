@@ -1,16 +1,16 @@
 package com.restaurant.management.domain.scrumboard.dto;
 
-public class SettingsDTO {
+public class BoardSettingsDTO {
     private Long id;
     private String color;
     private Boolean isSubscribed;
     private Boolean cardCoverImages;
 
-    public SettingsDTO() {
+    public BoardSettingsDTO() {
 
     }
 
-    public SettingsDTO(Long id, String color, Boolean isSubscribed, Boolean cardCoverImages) {
+    public BoardSettingsDTO(Long id, String color, Boolean isSubscribed, Boolean cardCoverImages) {
         this.id = id;
         this.color = color;
         this.isSubscribed = isSubscribed;

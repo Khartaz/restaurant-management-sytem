@@ -18,6 +18,12 @@ public class CheckItem {
     public CheckItem() {
     }
 
+    public CheckItem(Long id, String name, Boolean isChecked) {
+        this.id = id;
+        this.name = name;
+        this.isChecked = isChecked;
+    }
+
     public Long getId() {
         return id;
     }

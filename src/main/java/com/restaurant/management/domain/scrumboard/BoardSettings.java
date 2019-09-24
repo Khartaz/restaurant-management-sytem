@@ -28,6 +28,14 @@ public class BoardSettings {
         this.cardCoverImages = cardCoverImages;
     }
 
+    public BoardSettings(Long id, String color, Boolean isSubscribed,
+                         Boolean cardCoverImages) {
+        this.id = id;
+        this.color = color;
+        this.isSubscribed = isSubscribed;
+        this.cardCoverImages = cardCoverImages;
+    }
+
     public Long getId() {
         return id;
     }

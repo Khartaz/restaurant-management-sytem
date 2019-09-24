@@ -23,6 +23,12 @@ public class Label {
         this.className = className;
     }
 
+    public Label(Long id, String name, String className) {
+        this.id = id;
+        this.name = name;
+        this.className = className;
+    }
+
     public Long getId() {
         return id;
     }

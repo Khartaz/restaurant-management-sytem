@@ -43,6 +43,22 @@ public class Card {
     public Card() {
     }
 
+    public Card(String name, String description, String dueDate,
+                String idAttachmentCover, String membersIds, String labelsIds,
+                Boolean isSubscribed, List<Attachment> attachments,
+                List<CheckList> checkLists, List<Activity> activities) {
+        this.name = name;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.idAttachmentCover = idAttachmentCover;
+        this.membersIds = membersIds;
+        this.labelsIds = labelsIds;
+        this.isSubscribed = isSubscribed;
+        this.attachments = attachments;
+        this.checkLists = checkLists;
+        this.activities = activities;
+    }
+
     public Long getId() {
         return id;
     }

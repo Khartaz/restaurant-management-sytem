@@ -9,7 +9,7 @@ import com.restaurant.management.domain.layout.settings.layout.config.Navbar;
 import com.restaurant.management.domain.layout.settings.layout.config.Toolbar;
 import com.restaurant.management.domain.layout.settings.theme.Theme;
 import com.restaurant.management.exception.NotFoundException;
-import com.restaurant.management.repository.ecommerce.history.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.AccountUserRepository;
 import com.restaurant.management.repository.layout.LayoutSettingsRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;

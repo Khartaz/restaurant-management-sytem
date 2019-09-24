@@ -3,8 +3,8 @@ package com.restaurant.management.domain.scrumboard;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "settings")
-public class Settings {
+@Table(name = "board_settings")
+public class BoardSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,7 @@ public class Settings {
     @Column(name = "card_cover_images")
     private Boolean cardCoverImages;
 
-    public Settings() {
+    public BoardSettings() {
     }
 
     public Long getId() {

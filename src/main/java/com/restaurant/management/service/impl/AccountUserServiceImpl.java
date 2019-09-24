@@ -4,7 +4,7 @@ import com.restaurant.management.domain.ecommerce.*;
 import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
 import com.restaurant.management.exception.user.*;
 import com.restaurant.management.mapper.RoleMapper;
-import com.restaurant.management.repository.ecommerce.history.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.AccountUserRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;

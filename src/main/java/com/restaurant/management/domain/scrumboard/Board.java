@@ -17,7 +17,7 @@ public class Board {
     private String uri;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Settings settings;
+    private BoardSettings boardSettings;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BoardList> lists;
@@ -54,12 +54,12 @@ public class Board {
         this.uri = uri;
     }
 
-    public Settings getSettings() {
-        return settings;
+    public BoardSettings getBoardSettings() {
+        return boardSettings;
     }
 
-    public void setSettings(Settings settings) {
-        this.settings = settings;
+    public void setBoardSettings(BoardSettings boardSettings) {
+        this.boardSettings = boardSettings;
     }
 
     public List<BoardList> getLists() {

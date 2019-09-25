@@ -1,6 +1,6 @@
 package com.restaurant.management.mapper.ecommerce;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,51 +21,51 @@ public final class PersonnelMapper {
         this.addressMapper = addressMapper;
     }
 
-    public PersonnelDTO mapToPersonnelDTO(final AccountUser accountUser) {
+    public PersonnelDTO mapToPersonnelDTO(final User user) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return new PersonnelDTO(
-                formatter.format(accountUser.getCreatedAt()),
-                formatter.format(accountUser.getUpdatedAt()),
-                accountUser.getCreatedByUserId(),
-                accountUser.getUpdatedByUserId(),
-                accountUser.getId(),
-                accountUser.getName(),
-                accountUser.getLastName(),
-                accountUser.getEmail(),
-                accountUser.getPhone(),
-                accountUser.getJobTitle(),
-                roleToString(accountUser),
-                accountUser.isActive(),
-                addressMapper.mapToAddressDTO(accountUser.getAccountUserAddress())
+                formatter.format(user.getCreatedAt()),
+                formatter.format(user.getUpdatedAt()),
+                user.getCreatedByUserId(),
+                user.getUpdatedByUserId(),
+                user.getId(),
+                user.getName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getJobTitle(),
+                roleToString(user),
+                user.isActive(),
+                addressMapper.mapToAddressDTO(user.getUserAddress())
         );
     }
 
-    public PersonnelFormDTO mapToPersonnelFormDTO(final AccountUser accountUser) {
+    public PersonnelFormDTO mapToPersonnelFormDTO(final User user) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return new PersonnelFormDTO(
-                formatter.format(accountUser.getCreatedAt()),
-                accountUser.getId(),
-                accountUser.getName(),
-                accountUser.getLastName(),
-                accountUser.getEmail(),
-                accountUser.getPhone(),
-                accountUser.getJobTitle(),
-                roleToString(accountUser),
-                accountUser.isActive(),
-                accountUser.getAccountUserAddress().getStreetAndNumber(),
-                accountUser.getAccountUserAddress().getPostCode(),
-                accountUser.getAccountUserAddress().getCity(),
-                accountUser.getAccountUserAddress().getCountry()
+                formatter.format(user.getCreatedAt()),
+                user.getId(),
+                user.getName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getJobTitle(),
+                roleToString(user),
+                user.isActive(),
+                user.getUserAddress().getStreetAndNumber(),
+                user.getUserAddress().getPostCode(),
+                user.getUserAddress().getCity(),
+                user.getUserAddress().getCountry()
         );
     }
 
-    public Page<PersonnelDTO> mapToPersonnelDTO(final Page<AccountUser> personnel) {
+    public Page<PersonnelDTO> mapToPersonnelDTO(final Page<User> personnel) {
         return personnel.map(this::mapToPersonnelDTO);
     }
 
-    public Page<PersonnelFormDTO> mapToPersonnelFormDTOPage(final Page<AccountUser> personnel) {
+    public Page<PersonnelFormDTO> mapToPersonnelFormDTOPage(final Page<User> personnel) {
         return personnel.map(this::mapToPersonnelFormDTO);
     }
 }

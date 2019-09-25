@@ -1,6 +1,6 @@
 package com.restaurant.management.mapper.ecommerce;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.Role;
 import com.restaurant.management.domain.ecommerce.RoleName;
 import com.restaurant.management.domain.ecommerce.dto.RoleDto;
@@ -39,8 +39,8 @@ public final class RoleMapper {
     }
 
 
-    public static String roleToString(AccountUser accountUser) {
-        return accountUser.getRoles().stream()
+    public static String roleToString(User user) {
+        return user.getRoles().stream()
                 .map(r -> RoleMapper.mapRoleToString(r.getName()))
                 .collect(Collectors.joining());
     }

@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.ecommerce.dto;
 
-public final class AccountUserDTO {
+public final class UserDTO {
     private String createdAt;
     private String updatedAt;
     private String createdByUserId;
@@ -19,13 +19,13 @@ public final class AccountUserDTO {
     private String country;
     private CompanyDTO company;
 
-    public AccountUserDTO() {
+    public UserDTO() {
     }
 
-    public AccountUserDTO(String createdAt, String updatedAt, String createdByUserId, String updatedByUserId,
-                          Long id, String name, String lastName, String email, String phone, String jobTitle,
-                          Boolean isActive, String role, String streetAndNumber,
-                          String postCode, String city, String country, CompanyDTO company) {
+    public UserDTO(String createdAt, String updatedAt, String createdByUserId, String updatedByUserId,
+                   Long id, String name, String lastName, String email, String phone, String jobTitle,
+                   Boolean isActive, String role, String streetAndNumber,
+                   String postCode, String city, String country, CompanyDTO company) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.createdByUserId = createdByUserId;

@@ -7,7 +7,7 @@ import com.restaurant.management.exception.ecommerce.customer.CustomerMessages;
 import com.restaurant.management.exception.ecommerce.customer.CustomerNotFoundException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.CartRepository;
 import com.restaurant.management.repository.ecommerce.CustomerRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -32,15 +32,15 @@ import static com.restaurant.management.utils.Validation.validatePhoneNumberForm
 public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
     private CartRepository cartRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository,
                                CartRepository cartRepository,
-                               AccountUserRepository accountUserRepository) {
+                               UserRepository userRepository) {
         this.customerRepository = customerRepository;
         this.cartRepository = cartRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
     }
 
     public Customer registerCustomer(@CurrentUser UserPrincipal currentUser, CustomerFormDTO request) {
@@ -166,10 +166,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private Company getCompany(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+        User user = userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        return accountUser.getCompany();
+        return user.getCompany();
     }
 
     public Page<Customer> getAllByNameWithin(@CurrentUser UserPrincipal currentUser, String name, Pageable pageable) {

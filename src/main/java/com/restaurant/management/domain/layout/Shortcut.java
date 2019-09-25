@@ -1,6 +1,6 @@
 package com.restaurant.management.domain.layout;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 
 import javax.persistence.*;
 
@@ -16,7 +16,7 @@ public class Shortcut {
     private String shortcut;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private AccountUser accountUser;
+    private User user;
 
     public Shortcut() {
 
@@ -26,9 +26,9 @@ public class Shortcut {
         this.shortcut = shortcut;
     }
 
-    public Shortcut(String shortcut, AccountUser accountUser) {
+    public Shortcut(String shortcut, User user) {
         this.shortcut = shortcut;
-        this.accountUser = accountUser;
+        this.user = user;
     }
 
     public Long getId() {
@@ -43,12 +43,12 @@ public class Shortcut {
         this.shortcut = shortcut;
     }
 
-    public AccountUser getAccountUser() {
-        return accountUser;
+    public User getUser() {
+        return user;
     }
 
-    public void setAccountUser(AccountUser accountUser) {
-        this.accountUser = accountUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Shortcut {
         return "Shortcut{" +
                 "id=" + id +
                 ", shortcut='" + shortcut + '\'' +
-                ", accountUser=" + accountUser +
+                ", accountUser=" + user +
                 '}';
     }
 }

@@ -5,7 +5,7 @@ import com.restaurant.management.exception.ecommerce.cart.CartMessages;
 import com.restaurant.management.exception.ecommerce.cart.CartNotFoundException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.CartOrderedRepository;
 import com.restaurant.management.repository.ecommerce.CartRepository;
 import com.restaurant.management.repository.ecommerce.CustomerOrderedRepository;
@@ -26,19 +26,19 @@ public final class CartToCartOrderedProcessor {
     private ProductOrderedRepository productOrderedRepository;
     private CartOrderedRepository cartOrderedRepository;
     private CartRepository cartRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public CartToCartOrderedProcessor(CustomerOrderedRepository customerOrderedRepository,
                                       ProductOrderedRepository productOrderedRepository,
                                       CartOrderedRepository cartOrderedRepository,
                                       CartRepository cartRepository,
-                                      AccountUserRepository accountUserRepository) {
+                                      UserRepository userRepository) {
         this.customerOrderedRepository = customerOrderedRepository;
         this.productOrderedRepository = productOrderedRepository;
         this.cartOrderedRepository = cartOrderedRepository;
         this.cartRepository = cartRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
     }
 
     CartOrdered processSessionCartToCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
@@ -120,15 +120,15 @@ public final class CartToCartOrderedProcessor {
         );
     }
 
-    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+    private User getUserById(@CurrentUser UserPrincipal currentUser) {
+        return userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
     private Cart getRestaurantSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
@@ -144,9 +144,9 @@ public final class CartToCartOrderedProcessor {
     }
 
     private Cart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));

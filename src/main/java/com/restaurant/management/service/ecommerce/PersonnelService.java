@@ -1,6 +1,6 @@
 package com.restaurant.management.service.ecommerce;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
@@ -10,16 +10,16 @@ import org.springframework.data.domain.Pageable;
 
 public interface PersonnelService {
 
-    AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request);
+    User registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request);
 
-    AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request);
+    User updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request);
 
-    Page<AccountUser> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable);
+    Page<User> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable);
 
     ApiResponse deletePersonById(@CurrentUser UserPrincipal currentUser, Long personId);
 
     ApiResponse deleteAllByIds(@CurrentUser UserPrincipal currentUser, Long[] personnelIds);
 
-    AccountUser getPersonById(@CurrentUser UserPrincipal currentUser, Long personId);
+    User getPersonById(@CurrentUser UserPrincipal currentUser, Long personId);
 
 }

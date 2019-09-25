@@ -1,14 +1,14 @@
 package com.restaurant.management.service.ecommerce.impl;
 
 import com.restaurant.management.domain.ecommerce.*;
-import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
+import com.restaurant.management.domain.ecommerce.dto.UserDTO;
 import com.restaurant.management.exception.ecommerce.user.*;
 import com.restaurant.management.mapper.ecommerce.RoleMapper;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.ecommerce.AccountUserService;
+import com.restaurant.management.service.ecommerce.UserService;
 import com.restaurant.management.service.ecommerce.SimpleEmailService;
 import com.restaurant.management.web.request.user.*;
 import com.restaurant.management.web.response.ApiResponse;
@@ -30,35 +30,35 @@ import static com.restaurant.management.utils.Validation.validatePhoneNumberForm
 @Service
 @Transactional
 @SuppressWarnings("Duplicates")
-public class AccountUserServiceImpl implements AccountUserService {
+public class UserServiceImpl implements UserService {
 
     private AuthenticationManager authenticationManager;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
     private SimpleEmailService simpleEmailService;
 
     @Autowired
-    public AccountUserServiceImpl(AuthenticationManager authenticationManager, AccountUserRepository userRepository,
-                                  PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider,
-                                  SimpleEmailService simpleEmailService) {
+    public UserServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository,
+                           PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider,
+                           SimpleEmailService simpleEmailService) {
         this.authenticationManager = authenticationManager;
-        this.accountUserRepository = userRepository;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.simpleEmailService = simpleEmailService;
     }
 
-    private AccountUser getByEmail(String email) {
-        return accountUserRepository.findByEmailAndIsDeletedIsFalse(email)
+    private User getByEmail(String email) {
+        return userRepository.findByEmailAndIsDeletedIsFalse(email)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage() + email));
     }
 
     public Company getCompany(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+        User user = userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        return accountUser.getCompany();
+        return user.getCompany();
     }
 
     private boolean checkAccountActivationStatus(Boolean status) {
@@ -71,20 +71,20 @@ public class AccountUserServiceImpl implements AccountUserService {
     //This method is necessary for spring security context
     @Override
     public UserDetails loadUserByUsername(String email) {
-        AccountUser accountUser = getByEmail(email);
+        User user = getByEmail(email);
 
-        return UserPrincipal.create(accountUser);
+        return UserPrincipal.create(user);
     }
 
     // This method is used by JWTAuthenticationFilter
     public UserDetails loadUserByUserId(Long id) {
-        AccountUser accountUser = getUserById(id);
+        User user = getUserById(id);
 
-        return UserPrincipal.create(accountUser);
+        return UserPrincipal.create(user);
     }
 
     public ApiResponse checkEmailAvailability(String email) {
-        if(accountUserRepository.existsByEmailAndIsDeletedIsFalse(email)) {
+        if(userRepository.existsByEmailAndIsDeletedIsFalse(email)) {
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
         }
         return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
@@ -93,7 +93,7 @@ public class AccountUserServiceImpl implements AccountUserService {
     public ApiResponse checkEmailAvailabilityInCompany(@CurrentUser UserPrincipal currentUser, String email) {
         Long companyId = getCompany(currentUser).getId();
 
-        if (accountUserRepository.existsByEmailAndCompanyIdAndIsDeletedIsFalse(email, companyId)){
+        if (userRepository.existsByEmailAndCompanyIdAndIsDeletedIsFalse(email, companyId)){
             throw new UserExistsException(UserMessages.EMAIL_TAKEN.getMessage());
         }
         return new ApiResponse(true, UserMessages.EMAIL_AVAILABLE.getMessage());
@@ -103,24 +103,24 @@ public class AccountUserServiceImpl implements AccountUserService {
         return RoleMapper.mapRoleToString(roleName);
     }
 
-    public AccountUser getUserById(Long id) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(id)
+    public User getUserById(Long id) {
+        return userRepository.findByIdAndIsDeletedIsFalse(id)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
-    public AccountUser getCompanyUserById(@CurrentUser UserPrincipal currentUser, Long id) {
-        AccountUser currentUserResult = getUserById(currentUser.getId());
+    public User getCompanyUserById(@CurrentUser UserPrincipal currentUser, Long id) {
+        User currentUserResult = getUserById(currentUser.getId());
 
         Long companyId = currentUserResult.getCompany().getId();
 
-        return accountUserRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(id, companyId)
+        return userRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(id, companyId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
     public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
-        AccountUser accountUser = getByEmail(loginRequest.getEmail());
+        User user = getByEmail(loginRequest.getEmail());
 
-        checkAccountActivationStatus(accountUser.isActive());
+        checkAccountActivationStatus(user.isActive());
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -135,15 +135,15 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public boolean requestResetPassword(String email) {
-        AccountUser accountUser = getByEmail(email);
+        User user = getByEmail(email);
 
-        checkAccountActivationStatus(accountUser.isActive());
+        checkAccountActivationStatus(user.isActive());
 
-        Stream.of(accountUser).forEach(u -> {
+        Stream.of(user).forEach(u -> {
 
             u.setPasswordResetToken(tokenProvider.generatePasswordResetToken(u.getId()));
 
-            accountUserRepository.save(u);
+            userRepository.save(u);
 
             simpleEmailService.sendResetPasswordEmail(
                     new Mail(u.getEmail(), u.getName()), u.getPasswordResetToken());
@@ -152,12 +152,12 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public boolean resendEmailVerificationToken(String email) {
-        AccountUser accountUser = getByEmail(email);
+        User user = getByEmail(email);
 
-        String token = accountUser.getEmailVerificationToken();
+        String token = user.getEmailVerificationToken();
 
         simpleEmailService.sendEmailVerification(
-                new Mail(accountUser.getEmail(), accountUser.getName()), token);
+                new Mail(user.getEmail(), user.getName()), token);
 
         return true;
     }
@@ -165,17 +165,17 @@ public class AccountUserServiceImpl implements AccountUserService {
     public boolean verifyEmailToken(String token) {
         boolean returnValue = false;
 
-        AccountUser accountUser = accountUserRepository.findUserByEmailVerificationToken(token)
+        User user = userRepository.findUserByEmailVerificationToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
         if (!hasTokenExpired) {
 
-            accountUser.setEmailVerificationToken(null);
-            accountUser.setActive(Boolean.TRUE);
+            user.setEmailVerificationToken(null);
+            user.setActive(Boolean.TRUE);
 
-            accountUserRepository.save(accountUser);
+            userRepository.save(user);
 
             returnValue = true;
         }
@@ -183,13 +183,13 @@ public class AccountUserServiceImpl implements AccountUserService {
     }
 
     public ApiResponse newPasswordRequest(@CurrentUser UserPrincipal userPrincipal, NewPasswordRequest request) {
-        AccountUser accountUser = getUserById(userPrincipal.getId());
+        User user = getUserById(userPrincipal.getId());
 
-        if (!passwordEncoder.matches(request.getPassword(), accountUser.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 
             throw new UserBadRequestException(UserMessages.ACCESS_DENIED.getMessage());
 
-        } else if (passwordEncoder.matches(request.getNewPassword(), accountUser.getPassword())) {
+        } else if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
 
             throw new UserBadRequestException(UserMessages.DIFFERENT_PASSWORD.getMessage());
 
@@ -200,8 +200,8 @@ public class AccountUserServiceImpl implements AccountUserService {
 
         String encodedPassword = passwordEncoder.encode(request.getNewPassword());
 
-        accountUser.setPassword(encodedPassword);
-        accountUserRepository.save(accountUser);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
 
         return new ApiResponse(true, UserMessages.PASSWORD_CHANGED.getMessage());
     }
@@ -210,10 +210,10 @@ public class AccountUserServiceImpl implements AccountUserService {
         boolean returnValue = false;
         boolean hasTokenExpired = new JwtTokenProvider().hasTokenExpired(token);
 
-        AccountUser accountUser = accountUserRepository.findUserByPasswordResetToken(token)
+        User user = userRepository.findUserByPasswordResetToken(token)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.UNAUTHENTICATED.getMessage()));
 
-        checkAccountActivationStatus(accountUser.isActive());
+        checkAccountActivationStatus(user.isActive());
 
         if (!passwordReset.getPassword().equals(passwordReset.getConfirmPassword())) {
             throw new UserAuthenticationException(UserMessages.PASSWORDS_EQUALS.getMessage());
@@ -222,43 +222,43 @@ public class AccountUserServiceImpl implements AccountUserService {
         if (!hasTokenExpired) {
             String encodedPassword = passwordEncoder.encode(passwordReset.getPassword());
 
-            accountUser.setPassword(encodedPassword);
-            accountUser.setPasswordResetToken(null);
+            user.setPassword(encodedPassword);
+            user.setPasswordResetToken(null);
 
-            accountUserRepository.save(accountUser);
+            userRepository.save(user);
 
             returnValue = true;
         }
         return returnValue;
     }
 
-    public AccountUser updateAccountInfo(@CurrentUser UserPrincipal currentUser, AccountUserDTO accountUserDTO) {
-        AccountUser accountUser = getCompanyUserById(currentUser, currentUser.getId());
+    public User updateAccountInfo(@CurrentUser UserPrincipal currentUser, UserDTO userDTO) {
+        User user = getCompanyUserById(currentUser, currentUser.getId());
 
-        if (!accountUser.getEmail().equals(accountUserDTO.getEmail())) {
-            checkEmailAvailabilityInCompany(currentUser, accountUserDTO.getEmail());
+        if (!user.getEmail().equals(userDTO.getEmail())) {
+            checkEmailAvailabilityInCompany(currentUser, userDTO.getEmail());
         }
 
-        if (!accountUserDTO.getPhone().isEmpty()) {
-            validatePhoneNumberFormat(accountUserDTO.getPhone());
+        if (!userDTO.getPhone().isEmpty()) {
+            validatePhoneNumberFormat(userDTO.getPhone());
         }
 
-        Stream.of(accountUser)
+        Stream.of(user)
                 .forEach(acc -> {
-                    acc.setName(accountUserDTO.getName());
-                    acc.setLastName(accountUserDTO.getLastName());
-                    acc.setEmail(accountUserDTO.getEmail());
-                    acc.setPhone(accountUserDTO.getPhone());
-                    acc.setJobTitle(accountUserDTO.getJobTitle());
-                    acc.getAccountUserAddress().setStreetAndNumber(accountUserDTO.getStreetAndNumber());
-                    acc.getAccountUserAddress().setPostCode(accountUserDTO.getPostCode());
-                    acc.getAccountUserAddress().setCity(accountUserDTO.getCity());
-                    acc.getAccountUserAddress().setCountry(accountUserDTO.getCountry());
+                    acc.setName(userDTO.getName());
+                    acc.setLastName(userDTO.getLastName());
+                    acc.setEmail(userDTO.getEmail());
+                    acc.setPhone(userDTO.getPhone());
+                    acc.setJobTitle(userDTO.getJobTitle());
+                    acc.getUserAddress().setStreetAndNumber(userDTO.getStreetAndNumber());
+                    acc.getUserAddress().setPostCode(userDTO.getPostCode());
+                    acc.getUserAddress().setCity(userDTO.getCity());
+                    acc.getUserAddress().setCountry(userDTO.getCountry());
                 });
 
-        accountUserRepository.save(accountUser);
+        userRepository.save(user);
 
-        return accountUser;
+        return user;
     }
 
 }

@@ -7,12 +7,12 @@ import com.restaurant.management.exception.ecommerce.company.CompanyNotFoundExce
 import com.restaurant.management.exception.ecommerce.user.UserAuthenticationException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.CompanyRepository;
 import com.restaurant.management.repository.ecommerce.RoleRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.ecommerce.AccountUserService;
+import com.restaurant.management.service.ecommerce.UserService;
 import com.restaurant.management.service.ecommerce.LayoutSettingsService;
 import com.restaurant.management.service.ecommerce.CompanyService;
 import com.restaurant.management.web.request.user.SignUpUserRequest;
@@ -34,25 +34,25 @@ import static com.restaurant.management.utils.Validation.validatePhoneNumberForm
 public class CompanyServiceImpl implements CompanyService {
 
     private CompanyRepository companyRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private LayoutSettingsService settingsService;
-    private AccountUserService accountUserService;
+    private UserService userService;
 
     @Autowired
     public CompanyServiceImpl(CompanyRepository companyRepository,
-                              AccountUserRepository accountUserRepository,
+                              UserRepository userRepository,
                               RoleRepository roleRepository,
                               PasswordEncoder passwordEncoder,
                               LayoutSettingsService settingsService,
-                              AccountUserService accountUserService) {
+                              UserService userService) {
         this.companyRepository = companyRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.settingsService = settingsService;
-        this.accountUserService = accountUserService;
+        this.userService = userService;
 
     }
 
@@ -60,14 +60,14 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = registerCompany(request.getCompanyRequest());
 
-        AccountUser accountUser = registerCompanyManager(request.getSignUpUserRequest());
+        User user = registerCompanyManager(request.getSignUpUserRequest());
 
-        accountUser.setCompany(company); // <-- Assign company to user
+        user.setCompany(company); // <-- Assign company to user
 
-        accountUserRepository.save(accountUser);
+        userRepository.save(user);
         companyRepository.save(company);
 
-        return new RegisterCompany(accountUser, company);
+        return new RegisterCompany(user, company);
     }
 
     public Company updateCompanyInfo(@CurrentUser UserPrincipal currentUser, CompanyFormDTO request) {
@@ -93,16 +93,16 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     public Company getCompanyById(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUserById(currentUser.getId());
+        User user = getUserById(currentUser.getId());
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return companyRepository.findById(restaurantId)
                 .orElseThrow(() -> new CompanyNotFoundException(CompanyMessages.RESTAURANT_NOT_FOUND.getMessage()));
     }
 
-    private AccountUser getUserById(Long id) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(id)
+    private User getUserById(Long id) {
+        return userRepository.findByIdAndIsDeletedIsFalse(id)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage() + id));
     }
 
@@ -115,10 +115,10 @@ public class CompanyServiceImpl implements CompanyService {
         return company;
     }
 
-    private AccountUser registerCompanyManager(SignUpUserRequest request) {
+    private User registerCompanyManager(SignUpUserRequest request) {
         validatePhoneNumberFormat(request.getPhone());
 
-        accountUserService.checkEmailAvailability(request.getEmail());
+        userService.checkEmailAvailability(request.getEmail());
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
@@ -132,7 +132,7 @@ public class CompanyServiceImpl implements CompanyService {
 //        simpleEmailService.sendEmailVerification(
 //                new Mail(request.getEmail(), request.getName()), token);
 
-        AccountUser accountUser = new AccountUser();
+        User accountUser = new User();
         Stream.of(accountUser)
                 .forEach(user -> {
                     user.setName(request.getName());
@@ -146,7 +146,7 @@ public class CompanyServiceImpl implements CompanyService {
                     user.setRoles(Collections.singleton(userRole));
                     user.setEmailVerificationToken(null);
                     user.setSettings(settingsService.createDefaultLayoutSettings());
-                    user.setAccountUserAddress(new AccountUserAddress());
+                    user.setUserAddress(new UserAddress());
                 });
 
         return accountUser;

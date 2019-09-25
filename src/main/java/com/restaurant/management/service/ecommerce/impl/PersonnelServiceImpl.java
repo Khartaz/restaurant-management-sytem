@@ -6,12 +6,12 @@ import com.restaurant.management.domain.layout.Settings;
 import com.restaurant.management.exception.ecommerce.user.UserAuthenticationException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.RoleRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
-import com.restaurant.management.service.ecommerce.AccountUserService;
+import com.restaurant.management.service.ecommerce.UserService;
 import com.restaurant.management.service.ecommerce.LayoutSettingsService;
 import com.restaurant.management.service.ecommerce.PersonnelService;
 import com.restaurant.management.web.response.ApiResponse;
@@ -33,8 +33,8 @@ import static com.restaurant.management.utils.Validation.validatePhoneNumberForm
 @Transactional
 public class PersonnelServiceImpl implements PersonnelService {
 
-    private AccountUserRepository accountUserRepository;
-    private AccountUserService accountUserService;
+    private UserRepository userRepository;
+    private UserService userService;
     private RoleRepository roleRepository;
     private JwtTokenProvider tokenProvider;
     private PasswordEncoder passwordEncoder;
@@ -42,36 +42,36 @@ public class PersonnelServiceImpl implements PersonnelService {
 
 
     @Autowired
-    public PersonnelServiceImpl(AccountUserRepository accountUserRepository,
-                                AccountUserService accountUserService,
+    public PersonnelServiceImpl(UserRepository userRepository,
+                                UserService userService,
                                 RoleRepository roleRepository,
                                 JwtTokenProvider tokenProvider,
                                 PasswordEncoder passwordEncoder,
                                 LayoutSettingsService settingsService) {
-        this.accountUserRepository = accountUserRepository;
-        this.accountUserService = accountUserService;
+        this.userRepository = userRepository;
+        this.userService = userService;
         this.roleRepository = roleRepository;
         this.tokenProvider = tokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.settingsService = settingsService;
     }
 
-    public AccountUser registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
-        accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
+    public User registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+        userService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
 
         if (!request.getPhone().isEmpty()) {
             validatePhoneNumberFormat(request.getPhone());
         }
 
-        Company company = accountUserService.getCompany(currentUser);
+        Company company = userService.getCompany(currentUser);
 
         Settings settings = settingsService.createDefaultLayoutSettings();
 
         String companyName = company.getName();
         String withoutWhiteSpacesLowerCaseCompanyName = companyName.replaceAll("\\s+","").toLowerCase();
 
-        AccountUserAddress accountUserAddress = new AccountUserAddress();
-        Stream.of(accountUserAddress)
+        UserAddress userAddress = new UserAddress();
+        Stream.of(userAddress)
                 .forEach(a -> {
                     a.setStreetAndNumber(request.getStreetAndNumber());
                     a.setPostCode(request.getPostCode());
@@ -84,7 +84,7 @@ public class PersonnelServiceImpl implements PersonnelService {
         Role userRole = roleRepository.findByName(RoleName.ROLE_EMPLOYEE)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
 
-        AccountUser person = new AccountUser();
+        User person = new User();
         Stream.of(person)
                 .forEach(p -> {
                     p.setName(request.getName());
@@ -99,19 +99,19 @@ public class PersonnelServiceImpl implements PersonnelService {
                     p.setEmailVerificationToken(token);
                     p.setPassword(passwordEncoder.encode(withoutWhiteSpacesLowerCaseCompanyName));
                     p.setRoles(Collections.singleton(userRole));
-                    p.setAccountUserAddress(accountUserAddress);
+                    p.setUserAddress(userAddress);
                 });
 
-        accountUserRepository.save(person);
+        userRepository.save(person);
 
         return person;
     }
 
-    public AccountUser updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
-        AccountUser person = accountUserService.getCompanyUserById(currentUser, request.getId());
+    public User updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
+        User person = userService.getCompanyUserById(currentUser, request.getId());
 
         if (!person.getEmail().equals(request.getEmail())) {
-            accountUserService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
+            userService.checkEmailAvailabilityInCompany(currentUser, request.getEmail());
         }
 
         if (!request.getPhone().isEmpty()) {
@@ -126,29 +126,29 @@ public class PersonnelServiceImpl implements PersonnelService {
                     p.setPhone(request.getPhone());
                     p.setJobTitle(request.getJobTitle());
                     p.setActive(request.getActive());
-                    p.getAccountUserAddress().setStreetAndNumber(request.getStreetAndNumber());
-                    p.getAccountUserAddress().setPostCode(request.getPostCode());
-                    p.getAccountUserAddress().setCity(request.getCity());
-                    p.getAccountUserAddress().setCountry(request.getCountry());
+                    p.getUserAddress().setStreetAndNumber(request.getStreetAndNumber());
+                    p.getUserAddress().setPostCode(request.getPostCode());
+                    p.getUserAddress().setCity(request.getCity());
+                    p.getUserAddress().setCountry(request.getCountry());
 
-                    accountUserRepository.save(p);
+                    userRepository.save(p);
                 });
 
         return person;
     }
 
-    public Page<AccountUser> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        Company company = accountUserService.getCompany(currentUser);
+    public Page<User> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
+        Company company = userService.getCompany(currentUser);
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                 .orElseThrow(() -> new UserAuthenticationException(UserMessages.ROLE_NOT_SET.getMessage()));
 
-        AccountUser manager = accountUserRepository.findByRolesAndCompanyAndIsDeletedIsFalse(Collections.singleton(userRole), company)
+        User manager = userRepository.findByRolesAndCompanyAndIsDeletedIsFalse(Collections.singleton(userRole), company)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage()));
 
-        Page<AccountUser> accountUsers = accountUserRepository.findAllByCompanyAndIsDeletedIsFalse(company, pageable);
+        Page<User> accountUsers = userRepository.findAllByCompanyAndIsDeletedIsFalse(company, pageable);
 
-        List<AccountUser> content = accountUsers.getContent()
+        List<User> content = accountUsers.getContent()
                 .stream()
                 .filter(au -> !au.getId().equals(manager.getId()))
                 .collect(Collectors.toList());
@@ -157,10 +157,10 @@ public class PersonnelServiceImpl implements PersonnelService {
     }
 
     public ApiResponse deletePersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
-        AccountUser person = accountUserService.getCompanyUserById(currentUser, personId);
+        User person = userService.getCompanyUserById(currentUser, personId);
 
         person.setDeleted(Boolean.TRUE);
-        accountUserRepository.save(person);
+        userRepository.save(person);
 
         return new ApiResponse(true, UserMessages.ACCOUNT_DELETED.getMessage());
     }
@@ -168,20 +168,20 @@ public class PersonnelServiceImpl implements PersonnelService {
     public ApiResponse deleteAllByIds(@CurrentUser UserPrincipal currentUser, Long[] personnelIds) {
         List<Long> ids = new ArrayList<>(Arrays.asList(personnelIds));
 
-        List<AccountUser> personnel = accountUserRepository.findAllByIdIn(ids);
+        List<User> personnel = userRepository.findAllByIdIn(ids);
         Stream.of(personnel)
                 .forEach(p -> {
                     p.iterator().forEachRemaining(v -> v.setDeleted(Boolean.TRUE));
-                    p.iterator().forEachRemaining(v -> accountUserRepository.save(v));
+                    p.iterator().forEachRemaining(v -> userRepository.save(v));
                 });
 
         return new ApiResponse(true, UserMessages.ACCOUNTS_DELETED.getMessage());
     }
 
-    public AccountUser getPersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
-        Long companyId = accountUserService.getCompany(currentUser).getId();
+    public User getPersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
+        Long companyId = userService.getCompany(currentUser).getId();
 
-        return accountUserRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(personId, companyId)
+        return userRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(personId, companyId)
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.USER_NOT_FOUND.getMessage()));
     }
 

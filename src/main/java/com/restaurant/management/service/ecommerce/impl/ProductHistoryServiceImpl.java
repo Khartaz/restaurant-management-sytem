@@ -2,12 +2,12 @@ package com.restaurant.management.service.ecommerce.impl;
 
 import com.restaurant.management.audit.query.AuditQueryResult;
 import com.restaurant.management.audit.query.AuditQueryUtils;
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.Product;
 import com.restaurant.management.domain.ecommerce.history.ProductHistory;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.service.ecommerce.ProductHistoryService;
@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductHistoryServiceImpl implements ProductHistoryService {
 
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
 
     private static final String RESTAURANT_INFO_ID = "restaurantInfo";
 
     @Autowired
-    public ProductHistoryServiceImpl(AccountUserRepository accountUserRepository) {
-        this.accountUserRepository = accountUserRepository;
+    public ProductHistoryServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @PersistenceContext
@@ -44,10 +44,10 @@ public class ProductHistoryServiceImpl implements ProductHistoryService {
     public List<ProductHistory> productRevisions(Long productId,
                                                  @CurrentUser UserPrincipal currentUser) {
 
-        AccountUser accountUser = accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+        User user = userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
 

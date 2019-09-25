@@ -1,11 +1,11 @@
 package com.restaurant.management.service.ecommerce.facade;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.layout.Shortcut;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
 import com.restaurant.management.security.jwt.JwtTokenProvider;
-import com.restaurant.management.service.ecommerce.AccountUserService;
+import com.restaurant.management.service.ecommerce.UserService;
 import com.restaurant.management.service.ecommerce.LayoutSettingsService;
 import com.restaurant.management.service.ecommerce.LayoutShortcutService;
 import com.restaurant.management.service.ecommerce.CompanyService;
@@ -26,19 +26,19 @@ import static com.restaurant.management.mapper.ecommerce.RoleMapper.roleToString
 public final class CompanyAccountUserFacade {
 
     private CompanyService companyService;
-    private AccountUserService accountUserService;
+    private UserService userService;
     private JwtTokenProvider jwtTokenProvider;
     private LayoutSettingsService layoutSettingsService;
     private LayoutShortcutService shortcutService;
 
     @Autowired
     public CompanyAccountUserFacade(CompanyService companyService,
-                                    AccountUserService accountUserService,
+                                    UserService userService,
                                     JwtTokenProvider jwtTokenProvider,
                                     LayoutSettingsService layoutSettingsService,
                                     LayoutShortcutService shortcutService) {
         this.companyService = companyService;
-        this.accountUserService = accountUserService;
+        this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.layoutSettingsService = layoutSettingsService;
         this.shortcutService = shortcutService;
@@ -48,7 +48,7 @@ public final class CompanyAccountUserFacade {
 
         RegisterCompany registeredCompany = companyService.registerCompany(request);
 
-        AccountUser user = registeredCompany.getAccountUser();
+        User user = registeredCompany.getUser();
 
         shortcutService.assignDefaultShortcut(user.getId());
 
@@ -56,7 +56,7 @@ public final class CompanyAccountUserFacade {
 
         String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(user.getId());
 
-        AccountUser accountUser = registeredCompany.getAccountUser();
+        User accountUser = registeredCompany.getUser();
 
         UserDetailsResponse userDetails = new UserDetailsResponse(
                 accountUser.getCreatedAt(),
@@ -76,49 +76,49 @@ public final class CompanyAccountUserFacade {
     }
 
     public UserResponse getUserData(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = accountUserService.getUserById(currentUser.getId());
+        User user = userService.getUserById(currentUser.getId());
 
         String[] shortcuts = shortcutService.getLayoutShortcuts(currentUser);
 
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse(
-                accountUser.getCreatedAt(),
-                accountUser.getUpdatedAt(),
-                accountUser.getCreatedByUserId(),
-                accountUser.getUpdatedByUserId(),
-                accountUser.getId(),
-                roleToString(accountUser),
-                accountUser.getName(),
-                accountUser.getLastName(),
-                accountUser.getSettings().getPhotoURL(),
-                accountUser.getEmail(),
-                accountUser.getPhone()
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
+                user.getCreatedByUserId(),
+                user.getUpdatedByUserId(),
+                user.getId(),
+                roleToString(user),
+                user.getName(),
+                user.getLastName(),
+                user.getSettings().getPhotoURL(),
+                user.getEmail(),
+                user.getPhone()
         );
 
-        return new UserResponse(userDetailsResponse, accountUser.getSettings(), shortcuts);
+        return new UserResponse(userDetailsResponse, user.getSettings(), shortcuts);
     }
 
     public UserResponse getUserDataFromJWT(String token) {
         Long id = jwtTokenProvider.getUserIdFromJWT(token);
 
-        AccountUser accountUser = accountUserService.getUserById(id);
+        User user = userService.getUserById(id);
 
-        String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(accountUser.getId());
+        String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(user.getId());
 
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse(
-                accountUser.getCreatedAt(),
-                accountUser.getUpdatedAt(),
-                accountUser.getCreatedByUserId(),
-                accountUser.getUpdatedByUserId(),
-                accountUser.getId(),
-                roleToString(accountUser),
-                accountUser.getName(),
-                accountUser.getLastName(),
-                accountUser.getSettings().getPhotoURL(),
-                accountUser.getEmail(),
-                accountUser.getPhone()
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
+                user.getCreatedByUserId(),
+                user.getUpdatedByUserId(),
+                user.getId(),
+                roleToString(user),
+                user.getName(),
+                user.getLastName(),
+                user.getSettings().getPhotoURL(),
+                user.getEmail(),
+                user.getPhone()
         );
 
-        return new UserResponse(userDetailsResponse, accountUser.getSettings(), shortcuts, token);
+        return new UserResponse(userDetailsResponse, user.getSettings(), shortcuts, token);
     }
 
     public UserResponse updateAccountSettings(@CurrentUser UserPrincipal currentUser, UserUpdateRequest request) {

@@ -1,6 +1,6 @@
 package com.restaurant.management.security.jwt;
 
-import com.restaurant.management.service.ecommerce.AccountUserService;
+import com.restaurant.management.service.ecommerce.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenProvider tokenProvider;
 
     @Autowired
-    private AccountUserService accountUserService;
+    private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Long id = tokenProvider.getUserIdFromJWT(jwt);
 
-                UserDetails userDetails = accountUserService.loadUserByUserId(id);
+                UserDetails userDetails = userService.loadUserByUserId(id);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

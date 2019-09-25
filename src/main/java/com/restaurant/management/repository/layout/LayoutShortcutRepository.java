@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface LayoutShortcutRepository extends JpaRepository<Shortcut, Long> {
 
-    Optional<Shortcut> findByAccountUserId(Long id);
+    Optional<Shortcut> findByUserId(Long id);
 }

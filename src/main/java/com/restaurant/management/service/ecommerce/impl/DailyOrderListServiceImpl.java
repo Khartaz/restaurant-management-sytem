@@ -1,6 +1,6 @@
 package com.restaurant.management.service.ecommerce.impl;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.DailyOrderList;
 import com.restaurant.management.domain.ecommerce.Order;
 import com.restaurant.management.exception.ecommerce.order.OrderListExistsException;
@@ -9,7 +9,7 @@ import com.restaurant.management.exception.ecommerce.order.OrderMessages;
 import com.restaurant.management.exception.ecommerce.order.OrderNotFoundException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.DailyOrderListRepository;
 import com.restaurant.management.repository.ecommerce.OrderRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -31,19 +31,19 @@ import java.util.*;
 public class DailyOrderListServiceImpl implements DailyOrderListService {
     private DailyOrderListRepository dailyOrderListRepository;
     private OrderRepository orderRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public DailyOrderListServiceImpl(DailyOrderListRepository dailyOrderListRepository,
                                      OrderRepository orderRepository,
-                                     AccountUserRepository accountUserRepository) {
+                                     UserRepository userRepository) {
         this.dailyOrderListRepository = dailyOrderListRepository;
         this.orderRepository = orderRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
     }
 
-    private AccountUser getUser(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+    private User getUser(@CurrentUser UserPrincipal currentUser) {
+        return userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
@@ -53,36 +53,36 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     public DailyOrderList getOrderListById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         return dailyOrderListRepository.findByIdAndCompanyId(orderListId, companyId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
     public Page<DailyOrderList> getAll(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        AccountUser accountUser = getUser(currentUser);
+        User user = getUser(currentUser);
 
-        return dailyOrderListRepository.findAllByCompanyId(accountUser.getCompany().getId(), pageable);
+        return dailyOrderListRepository.findAllByCompanyId(user.getCompany().getId(), pageable);
     }
 
     public boolean checkDailyOrderListExists(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUser(currentUser);
+        User user = getUser(currentUser);
 
-        Long companyId = accountUser.getCompany().getId();
+        Long companyId = user.getCompany().getId();
 
         return dailyOrderListRepository.existsByIsOpenTrueAndCompanyId(companyId);
     }
 
     public boolean openOrderList(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUser(currentUser);
+        User user = getUser(currentUser);
 
         DailyOrderList orderList = new DailyOrderList.DailyOrderListBuilder()
                 .setDailyIncome(0.00)
                 .setNumberOfOrders(0)
                 .setIsOpen(Boolean.TRUE)
                 .setOrders(new LinkedHashSet<>())
-                .setCompany(accountUser.getCompany())
+                .setCompany(user.getCompany())
                 .build();
 
         dailyOrderListRepository.save(orderList);
@@ -91,16 +91,16 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     public DailyOrderList getOpenedOrderList(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         return dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndCompanyId(companyId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
     }
 
     public DailyOrderList addOrderToList(@CurrentUser UserPrincipal currentUser, Long orderId) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         Order order = getOrderByIdAndCompanyId(orderId, companyId);
 
@@ -134,8 +134,8 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     public DailyOrderList removeOrderFromList(@CurrentUser UserPrincipal currentUser, Long orderId) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         Order order = getOrderByIdAndCompanyId(orderId, companyId);
 
@@ -167,8 +167,8 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     public DailyOrderList closeDailyList(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         DailyOrderList dailyOrderList = dailyOrderListRepository.findDailyOrderListByIsOpenTrueAndCompanyId(companyId)
                 .orElseThrow(() -> new OrderListNotFoundException(OrderMessages.ORDER_LIST_NOT_OPEN.getMessage()));
@@ -181,8 +181,8 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     public ApiResponse deleteById(@CurrentUser UserPrincipal currentUser, Long orderListId) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         DailyOrderList orderList = dailyOrderListRepository.findByIdAndCompanyId(orderListId, companyId)
                 .orElseThrow(() -> new OrderListExistsException(OrderMessages.ORDER_LIST_NOT_FOUND.getMessage()));
@@ -193,8 +193,8 @@ public class DailyOrderListServiceImpl implements DailyOrderListService {
     }
 
     public StatisticsReportResponse countDailyOrders(@CurrentUser UserPrincipal currentUser) {
-        AccountUser accountUser = getUser(currentUser);
-        Long companyId = accountUser.getCompany().getId();
+        User user = getUser(currentUser);
+        Long companyId = user.getCompany().getId();
 
         DailyOrderList dailyOrderList = dailyOrderListRepository.findByIsOpenIsTrueAndCompanyId(companyId);
 

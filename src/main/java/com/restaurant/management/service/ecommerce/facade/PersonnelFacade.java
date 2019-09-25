@@ -1,6 +1,6 @@
 package com.restaurant.management.service.ecommerce.facade;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelDTO;
 import com.restaurant.management.domain.ecommerce.dto.PersonnelFormDTO;
 import com.restaurant.management.mapper.ecommerce.PersonnelMapper;
@@ -31,21 +31,21 @@ public class PersonnelFacade {
     }
 
     public PersonnelFormDTO registerPerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
-        AccountUser accountUser = personnelService.registerPerson(currentUser, request);
+        User user = personnelService.registerPerson(currentUser, request);
 
-        shortcutService.assignDefaultShortcut(accountUser.getId());
+        shortcutService.assignDefaultShortcut(user.getId());
 
-        return personnelMapper.mapToPersonnelFormDTO(accountUser);
+        return personnelMapper.mapToPersonnelFormDTO(user);
     }
 
     public PersonnelFormDTO updatePerson(@CurrentUser UserPrincipal currentUser, PersonnelFormDTO request) {
-        AccountUser accountUser = personnelService.updatePerson(currentUser, request);
+        User user = personnelService.updatePerson(currentUser, request);
 
-        return personnelMapper.mapToPersonnelFormDTO(accountUser);
+        return personnelMapper.mapToPersonnelFormDTO(user);
     }
 
     public Page<PersonnelFormDTO> getAllPersonnel(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        Page<AccountUser> personnel = personnelService.getAllPersonnel(currentUser, pageable);
+        Page<User> personnel = personnelService.getAllPersonnel(currentUser, pageable);
 
         return personnelMapper.mapToPersonnelFormDTOPage(personnel);
     }
@@ -59,7 +59,7 @@ public class PersonnelFacade {
     }
 
     public PersonnelDTO getPersonById(@CurrentUser UserPrincipal currentUser, Long personId) {
-        AccountUser person = personnelService.getPersonById(currentUser, personId);
+        User person = personnelService.getPersonById(currentUser, personId);
 
         return personnelMapper.mapToPersonnelDTO(person);
     }

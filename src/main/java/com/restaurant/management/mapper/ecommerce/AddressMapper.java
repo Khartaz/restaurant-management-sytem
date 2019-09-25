@@ -1,6 +1,6 @@
 package com.restaurant.management.mapper.ecommerce;
 
-import com.restaurant.management.domain.ecommerce.AccountUserAddress;
+import com.restaurant.management.domain.ecommerce.UserAddress;
 import com.restaurant.management.domain.ecommerce.CustomerAddress;
 import com.restaurant.management.domain.ecommerce.CompanyAddress;
 import com.restaurant.management.domain.ecommerce.CustomerOrderedAddress;
@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 @Component
 public final class AddressMapper {
 
-    public AddressDTO mapToAddressDTO(final AccountUserAddress accountUserAddress) {
+    public AddressDTO mapToAddressDTO(final UserAddress userAddress) {
         return new AddressDTO(
-                accountUserAddress.getCreatedAt(),
-                accountUserAddress.getUpdatedAt(),
-                accountUserAddress.getCreatedByUserId(),
-                accountUserAddress.getUpdatedByUserId(),
-                accountUserAddress.getId(),
-                accountUserAddress.getStreetAndNumber(),
-                accountUserAddress.getPostCode(),
-                accountUserAddress.getCity(),
-                accountUserAddress.getCountry()
+                userAddress.getCreatedAt(),
+                userAddress.getUpdatedAt(),
+                userAddress.getCreatedByUserId(),
+                userAddress.getUpdatedByUserId(),
+                userAddress.getId(),
+                userAddress.getStreetAndNumber(),
+                userAddress.getPostCode(),
+                userAddress.getCity(),
+                userAddress.getCountry()
         );
     }
 

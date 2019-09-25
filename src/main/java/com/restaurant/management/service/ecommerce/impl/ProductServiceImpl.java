@@ -7,7 +7,7 @@ import com.restaurant.management.exception.ecommerce.product.ProductMessages;
 import com.restaurant.management.exception.ecommerce.product.ProductNotFoundException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.LineItemRepository;
 import com.restaurant.management.repository.ecommerce.ProductRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -31,15 +31,15 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
     private LineItemRepository lineItemRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
                               LineItemRepository lineItemRepository,
-                              AccountUserRepository accountUserRepository) {
+                              UserRepository userRepository) {
         this.productRepository = productRepository;
         this.lineItemRepository = lineItemRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
     }
 
     private ApiResponse checkProductNameAvailabilityInCompany(String name, Long companyId) {
@@ -50,9 +50,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product registerProduct(@CurrentUser UserPrincipal currentUser, ProductFormDTO request) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        checkProductNameAvailabilityInCompany(request.getName(), accountUser.getCompany().getId());
+        checkProductNameAvailabilityInCompany(request.getName(), user.getCompany().getId());
 
         ProductInventory productInventory = new ProductInventory();
         Stream.of(productInventory)
@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
                     p.setDeleted(Boolean.FALSE);
                     p.setProductInventory(productInventory);
                     p.setProductShippingDetails(productShippingDetails);
-                    p.setCompany(accountUser.getCompany());
+                    p.setCompany(user.getCompany());
                 });
 
         productRepository.save(product);
@@ -117,9 +117,9 @@ public class ProductServiceImpl implements ProductService {
 
     public Product getProductById(Long productId, @CurrentUser UserPrincipal currentUser) {
 
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return productRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(productId, restaurantId)
                 .orElseThrow(() -> new ProductNotFoundException(ProductMessages.PRODUCT_ID_NOT_FOUND.getMessage() + productId));
@@ -127,9 +127,9 @@ public class ProductServiceImpl implements ProductService {
 
     public Page<Product> getAllByCompany(Pageable pageable, @CurrentUser UserPrincipal currentUser) {
 
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        return productRepository.findAllByCompanyAndIsDeletedIsFalse(pageable, accountUser.getCompany());
+        return productRepository.findAllByCompanyAndIsDeletedIsFalse(pageable, user.getCompany());
     }
 
     public ApiResponse deleteById(Long productId, @CurrentUser UserPrincipal currentUser) {
@@ -161,8 +161,8 @@ public class ProductServiceImpl implements ProductService {
         return new ApiResponse(true, ProductMessages.PRODUCTS_DELETED.getMessage());
     }
 
-    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+    private User getUserById(@CurrentUser UserPrincipal currentUser) {
+        return userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 }

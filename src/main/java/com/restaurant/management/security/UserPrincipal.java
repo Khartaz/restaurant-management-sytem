@@ -1,7 +1,7 @@
 package com.restaurant.management.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,18 +39,18 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(AccountUser accountUser) {
-        List<GrantedAuthority> authorities = accountUser.getRoles().stream()
+    public static UserPrincipal create(User user) {
+        List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().
                         name()))
                 .collect(Collectors.toList());
 
         return new UserPrincipal(
-                accountUser.getId(),
-                accountUser.getName(),
-                accountUser.getLastName(),
-                accountUser.getEmail(),
-                accountUser.getPassword(),
+                user.getId(),
+                user.getName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPassword(),
                 authorities
         );
     }

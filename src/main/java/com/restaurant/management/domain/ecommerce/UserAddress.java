@@ -5,19 +5,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "account_user_addresses")
-public class AccountUserAddress extends AbstractAddress {
+public class UserAddress extends AbstractAddress {
 
-    public AccountUserAddress() {
+    public UserAddress() {
     }
 
-    public AccountUserAddress(String streetAndNumber, String postCode,
-                              String city, String country) {
+    public UserAddress(String streetAndNumber, String postCode,
+                       String city, String country) {
         super(streetAndNumber, postCode, city, country);
     }
 
-    public AccountUserAddress(Long createdAt, Long updatedAt,
-                              String createdByUserId, String updatedByUserId, Long id,
-                              String streetAndNumber, String postCode, String city, String country) {
+    public UserAddress(Long createdAt, Long updatedAt,
+                       String createdByUserId, String updatedByUserId, Long id,
+                       String streetAndNumber, String postCode, String city, String country) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, streetAndNumber, postCode, city, country);
     }
 
@@ -47,8 +47,8 @@ public class AccountUserAddress extends AbstractAddress {
             return this;
         }
 
-        public AccountUserAddress build() {
-            return new AccountUserAddress(
+        public UserAddress build() {
+            return new UserAddress(
                     this.streetAndNumber,
                     this.postCode,
                     this.city,

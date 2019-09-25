@@ -38,7 +38,7 @@ public class CartServiceImpl implements CartService {
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
     private LineItemRepository lineItemRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public CartServiceImpl(CartRepository cartRepository,
@@ -46,26 +46,26 @@ public class CartServiceImpl implements CartService {
                            ProductRepository productRepository,
                            CustomerRepository customerRepository,
                            LineItemRepository lineItemRepository,
-                           AccountUserRepository accountUserRepository) {
+                           UserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.cartOrderedRepository = cartOrderedRepository;
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
         this.lineItemRepository = lineItemRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
     }
 
     public Optional<Cart> getCart(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        AccountUser accountUser = getUserById(currentUser);
-        Long restaurantId = accountUser.getCompany().getId();
+        User user = getUserById(currentUser);
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId);
     }
 
     public Cart getCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
@@ -176,17 +176,17 @@ public class CartServiceImpl implements CartService {
     }
 
     public Page<Cart> getCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findAllByCompanyId(restaurantId, pageable);
     }
 
     public Cart getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));
@@ -217,15 +217,15 @@ public class CartServiceImpl implements CartService {
         return new ApiResponse(true, CartMessages.LINE_ITEM_DELETED.getMessage());
     }
 
-    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+    private User getUserById(@CurrentUser UserPrincipal currentUser) {
+        return userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
     private Customer getCustomerByIdAndRestaurantId(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        return customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, accountUser.getCompany().getId())
+        return customerRepository.findByIdAndCompanyIdAndIsDeletedIsFalse(customerId, user.getCompany().getId())
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerMessages.CUSTOMER_NOT_REGISTER.getMessage()));
     }
 

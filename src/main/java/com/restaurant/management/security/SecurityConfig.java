@@ -2,7 +2,7 @@ package com.restaurant.management.security;
 
 import com.restaurant.management.security.jwt.JwtAuthenticationEntryPoint;
 import com.restaurant.management.security.jwt.JwtAuthenticationFilter;
-import com.restaurant.management.service.ecommerce.AccountUserService;
+import com.restaurant.management.service.ecommerce.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,12 +27,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private AccountUserService accountUserService;
+    private UserService userService;
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    public void setAccountUserService(AccountUserService accountUserService) {
-        this.accountUserService = accountUserService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Autowired
@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(accountUserService)
+                .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder());
     }
 

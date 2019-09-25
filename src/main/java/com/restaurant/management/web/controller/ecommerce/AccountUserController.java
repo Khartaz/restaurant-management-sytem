@@ -1,10 +1,10 @@
 package com.restaurant.management.web.controller.ecommerce;
 
 import com.restaurant.management.config.LogLogin;
-import com.restaurant.management.domain.ecommerce.dto.AccountUserDTO;
+import com.restaurant.management.domain.ecommerce.dto.UserDTO;
 import com.restaurant.management.security.CurrentUser;
 import com.restaurant.management.security.UserPrincipal;
-import com.restaurant.management.service.ecommerce.facade.AccountUserFacade;
+import com.restaurant.management.service.ecommerce.facade.UserFacade;
 import com.restaurant.management.service.ecommerce.facade.CompanyAccountUserFacade;
 import com.restaurant.management.web.request.user.LoginRequest;
 import com.restaurant.management.web.request.user.NewPasswordRequest;
@@ -29,13 +29,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/accounts")
 public class AccountUserController {
 
-    private AccountUserFacade accountUserFacade;
+    private UserFacade userFacade;
     private CompanyAccountUserFacade companyAccountUserFacade;
 
     @Autowired
-    public AccountUserController(AccountUserFacade accountUserFacade,
+    public AccountUserController(UserFacade userFacade,
                                  CompanyAccountUserFacade companyAccountUserFacade) {
-        this.accountUserFacade = accountUserFacade;
+        this.userFacade = userFacade;
         this.companyAccountUserFacade = companyAccountUserFacade;
     }
 
@@ -43,7 +43,7 @@ public class AccountUserController {
     @PostMapping(value = "/login", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        JwtAuthenticationResponse jwt = accountUserFacade.authenticateUser(loginRequest);
+        JwtAuthenticationResponse jwt = userFacade.authenticateUser(loginRequest);
 
         UserResponse userResponse = companyAccountUserFacade.getUserDataFromJWT(jwt.getAccessToken());
 
@@ -64,10 +64,10 @@ public class AccountUserController {
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<AccountUserDTO> updateAccountInfo(@CurrentUser UserPrincipal currentUser,
-                                               @Valid @RequestBody AccountUserDTO accountUserDTO) {
+    Resource<UserDTO> updateAccountInfo(@CurrentUser UserPrincipal currentUser,
+                                        @Valid @RequestBody UserDTO userDTO) {
 
-        AccountUserDTO accountUser = accountUserFacade.updateAccountInfo(currentUser, accountUserDTO);
+        UserDTO accountUser = userFacade.updateAccountInfo(currentUser, userDTO);
 
         Link link = linkTo(AccountUserController.class).slash(accountUser.getId()).withSelfRel();
 
@@ -76,18 +76,18 @@ public class AccountUserController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Resource<AccountUserDTO> getAccountInfo(@CurrentUser UserPrincipal currentUser) {
-        AccountUserDTO accountUserDTO = accountUserFacade.getAccountInfo(currentUser);
+    Resource<UserDTO> getAccountInfo(@CurrentUser UserPrincipal currentUser) {
+        UserDTO userDTO = userFacade.getAccountInfo(currentUser);
 
-        Link link = linkTo(AccountUserController.class).slash(accountUserDTO.getId()).withSelfRel();
+        Link link = linkTo(AccountUserController.class).slash(userDTO.getId()).withSelfRel();
 
-        return new Resource<>(accountUserDTO, link);
+        return new Resource<>(userDTO, link);
     }
 
     @PutMapping(value = "/reset-password", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
     ApiResponse newPasswordRequest(@CurrentUser UserPrincipal userPrincipal, @RequestBody NewPasswordRequest request) {
-        return accountUserFacade.newPasswordRequest(userPrincipal, request);
+        return userFacade.newPasswordRequest(userPrincipal, request);
     }
 
 }

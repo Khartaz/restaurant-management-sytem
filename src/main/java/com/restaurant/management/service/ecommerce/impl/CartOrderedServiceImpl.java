@@ -1,13 +1,13 @@
 package com.restaurant.management.service.ecommerce.impl;
 
-import com.restaurant.management.domain.ecommerce.AccountUser;
+import com.restaurant.management.domain.ecommerce.User;
 import com.restaurant.management.domain.ecommerce.CartOrdered;
 import com.restaurant.management.domain.ecommerce.Cart;
 import com.restaurant.management.exception.ecommerce.cart.CartMessages;
 import com.restaurant.management.exception.ecommerce.cart.CartNotFoundException;
 import com.restaurant.management.exception.ecommerce.user.UserMessages;
 import com.restaurant.management.exception.ecommerce.user.UserNotFoundException;
-import com.restaurant.management.repository.ecommerce.AccountUserRepository;
+import com.restaurant.management.repository.ecommerce.UserRepository;
 import com.restaurant.management.repository.ecommerce.CartOrderedRepository;
 import com.restaurant.management.repository.ecommerce.CartRepository;
 import com.restaurant.management.security.CurrentUser;
@@ -25,30 +25,30 @@ import javax.transaction.Transactional;
 @SuppressWarnings("Duplicates")
 public class CartOrderedServiceImpl implements CartOrderedService {
     private CartRepository cartRepository;
-    private AccountUserRepository accountUserRepository;
+    private UserRepository userRepository;
     private CartOrderedRepository cartOrderedRepository;
 
     private CartToCartOrderedProcessor processor;
 
     public CartOrderedServiceImpl(CartRepository cartRepository,
-                                  AccountUserRepository accountUserRepository,
+                                  UserRepository userRepository,
                                   CartOrderedRepository cartOrderedRepository,
                                   CartToCartOrderedProcessor processor) {
         this.cartRepository = cartRepository;
-        this.accountUserRepository = accountUserRepository;
+        this.userRepository = userRepository;
         this.cartOrderedRepository = cartOrderedRepository;
         this.processor = processor;
     }
 
-    private AccountUser getUserById(@CurrentUser UserPrincipal currentUser) {
-        return accountUserRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
+    private User getUserById(@CurrentUser UserPrincipal currentUser) {
+        return userRepository.findByIdAndIsDeletedIsFalse(currentUser.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserMessages.ID_NOT_FOUND.getMessage()));
     }
 
     private Cart getSessionCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage() + cartId));
@@ -64,9 +64,9 @@ public class CartOrderedServiceImpl implements CartOrderedService {
     }
 
     private Cart getRestaurantSessionCartByCustomerId(@CurrentUser UserPrincipal currentUser, Long customerId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartRepository.findCartByCustomerIdAndCompanyId(customerId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CUSTOMER_SESSION_CART_NOT_FOUND.getMessage()));
@@ -77,17 +77,17 @@ public class CartOrderedServiceImpl implements CartOrderedService {
     }
 
     public Page<CartOrdered> getAllCarts(@CurrentUser UserPrincipal currentUser, Pageable pageable) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartOrderedRepository.findAllByCompanyId(restaurantId, pageable);
     }
 
     public CartOrdered getCartById(@CurrentUser UserPrincipal currentUser, Long cartId) {
-        AccountUser accountUser = getUserById(currentUser);
+        User user = getUserById(currentUser);
 
-        Long restaurantId = accountUser.getCompany().getId();
+        Long restaurantId = user.getCompany().getId();
 
         return cartOrderedRepository.findByIdAndCompanyId(cartId, restaurantId)
                 .orElseThrow(() -> new CartNotFoundException(CartMessages.CART_ID_NOT_FOUND.getMessage()));

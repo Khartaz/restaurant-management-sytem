@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "account_users")
-public class AccountUser extends AbstractUser {
+@Table(name = "users")
+public class User extends AbstractUser {
 
     @NotBlank
     @Size(max = 100)
@@ -40,33 +40,33 @@ public class AccountUser extends AbstractUser {
     private Company company;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private AccountUserAddress accountUserAddress;
+    private UserAddress userAddress;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Settings settings;
 
-    public AccountUser() {
+    public User() {
     }
 
-    public AccountUser(String name, String lastName, String email,
-                       String phone, String jobTitle, String password,
-                       String emailVerificationToken,
-                       Boolean isActive, Set<Role> roles, Company company,
-                       AccountUserAddress accountUserAddress, Settings settings) {
+    public User(String name, String lastName, String email,
+                String phone, String jobTitle, String password,
+                String emailVerificationToken,
+                Boolean isActive, Set<Role> roles, Company company,
+                UserAddress userAddress, Settings settings) {
         super(name, lastName, email, phone, jobTitle);
         this.password = password;
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
         this.roles = roles;
         this.company = company;
-        this.accountUserAddress = accountUserAddress;
+        this.userAddress = userAddress;
         this.settings = settings;
     }
 
-    public AccountUser(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
-                       Long id, String name, String lastName, String email, String phone, String jobTitle,
-                       String emailVerificationToken,
-                       Boolean isActive, Set<Role> roles) {
+    public User(Long createdAt, Long updatedAt, String createdByUserId, String updatedByUserId,
+                Long id, String name, String lastName, String email, String phone, String jobTitle,
+                String emailVerificationToken,
+                Boolean isActive, Set<Role> roles) {
         super(createdAt, updatedAt, createdByUserId, updatedByUserId, id, name, lastName, email, phone, jobTitle);
         this.emailVerificationToken = emailVerificationToken;
         this.isActive = isActive;
@@ -121,12 +121,12 @@ public class AccountUser extends AbstractUser {
         this.company = company;
     }
 
-    public AccountUserAddress getAccountUserAddress() {
-        return accountUserAddress;
+    public UserAddress getUserAddress() {
+        return userAddress;
     }
 
-    public void setAccountUserAddress(AccountUserAddress accountUserAddress) {
-        this.accountUserAddress = accountUserAddress;
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
     }
 
     public Settings getSettings() {

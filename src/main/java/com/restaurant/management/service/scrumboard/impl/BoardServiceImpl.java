@@ -20,7 +20,7 @@ public class BoardServiceImpl implements BoardService {
         this.boardRepository = boardRepository;
     }
 
-    public Board createEmptyBoard() {
+    public Board createNewEmptyBoard() {
         Board board = new Board();
 
         Label sampleLabel1 = new Label("High Priority", "bd-red text-white");

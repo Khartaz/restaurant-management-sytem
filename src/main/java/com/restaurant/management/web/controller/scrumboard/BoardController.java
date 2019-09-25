@@ -5,13 +5,7 @@ import com.restaurant.management.domain.scrumboard.dto.*;
 import com.restaurant.management.mapper.scrumboard.BoardMapper;
 import com.restaurant.management.service.scrumboard.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Arrays;
-import java.util.Collections;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -29,9 +23,9 @@ public class BoardController {
         this.boardMapper = boardMapper;
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_VALUE)
     public BoardDTO createNewEmptyBoard() {
-        Board board = boardService.createEmptyBoard();
+        Board board = boardService.createNewEmptyBoard();
 
         return boardMapper.mapToBoardDTO(board);
 

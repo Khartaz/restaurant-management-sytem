@@ -53,7 +53,6 @@ public class CompanyServiceImpl implements CompanyService {
         this.passwordEncoder = passwordEncoder;
         this.settingsService = settingsService;
         this.userService = userService;
-
     }
 
     public RegisterCompany registerCompany(RegisterCompanyRequest request) {

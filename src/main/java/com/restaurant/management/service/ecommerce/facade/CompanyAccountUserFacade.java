@@ -48,15 +48,13 @@ public final class CompanyAccountUserFacade {
 
         RegisterCompany registeredCompany = companyService.registerCompany(request);
 
-        User user = registeredCompany.getUser();
-
-        shortcutService.assignDefaultShortcut(user.getId());
-
-        String token = jwtTokenProvider.generateRegistrationToken(user.getId());
-
-        String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(user.getId());
-
         User accountUser = registeredCompany.getUser();
+
+        shortcutService.assignDefaultShortcut(accountUser.getId());
+
+        String token = jwtTokenProvider.generateRegistrationToken(accountUser.getId());
+
+        String[] shortcuts = shortcutService.getLayoutShortcutsFromAccountId(accountUser.getId());
 
         UserDetailsResponse userDetails = new UserDetailsResponse(
                 accountUser.getCreatedAt(),

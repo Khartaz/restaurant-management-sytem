@@ -13,6 +13,14 @@ public final class LoginRequest {
     @Size(min = 6, max = 100, message = "password must be between 6 - 100")
     private String password;
 
+    public LoginRequest() {
+    }
+
+    public LoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
